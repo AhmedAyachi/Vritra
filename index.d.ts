@@ -11,3 +11,4 @@ export const Router:(
         component:(props:{parent:HTMLElement})=>HTMLElement,
     }]
 )=>void;
+export const createStore:(value:object)=>any;

@@ -13,7 +13,7 @@ export const map=(array=[],treatment)=>{
 
 export const useRef=(startswith="")=>`${startswith}_${Math.random().toString(36).slice(2)}${Math.random().toString(36).slice(2)}`;
 
-export const useStore=(Reducer={})=>{
+export const createStore=(Reducer={})=>{
     const store=window.store=new function Store(){
         let strReducer=null;
         if(Reducer&&typeof(Reducer)==="object"){
