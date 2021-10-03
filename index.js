@@ -1,6 +1,6 @@
 
 
-export {Router} from "./Router";
+export {HashRouter} from "./HashRouter";
 
 export const map=(array=[],treatment)=>{
     let str="";

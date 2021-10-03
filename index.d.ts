@@ -3,7 +3,7 @@ declare module "vanilla";
 
 export const useRef:(startsWith:string)=>string;
 export const map:(array:any[],callback:(value:any,index:number,array:any)=>string)=>string;
-export const Router:(
+export const HashRouter:(
     target:HTMLElement,
     routes:[{
         hash:string,
