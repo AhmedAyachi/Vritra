@@ -1,0 +1,7 @@
+.flatlist{
+    max-width:100%;
+    max-height:100%;
+    font-size:1em;
+    overflow-x:hidden;
+    overflow-y:auto;
+}

@@ -1,5 +1,5 @@
 
-export const HashRouter=(target=new HTMLElement(),routes/*=[{component:()=>{},hash:"",memorize:true}]*/)=>{
+export const HashRouter=(target=new HTMLElement(),routes)=>{
     const {history,location}=window;
     let data=null,route=null;
  
