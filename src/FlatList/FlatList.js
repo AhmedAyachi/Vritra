@@ -33,6 +33,13 @@ export default function FlatList(props){
                 if(item){
                     state.itemEl=renderItem({parent:container,item,index,data});
                     state.itemEls.push(state.itemEl);
+                    if(horizontal){
+                        const {style}=state.itemEl;
+                        Object.assign(style,{
+                            display:"inline",
+                            verticalAlign:"middle",
+                        });
+                    }
                     observer.observe(state.itemEl);
                 }
                 else if(onReachEnd){
