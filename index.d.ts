@@ -67,7 +67,7 @@ export function Modal(props:{
 
 export function useRef(startsWith:string):string;
 export function map(array:any[],callback:(item:any,index:number,array:any[])=>string):string;
-export function setSwipeAction(params:{
+export function useSwipeGesture(params:{
     element:HTMLElement,
     onSwipeLeft():void,
     onSwipeRight():void,
