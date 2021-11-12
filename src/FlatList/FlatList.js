@@ -1,9 +1,9 @@
-import {useRef,setSwipeAction} from "../index";
+import {useRef,useSwipeGesture} from "../index";
 import css from "./FlatList.module.css";
 
 
 export default function FlatList(props){
-    const {parent,ref=useRef("flatlist"),className,containerClassName,data,renderItem,onReachEnd,horizontal,pagingEnabled=false,threshold=0.5,transition="250ms"}=props;
+    const {parent,ref=useRef("flatlist"),className,containerClassName,data,renderItem,onReachEnd,horizontal,pagingEnabled=false,threshold=0.5,transition="250ms",onSwipe}=props;
     parent.insertAdjacentHTML("beforeend",`<div id="${ref}" class="${css.flatlist} ${className||""}"></div>`);
     const flatlist=parent.querySelector(`#${ref}`),state={
         index:null,
@@ -46,7 +46,7 @@ export default function FlatList(props){
         if(pagingEnabled&&horizontal){
             const {itemEls,itemOffset}=state;
             container.style.overflow="visible";
-            setSwipeAction({
+            useSwipeGesture({
                 element:flatlist,
                 onSwipeLeft:()=>{
                     const {focus}=state,lastIndex=itemEls.length-1;
@@ -54,6 +54,7 @@ export default function FlatList(props){
                         state.focus=focus+1;
                         const {offsetLeft}=itemEls[state.focus];
                         container.style.transform=`translateX(-${offsetLeft-itemOffset}px)`;
+                        onSwipe&&onSwipe({direction:"left",index:state.focus,container});
                     }
                 },
                 onSwipeRight:()=>{
@@ -62,19 +63,20 @@ export default function FlatList(props){
                         state.focus=focus-1;
                         const {offsetLeft}=itemEls[state.focus],offsetX=offsetLeft-itemOffset;
                         container.style.transform=`translateX(-${offsetX>0?offsetX:0}px)`;
+                        onSwipe&&onSwipe({direction:"right",index:state.focus,container});
                     }
                 },
             });
         }
+    }
 
-        flatlist.addItems=(items)=>{
-            if(Array.isArray(items)&&items.length){
-                data.push(...items);
-                if(state.endreached){
-                    state.itemEl=renderItem({parent:flatlist,item:items[0],index:state.index,data});
-                    observer.observe(state.itemEl);
-                    state.endreached=false;
-                }
+    flatlist.addItems=(items)=>{
+        if(Array.isArray(items)&&items.length){
+            data.push(...items);
+            if(state.endreached){
+                state.itemEl=renderItem({parent:flatlist,item:items[0],index:state.index,data});
+                observer.observe(state.itemEl);
+                state.endreached=false;
             }
         }
     }

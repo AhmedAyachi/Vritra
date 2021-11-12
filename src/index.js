@@ -23,7 +23,7 @@ export const map=(array=[],treatment)=>{
 
 export const useRef=(startswith="")=>`${startswith}_${Math.random().toString(36).slice(2)}${Math.random().toString(36).slice(2)}`;
 
-export const setSwipeAction=(params)=>{
+export const useSwipeGesture=(params)=>{
     const state={...params},{element}=state;
     element.addEventListener("touchstart",(event)=>{
         event.stopPropagation();

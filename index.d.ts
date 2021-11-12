@@ -50,6 +50,7 @@ export function FlatList(props:{
     threshold:number,
     transition:string,
     renderItem(props:{parent:HTMLElement,item:any,index:number,data:any[]}):HTMLElement,
+    onSwipe(params:{direction:string,index:number,container:HTMLElement}):void,
     onReachEnd(container:HTMLElement):void,
 }):FlatList;
 
