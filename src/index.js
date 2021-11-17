@@ -62,11 +62,11 @@ export const fadeIn=(element,props={},callback)=>{
         const {display="block",duration=200}=props;
         const style=element.style;
         style.display=display;
-        style.transition=`${duration}ms`;
-        //style.animation=`fadeIn ${duration}ms 1 linear forwards`;
-        style.opacity="1";
+        //style.transition=`${duration}ms`;
+        style.animation=`fadeIn ${duration}ms 1 linear forwards`;
+        //style.opacity="1";
         callback&&setTimeout(()=>{
-            style.transition=null;
+            //style.transition=null;
             callback&&callback();
         },duration);
     }/*
@@ -79,13 +79,13 @@ export const fadeIn=(element,props={},callback)=>{
 export const fadeOut=(element,duration=200,callback)=>{
     if(element!==null){
         const style=element.style;
-        style.opacity="0";
-        style.transition=`${duration}ms`;
-        //style.animation=`fadeOut ${duration}ms 1 linear forwards`;
+        /*style.opacity="0";
+        style.transition=`${duration}ms`;*/
+        style.animation=`fadeOut ${duration}ms 1 linear forwards`;
         setTimeout(()=>{
             style.display="none";
-            style.transition=null;
-            //style.animation="";
+            //style.transition=null;
+            style.animation="";
             callback&&callback();
         },duration);
     }/*
