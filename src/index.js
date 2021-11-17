@@ -1,3 +1,4 @@
+import css from "./index.css";
 
 
 export {HashRouter} from "./HashRouter";
@@ -62,38 +63,24 @@ export const fadeIn=(element,props={},callback)=>{
         const {display="block",duration=200}=props;
         const style=element.style;
         style.display=display;
-        //style.transition=`${duration}ms`;
-        style.animation=`fadeIn ${duration}ms 1 linear forwards`;
-        //style.opacity="1";
+        style.animation=`${css.fadeIn} ${duration}ms 1 linear forwards`;
         callback&&setTimeout(()=>{
-            //style.transition=null;
             callback&&callback();
         },duration);
-    }/*
-    @keyframes fadeIn{
-        from {opacity:0}
-        to {opacity:1}
     }
-*/}
+}
 
 export const fadeOut=(element,duration=200,callback)=>{
     if(element!==null){
         const style=element.style;
-        /*style.opacity="0";
-        style.transition=`${duration}ms`;*/
-        style.animation=`fadeOut ${duration}ms 1 linear forwards`;
+        style.animation=`${css.fadeOut} ${duration}ms 1 linear forwards`;
         setTimeout(()=>{
             style.display="none";
-            //style.transition=null;
             style.animation="";
             callback&&callback();
         },duration);
-    }/*
-    @keyframes fadeOut{
-        from {opacity:1}
-        to {opacity:0}
     }
-*/}
+}
 
 export const toggle=(element,{display="block",duration=0.2},callback)=>{
     if(element.style.display==="none"){
