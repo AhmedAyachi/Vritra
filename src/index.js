@@ -1,4 +1,4 @@
-import css from "./index.css";
+import css from "./index.module.css";
 
 
 export {HashRouter} from "./HashRouter";
