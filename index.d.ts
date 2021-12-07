@@ -4,7 +4,7 @@ declare module "vanilla";
 export function HashRouter(
     target:HTMLElement,
     routes:[{
-        hash:string,
+        hash:String,
         memorize:boolean,
         component:(props:{parent:HTMLElement})=>HTMLElement,
     }]
@@ -17,9 +17,9 @@ interface DraggableView extends HTMLElement{
     ):void,
 }
 interface DraggableViewState{
-    x:number,y:number,
-    dragX:number,dragY:number,dragDX:number,dragDY:number,
-    dropX:number,dropY:number,dropDX:number,dropDY:number,
+    x:Number,y:Number,
+    dragX:Number,dragY:Number,dragDX:Number,dragDY:Number,
+    dropX:Number,dropY:Number,dropDX:Number,dropDY:Number,
     onDrag(element:DraggableView,state:DraggableViewState):void,
     onMove(element:DraggableView,state:DraggableViewState):void,
     onDrop(element:DraggableView,state:DraggableViewState):void,
@@ -27,8 +27,8 @@ interface DraggableViewState{
 }
 export function DraggableView(props:{
     parent:HTMLElement,
-    ref:string,
-    className:string,
+    ref:String,
+    className:String,
     horizontalDrag:boolean,
     verticalDrag:boolean,
     onDrag(element:DraggableView,state:DraggableViewState):void,
@@ -41,32 +41,33 @@ interface FlatList extends HTMLElement{
 }
 export function FlatList(props:{
     parent:HTMLElement,
-    ref:string,
-    className:string,
-    containerClassName:string,
+    ref:String,
+    className:String,
+    containerClassName:String,
     data:any[],
     horizontal:boolean,
     pagingEnabled:boolean,
-    threshold:number,
-    transition:string,
-    renderItem(props:{parent:HTMLElement,item:any,index:number,data:any[]}):HTMLElement,
-    onSwipe(params:{direction:string,index:number,container:HTMLElement}):void,
+    threshold:Number,
+    transition:String,
+    renderItem(props:{parent:HTMLElement,item:any,index:Number,data:any[]}):HTMLElement,
+    onSwipe(params:{direction:String,index:Number,container:HTMLElement}):void,
     onReachEnd(container:HTMLElement):void,
 }):FlatList;
 
 interface Modal extends HTMLElement{
-    show(display:string,callback:()=>void):void,
+    show(display:String,callback:()=>void):void,
     hide(callback:()=>void):void,
 }
 export function Modal(props:{
     parent:HTMLElement,
-    ref:string,
-    className:string,
+    ref:String,
+    className:String,
     onMount(element:Modal):void,
 }):Modal;
 
-export function useRef(startsWith:string):string;
-export function map(array:any[],callback:(item:any,index:number,array:any[])=>string):string;
+export function useRef(startsWith:String):String;
+export function map(array:any[],callback:(item:any,index:Number,array:any[])=>String):String;
+export function map(iteration:Number,callback:(index:Number)=>String):String;
 export function useSwipeGesture(params:{
     element:HTMLElement,
     onSwipeLeft():void,
@@ -75,32 +76,32 @@ export function useSwipeGesture(params:{
 export const specialchars="+=}°)]@ç^_\\`-|(['{\"#~&²£$¤*µ%ù§!/:.;?,<>";
 export function fadeIn(
     element:HTMLElement,
-    props:{display:string,duration:number},
+    props:{display:String,duration:Number},
     callback:()=>void,
 ):void;
 export function fadeOut(
     element:HTMLElement,
-    duration:number,
+    duration:Number,
     callback:()=>void,
 ):void;
 export function toggle(
     element:HTMLElement,
-    props:{display:string,duration:number},
+    props:{display:String,duration:Number},
     callback:()=>void,
 ):void;
 export function randomColor(
     style:"color"|"hue-rotate",
-    colors:string[],
-):string;
-export function createCode(length:number):string;
-export function replaceAt(index:number,replaceValue:string,targetString:string):string;
-export function capitalize(str:string):string;
-export function emailCheck(str:string):boolean;
-export function getArrayMax(array:any[],start:number,end:number):{
+    colors:String[],
+):String;
+export function createCode(length:Number):String;
+export function replaceAt(index:Number,replaceValue:String,targetString:String):String;
+export function capitalize(str:String):String;
+export function emailCheck(str:String):boolean;
+export function getArrayMax(array:any[],start:Number,end:Number):{
     value:any,
-    index:number,
+    index:Number,
 };
-export function removeItem(array:any[],predicate:(item:any,index:number,array:any[])=>void):void;
-export function replaceAll(target:string,searchValue:string,replaceValue:string):string;
-export function factorial(n:number):number;
-export function getCharsInBetween(startChar:string,endChar:string,from:string):string;
+export function removeItem(array:any[],predicate:(item:any,index:Number,array:any[])=>void):void;
+export function replaceAll(target:String,searchValue:String,replaceValue:String):String;
+export function factorial(n:Number):Number;
+export function getCharsInBetween(startChar:String,endChar:String,from:String):String;
