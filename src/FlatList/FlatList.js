@@ -3,7 +3,7 @@ import css from "./FlatList.module.css";
 
 
 export default function FlatList(props){
-    const {parent,ref=useRef("flatlist"),className,containerClassName,data,renderItem,onReachEnd,horizontal,pagingEnabled=false,threshold=0.5,transition="250ms",onSwipe}=props;
+    const {parent,ref=useRef("flatlist"),className,containerClassName,data,renderItem,onReachEnd,horizontal,pagingEnabled=false,threshold=0.25,transition="250ms",onSwipe}=props;
     parent.insertAdjacentHTML("beforeend",`<div id="${ref}" class="${css.flatlist} ${className||""}"></div>`);
     const flatlist=parent.querySelector(`#${ref}`),state={
         index:null,
@@ -87,6 +87,6 @@ export default function FlatList(props){
 const styles={
     container:({transition,horizontal})=>`
         white-space:${horizontal?"nowrap":"normal"};
-        transition:${transition||"0"};
+        transition:${transition||"250ms"};
     `,
 }
