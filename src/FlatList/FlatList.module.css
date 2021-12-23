@@ -15,6 +15,7 @@
     height:100%;
     top:0;
     left:0;
+    color:rgba(0,0,0,0.5);
     background-color:white;
 }
 .emptymsg{
@@ -24,5 +25,5 @@
     font-weight:700;
     font-size:7em;
     text-transform:capitalize;
-    color:rgba(0,0,0,0.5);
+    color:inherit;
 }
