@@ -87,7 +87,7 @@ export default function FlatList(props){
         }
     }
 
-    flatlist.showItems=(items)=>{
+    flatlist.showItems=(items,render)=>{
         const {popuplist}=state;
         popuplist&&popuplist.remove();
         if(Array.isArray(items)){
@@ -96,6 +96,7 @@ export default function FlatList(props){
                 parent:flatlist,
                 className:`${css.popuplist} ${popupClassName||""}`,
                 data:items,
+                renderItem:render||renderItem,
                 onReachEnd:null,
             });
         }
