@@ -12,10 +12,16 @@ export default function FlatList(props){
         itemEls:[],
         endreached:false,
         itemOffset:null,
+        popuplist:null,
     };
 
     flatlist.innerHTML=`
-        <div class="${css.container} ${containerClassName||""}" style="${styles.container({transition,horizontal})}"></div>
+        ${Array.isArray(data)&&data.length?`
+            <div class="${css.container} ${containerClassName||""}" style="${styles.container({transition,horizontal})}">
+        `:`
+            <p class="${css.emptymsg}">no results</p>
+        `}
+        </div>
     `;
 
     if(Array.isArray(data)&&data.length&&renderItem){
@@ -80,6 +86,21 @@ export default function FlatList(props){
             }
         }
     }
+
+    flatlist.showItems=(items)=>{
+        const {popuplist}=state;
+        popuplist&&popuplist.remove();
+        if(Array.isArray(items)){
+            state.popuplist=FlatList({
+                ...props,
+                parent:flatlist,
+                className:css.popuplist,
+                data:items,
+                onReachEnd:null,
+            });
+        }
+    }
+
     return flatlist;
 }
 

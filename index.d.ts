@@ -38,6 +38,7 @@ export function DraggableView(props:{
 
 interface FlatList extends HTMLElement{
     addItems(items:any[]):void,
+    showItems(items:any[]):void,
 }
 export function FlatList(props:{
     parent:HTMLElement,

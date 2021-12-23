@@ -8,3 +8,19 @@
 .container{
     overflow:auto;
 }
+.popuplist{
+    position:absolute;
+    width:100%;
+    height:100%;
+    top:0;
+    left:0;
+}
+.emptymsg{
+    max-width:100%;
+    text-align:center;
+    font-family:inter;
+    font-weight:700;
+    font-size:7em;
+    text-transform:capitalize;
+    color:rgba(0,0,0,0.5);
+}
