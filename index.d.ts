@@ -45,6 +45,7 @@ export function FlatList(props:{
     ref:String,
     className:String,
     containerClassName:String,
+    popupClassName:String,
     data:any[],
     horizontal:boolean,
     pagingEnabled:boolean,
