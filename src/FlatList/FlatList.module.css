@@ -1,4 +1,5 @@
 .flatlist{
+    position:relative;
     max-width:100%;
     max-height:100%;
     font-size:1em;
@@ -14,6 +15,7 @@
     height:100%;
     top:0;
     left:0;
+    background-color:white;
 }
 .emptymsg{
     max-width:100%;
