@@ -1,4 +1,5 @@
 .flatlist{
+    position:relative;
     max-width:100%;
     max-height:100%;
     font-size:1em;
@@ -8,4 +9,23 @@
 .container{
     height:100%;
     overflow:auto;
+}
+.popuplist{
+    position:absolute;
+    width:100%;
+    height:100%;
+    top:0;
+    left:0;
+    color:rgba(0,0,0,0.5);
+    background-color:white;
+}
+.emptymsg{
+    max-width:100%;
+    text-align:center;
+    font-family:inter;
+    font-weight:700;
+    font-size:7em;
+    margin-top:5%;
+    text-transform:capitalize;
+    color:inherit;
 }
