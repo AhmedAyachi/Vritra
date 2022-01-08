@@ -25,8 +25,8 @@ export default function FlatList(props){
         </div>
     `;
 
-    if(Array.isArray(data)&&data.length&&renderItem){
-        const container=flatlist.querySelector(`.${css.container}`);
+    const container=flatlist.querySelector(`.${css.container}`);
+    if(container&&renderItem){
         state.index=state.focus=0;
         state.itemEl=renderItem({parent:container,item:data[0],index:0,data});
         state.itemEls.push(state.itemEl);
@@ -81,7 +81,7 @@ export default function FlatList(props){
         if(Array.isArray(items)&&items.length){
             data.push(...items);
             if(state.endreached){
-                state.itemEl=renderItem({parent:flatlist,item:items[0],index:state.index,data});
+                state.itemEl=renderItem({parent:container,item:items[0],index:state.index,data});
                 state.observer.observe(state.itemEl);
                 state.endreached=false;
             }
