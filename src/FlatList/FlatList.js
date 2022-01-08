@@ -13,6 +13,7 @@ export default function FlatList(props){
         endreached:false,
         itemOffset:null,
         popuplist:null,
+        observer:null,
     };
 
     flatlist.innerHTML=`
@@ -30,7 +31,7 @@ export default function FlatList(props){
         state.itemEl=renderItem({parent:container,item:data[0],index:0,data});
         state.itemEls.push(state.itemEl);
         state.itemOffset=state.itemEl.offsetLeft;
-        const observer=new IntersectionObserver(([entry])=>{
+        const observer=state.observer=new IntersectionObserver(([entry])=>{
             const {isIntersecting}=entry;
             if(isIntersecting){
                 state.index++;
@@ -81,7 +82,7 @@ export default function FlatList(props){
             data.push(...items);
             if(state.endreached){
                 state.itemEl=renderItem({parent:flatlist,item:items[0],index:state.index,data});
-                observer.observe(state.itemEl);
+                state.observer.observe(state.itemEl);
                 state.endreached=false;
             }
         }
