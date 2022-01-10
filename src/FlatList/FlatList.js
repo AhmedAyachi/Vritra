@@ -39,7 +39,7 @@ export default function FlatList(props){
                 const {index}=state;
                 if(index<data.length){
                     const item=data[index];
-                    state.itemEl=renderItem({parent:container,item,index,data});
+                    state.itemEl=getElement({item,index,data});
                     state.itemEls.push(state.itemEl);
                     observer.observe(state.itemEl);
                 }
