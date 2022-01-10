@@ -3,7 +3,7 @@ import css from "./FlatList.module.css";
 
 
 export default function FlatList(props){
-    const {parent,ref=useRef("flatlist"),className,containerClassName,popupClassName,data,renderItem,onReachEnd,horizontal,pagingEnabled=false,threshold=0.5,transition="250ms",onSwipe}=props;
+    const {parent,ref=useRef("flatlist"),className,containerClassName,popupClassName,data,renderItem,onReachEnd,horizontal,backwards,pagingEnabled=false,threshold=0.5,transition="250ms",onSwipe}=props;
     parent.insertAdjacentHTML("beforeend",`<div id="${ref}" class="${css.flatlist} ${className||""}"></div>`);
     const flatlist=parent.querySelector(`#${ref}`),state={
         index:null,
@@ -18,9 +18,9 @@ export default function FlatList(props){
 
     flatlist.innerHTML=`
         ${Array.isArray(data)&&data.length?`
-            <div class="${css.container} ${containerClassName||""}" style="${styles.container({transition,horizontal})}">
+            <div class="${css.container} ${containerClassName||""}" style="${styles.container({pagingEnabled,transition,horizontal})}">
         `:`
-            <p class="${css.emptymsg}">no results</p>
+            <p class="${css.emptymsg}">no data</p>
         `}
         </div>
     `;
@@ -28,7 +28,7 @@ export default function FlatList(props){
     const container=flatlist.querySelector(`.${css.container}`);
     if(container&&renderItem){
         state.index=state.focus=0;
-        state.itemEl=renderItem({parent:container,item:data[0],index:0,data});
+        state.itemEl=getElement({item:data[0],index:0,data});
         state.itemEls.push(state.itemEl);
         state.itemOffset=state.itemEl.offsetLeft;
         const observer=state.observer=new IntersectionObserver(([entry])=>{
@@ -36,8 +36,9 @@ export default function FlatList(props){
             if(isIntersecting){
                 state.index++;
                 observer.unobserve(state.itemEl);
-                const {index}=state,item=data[index];
-                if(item){
+                const {index}=state;
+                if(index<data.length){
+                    const item=data[index];
                     state.itemEl=renderItem({parent:container,item,index,data});
                     state.itemEls.push(state.itemEl);
                     observer.observe(state.itemEl);
@@ -81,7 +82,7 @@ export default function FlatList(props){
         if(Array.isArray(items)&&items.length){
             data.push(...items);
             if(state.endreached){
-                state.itemEl=renderItem({parent:container,item:items[0],index:state.index,data});
+                state.itemEl=getElement({item:items[0],index:state.index,data});
                 state.observer.observe(state.itemEl);
                 state.endreached=false;
             }
@@ -103,12 +104,32 @@ export default function FlatList(props){
         }
     }
 
+    function getElement(params){
+        const {item,index,data}=params;
+        let element;
+        if(backwards){
+            const {scrollTop,scrollHeight,scrollLeft,scrollWidth}=container;
+            element=container.insertAdjacentElement("afterbegin",renderItem({parent:container,item,index,data}));
+            Object.assign(container,{
+                scrollTop:container.scrollHeight-(scrollHeight-scrollTop),
+                scrollLeft:container.scrollWidth-(scrollWidth-scrollLeft),
+            });
+        }
+        else{
+            element=renderItem({parent:container,item,index,data});
+        }
+        return element;
+    }
+
     return flatlist;
 }
 
 const styles={
-    container:({transition,horizontal})=>`
+    container:({transition,horizontal,pagingEnabled})=>`
         white-space:${horizontal?"nowrap":"normal"};
         transition:${transition||"250ms"};
+        ${pagingEnabled?`
+            overflow:visible !important;
+        `:""}
     `,
 }

@@ -48,6 +48,7 @@ export function FlatList(props:{
     popupClassName:String,
     data:any[],
     horizontal:boolean,
+    backwards:boolean,
     pagingEnabled:boolean,
     threshold:Number,
     transition:String,
@@ -91,10 +92,7 @@ export function toggle(
     props:{display:String,duration:Number},
     callback:()=>void,
 ):void;
-export function randomColor(
-    style:"color"|"hue-rotate",
-    colors:String[],
-):String;
+export function randomColor(from:String[]?):String;
 export function createCode(length:Number):String;
 export function replaceAt(index:Number,replaceValue:String,targetString:String):String;
 export function capitalize(str:String):String;

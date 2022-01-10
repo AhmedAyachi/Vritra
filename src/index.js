@@ -91,21 +91,16 @@ export const toggle=(element,{display="block",duration=0.2},callback)=>{
     }
 }
 
-export function randomColor(style="color",colors=[]){
-    if(style==="hue-rotate"){
-        return`hue-rotate(${Math.floor(Math.random()*1000)}deg)`;
+export function randomColor(colors=[]){
+    if(Array.isArray(colors)&&colors.length){
+        return colors[Math.floor(Math.random()*colors.length)];
     }
-    else if(style==="color"){
-        if(colors.length>0){
-            return colors[Math.floor(Math.random()*colors.length)];
-        }
-        else{
-            return `rgb(
-                ${Math.floor(Math.random()*255)},
-                ${Math.floor(Math.random()*255)},
-                ${Math.floor(Math.random()*255)}
-            )`
-        }
+    else{
+        return `rgb(
+            ${Math.floor(Math.random()*255)},
+            ${Math.floor(Math.random()*255)},
+            ${Math.floor(Math.random()*255)}
+        )`
     }
 }
 
