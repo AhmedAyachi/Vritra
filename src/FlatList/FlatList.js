@@ -103,6 +103,7 @@ export default function FlatList(props){
             });
         }
     }
+    flatlist.container=container;
 
     function getElement(params){
         const {item,index,data}=params;
