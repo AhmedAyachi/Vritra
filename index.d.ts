@@ -74,8 +74,8 @@ export function map(array:any[],callback:(item:any,index:Number,array:any[])=>St
 export function map(iteration:Number,callback:(index:Number)=>String):String;
 export function useSwipeGesture(params:{
     element:HTMLElement,
-    onSwipeLeft():void,
-    onSwipeRight():void,
+    onSwipeLeft(eventRemover:()=>void,eventAdder:()=>void):void,
+    onSwipeRight(eventRemover:()=>void,eventAdder:()=>void):void,
 }):void;
 export const specialchars="+=}°)]@ç^_\\`-|(['{\"#~&²£$¤*µ%ù§!/:.;?,<>";
 export function fadeIn(
@@ -93,7 +93,7 @@ export function toggle(
     props:{display:String,duration:Number},
     callback:()=>void,
 ):void;
-export function randomColor(from:String[]?):String;
+export function randomColor(from?:String[]):String;
 export function createCode(length:Number):String;
 export function replaceAt(index:Number,replaceValue:String,targetString:String):String;
 export function capitalize(str:String):String;
