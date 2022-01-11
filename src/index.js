@@ -25,7 +25,7 @@ export const map=(array=[],treatment)=>{
 export const useRef=(startswith="")=>`${startswith}_${Math.random().toString(36).slice(2)}${Math.random().toString(36).slice(2)}`;
 
 export const useSwipeGesture=(params)=>{
-    const state={...params},{element}=state;
+    const state={...params},{element,length=40}=state;
     element.addEventListener("touchstart",(event)=>{
         event.stopPropagation();
         const {clientX,clientY}=event.changedTouches[0];
@@ -37,14 +37,14 @@ export const useSwipeGesture=(params)=>{
         const swipewidth=state.touchX-clientX,swipeheight=Math.abs(clientY-state.touchY);
         const {onSwipeLeft,onSwipeRight}=state;
         if(swipeheight<60){
-            if(onSwipeLeft&&(swipewidth>40)){
+            if(onSwipeLeft&&(swipewidth>length)){
                 onSwipeLeft(()=>{
                     state.onSwipeLeft=null;
                 },()=>{
                     state.onSwipeLeft=params.onSwipeLeft;
                 });
             }
-            else if(onSwipeRight&&(swipewidth<-40)){
+            else if(onSwipeRight&&(swipewidth<-length)){
                 onSwipeRight(()=>{
                     state.onSwipeRight=null;
                 },()=>{

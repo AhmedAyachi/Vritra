@@ -74,6 +74,7 @@ export function map(array:any[],callback:(item:any,index:Number,array:any[])=>St
 export function map(iteration:Number,callback:(index:Number)=>String):String;
 export function useSwipeGesture(params:{
     element:HTMLElement,
+    length:number,
     onSwipeLeft(eventRemover:()=>void,eventAdder:()=>void):void,
     onSwipeRight(eventRemover:()=>void,eventAdder:()=>void):void,
 }):void;
