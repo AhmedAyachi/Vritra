@@ -84,7 +84,7 @@ export default function FlatList(props){
             if(state.endreached){
                 const element=state.itemEl=getElement({item:items[0],index:state.index,data});
                 state.itemEls.push(element);
-                state.observer.observe(state.itemEl);
+                state.observer.observe(element);
                 state.endreached=false;
             }
         }
