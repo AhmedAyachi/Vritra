@@ -57,7 +57,7 @@ export default function FlatList(props){
             useSwipeGesture({
                 element:flatlist,
                 onSwipeLeft:()=>{
-                    const {focus}=state,lastIndex=data.length-1;
+                    const {focus}=state,lastIndex=itemEls.length-1;
                     if(focus<lastIndex){
                         state.focus=focus+1;
                         const {offsetLeft}=itemEls[state.focus];
@@ -82,7 +82,8 @@ export default function FlatList(props){
         if(Array.isArray(items)&&items.length){
             data.push(...items);
             if(state.endreached){
-                state.itemEl=getElement({item:items[0],index:state.index,data});
+                const element=state.itemEl=getElement({item:items[0],index:state.index,data});
+                state.itemEls.push(element);
                 state.observer.observe(state.itemEl);
                 state.endreached=false;
             }
