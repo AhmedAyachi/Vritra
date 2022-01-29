@@ -149,6 +149,7 @@ export default function FlatList(props){
 
 const styles={
     container:({transition,horizontal,pagingEnabled})=>`
+        overflow-x:${horizontal?"auto":"hidden"};
         white-space:${horizontal?"nowrap":"normal"};
         transition:${transition||"250ms"};
         ${pagingEnabled?`
