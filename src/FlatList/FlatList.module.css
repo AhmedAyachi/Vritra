@@ -8,7 +8,7 @@
 }
 .container{
     height:100%;
-    overflow:auto;
+    overflow:hidden auto;
 }
 .popuplist{
     position:absolute;
