@@ -41,10 +41,9 @@ export default function FlatList(props){
                     const item=data[index];
                     createElement({item,index});
                 }
-                else if(onReachEnd){
+                else{
                     state.endreached=true;
-                    console.log("observer killed");
-                    onReachEnd(container);
+                    onReachEnd&&onReachEnd(container);
                 }
             }
         },{root:flatlist,threshold});
@@ -81,9 +80,7 @@ export default function FlatList(props){
         if(Array.isArray(items)&&items.length){
             data.push(...items);
             if(state.endreached){
-                /* const element= */createElement({item:items[0],index:state.index});
-                //state.itemEls.push(element);
-                //state.observer.observe(element);
+                createElement({item:items[0],index:state.index});
                 state.endreached=false;
             }
         }
@@ -101,42 +98,6 @@ export default function FlatList(props){
                 renderItem:render||renderItem,
                 onReachEnd:null,
             });
-        }
-    }
-    
-    flatlist.scrollToIndex=(index)=>{
-        if((index>-1)&&(index<data.length)){
-            const {itemEls}=state;
-            let target;
-            if(index<itemEls.length){
-                target=state.itemEls[index];
-            }
-            else{
-                console.log("scrollToIndex is creating next");
-                const {observer}=state;
-                //console.log("length",itemEls.length);
-                for(let i=itemEls.length;i<=index;i++){
-                    observer.unobserve(state.itemEl);
-                    console.log({item:data[index],index:i});
-                    createElement({item:data[index],index:i});
-                }
-                target=state.itemEl;
-            }
-            const {firstOffset}=state;
-            if(horizontal){
-                const {offsetLeft}=target;
-                if(pagingEnabled){
-                    container.style.transform=`translateX(-${offsetLeft-firstOffset}px)`;
-                }
-                else{
-                    container.scrollLeft=offsetLeft-firstOffset;
-                }
-            }
-            else{
-                const {offsetTop}=target;
-                container.scrollTop=offsetTop-firstOffset;
-            }
-            state.focus=index;
         }
     }
 
@@ -159,7 +120,6 @@ export default function FlatList(props){
         state.itemEls.push(element);
         state.itemEl=element;
         observer&&observer.observe(element);
-        //return element;
     }
 
     return flatlist;
