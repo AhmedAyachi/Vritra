@@ -107,6 +107,7 @@ export default function FlatList(props){
     
     flatlist.scrollToIndex=(index)=>{
         if((index>-1)&&(index<data.length)){
+            console.log("scrollToIndex called");
             const {itemEls}=state;
             if(index<itemEls.length){
                 const itemEl=state.itemEls[index],{firstOffset}=state;
@@ -125,6 +126,7 @@ export default function FlatList(props){
                 }
             }
             else{
+                console.log("scrollToIndex is creating next");
                 const {observer}=state;
                 for(let i=itemEls.length;i<index;i++){
                     observer.unobserve(state.itemEl);
