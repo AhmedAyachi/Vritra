@@ -130,6 +130,7 @@ export default function FlatList(props){
                 const {observer}=state;
                 for(let i=itemEls.length;i<index;i++){
                     observer.unobserve(state.itemEl);
+                    console.log({item:data[index],index:i});
                     createNextItem({item:data[index],index:i});
                 }
             }
