@@ -106,7 +106,7 @@ export default function FlatList(props){
     }
     
     flatlist.scrollToIndex=(i)=>{
-        if(i&&i>data.length){
+        if((i>-1)&&(i<data.length)){
             state.focus=i;
             const itemEl=state.itemEls[i],{firstOffset}=state;
             if(horizontal){
