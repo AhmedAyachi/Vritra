@@ -117,7 +117,6 @@ export default function FlatList(props){
                 //console.log("length",itemEls.length);
                 for(let i=itemEls.length;i<=index;i++){
                     observer.unobserve(state.itemEl);
-                    o
                     console.log({item:data[index],index:i});
                     createElement({item:data[index],index:i});
                 }
