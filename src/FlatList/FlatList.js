@@ -11,7 +11,7 @@ export default function FlatList(props){
         focus:null,
         itemEls:[],
         endreached:false,
-        itemOffset:null,
+        firstOffset:null,
         popuplist:null,
         observer:null,
     };
@@ -28,9 +28,9 @@ export default function FlatList(props){
     const container=flatlist.querySelector(`.${css.container}`);
     if(container&&renderItem){
         state.index=state.focus=0;
-        state.itemEl=getElement({item:data[0],index:0,data});
+        state.itemEl=getElement({item:data[0],index:0});
         state.itemEls.push(state.itemEl);
-        state.itemOffset=state.itemEl.offsetLeft;
+        state.firstOffset=horizontal?state.itemEl.offsetLeft:state.itemEl.offsetTop;
         const observer=state.observer=new IntersectionObserver(([entry])=>{
             const {isIntersecting}=entry;
             if(isIntersecting){
@@ -39,7 +39,7 @@ export default function FlatList(props){
                 const {index}=state;
                 if(index<data.length){
                     const item=data[index];
-                    state.itemEl=getElement({item,index,data});
+                    state.itemEl=getElement({item,index});
                     state.itemEls.push(state.itemEl);
                     observer.observe(state.itemEl);
                 }
@@ -52,7 +52,7 @@ export default function FlatList(props){
         observer.observe(state.itemEl);
 
         if(pagingEnabled&&horizontal){
-            const {itemEls,itemOffset}=state;
+            const {itemEls,firstOffset}=state;
             container.style.overflow="visible";
             useSwipeGesture({
                 element:flatlist,
@@ -61,7 +61,7 @@ export default function FlatList(props){
                     if(focus<lastIndex){
                         state.focus=focus+1;
                         const {offsetLeft}=itemEls[state.focus];
-                        container.style.transform=`translateX(-${offsetLeft-itemOffset}px)`;
+                        container.style.transform=`translateX(-${offsetLeft-firstOffset}px)`;
                         onSwipe&&onSwipe({direction:"left",index:state.focus,container});
                     }
                 },
@@ -69,7 +69,7 @@ export default function FlatList(props){
                     const {focus}=state;
                     if(focus){
                         state.focus=focus-1;
-                        const {offsetLeft}=itemEls[state.focus],offsetX=offsetLeft-itemOffset;
+                        const {offsetLeft}=itemEls[state.focus],offsetX=offsetLeft-firstOffset;
                         container.style.transform=`translateX(-${offsetX>0?offsetX:0}px)`;
                         onSwipe&&onSwipe({direction:"right",index:state.focus,container});
                     }
@@ -82,7 +82,7 @@ export default function FlatList(props){
         if(Array.isArray(items)&&items.length){
             data.push(...items);
             if(state.endreached){
-                const element=state.itemEl=getElement({item:items[0],index:state.index,data});
+                const element=state.itemEl=getElement({item:items[0],index:state.index});
                 state.itemEls.push(element);
                 state.observer.observe(element);
                 state.endreached=false;
@@ -104,10 +104,31 @@ export default function FlatList(props){
             });
         }
     }
+    
+    flatlist.scrollToIndex=(i)=>{
+        if(i&&i>data.length){
+            state.focus=i;
+            const itemEl=state.itemEls[i],{firstOffset}=state;
+            if(horizontal){
+                const {offsetLeft}=itemEl;
+                if(pagingEnabled){
+                    container.style.transform=`translateX(-${offsetLeft-firstOffset}px)`;
+                }
+                else{
+                    container.scrollLeft=offsetLeft-firstOffset;
+                }
+            }
+            else{
+                const {offsetTop}=itemEl;
+                container.scrollTop=offsetTop-firstOffset;
+            }
+        }
+    }
+
     flatlist.container=container;
 
     function getElement(params){
-        const {item,index,data}=params;
+        const {item,index}=params;
         let element;
         if(backwards){
             const {scrollTop,scrollHeight,scrollLeft,scrollWidth}=container;

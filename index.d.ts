@@ -37,8 +37,9 @@ export function DraggableView(props:{
 }):DraggableView;
 
 interface FlatList extends HTMLElement{
-    addItems(items:any[],renderItem:(props:{parent:HTMLElement,item:any,index:Number,data:any[]})=>HTMLElement):void,
-    showItems(items:any[]):void,
+    addItems(items:any[]):void,
+    showItems(items:any[],renderItem:(props:{parent:HTMLElement,item:any,index:Number,data:any[]})=>HTMLElement):void,
+    scrollToIndex(index:Number):void,
     container:HTMLElement,
 }
 export function FlatList(props:{
@@ -54,7 +55,7 @@ export function FlatList(props:{
     threshold:Number,
     transition:String,
     renderItem(props:{parent:HTMLElement,item:any,index:Number,data:any[]}):HTMLElement,
-    onSwipe(params:{direction:String,index:Number,container:HTMLElement}):void,
+    onSwipe(params:{direction:"left"|"right",index:Number,container:HTMLElement}):void,
     onReachEnd(container:HTMLElement):void,
 }):FlatList;
 
