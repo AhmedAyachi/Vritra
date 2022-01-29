@@ -28,7 +28,7 @@ export default function FlatList(props){
     const container=flatlist.querySelector(`.${css.container}`);
     if(container&&renderItem){
         state.index=state.focus=0;
-        createNextItem({item:data[0],index:0});
+        createElement({item:data[0],index:0});
         //state.itemEls.push(state.itemEl);
         state.firstOffset=horizontal?state.itemEl.offsetLeft:state.itemEl.offsetTop;
         const observer=state.observer=new IntersectionObserver(([entry])=>{
@@ -39,7 +39,7 @@ export default function FlatList(props){
                 const {index}=state;
                 if(index<data.length){
                     const item=data[index];
-                    createNextItem({item,index});
+                    createElement({item,index});
                     //state.itemEls.push(state.itemEl);
                     //observer.observe(state.itemEl);
                 }
@@ -82,7 +82,7 @@ export default function FlatList(props){
         if(Array.isArray(items)&&items.length){
             data.push(...items);
             if(state.endreached){
-                /* const element= */createNextItem({item:items[0],index:state.index});
+                /* const element= */createElement({item:items[0],index:state.index});
                 //state.itemEls.push(element);
                 //state.observer.observe(element);
                 state.endreached=false;
@@ -128,11 +128,11 @@ export default function FlatList(props){
             else{
                 console.log("scrollToIndex is creating next");
                 const {observer}=state;
-                console.log(itemEls.length);
-                for(let i=itemEls.length;i<index;i++){
+                console.log("length",itemEls.length);
+                for(let i=itemEls.length;i<=index;i++){
                     observer.unobserve(state.itemEl);
                     console.log({item:data[index],index:i});
-                    createNextItem({item:data[index],index:i});
+                    createElement({item:data[index],index:i});
                 }
             }
             state.focus=index;
@@ -141,7 +141,7 @@ export default function FlatList(props){
 
     flatlist.container=container;
 
-    function createNextItem(params){
+    function createElement(params){
         const {item,index}=params,{observer}=state;
         let element;
         if(backwards){
@@ -156,8 +156,8 @@ export default function FlatList(props){
             element=renderItem({parent:container,item,index,data});
         }
         state.itemEls.push(element);
-        observer&&observer.observe(element);
         state.itemEl=element;
+        observer&&observer.observe(element);
         //return element;
     }
 
