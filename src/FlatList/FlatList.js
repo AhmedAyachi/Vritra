@@ -153,7 +153,7 @@ export default function FlatList(props){
             element=renderItem({parent:container,item,index,data});
         }
         state.itemEls.push(element);
-        observer&&observer.observe(state.itemEl);
+        observer&&observer.observe(element);
         return element;
     }
 
