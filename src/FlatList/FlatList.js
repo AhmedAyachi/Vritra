@@ -29,7 +29,7 @@ export default function FlatList(props){
     if(container&&renderItem){
         
         
-        state.firstOffset=horizontal?state.itemEl.offsetLeft:state.itemEl.offsetTop;
+        
         const observer=state.observer=new IntersectionObserver(([entry])=>{
             const {isIntersecting}=entry;
             if(isIntersecting){
@@ -51,6 +51,7 @@ export default function FlatList(props){
         state.index=state.focus=0;
         state.itemEl=getElement({item:data[0],index:0});
         //state.itemEls.push(state.itemEl);
+        state.firstOffset=horizontal?state.itemEl.offsetLeft:state.itemEl.offsetTop;
         //observer.observe(state.itemEl);
 
         if(pagingEnabled&&horizontal){
