@@ -27,9 +27,10 @@ export default function FlatList(props){
 
     const container=flatlist.querySelector(`.${css.container}`);
     if(container&&renderItem){
-        
-        
-        
+        state.index=state.focus=0;
+        state.itemEl=getElement({item:data[0],index:0});
+        //state.itemEls.push(state.itemEl);
+        state.firstOffset=horizontal?state.itemEl.offsetLeft:state.itemEl.offsetTop;
         const observer=state.observer=new IntersectionObserver(([entry])=>{
             const {isIntersecting}=entry;
             if(isIntersecting){
@@ -48,11 +49,7 @@ export default function FlatList(props){
                 }
             }
         },{root:flatlist,threshold});
-        state.index=state.focus=0;
-        state.itemEl=getElement({item:data[0],index:0});
-        //state.itemEls.push(state.itemEl);
-        state.firstOffset=horizontal?state.itemEl.offsetLeft:state.itemEl.offsetTop;
-        //observer.observe(state.itemEl);
+        observer.observe(state.itemEl);
 
         if(pagingEnabled&&horizontal){
             const {itemEls,firstOffset}=state;
