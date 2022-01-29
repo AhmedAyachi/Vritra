@@ -107,7 +107,6 @@ export default function FlatList(props){
     
     flatlist.scrollToIndex=(index)=>{
         if((index>-1)&&(index<data.length)){
-            console.log("scrollToIndex called");
             const {itemEls}=state;
             if(index<itemEls.length){
                 const itemEl=state.itemEls[index],{firstOffset}=state;
@@ -128,11 +127,25 @@ export default function FlatList(props){
             else{
                 console.log("scrollToIndex is creating next");
                 const {observer}=state;
-                console.log("length",itemEls.length);
+                //console.log("length",itemEls.length);
                 for(let i=itemEls.length;i<=index;i++){
                     observer.unobserve(state.itemEl);
                     console.log({item:data[index],index:i});
                     createElement({item:data[index],index:i});
+                }
+                const {itemEl,firstOffset}=state;
+                if(horizontal){
+                    const {offsetLeft}=itemEl;
+                    if(pagingEnabled){
+                        container.style.transform=`translateX(-${offsetLeft-firstOffset}px)`;
+                    }
+                    else{
+                        container.scrollLeft=offsetLeft-firstOffset;
+                    }
+                }
+                else{
+                    const {offsetTop}=itemEl;
+                    container.scrollTop=offsetTop-firstOffset;
                 }
             }
             state.focus=index;
