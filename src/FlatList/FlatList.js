@@ -31,7 +31,6 @@ export default function FlatList(props){
         createElement({item:data[0],index:0});
         state.firstOffset=horizontal?state.itemEl.offsetLeft:state.itemEl.offsetTop;
         const observer=state.observer=new IntersectionObserver(([entry])=>{
-            console.log("observer called");
             const {isIntersecting}=entry;
             if(isIntersecting){
                 state.index++;
