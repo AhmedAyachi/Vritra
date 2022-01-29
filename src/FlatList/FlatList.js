@@ -29,7 +29,7 @@ export default function FlatList(props){
     if(container&&renderItem){
         state.index=state.focus=0;
         state.itemEl=getElement({item:data[0],index:0});
-        state.itemEls.push(state.itemEl);
+        //state.itemEls.push(state.itemEl);
         state.firstOffset=horizontal?state.itemEl.offsetLeft:state.itemEl.offsetTop;
         const observer=state.observer=new IntersectionObserver(([entry])=>{
             const {isIntersecting}=entry;
@@ -40,8 +40,8 @@ export default function FlatList(props){
                 if(index<data.length){
                     const item=data[index];
                     state.itemEl=getElement({item,index});
-                    state.itemEls.push(state.itemEl);
-                    observer.observe(state.itemEl);
+                    //state.itemEls.push(state.itemEl);
+                    //observer.observe(state.itemEl);
                 }
                 else if(onReachEnd){
                     state.endreached=true;
@@ -49,7 +49,7 @@ export default function FlatList(props){
                 }
             }
         },{root:flatlist,threshold});
-        observer.observe(state.itemEl);
+        //observer.observe(state.itemEl);
 
         if(pagingEnabled&&horizontal){
             const {itemEls,firstOffset}=state;
@@ -82,9 +82,9 @@ export default function FlatList(props){
         if(Array.isArray(items)&&items.length){
             data.push(...items);
             if(state.endreached){
-                const element=state.itemEl=getElement({item:items[0],index:state.index});
-                state.itemEls.push(element);
-                state.observer.observe(element);
+                /* const element= */state.itemEl=getElement({item:items[0],index:state.index});
+                //state.itemEls.push(element);
+                //state.observer.observe(element);
                 state.endreached=false;
             }
         }
@@ -105,30 +105,41 @@ export default function FlatList(props){
         }
     }
     
-    flatlist.scrollToIndex=(i)=>{
-        if((i>-1)&&(i<data.length)){
-            state.focus=i;
-            const itemEl=state.itemEls[i],{firstOffset}=state;
-            if(horizontal){
-                const {offsetLeft}=itemEl;
-                if(pagingEnabled){
-                    container.style.transform=`translateX(-${offsetLeft-firstOffset}px)`;
+    flatlist.scrollToIndex=(index)=>{
+        if((index>-1)&&(index<data.length)){
+            
+            const {itemEls}=state;
+            if(index<itemEls.length){
+                const itemEl=state.itemEls[index],{firstOffset}=state;
+                if(horizontal){
+                    const {offsetLeft}=itemEl;
+                    if(pagingEnabled){
+                        container.style.transform=`translateX(-${offsetLeft-firstOffset}px)`;
+                    }
+                    else{
+                        container.scrollLeft=offsetLeft-firstOffset;
+                    }
                 }
                 else{
-                    container.scrollLeft=offsetLeft-firstOffset;
+                    const {offsetTop}=itemEl;
+                    container.scrollTop=offsetTop-firstOffset;
                 }
             }
             else{
-                const {offsetTop}=itemEl;
-                container.scrollTop=offsetTop-firstOffset;
+                const {observer}=state;
+                for(let i=itemEls.length;i<index;i++){
+                    observer.unobserve(state.itemEl);
+                    state.itemEl=getElement({item:data[index],index:i});
+                }
             }
+            state.focus=index;
         }
     }
 
     flatlist.container=container;
 
     function getElement(params){
-        const {item,index}=params;
+        const {item,index}=params,{observer}=state;
         let element;
         if(backwards){
             const {scrollTop,scrollHeight,scrollLeft,scrollWidth}=container;
@@ -141,6 +152,8 @@ export default function FlatList(props){
         else{
             element=renderItem({parent:container,item,index,data});
         }
+        state.itemEls.push(element);
+        observer&&observer.observe(state.itemEl);
         return element;
     }
 
