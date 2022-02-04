@@ -103,7 +103,8 @@ export function getArrayMax(array:any[],start:Number,end:Number):{
     value:any,
     index:Number,
 };
-export function removeItem(array:any[],predicate:(item:any,index:Number,array:any[])=>void):void;
+export function removeItem(array:any[],predicate:(item:any,index:Number,array:any[])=>boolean):any;
+export function removeItem(array:any[],item:any):any;
 export function replaceAll(target:String,searchValue:String,replaceValue:String):String;
 export function factorial(n:Number):Number;
 export function getCharsInBetween(startChar:String,endChar:String,from:String):String;

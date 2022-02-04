@@ -159,15 +159,26 @@ export const getArrayMax=(array=[],start=0,end=array.length)=>{
 
 export const removeItem=(array,predicate)=>{
     let item=null,status=null;
-    if(Array.isArray(array)&&(typeof(predicate)==="function")){
+    if(Array.isArray(array)){
         let index=-1;
-        item=array.find((item,i)=>{
-            status=predicate(item,i,array);
-            if(status){
-                index=i;
-            }
-            return status;
-        });
+        if(typeof(predicate)==="function"){
+            item=array.find((item,i)=>{
+                status=predicate(item,i,array);
+                if(status){
+                    index=i;
+                }
+                return status;
+            });
+        }
+        else{
+            item=array.find((item,i)=>{
+                status=item===predicate;
+                if(status){
+                    index=i;
+                }
+                return status;
+            });
+        }
         (index>-1)&&array.splice(index,1);
     }
     return item;
