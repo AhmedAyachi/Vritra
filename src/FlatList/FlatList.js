@@ -91,7 +91,7 @@ export default function FlatList(props){
         if(Array.isArray(items)){
             state.popuplist=FlatList({
                 ...props,
-                parent:flatlist,
+                //parent:flatlist,
                 className:`${css.popuplist} ${popupClassName||""}`,
                 data:items,
                 renderItem:render||renderItem,
