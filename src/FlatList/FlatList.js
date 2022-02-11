@@ -88,15 +88,17 @@ export default function FlatList(props){
     flatlist.showItems=(items,render)=>{
         const {popuplist}=state;
         popuplist&&popuplist.remove();
+        flatlist.style.overflow=null;
         if(Array.isArray(items)){
             state.popuplist=FlatList({
                 ...props,
-                //parent:flatlist,
+                parent:flatlist,
                 className:`${css.popuplist} ${popupClassName||""}`,
                 data:items,
                 renderItem:render||renderItem,
                 onReachEnd:null,
             });
+            flatlist.style.overflow="hidden";
         }
     }
 
