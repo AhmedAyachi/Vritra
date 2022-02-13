@@ -6,6 +6,21 @@ export {default as DraggableView} from "./DraggableView/DraggableView";
 export {default as Modal} from "./Modal/Modal";
 export {default as FlatList} from "./FlatList/FlatList";
 
+export const groupBy=(array,filter)=>{
+    const groups=[],{length}=array;
+    for(let i=0;i<length;i++){
+        const item=array[i],predicate=filter(item,i,array);
+        const group=groups.find(group=>group.predicate===predicate);
+        if(group){
+            group.items.push(item);
+        }
+        else{
+            groups.push({predicate,items:[item]});
+        }
+    }
+    return groups;
+} 
+
 export const map=(array=[],treatment)=>{
     let str="";
     if(Array.isArray(array)){
