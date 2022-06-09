@@ -27,6 +27,11 @@ interface DraggableViewState{
 }
 export function DraggableView(props:{
     parent:HTMLElement,
+    id:String,
+    /**
+     * @deprecated
+     * use id prop instead
+     */
     ref:String,
     className:String,
     horizontalDrag:boolean,
@@ -43,6 +48,11 @@ interface FlatList extends HTMLElement{
 }
 export function FlatList(props:{
     parent:HTMLElement,
+    id:String,
+    /**
+     * @deprecated
+     * use id prop instead
+     */
     ref:String,
     className:String,
     containerClassName:String,
@@ -64,6 +74,11 @@ interface Modal extends HTMLElement{
 }
 export function Modal(props:{
     parent:HTMLElement,
+    id:String,
+    /**
+     * @deprecated
+     * use id prop instead
+     */
     ref:String,
     className:String,
     onMount(element:Modal):void,
