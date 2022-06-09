@@ -69,6 +69,11 @@ export function Modal(props:{
     onMount(element:Modal):void,
 }):Modal;
 
+export function useId(startsWith:String):String;
+/**
+ * @deprecated
+ * use useId instead
+ */
 export function useRef(startsWith:String):String;
 export function groupBy(array:any[],filter:(item:any,index:Number,array:any[])=>any):{predicate:any,items:any[]}[];
 export function map(array:any[],callback:(item:any,index:Number,array:any[])=>String):String;

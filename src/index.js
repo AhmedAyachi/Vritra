@@ -37,7 +37,8 @@ export const map=(array=[],treatment)=>{
     return str;
 }
 
-export const useRef=(startswith="")=>`${startswith}_${Math.random().toString(36).slice(2)}${Math.random().toString(36).slice(2)}`;
+export const useId=(startswith="")=>`${startswith}_${Math.random().toString(36).slice(2)}${Math.random().toString(36).slice(2)}`;
+export const useRef=useId;
 
 export const useSwipeGesture=(params)=>{
     const state={...params},{element,length=40}=state;
