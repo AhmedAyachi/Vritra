@@ -3,8 +3,8 @@ import css from "./DraggableView.module.css";
 
 
 export default function DraggableView(props){
-    const {parent,ref=useId("draggableview"),id=ref,className="",horizontalDrag=true,verticalDrag=true,onDrag,onMove,onDrop,innerHTML=""}=props;
-    parent.insertAdjacentHTML("beforeend",`<div id="${id}" class="${css.draggableview} ${className}" style="font-size:1em"></div>`);
+    const {parent,ref=useId("draggableview"),id=ref,className="",horizontalDrag=true,verticalDrag=true,onDrag,onMove,onDrop,style}=props;
+    parent.insertAdjacentHTML("beforeend",`<div id="${id}" class="${css.draggableview} ${className}" style="font-size:1em;${style||""}"></div>`);
     const draggableview=parent.querySelector(`#${id}`),state={
         x:null,y:null,
         dragX:null,dragY:null,dragDX:null,dragDY:null,
@@ -12,7 +12,7 @@ export default function DraggableView(props){
         onDrag,onMove,onDrop,
     }
     
-    draggableview.innerHTML=innerHTML;
+    draggableview.innerHTML="";
 
     if(verticalDrag||horizontalDrag){
         const {style}=draggableview;

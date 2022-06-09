@@ -36,6 +36,7 @@ export function DraggableView(props:{
     className:String,
     horizontalDrag:boolean,
     verticalDrag:boolean,
+    style:String,
     onDrag(element:DraggableView,state:DraggableViewState):void,
     onMove(element:DraggableView,state:DraggableViewState):void,
     onDrop(element:DraggableView,state:DraggableViewState):void,
