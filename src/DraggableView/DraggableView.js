@@ -10,14 +10,16 @@ export default function DraggableView(props){
         dragX:null,dragY:null,dragDX:null,dragDY:null,
         dropX:null,dropY:null,dropDX:null,dropDY:null,
         onDrag,onMove,onDrop,
+        isTouchDevice:isTouchDevice(),
     }
     
     draggableview.innerHTML="";
 
     if(verticalDrag||horizontalDrag){
-        const {style}=draggableview;
+        const {style}=draggableview,{isTouchDevice}=state;
         style.position="absolute";
-        draggableview.onmousedown=(event)=>{
+        draggableview.addEventListener(isTouchDevice?"touchstart":"mousedown",(event)=>{
+            setTime
             const {x,y}=event,{offsetLeft,offsetTop}=draggableview,{onDrag}=state;
             state.dragX=x;
             state.dragY=y;
@@ -36,8 +38,8 @@ export default function DraggableView(props){
                 }
                 onMove&&onMove(draggableview,state);
             }
-            window.addEventListener("mousemove",onPointerMove);
-            window.addEventListener("mouseup",(event)=>{
+            window.addEventListener(isTouchDevice?"touchmove":"mousemove",onPointerMove);
+            window.addEventListener(isTouchDevice?"touchend":"mouseup",(event)=>{
                 const {x,y}=event,{onDrop}=state,{offsetLeft,offsetTop}=draggableview;
                 state.dropX=x;
                 state.dropY=y;
@@ -45,8 +47,8 @@ export default function DraggableView(props){
                 state.dropDY=y-offsetTop;
                 onDrop&&onDrop(draggableview,state);
                 window.removeEventListener("mousemove",onPointerMove);
-            },{once:true});
-        }
+            },{once:true})
+        });
     }
 
     draggableview.setEventListener=(type,listener)=>{
@@ -60,3 +62,4 @@ export default function DraggableView(props){
 }
 
 const eventtypes=["drag","move","drop"];
+const isTouchDevice=()=>((("ontouchstart" in window)||(navigator.maxTouchPoints>0)||(navigator.msMaxTouchPoints>0)));
