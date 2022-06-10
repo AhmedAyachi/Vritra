@@ -46,7 +46,7 @@ export default function DraggableView(props){
                 state.dropDY=y-offsetTop;
                 onDrop&&onDrop(draggableview,state);
                 window.removeEventListener(isTouchDevice?"touchmove":"mousemove",onPointerMove);
-            },{once:true})
+            },{once:true});
         });
     }
 
