@@ -19,7 +19,6 @@ export default function DraggableView(props){
         const {style}=draggableview,{isTouchDevice}=state;
         style.position="absolute";
         draggableview.addEventListener(isTouchDevice?"touchstart":"mousedown",(event)=>{
-            setTime
             const {x,y}=event,{offsetLeft,offsetTop}=draggableview,{onDrag}=state;
             state.dragX=x;
             state.dragY=y;
