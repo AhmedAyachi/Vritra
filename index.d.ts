@@ -13,8 +13,18 @@ export function HashRouter(
 interface DraggableView extends HTMLElement{
     setEventListener(
         type:"drag"|"move"|"drop",
-        listener:(element:DraggableView,state:DraggableViewState)=>void
+        listener:(element:DraggableView,state:DraggableViewState)=>void,
     ):void,
+    getPosition():{
+        /**
+         * value in 0..1
+         */
+        x:number,
+        /**
+         * value in 0..1
+         */
+        y:number,
+    },
 }
 interface DraggableViewState{
     x:Number,y:Number,

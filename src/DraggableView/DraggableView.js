@@ -58,6 +58,10 @@ export default function DraggableView(props){
             state[`on${type}`]=listener;
         }
     }
+    draggableview.getPosition=()=>({
+        x:state.x/window.innerWidth,
+        y:state.y/window.innerHeight,
+    });
 
     return draggableview;    
 }
