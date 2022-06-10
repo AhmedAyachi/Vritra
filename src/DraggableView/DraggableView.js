@@ -62,6 +62,11 @@ export default function DraggableView(props){
         x:state.x/window.innerWidth,
         y:state.y/window.innerHeight,
     });
+    draggableview.setPosition=({x,y})=>{
+        state.x=x*window.innerWidth;
+        state.y=y*window.innerHeight;
+        Object.assign(draggableview.style,{left:`${state.x}px`,top:`${state.y}px`});
+    }
 
     return draggableview;    
 }
