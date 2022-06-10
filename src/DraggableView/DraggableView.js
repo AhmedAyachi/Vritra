@@ -10,7 +10,7 @@ export default function DraggableView(props){
         dragX:null,dragY:null,dragDX:null,dragDY:null,
         dropX:null,dropY:null,dropDX:null,dropDY:null,
         onDrag,onMove,onDrop,
-        isTouchDevice:true,
+        isTouchDevice:isTouchDevice(),
     }
     
     draggableview.innerHTML="";
@@ -19,14 +19,14 @@ export default function DraggableView(props){
         const {style}=draggableview,{isTouchDevice}=state;
         style.position="absolute";
         draggableview.addEventListener(isTouchDevice?"touchstart":"mousedown",(event)=>{
-            const {x,y}=event,{offsetLeft,offsetTop}=draggableview,{onDrag}=state;
+            const {clientX:x,clientY:y}=(isTouchDevice?event.changedTouches[0]:event),{offsetLeft,offsetTop}=draggableview,{onDrag}=state;
             state.dragX=x;
             state.dragY=y;
             state.dragDX=x-offsetLeft;
             state.dragDY=y-offsetTop;
             onDrag&&onDrag(draggableview,state);
             function onPointerMove(event){
-                const {x,y}=event,{onMove,dragDX,dragDY}=state;
+                const {clientX:x,clientY:y}=(isTouchDevice?event.changedTouches[0]:event),{onMove,dragDX,dragDY}=state;
                 state.x=x-dragDX;
                 state.y=y-dragDY;
                 if(horizontalDrag){
@@ -39,13 +39,13 @@ export default function DraggableView(props){
             }
             window.addEventListener(isTouchDevice?"touchmove":"mousemove",onPointerMove);
             window.addEventListener(isTouchDevice?"touchend":"mouseup",(event)=>{
-                const {x,y}=event,{onDrop}=state,{offsetLeft,offsetTop}=draggableview;
+                const {clientX:x,clientY:y}=(isTouchDevice?event.changedTouches[0]:event),{onDrop}=state,{offsetLeft,offsetTop}=draggableview;
                 state.dropX=x;
                 state.dropY=y;
                 state.dropDX=x-offsetLeft;
                 state.dropDY=y-offsetTop;
                 onDrop&&onDrop(draggableview,state);
-                window.removeEventListener("mousemove",onPointerMove);
+                window.removeEventListener(isTouchDevice?"touchmove":"mousemove",onPointerMove);
             },{once:true})
         });
     }
