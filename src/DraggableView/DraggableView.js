@@ -3,15 +3,17 @@ import css from "./DraggableView.module.css";
 
 
 export default function DraggableView(props){
-    const {parent,ref=useId("draggableview"),id=ref,className="",horizontalDrag=true,verticalDrag=true,onDrag,onMove,onDrop,style}=props;
+    const {parent,ref=useId("draggableview"),id=ref,position={x:0,y:0},className="",horizontalDrag=true,verticalDrag=true,onDrag,onMove,onDrop,style}=props;
     parent.insertAdjacentHTML("beforeend",`<div id="${id}" class="${css.draggableview} ${className}" style="font-size:1em;${style||""}"></div>`);
     const draggableview=parent.querySelector(`#${id}`),state={
-        x:null,y:null,
+        x:position.x*window.innerWidth,
+        y:position.y*window.innerHeight,
         dragX:null,dragY:null,dragDX:null,dragDY:null,
         dropX:null,dropY:null,dropDX:null,dropDY:null,
         onDrag,onMove,onDrop,
         isTouchDevice:isTouchDevice(),
     }
+    Object.assign(draggableview.style,{left:`${state.x}px`,top:`${state.y}px`});
     
     draggableview.innerHTML="";
 
@@ -46,7 +48,7 @@ export default function DraggableView(props){
                 state.dropDY=y-offsetTop;
                 onDrop&&onDrop(draggableview,state);
                 window.removeEventListener(isTouchDevice?"touchmove":"mousemove",onPointerMove);
-            },{once:true});
+            },{once:true})
         });
     }
 

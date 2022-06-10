@@ -34,6 +34,11 @@ export function DraggableView(props:{
      */
     ref:String,
     className:String,
+    /**
+     * @param x in 0..1
+     * @param y in 0..1
+     */
+    position:{x:number,y:number},
     horizontalDrag:boolean,
     verticalDrag:boolean,
     style:String,
