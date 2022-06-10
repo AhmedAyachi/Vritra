@@ -10,7 +10,7 @@ export default function DraggableView(props){
         dragX:null,dragY:null,dragDX:null,dragDY:null,
         dropX:null,dropY:null,dropDX:null,dropDY:null,
         onDrag,onMove,onDrop,
-        isTouchDevice:isTouchDevice(),
+        isTouchDevice:true,
     }
     
     draggableview.innerHTML="";
