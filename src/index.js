@@ -212,24 +212,26 @@ export const replaceAll=(target="",searchValue="",replaceValue="")=>{
 export const factorial=(n=0)=>n?n*factorial(n-1):1;
 
 export const getCharsInBetween=(startChar="",endChar="",from="")=>{
-    const length=from.length;
-    let i=0,startIndex=-1,endIndex=0;
-    if(!startChar){
-        startIndex=0;
-    }
-    else{
-        while(startIndex<0&&i<length){
+    const {length}=from;
+    let i=0,startIndex=-1,endIndex=length,found=false;
+    if(startChar){
+        while((!found)&&(i<length)){
             if(from[i]===startChar){
                 startIndex=i;
+                found=true;
             }
             i++;
         }
     }
-    while(!endIndex&&i<length){
-        if(from[i]===endChar){
-            endIndex=i;
+    if(endChar){
+        found=false;
+        while((!found)&&(i<length)){
+            if(from[i]===endChar){
+                endIndex=i;
+                found=true;
+            }
+            i++;
         }
-        i++;
     }
-    return startIndex>-1?from.slice(startIndex+1,endIndex||length):"";
+    return from.substring(startIndex+1,endIndex);
 }

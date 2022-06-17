@@ -146,4 +146,14 @@ export function removeItem(array:any[],predicate:(item:any,index:Number,array:an
 export function removeItem(array:any[],item:any):any;
 export function replaceAll(target:String,searchValue:String,replaceValue:String):String;
 export function factorial(n:Number):Number;
+/**
+* Extracts all characters between the two limiters specified.
+* Limiters are not included 
+* @param startChar
+* Left limiter character
+* @param endChar
+* Right limiter character
+* @Note
+* Pass empty string as parameter to include first or last character
+*/
 export function getCharsInBetween(startChar:String,endChar:String,from:String):String;
