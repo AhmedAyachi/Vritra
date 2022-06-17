@@ -213,6 +213,9 @@ export const factorial=(n=0)=>n?n*factorial(n-1):1;
 
 export const getCharsInBetween=(startChar="",endChar="",from="")=>{
     const length=from.length;
+    if(!startChar){
+        startChar=from[0];
+    }
     let i=0,startIndex=-1,endIndex=0;
     while(startIndex<0&&i<length){
         if(from[i]===startChar){
