@@ -175,7 +175,7 @@ export const getArrayMax=(array=[],start=0,end=array.length)=>{
 
 export const removeItem=(array,predicate)=>{
     let item=null,status=null;
-    if(Array.isArray(array)){
+    if(Array.isArray(array)&&array.length){
         let index=-1;
         if(typeof(predicate)==="function"){
             item=array.find((item,i)=>{
@@ -199,6 +199,23 @@ export const removeItem=(array,predicate)=>{
     }
     return item;
 };
+
+export const findItem=(array=[],predicate)=>{
+    let item;
+    if(Array.isArray(array)&&array.length){
+        const {length}=array;
+        let found=false,i=0;
+        while((!found)&&(i<length)){
+            const target=array[i];
+            if(predicate(target,i,array)){
+                found=true;
+                item={value:target,index:i}
+            };
+            i++;
+        }
+    }
+    return item;
+}
 
 export const replaceAll=(target="",searchValue="",replaceValue="")=>{
     let str="";

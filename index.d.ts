@@ -144,6 +144,7 @@ export function getArrayMax(array:any[],start:Number,end:Number):{
 };
 export function removeItem(array:any[],predicate:(item:any,index:Number,array:any[])=>boolean):any;
 export function removeItem(array:any[],item:any):any;
+export function findItem(array:any[],predicate:(item:any,index:Number,array:any[])=>boolean):{value:any,index:number};
 export function replaceAll(target:String,searchValue:String,replaceValue:String):String;
 export function factorial(n:Number):Number;
 /**
