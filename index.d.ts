@@ -144,17 +144,25 @@ export function getArrayMax(array:any[],start:Number,end:Number):{
 };
 export function removeItem(array:any[],predicate:(item:any,index:Number,array:any[])=>boolean):any;
 export function removeItem(array:any[],item:any):any;
+/**
+ * 
+ * @param array array to search
+ * @param predicate 
+ * Calls predicate once for each element of the array, in ascending order, 
+ * until it finds one where predicate returns true. If such an element is found,
+ * an object containing the element and its index is returned, else null is returned.
+*/
 export function findItem(array:any[],predicate:(item:any,index:Number,array:any[])=>boolean):{value:any,index:number};
 export function replaceAll(target:String,searchValue:String,replaceValue:String):String;
 export function factorial(n:Number):Number;
 /**
-* Extracts all characters between the two limiters specified.
-* Limiters are not included 
-* @param startChar
-* Left limiter character
-* @param endChar
-* Right limiter character
-* @Note
-* Pass empty string as parameter to include first or last character
+ * Extracts all characters between the two limiters specified.
+ * Limiters are not included 
+ * @param startChar
+ * Left limiter character
+ * @param endChar
+ * Right limiter character
+ * @Note
+ * Pass empty string as parameter to include first or last character
 */
 export function getCharsInBetween(startChar:String,endChar:String,from:String):String;

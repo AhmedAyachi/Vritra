@@ -201,7 +201,7 @@ export const removeItem=(array,predicate)=>{
 };
 
 export const findItem=(array=[],predicate)=>{
-    let item;
+    let item=null;
     if(Array.isArray(array)&&array.length){
         const {length}=array;
         let found=false,i=0;
