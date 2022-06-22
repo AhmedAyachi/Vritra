@@ -70,7 +70,7 @@ export default function DraggableView(props){
         }
         if(ychanged){
             state.y=y*window.innerHeight;
-            draggableview.style.left=`${state.y}px`;
+            draggableview.style.top=`${state.y}px`;
         }
         if(xchanged||ychanged){
             const {onMove}=state;
