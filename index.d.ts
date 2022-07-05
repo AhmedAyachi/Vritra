@@ -102,6 +102,21 @@ export function Modal(props:{
     onMount(element:Modal):void,
 }):Modal;
 
+/**
+ * returns an array of objects representing the months of the year;
+ * @property name 
+ * @property length : number of days
+ * @note 
+ * February will always have 28 days but it has 29 in leap years
+ */
+export function getMonths():{name:String,length:Number}[];
+
+/**
+ * returns an array containing the 7 days of the week
+ * starting with monday
+ */
+export function getDays():String[];
+
 export function useId(startsWith:String):String;
 /**
  * @deprecated

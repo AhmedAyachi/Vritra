@@ -6,6 +6,23 @@ export {default as DraggableView} from "./DraggableView/DraggableView";
 export {default as Modal} from "./Modal/Modal";
 export {default as FlatList} from "./FlatList/FlatList";
 
+export const getMonths=()=>[
+    {name:"january",length:31},
+    {name:"february",length:28},
+    {name:"march",length:31},
+    {name:"april",length:30},
+    {name:"may",length:31},
+    {name:"june",length:30},
+    {name:"july",length:31},
+    {name:"august",length:31},
+    {name:"september",length:30},
+    {name:"october",length:31},
+    {name:"november",length:30},
+    {name:"december",length:31},
+];
+
+export const getDays=()=>["monday","tuesday","wednesday","thursday","friday","saturday","sunday"];
+
 export const groupBy=(array,filter)=>{
     const groups=[],{length}=array;
     for(let i=0;i<length;i++){
