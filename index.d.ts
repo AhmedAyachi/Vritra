@@ -109,8 +109,6 @@ export function Modal(props:{
  * @default false
  * @property name 
  * @property length : number of days
- * @note 
- * February will always have 28 days but it has 29 in leap years
  */
 export function getMonths(isLeapYear:Boolean=false):{name:String,length:Number}[];
 
