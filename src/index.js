@@ -6,9 +6,9 @@ export {default as DraggableView} from "./DraggableView/DraggableView";
 export {default as Modal} from "./Modal/Modal";
 export {default as FlatList} from "./FlatList/FlatList";
 
-export const getMonths=()=>[
+export const getMonths=(isLeapYear=false)=>[
     {name:"january",length:31},
-    {name:"february",length:28},
+    {name:"february",length:isLeapYear?29:28},
     {name:"march",length:31},
     {name:"april",length:30},
     {name:"may",length:31},

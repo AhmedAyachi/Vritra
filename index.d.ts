@@ -104,12 +104,15 @@ export function Modal(props:{
 
 /**
  * returns an array of objects representing the months of the year;
+ * @param isLeapYear
+ * if true, february length value would be 29 else 28
+ * @default false
  * @property name 
  * @property length : number of days
  * @note 
  * February will always have 28 days but it has 29 in leap years
  */
-export function getMonths():{name:String,length:Number}[];
+export function getMonths(isLeapYear:Boolean=false):{name:String,length:Number}[];
 
 /**
  * returns an array containing the 7 days of the week
