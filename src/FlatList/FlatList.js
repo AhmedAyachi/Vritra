@@ -18,11 +18,10 @@ export default function FlatList(props){
 
     flatlist.innerHTML=`
         ${Array.isArray(data)&&data.length?`
-            <div id="container" class="${css.container} ${containerClassName||""}" style="${styles.container({pagingEnabled,transition,horizontal})}">
+            <div id="container" class="${css.container} ${containerClassName||""}" style="${styles.container({pagingEnabled,transition,horizontal})}"></div>
         `:`
             <p class="${css.emptymsg}">no data</p>
         `}
-        </div>
     `;
 
     const container=flatlist.querySelector(`.${css.container}`);
