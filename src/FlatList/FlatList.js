@@ -18,7 +18,7 @@ export default function FlatList(props){
 
     flatlist.innerHTML=`
         ${Array.isArray(data)&&data.length?`
-            <div class="${css.container} ${containerClassName||""}" style="${styles.container({pagingEnabled,transition,horizontal})}">
+            <div id="container" class="${css.container} ${containerClassName||""}" style="${styles.container({pagingEnabled,transition,horizontal})}">
         `:`
             <p class="${css.emptymsg}">no data</p>
         `}
