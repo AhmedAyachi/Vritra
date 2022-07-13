@@ -1,7 +1,7 @@
 import css from "./index.module.css";
 
 
-export {HashRouter} from "./HashRouter";
+export {HashRouter} from "./HashRouter/HashRouter";
 export {default as DraggableView} from "./DraggableView/DraggableView";
 export {default as Modal} from "./Modal/Modal";
 export {default as FlatList} from "./FlatList/FlatList";

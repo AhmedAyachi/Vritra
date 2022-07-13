@@ -1,5 +1,5 @@
 
-export const HashRouter=(target=new HTMLElement(),routes)=>{
+export function HashRouter(target=new HTMLElement(),routes){
     const {history,location}=window;
     let data=null,route=null;
  
