@@ -38,7 +38,7 @@ export default function FlatList<type>(props:{
     transition:String,
     renderItem(props:{parent:HTMLElement,item:type,index:Number,data:type[]}):HTMLElement,
     onSwipe(params:{direction:"left"|"right",index:Number,container:HTMLElement}):void,
-    onReachEnd(params:{container:HTMLElement,data:type[]}):void,
+    onReachEnd(params:{parent:HTMLElement,data:type[]}):void,
 }):FlatList;
 
 interface FlatList extends HTMLElement{
