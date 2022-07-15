@@ -1,6 +1,6 @@
 
 
-export default function FlatList(props:{
+export default function FlatList<type>(props:{
     parent:HTMLElement,
     id:String,
     /**
@@ -11,7 +11,7 @@ export default function FlatList(props:{
     className:String,
     containerClassName:String,
     popupClassName:String,
-    data:any[],
+    data:type[],
     horizontal:boolean,
     /**
      * Make Flatlist scrollable from bottom to top.
@@ -36,13 +36,13 @@ export default function FlatList(props:{
      * Specifies the transition animation from one element to the next
      */
     transition:String,
-    renderItem(props:{parent:HTMLElement,item:any,index:Number,data:any[]}):HTMLElement,
+    renderItem(props:{parent:HTMLElement,item:type,index:Number,data:type[]}):HTMLElement,
     onSwipe(params:{direction:"left"|"right",index:Number,container:HTMLElement}):void,
-    onReachEnd(container:HTMLElement):void,
+    onReachEnd(params:{container:HTMLElement,data:type[]}):void,
 }):FlatList;
 
 interface FlatList extends HTMLElement{
     addItems(items:any[]):void,
-    showItems(items:any[],renderItem:(props:{parent:HTMLElement,item:any,index:Number,data:any[]})=>HTMLElement):void,
-    container:HTMLElement,
+    showItems<type>(items:type[],renderItem:(props:{parent:HTMLElement,item:type,index:Number,data:type[]})=>HTMLElement):void,
+    readonly container:HTMLElement,
 }

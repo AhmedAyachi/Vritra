@@ -41,7 +41,7 @@ export default function FlatList(props){
                 }
                 else{
                     state.endreached=true;
-                    onReachEnd&&onReachEnd(container);
+                    onReachEnd&&onReachEnd({parent:container,data});
                 }
             }
         },{root:flatlist,threshold});

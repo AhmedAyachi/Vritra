@@ -28,8 +28,8 @@ export function useId(startsWith:String):String;
  * use useId instead
  */
 export function useRef(startsWith:String):String;
-export function groupBy(array:any[],filter:(item:any,index:Number,array:any[])=>any):{predicate:any,items:any[]}[];
-export function map(array:any[],callback:(item:any,index:Number,array:any[])=>String):String;
+export function groupBy<type>(array:type[],filter:(item:type,index:Number,array:type[])=>any):{predicate:any,items:type[]}[];
+export function map<type>(array:type[],callback:(item:type,index:Number,array:type[])=>String):String;
 export function map(iteration:Number,callback:(index:Number)=>String):String;
 export function useSwipeGesture(params:{
     element:HTMLElement,
@@ -58,12 +58,12 @@ export function createCode(length:Number):String;
 export function replaceAt(index:Number,replaceValue:String,targetString:String):String;
 export function capitalize(str:String):String;
 export function emailCheck(str:String):boolean;
-export function getArrayMax(array:any[],start:Number,end:Number):{
-    value:any,
+export function getArrayMax<type>(array:type[],start:Number,end:Number):{
+    value:type,
     index:Number,
 };
-export function removeItem(array:any[],predicate:(item:any,index:Number,array:any[])=>boolean):any;
-export function removeItem(array:any[],item:any):any;
+export function removeItem<type>(array:type[],predicate:(item:type,index:Number,array:type[])=>boolean):type;
+export function removeItem<type>(array:type[],item:type):type;
 /**
  * 
  * @param array array to search
@@ -72,7 +72,7 @@ export function removeItem(array:any[],item:any):any;
  * until it finds one where predicate returns true. If such an element is found,
  * an object containing the element and its index is returned, else null is returned.
 */
-export function findItem(array:any[],predicate:(item:any,index:Number,array:any[])=>boolean):{value:any,index:number};
+export function findItem<type>(array:type[],predicate:(item:type,index:Number,array:type[])=>boolean):{value:type,index:number};
 export function replaceAll(target:String,searchValue:String,replaceValue:String):String;
 export function factorial(n:Number):Number;
 /**
