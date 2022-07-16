@@ -17,6 +17,11 @@ export {HashRouter} from "./src/HashRouter/HashRouter";
 export function getMonths(isLeapYear:Boolean=false):{name:String,length:Number}[];
 
 /**
+ * @param year year to check, default to current year
+ */
+export function isLeapYear(year?:Number):Boolean;
+
+/**
  * returns an array containing the 7 days of the week
  * starting with monday
  */

@@ -21,6 +21,8 @@ export const getMonths=(isLeapYear=false)=>[
     {name:"december",length:31},
 ];
 
+export const isLeapYear=(year=new Date(Date.now()).getFullYear())=>!Boolean((year-1752)%4);
+
 export const getDays=()=>["monday","tuesday","wednesday","thursday","friday","saturday","sunday"];
 
 export const groupBy=(array,filter)=>{
