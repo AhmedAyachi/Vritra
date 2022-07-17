@@ -25,12 +25,12 @@ export const isLeapYear=(year=new Date(Date.now()).getFullYear())=>!Boolean((yea
 
 const defaultdays=["monday","tuesday","wednesday","thursday","friday","saturday","sunday"];
 export const getDays=(start="monday")=>{
-    const days=[],index=defaultdays.indexOf(start)||0;
-    for(let i=index;i<days.length;i++){
-        d.push(days[i]);
+    const days=[];index=Math.max(0,defaultdays.indexOf(start));
+    for(let i=index;i<7;i++){
+        days.push(defaultdays[i]);
     }
     for(let i=0;i<index;i++){
-        d.push(days[i]);
+        days.push(defaultdays[i]);
     }
     return days;
 };
