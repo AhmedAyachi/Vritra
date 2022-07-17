@@ -23,9 +23,10 @@ export function isLeapYear(year?:Number):Boolean;
 
 /**
  * returns an array containing the 7 days of the week
- * starting with monday
+ * @param start first day of the week
+ * @default "monday"
  */
-export function getDays():String[];
+export function getDays(start?:"monday"|"tuesday"|"wednesday"|"thursday"|"friday"|"saturday"|"sunday"):String[];
 
 export function useId(startsWith:String):String;
 /**

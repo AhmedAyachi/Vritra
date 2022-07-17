@@ -23,7 +23,17 @@ export const getMonths=(isLeapYear=false)=>[
 
 export const isLeapYear=(year=new Date(Date.now()).getFullYear())=>!Boolean((year-1752)%4);
 
-export const getDays=()=>["monday","tuesday","wednesday","thursday","friday","saturday","sunday"];
+const defaultdays=["monday","tuesday","wednesday","thursday","friday","saturday","sunday"];
+export const getDays=(start="monday")=>{
+    const days=[],index=defaultdays.indexOf(start)||0;
+    for(let i=index;i<days.length;i++){
+        d.push(days[i]);
+    }
+    for(let i=0;i<index;i++){
+        d.push(days[i]);
+    }
+    return days;
+};
 
 export const groupBy=(array,filter)=>{
     const groups=[],{length}=array;
