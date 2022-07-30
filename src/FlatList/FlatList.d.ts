@@ -43,6 +43,12 @@ export default function FlatList<type>(props:{
 
 interface FlatList extends HTMLElement{
     addItems(items:any[]):void,
-    showItems<type>(items:type[],renderItem:(props:{parent:HTMLElement,item:type,index:Number,data:type[]})=>HTMLElement):void,
+    /**
+     * Creates a flatlist on top of the original flatlist
+     * @param items data to show
+     * @param renderItem function component to use
+     */
+    showItems<type>(items:type[],renderItem?:(props:{parent:HTMLElement,item:type,index:Number,data:type[]})=>HTMLElement):void,
+    showItems<type>(predicate:(item:type,index:Number,array:type[])=>Boolean,renderItem?:(props:{parent:HTMLElement,item:type,index:Number,data:type[]})=>HTMLElement):void,
     readonly container:HTMLElement,
 }

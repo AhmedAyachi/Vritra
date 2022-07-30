@@ -84,10 +84,11 @@ export default function FlatList(props){
         }
     }
 
-    flatlist.showItems=(items,render)=>{
+    flatlist.showItems=(predicate,render)=>{
         const {popuplist}=state;
         popuplist&&popuplist.remove();
         flatlist.style.overflow=null;
+        const items=(typeof(predicate)==="function")?data.filter(predicate):predicate;
         if(Array.isArray(items)){
             state.popuplist=FlatList({
                 ...props,
