@@ -1,6 +1,6 @@
 declare module "vanilla";
 
-
+export {default as View} from "./src/View/View";
 export {default as DraggableView} from "./src/DraggableView/DraggableView";
 export {default as FlatList} from "./src/FlatList/FlatList";
 export {default as Modal} from "./src/Modal/Modal";
