@@ -2,8 +2,8 @@ import {useId} from "../index";
 
 
 export default function View(props){
-    const {parent,id=useId("view"),className,style}=props;
-    parent.insertAdjacentHTML("beforeend",`<div id="${id}" ${className?`class="${className}"`:""} ${style?`style="${style}"`:""}></div>`);
+    const {parent,id=useId("view"),className,style,position="beforeend"}=props;
+    parent.insertAdjacentHTML(position,`<div id="${id}" ${className?`class="${className}"`:""} ${style?`style="${style}"`:""}></div>`);
     const view=parent.querySelector(`#${id}`);
 
     view.innerHTML=`
