@@ -1,3 +1,4 @@
+import View from "../View/View";
 
 
 export default function Modal(props:{
@@ -12,7 +13,7 @@ export default function Modal(props:{
     onMount(element:Modal):void,
 }):Modal;
 
-interface Modal extends HTMLElement{
+interface Modal extends View {
     show(display:String,callback:()=>void):void,
     hide(callback:()=>void):void,
 }

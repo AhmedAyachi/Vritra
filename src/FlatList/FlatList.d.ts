@@ -1,3 +1,4 @@
+import View from "../View/View";
 
 
 export default function FlatList<type>(props:{
@@ -41,7 +42,7 @@ export default function FlatList<type>(props:{
     onReachEnd(params:{parent:HTMLElement,data:type[]}):void,
 }):FlatList;
 
-interface FlatList extends HTMLElement{
+interface FlatList extends View {
     addItems(items:any[]):void,
     /**
      * Creates a flatlist on top of the original flatlist

@@ -1,3 +1,4 @@
+import View from "../View/View";
 
 
 export default function DraggableView(props:{
@@ -22,7 +23,7 @@ export default function DraggableView(props:{
     onDrop(element:DraggableView,state:DraggableViewState):void,
 }):DraggableView;
 
-interface DraggableView extends HTMLElement{
+interface DraggableView extends View {
     setEventListener(
         type:"drag"|"move"|"drop",
         listener:(element:DraggableView,state:DraggableViewState)=>void,
