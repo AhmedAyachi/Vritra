@@ -1,11 +1,10 @@
-import {useId,fadeIn,fadeOut} from "../index";
+import {useId,View,fadeIn,fadeOut} from "../index";
 import css from "./Modal.module.css";
 
 
 export default function Modal(props){
     const {parent,ref=useId("modal"),id=ref,className,onMount,visible=true}=props;
-    parent.insertAdjacentHTML("beforeend",`<div id="${id}" class="${css.modal} ${className||""}" style="${styles.modal}"></div>`);
-    const modal=parent.querySelector(`#${id}`),state={
+    const modal=View({parent,id,className:`${css.modal} ${className||""}`,style:styles.modal}),state={
         fadeduration:0.1,
     };
 

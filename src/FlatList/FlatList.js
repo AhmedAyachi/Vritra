@@ -1,11 +1,10 @@
-import {useId,useSwipeGesture} from "../index";
+import {useId,View} from "../index";
 import css from "./FlatList.module.css";
 
 
 export default function FlatList(props){
     const {parent,ref=useId("flatlist"),id=ref,className,containerClassName,popupClassName,data,renderItem,onReachEnd,horizontal,backwards,pagingEnabled=false,threshold=0.5,transition="250ms",onSwipe}=props;
-    parent.insertAdjacentHTML("beforeend",`<div id="${id}" class="${css.flatlist} ${className||""}"></div>`);
-    const flatlist=parent.querySelector(`#${id}`),state={
+    const flatlist=View({id,parent,className:`${css.flatlist} ${className||""}`}),state={
         index:null,
         itemEl:null,
         focus:null,

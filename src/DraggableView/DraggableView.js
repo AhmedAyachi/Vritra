@@ -1,16 +1,17 @@
-import {useId,capitalize} from "../index";
+import {useId,View,capitalize} from "../index";
 import css from "./DraggableView.module.css";
 
 
 export default function DraggableView(props){
-    const {parent,ref=useId("draggableview"),id=ref,position={x:0,y:0},className="",horizontalDrag=true,verticalDrag=true,onDrag,onMove,onDrop,style}=props;
-    parent.insertAdjacentHTML("beforeend",`<div id="${id}" class="${css.draggableview} ${className}" style="font-size:1em;${style||""}"></div>`);
-    const draggableview=parent.querySelector(`#${id}`),state={
+    const {parent,ref=useId("draggableview"),id=ref,position={x:0,y:0},horizontalDrag=true,verticalDrag=true}=props;
+    const draggableview=View({parent,id,style:props.style,className:`${css.draggableview} ${props.className||""}`}),state={
         x:position.x*window.innerWidth,
         y:position.y*window.innerHeight,
         dragX:null,dragY:null,dragDX:null,dragDY:null,
         dropX:null,dropY:null,dropDX:null,dropDY:null,
-        onDrag,onMove,onDrop,
+        onDrag:props.onDrag,
+        onMove:props.onMove,
+        onDrop:props.onDrag,
         isTouchDevice:isTouchDevice(),
     }
     Object.assign(draggableview.style,{left:`${state.x}px`,top:`${state.y}px`});
