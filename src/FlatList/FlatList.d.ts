@@ -1,4 +1,4 @@
-import View from "../View/View";
+import {View} from "../View/View";
 
 
 export default function FlatList<type>(props:{
