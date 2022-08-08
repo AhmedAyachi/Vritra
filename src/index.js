@@ -2,7 +2,7 @@ import css from "./index.module.css";
 
 
 export {HashRouter} from "./HashRouter/HashRouter";
-export {default as View} from "./View/View";
+export {default as Component} from "./Component/Component";
 export {default as DraggableView} from "./DraggableView/DraggableView";
 export {default as Modal} from "./Modal/Modal";
 export {default as FlatList} from "./FlatList/FlatList";
@@ -68,7 +68,6 @@ export const map=(array=[],treatment)=>{
 }
 
 export const useId=(startswith="")=>`${startswith}_${Math.random().toString(36).slice(2)}${Math.random().toString(36).slice(2)}`;
-export const useRef=useId;
 
 export const useSwipeGesture=(params)=>{
     const state={...params},{element,length=40}=state;

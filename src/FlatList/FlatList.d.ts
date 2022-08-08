@@ -1,14 +1,9 @@
-import {View} from "../View/View";
+import Component from "../Component/Component";
 
 
 export default function FlatList<type>(props:{
-    parent:HTMLElement,
+    parent:Component|HTMLElement,
     id:String,
-    /**
-     * @deprecated
-     * use id prop instead
-     */
-    ref:String,
     className:String,
     containerClassName:String,
     popupClassName:String,
@@ -42,7 +37,7 @@ export default function FlatList<type>(props:{
     onReachEnd(params:{parent:HTMLElement,data:type[]}):void,
 }):FlatList;
 
-interface FlatList extends View {
+interface FlatList extends Component {
     addItems(items:any[]):void,
     /**
      * Creates a flatlist on top of the original flatlist

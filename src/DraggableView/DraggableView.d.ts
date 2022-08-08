@@ -1,14 +1,9 @@
-import {View} from "../View/View";
+import Component from "../Component/Component";
 
 
 export default function DraggableView(props:{
-    parent:HTMLElement,
+    parent:Component|HTMLElement,
     id:String,
-    /**
-     * @deprecated
-     * use id prop instead
-     */
-    ref:String,
     className:String,
     /**
      * @param x in 0..1
@@ -18,15 +13,15 @@ export default function DraggableView(props:{
     horizontalDrag:boolean,
     verticalDrag:boolean,
     style:String,
-    onDrag(element:DraggableView,state:DraggableViewState):void,
-    onMove(element:DraggableView,state:DraggableViewState):void,
-    onDrop(element:DraggableView,state:DraggableViewState):void,
+    onDrag(component:DraggableView,state:DraggableViewState):void,
+    onMove(component:DraggableView,state:DraggableViewState):void,
+    onDrop(component:DraggableView,state:DraggableViewState):void,
 }):DraggableView;
 
-interface DraggableView extends View {
+interface DraggableView extends Component {
     setEventListener(
         type:"drag"|"move"|"drop",
-        listener:(element:DraggableView,state:DraggableViewState)=>void,
+        listener:(component:DraggableView,state:DraggableViewState)=>void,
     ):void,
     getPosition():DraggableViewPosition,
     setPosition(position:DraggableViewPosition):void,
@@ -35,9 +30,9 @@ interface DraggableViewState{
     x:Number,y:Number,
     dragX:Number,dragY:Number,dragDX:Number,dragDY:Number,
     dropX:Number,dropY:Number,dropDX:Number,dropDY:Number,
-    onDrag(element:DraggableView,state:DraggableViewState):void,
-    onMove(element:DraggableView,state:DraggableViewState):void,
-    onDrop(element:DraggableView,state:DraggableViewState):void,
+    onDrag(component:DraggableView,state:DraggableViewState):void,
+    onMove(component:DraggableView,state:DraggableViewState):void,
+    onDrop(component:DraggableView,state:DraggableViewState):void,
 
 }
 

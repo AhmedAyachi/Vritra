@@ -28,12 +28,12 @@ export function isLeapYear(year?:Number):Boolean;
  */
 export function getDays(start?:"monday"|"tuesday"|"wednesday"|"thursday"|"friday"|"saturday"|"sunday"):String[];
 
-export function useId(startsWith:String):String;
 /**
- * @deprecated
- * use useId instead
+ * Returns a random string whose length is between 21 and 23 
+ * @param startsWith 
+ * String prefix
  */
-export function useRef(startsWith:String):String;
+export function useId(startsWith:String):String;
 export function groupBy<type>(array:type[],filter:(item:type,index:Number,array:type[])=>any):{predicate:any,items:type[]}[];
 export function map<type>(array:type[],callback:(item:type,index:Number,array:type[])=>String):String;
 export function map(iteration:Number,callback:(index:Number)=>String):String;

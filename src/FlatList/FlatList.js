@@ -1,10 +1,10 @@
-import {useId,View} from "../index";
+import {useId,Component} from "../index";
 import css from "./FlatList.module.css";
 
 
 export default function FlatList(props){
-    const {parent,ref=useId("flatlist"),id=ref,className,containerClassName,popupClassName,data,renderItem,onReachEnd,horizontal,backwards,pagingEnabled=false,threshold=0.5,transition="250ms",onSwipe}=props;
-    const flatlist=View({id,parent,className:`${css.flatlist} ${className||""}`}),state={
+    const {parent,id=useId("flatlist"),className,containerClassName,popupClassName,data,renderItem,onReachEnd,horizontal,backwards,pagingEnabled=false,threshold=0.5,transition="250ms",onSwipe}=props;
+    const flatlist=new Component({id,parent,className:`${css.flatlist} ${className||""}`}),state={
         index:null,
         itemEl:null,
         focus:null,
@@ -43,14 +43,14 @@ export default function FlatList(props){
                     onReachEnd&&onReachEnd({parent:container,data});
                 }
             }
-        },{root:flatlist,threshold});
+        },{root:flatlist.element,threshold});
         observer.observe(state.itemEl);
 
         if(pagingEnabled&&horizontal){
             const {itemEls,firstOffset}=state;
             container.style.overflow="visible";
             useSwipeGesture({
-                element:flatlist,
+                element:flatlist.element,
                 onSwipeLeft:()=>{
                     const {focus}=state,lastIndex=itemEls.length-1;
                     if(focus<lastIndex){
@@ -86,7 +86,7 @@ export default function FlatList(props){
     flatlist.showItems=(predicate,render)=>{
         const {popuplist}=state;
         popuplist&&popuplist.remove();
-        flatlist.style.overflow=null;
+        flatlist.element.style.overflow=null;
         const items=(typeof(predicate)==="function")?data.filter(predicate):predicate;
         if(Array.isArray(items)){
             state.popuplist=FlatList({
@@ -97,7 +97,7 @@ export default function FlatList(props){
                 renderItem:render||renderItem,
                 onReachEnd:null,
             });
-            flatlist.style.overflow="hidden";
+            flatlist.element.style.overflow="hidden";
         }
     }
 

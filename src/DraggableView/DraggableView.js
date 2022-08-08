@@ -1,10 +1,10 @@
-import {useId,View,capitalize} from "../index";
+import {useId,Component,capitalize} from "../index";
 import css from "./DraggableView.module.css";
 
 
 export default function DraggableView(props){
-    const {parent,ref=useId("draggableview"),id=ref,position={x:0,y:0},horizontalDrag=true,verticalDrag=true}=props;
-    const draggableview=View({parent,id,style:props.style,className:`${css.draggableview} ${props.className||""}`}),state={
+    const {parent,id=useId("draggableview"),position={x:0,y:0},horizontalDrag=true,verticalDrag=true}=props;
+    const draggableview=new Component({parent,id,style:props.style,className:`${css.draggableview} ${props.className||""}`}),state={
         x:position.x*window.innerWidth,
         y:position.y*window.innerHeight,
         dragX:null,dragY:null,dragDX:null,dragDY:null,
@@ -13,16 +13,16 @@ export default function DraggableView(props){
         onMove:props.onMove,
         onDrop:props.onDrag,
         isTouchDevice:isTouchDevice(),
-    }
-    Object.assign(draggableview.style,{left:`${state.x}px`,top:`${state.y}px`});
+    },{element}=draggableview;
+    Object.assign(element.style,{left:`${state.x}px`,top:`${state.y}px`});
     
     draggableview.innerHTML="";
 
     if(verticalDrag||horizontalDrag){
-        const {style}=draggableview,{isTouchDevice}=state;
+        const {style}=element,{isTouchDevice}=state;
         style.position="absolute";
-        draggableview.addEventListener(isTouchDevice?"touchstart":"mousedown",(event)=>{
-            const {clientX:x,clientY:y}=(isTouchDevice?event.changedTouches[0]:event),{offsetLeft,offsetTop}=draggableview,{onDrag}=state;
+        element.addEventListener(isTouchDevice?"touchstart":"mousedown",(event)=>{
+            const {clientX:x,clientY:y}=(isTouchDevice?event.changedTouches[0]:event),{offsetLeft,offsetTop}=element,{onDrag}=state;
             state.dragX=x;
             state.dragY=y;
             state.dragDX=x-offsetLeft;
@@ -42,7 +42,7 @@ export default function DraggableView(props){
             }
             window.addEventListener(isTouchDevice?"touchmove":"mousemove",onPointerMove);
             window.addEventListener(isTouchDevice?"touchend":"mouseup",(event)=>{
-                const {clientX:x,clientY:y}=(isTouchDevice?event.changedTouches[0]:event),{onDrop}=state,{offsetLeft,offsetTop}=draggableview;
+                const {clientX:x,clientY:y}=(isTouchDevice?event.changedTouches[0]:event),{onDrop}=state,{offsetLeft,offsetTop}=element;
                 state.dropX=x;
                 state.dropY=y;
                 state.dropDX=x-offsetLeft;
@@ -67,11 +67,11 @@ export default function DraggableView(props){
         const xchanged=state.x!==x,ychanged=state.y!==y;
         if(xchanged){
             state.x=x*window.innerWidth;
-            draggableview.style.left=`${state.x}px`;
+            element.style.left=`${state.x}px`;
         }
         if(ychanged){
             state.y=y*window.innerHeight;
-            draggableview.style.top=`${state.y}px`;
+            element.style.top=`${state.y}px`;
         }
         if(xchanged||ychanged){
             const {onMove}=state;
