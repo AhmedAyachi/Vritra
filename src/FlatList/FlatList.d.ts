@@ -69,14 +69,14 @@ interface FlatList<type> extends View {
      * @param renderItem function component to use
      * @returns The flatlist popup element if created, null otherwise
      */
-    showItems<type>(items:type[],renderItem?:(props:{parent:HTMLElement,item:type,index:Number,data:type[]})=>HTMLElement):FlatList|null,
+    showItems<type>(items:type[],renderItem?:(props:{parent:HTMLElement,item:type,index:Number,data:type[]})=>HTMLElement):FlatList<type>|null,
     /**
      * Creates a flatlist on top of the original flatlist as a popup
      * @param predicate function to execute to filter items
      * @param renderItem function component to use
      * @returns The flatlist popup element if created, null otherwise
      */
-    showItems<type>(predicate:(item:type,index:Number,array:type[])=>Boolean,renderItem?:(props:{parent:HTMLElement,item:type,index:Number,data:type[]})=>HTMLElement):FlatList|null,
+    showItems<type>(predicate:(item:type,index:Number,array:type[])=>Boolean,renderItem?:(props:{parent:HTMLElement,item:type,index:Number,data:type[]})=>HTMLElement):FlatList<type>|null,
     /**
      * Returns the popup flatlist 
      */
