@@ -48,10 +48,21 @@ export default function FlatList<type>(props:{
     renderItem(props:{parent:HTMLElement,item:type,index:Number,data:type[]}):HTMLElement,
     onSwipe(params:{direction:"left"|"right",index:Number,container:HTMLElement}):void,
     onReachEnd(params:{parent:HTMLElement,data:type[]}):void,
-}):FlatList;
+}):FlatList<type>;
 
-interface FlatList extends View {
+interface FlatList<type> extends View {
     addItems(items:any[]):void,
+    /**
+     * removeItem calls predicate once for each element of the array, in ascending order, 
+     * until it finds one where predicate returns true. If such an element is found, it's removed.
+     * @param predicate function used to find the item.
+     */
+    removeItem(predicate:(item:type,index:Number,array:type[])=>Boolean):any,
+    /**
+     * Removes item if found
+     * @param item function used to find the item.
+     */
+    removeItem(item:any):type,
     /**
      * Creates a flatlist on top of the original flatlist as a popup
      * @param items data to show

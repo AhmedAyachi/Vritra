@@ -1,4 +1,4 @@
-import {useId,View} from "../index";
+import {useId,View,removeItem} from "../index";
 import css from "./FlatList.module.css";
 
 
@@ -82,6 +82,14 @@ export default function FlatList(props){
                 state.endreached=false;
             }
         }
+    }
+
+    flatlist.removeItem=(predicate)=>{
+        const {length}=data,item=removeItem(data,predicate);
+        if(data.length<length){
+            state.index--;
+        }
+        return item;
     }
 
     flatlist.showItems=(predicate,render)=>{
