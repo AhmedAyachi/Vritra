@@ -12,6 +12,10 @@ export default function FlatList<type>(props:{
     className:String,
     containerClassName:String,
     popupClassName:String,
+    /**
+     * Flatlist data array.
+     * The flatlist doesn't use this array but retrieves its initial data from it. 
+     */
     data:type[],
     horizontal:boolean,
     /**
@@ -37,6 +41,10 @@ export default function FlatList<type>(props:{
      * Specifies the transition animation from one element to the next
      */
     transition:String,
+    /**
+     * Function to execute on each data item
+     * @param props 
+     */
     renderItem(props:{parent:HTMLElement,item:type,index:Number,data:type[]}):HTMLElement,
     onSwipe(params:{direction:"left"|"right",index:Number,container:HTMLElement}):void,
     onReachEnd(params:{parent:HTMLElement,data:type[]}):void,
@@ -45,11 +53,21 @@ export default function FlatList<type>(props:{
 interface FlatList extends View {
     addItems(items:any[]):void,
     /**
-     * Creates a flatlist on top of the original flatlist
+     * Creates a flatlist on top of the original flatlist as a popup
      * @param items data to show
      * @param renderItem function component to use
+     * @returns The flatlist popup element if created, null otherwise
      */
-    showItems<type>(items:type[],renderItem?:(props:{parent:HTMLElement,item:type,index:Number,data:type[]})=>HTMLElement):void,
-    showItems<type>(predicate:(item:type,index:Number,array:type[])=>Boolean,renderItem?:(props:{parent:HTMLElement,item:type,index:Number,data:type[]})=>HTMLElement):void,
+    showItems<type>(items:type[],renderItem?:(props:{parent:HTMLElement,item:type,index:Number,data:type[]})=>HTMLElement):FlatList|null,
+    /**
+     * Creates a flatlist on top of the original flatlist as a popup
+     * @param predicate function to execute to filter items
+     * @param renderItem function component to use
+     * @returns The flatlist popup element if created, null otherwise
+     */
+    showItems<type>(predicate:(item:type,index:Number,array:type[])=>Boolean,renderItem?:(props:{parent:HTMLElement,item:type,index:Number,data:type[]})=>HTMLElement):FlatList|null,
+    /**
+     * Returns the popup flatlist 
+     */
     readonly container:HTMLElement,
 }

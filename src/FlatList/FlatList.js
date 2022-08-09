@@ -3,8 +3,9 @@ import css from "./FlatList.module.css";
 
 
 export default function FlatList(props){
-    const {parent,ref=useId("flatlist"),id=ref,className,containerClassName,popupClassName,data,renderItem,onReachEnd,horizontal,backwards,pagingEnabled=false,threshold=0.5,transition="250ms",onSwipe}=props;
+    const {parent,ref=useId("flatlist"),id=ref,className,containerClassName,popupClassName,renderItem,onReachEnd,horizontal,backwards,pagingEnabled=false,threshold=0.5,transition="250ms",onSwipe}=props;
     const flatlist=View({id,parent,className:`${css.flatlist} ${className||""}`}),state={
+        data:Array.isArray(props.data)&&[...props.data],
         index:null,
         itemEl:null,
         focus:null,
@@ -13,10 +14,10 @@ export default function FlatList(props){
         firstOffset:null,
         popuplist:null,
         observer:null,
-    };
+    },{data}=state;
 
     flatlist.innerHTML=`
-        ${Array.isArray(data)&&data.length?`
+        ${data&&data.length?`
             <div class="${css.container} ${containerClassName||""}" style="${styles.container({pagingEnabled,transition,horizontal})}"></div>
         `:`
             <p class="${css.emptymsg}">no data</p>
@@ -99,6 +100,10 @@ export default function FlatList(props){
             });
             flatlist.style.overflow="hidden";
         }
+        else{
+            state.popuplist=null;
+        }
+        return state.popuplist;
     }
 
     flatlist.container=container;
