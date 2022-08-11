@@ -103,7 +103,16 @@ export const useSwipeGesture=(params)=>{
     element.addEventListener("touchend",onTouchEnd,{passive:true});
 }
 
-export const specialchars="+=}°)]@ç^_\\`-|(['{\"#~&²£$¤*µ%ù§!/:.;?,<>";
+const specialchars="+=}°)]@ç^_\\`-|(['{\"#~&²£$¤*µ%ù§!/:.;?,<>";
+export const sanitize=(str="")=>{
+    let sanitized="";
+    for(const char of str){
+        if(!specialchars.includes(char)){
+            sanitized+=char;
+        }
+    }
+    return sanitized;
+}
 
 export const fadeIn=(element,props={},callback)=>{
     if(element!==null){
@@ -175,7 +184,7 @@ export const replaceAt=(index=0,replaceValue="",targetString="")=>targetString.s
 
 export const capitalize=(str)=>str?replaceAt(0,str[0].toUpperCase(),str.toLowerCase()):"";
 
-export const emailCheck=(str)=>{
+export const isEmail=(str)=>{
     str=str.trim();
     const p_number=str.split(".").length-1;
     const p_lastindex= str.lastIndexOf("."),at_index=str.indexOf("@");

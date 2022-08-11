@@ -45,7 +45,11 @@ export function useSwipeGesture(params:{
     onSwipeLeft(eventRemover:()=>void,eventAdder:()=>void):void,
     onSwipeRight(eventRemover:()=>void,eventAdder:()=>void):void,
 }):void;
-export const specialchars="+=}°)]@ç^_\\`-|(['{\"#~&²£$¤*µ%ù§!/:.;?,<>";
+/**
+ * Removes special charcaters from a string and returns the sanitized string.
+ * @param str String to sanitize
+ */
+export function sanitize(str:String):String;
 export function fadeIn(
     element:HTMLElement,
     props:{display:String,duration:Number},
@@ -65,7 +69,7 @@ export function randomColor(from?:String[]):String;
 export function createCode(length:Number):String;
 export function replaceAt(index:Number,replaceValue:String,targetString:String):String;
 export function capitalize(str:String):String;
-export function emailCheck(str:String):boolean;
+export function isEmail(str:String):boolean;
 export function getArrayMax<type>(array:type[],start:Number,end:Number):{
     value:type,
     index:Number,
