@@ -25,6 +25,7 @@ interface FlatList<Type> extends View {
      * @returns The flatlist popup element if created, null otherwise.
      * @see
      * onReachEnd and onRemoveItem props are not passed to the popup faltlist.
+     * If items is not an array, The method removes the popup flatlist.
      */
     showItems<Type>(items:Type[],props?:PopupProps<Type>):FlatList<Type>|null,
     /**
@@ -34,6 +35,7 @@ interface FlatList<Type> extends View {
      * @returns The flatlist popup element if created, null otherwise.
      * @see
      * onReachEnd and onRemoveItem props are not passed to the popup faltlist.
+     * If items is not an array, The method removes the popup flatlist.
      */
     showItems<Type>(predicate:(item:Type,index:Number,array:Type[])=>Boolean,props?:PopupProps<Type>):FlatList<Type>|null,
     /**
