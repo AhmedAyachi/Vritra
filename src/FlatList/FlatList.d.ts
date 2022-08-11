@@ -82,13 +82,13 @@ type PopupProps<Type>={
     renderItem:renderItem<Type>,
     onSwipe(params:{direction:"left"|"right",index:Number,container:HTMLElement}):void,
     /**
-     * Called each time addItems method called;
+     * Triggered each time addItems method called;
      * @param items 
      */
     onAddItems(items:Type[]):void,
      /**
       * Triggered each time removeItem method called;
-      * @param params C
+      * @param params
       */
     onRemoveItem(params:RemovedData<Type>):void,
     onReachEnd(params:{parent:HTMLElement,data:Type[]}):void,
