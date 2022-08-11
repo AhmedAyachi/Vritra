@@ -1,10 +1,12 @@
 declare module "vanilla";
 
+
+export {HashRouter} from "./src/HashRouter/HashRouter";
+export {default as HashMap} from "./src/HashMap/HashMap";
 export {default as View} from "./src/View/View";
 export {default as DraggableView} from "./src/DraggableView/DraggableView";
 export {default as FlatList} from "./src/FlatList/FlatList";
 export {default as Modal} from "./src/Modal/Modal";
-export {HashRouter} from "./src/HashRouter/HashRouter";
 
 /**
  * returns an array of objects representing the months of the year;

@@ -2,6 +2,7 @@ import css from "./index.module.css";
 
 
 export {HashRouter} from "./HashRouter/HashRouter";
+export {default as HashMap} from "./HashMap/HashMap";
 export {default as View} from "./View/View";
 export {default as DraggableView} from "./DraggableView/DraggableView";
 export {default as Modal} from "./Modal/Modal";
