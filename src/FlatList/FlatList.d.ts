@@ -83,7 +83,7 @@ type PopupProps<Type>={
     onSwipe(params:{direction:"left"|"right",index:Number,container:HTMLElement}):void,
     /**
      * Triggered each time addItems method called;
-     * @param items 
+     * @param items added items array
      */
     onAddItems(items:Type[]):void,
      /**
