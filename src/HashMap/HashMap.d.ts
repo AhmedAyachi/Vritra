@@ -8,4 +8,8 @@ export default class HashMap extends Map {
      * @returns if value is true returns value at index otherwise returns the key
      */
     at(index:Number,isValue:Boolean=false):Key|Value;
+    /**
+     * Same as size property
+     */
+    readonly length:Number;
 }

@@ -19,4 +19,8 @@ export default class HashMap extends Map {
         return item;
     }
 
+    get length(){
+        return super.size;
+    }
+
 }
