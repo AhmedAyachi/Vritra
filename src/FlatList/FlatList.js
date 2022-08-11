@@ -1,15 +1,15 @@
-import {useId,View,removeItem} from "../index";
+import {useId,View,removeItem,HashMap} from "../index";
 import css from "./FlatList.module.css";
 
 
 export default function FlatList(props){
-    const {parent,ref=useId("flatlist"),id=ref,className,containerClassName,popupClassName,renderItem,onReachEnd,horizontal,backwards,pagingEnabled=false,threshold=0.5,transition="250ms",onSwipe}=props;
+    const {parent,ref=useId("flatlist"),id=ref,className,containerClassName,popupClassName,renderItem,onReachEnd,onRemoveItem,onAddItems,horizontal,backwards,pagingEnabled=false,threshold=0.5,transition="250ms",onSwipe}=props;
     const flatlist=View({id,parent,className:`${css.flatlist} ${className||""}`}),state={
         data:Array.isArray(props.data)&&[...props.data],
         index:null,
         itemEl:null,
         focus:null,
-        itemEls:[],
+        items:new HashMap(),
         endreached:false,
         firstOffset:null,
         popuplist:null,
@@ -48,15 +48,15 @@ export default function FlatList(props){
         observer.observe(state.itemEl);
 
         if(pagingEnabled&&horizontal){
-            const {itemEls,firstOffset}=state;
+            const {items,firstOffset}=state;
             container.style.overflow="visible";
             useSwipeGesture({
                 element:flatlist,
                 onSwipeLeft:()=>{
-                    const {focus}=state,lastIndex=itemEls.length-1;
+                    const {focus}=state,lastIndex=items.length-1;
                     if(focus<lastIndex){
                         state.focus=focus+1;
-                        const {offsetLeft}=itemEls[state.focus];
+                        const {offsetLeft}=items.at(state.focus,true);
                         container.style.transform=`translateX(-${offsetLeft-firstOffset}px)`;
                         onSwipe&&onSwipe({direction:"left",index:state.focus,container});
                     }
@@ -65,7 +65,7 @@ export default function FlatList(props){
                     const {focus}=state;
                     if(focus){
                         state.focus=focus-1;
-                        const {offsetLeft}=itemEls[state.focus],offsetX=offsetLeft-firstOffset;
+                        const {offsetLeft}=items.at(state.focus,true),offsetX=offsetLeft-firstOffset;
                         container.style.transform=`translateX(-${offsetX>0?offsetX:0}px)`;
                         onSwipe&&onSwipe({direction:"right",index:state.focus,container});
                     }
@@ -81,18 +81,27 @@ export default function FlatList(props){
                 createElement({item:items[0],index:state.index});
                 state.endreached=false;
             }
+            onAddItems&&onAddItems(items);
         }
     }
 
-    flatlist.removeItem=(predicate)=>{
-        const {length}=data,item=removeItem(data,predicate);
+    flatlist.removeItem=(predicate,withElement=true)=>{
+        const {length}=data,item=removeItem(data,predicate),removed={item,element:null}; 
         if(data.length<length){
+            const {items}=state;
+            removed.element=items.get(item);
+            if(withElement){
+                const {element}=removed;
+                (element instanceof Element)&&element.remove();
+            }
+            items.delete(item);
             state.index--;
+            onRemoveItem&&onRemoveItem(removed);
         }
-        return item;
+        return removed;
     }
 
-    flatlist.showItems=(predicate,render)=>{
+    flatlist.showItems=(predicate,popupProps)=>{
         const {popuplist}=state;
         popuplist&&popuplist.remove();
         flatlist.style.overflow=null;
@@ -100,11 +109,12 @@ export default function FlatList(props){
         if(Array.isArray(items)){
             state.popuplist=FlatList({
                 ...props,
+                onReachEnd:null,
+                onRemoveItem:null,
+                ...popupProps,
                 parent:flatlist,
                 className:`${css.popuplist} ${popupClassName||""}`,
                 data:items,
-                renderItem:render||renderItem,
-                onReachEnd:null,
             });
             flatlist.style.overflow="hidden";
         }
@@ -130,7 +140,7 @@ export default function FlatList(props){
         else{
             element=renderItem({parent:container,item,index,data});
         }
-        state.itemEls.push(element);
+        state.items.set(item,element);
         state.itemEl=element;
         observer&&observer.observe(element);
     }
