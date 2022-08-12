@@ -104,9 +104,18 @@ export const useSwipeGesture=(params)=>{
 }
 
 //export const specialchars="+=}°)]@ç^_\\`-|(['{\"#~&²£$¤*µ%ù§!/:.;?,<>";
-
 export const sanitize=(str="")=>{
-    const onlynumbers=str.startsWith("-")&&str.match(/[0-9]/);
+    const {length}=str;
+    let onlynumbers=str.startsWith("-")&&(length>1);
+    if(onlynumbers){
+        onlynumbers=false;
+        let i=1;
+        while((!onlynumbers)&&(i<length)){
+            const char=str[i];
+            onlynumbers=("0"<=char)&&(char<="9");
+            i++;
+        }
+    }
     return (onlynumbers?"-":"")+str.replace(onlynumbers?/[^0-9]/g:/[^a-zA-Z0-9]/g,"");
 }
 
