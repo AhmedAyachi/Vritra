@@ -46,8 +46,9 @@ export function useSwipeGesture(params:{
     onSwipeRight(eventRemover:()=>void,eventAdder:()=>void):void,
 }):void;
 /**
- * Removes special charcaters from a string and returns the sanitized string.
  * @param str String to sanitize
+ * @returns string that only contains numbers or letters
+ * @see If the string starts with "-" and contains numbers then only numbers are kept 
  */
 export function sanitize(str:String):String;
 export function fadeIn(

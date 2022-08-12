@@ -103,15 +103,11 @@ export const useSwipeGesture=(params)=>{
     element.addEventListener("touchend",onTouchEnd,{passive:true});
 }
 
-const specialchars="+=}°)]@ç^_\\`-|(['{\"#~&²£$¤*µ%ù§!/:.;?,<>";
+//export const specialchars="+=}°)]@ç^_\\`-|(['{\"#~&²£$¤*µ%ù§!/:.;?,<>";
+
 export const sanitize=(str="")=>{
-    let sanitized="";
-    for(const char of str){
-        if(!specialchars.includes(char)){
-            sanitized+=char;
-        }
-    }
-    return sanitized;
+    const onlynumbers=str.startsWith("-")&&str.match(/[0-9]/);
+    return (onlynumbers?"-":"")+str.replace(onlynumbers?/[^0-9]/g:/[^a-zA-Z0-9]/g,"");
 }
 
 export const fadeIn=(element,props={},callback)=>{
