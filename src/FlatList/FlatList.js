@@ -1,4 +1,4 @@
-import {useId,View,removeItem,HashMap} from "../index";
+import {useId,View,removeItem,HashMap,useSwipeGesture} from "../index";
 import css from "./FlatList.module.css";
 
 
