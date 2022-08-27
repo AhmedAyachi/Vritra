@@ -1,4 +1,4 @@
-import {View} from "../View/View";
+import {View,ViewProps} from "../View/View";
 
 
 export default function FlatList<Type>(props:FlatListProps<Type>):FlatList<Type>;
@@ -44,7 +44,7 @@ interface FlatList<Type> extends View {
     readonly container:HTMLElement,
 }
 
-type PopupProps<Type>={
+type PopupProps<Type>=ViewProps&{
     id:String,
     /**
      * @deprecated

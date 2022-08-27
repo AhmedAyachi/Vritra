@@ -3,8 +3,8 @@ import css from "./FlatList.module.css";
 
 
 export default function FlatList(props){
-    const {parent,ref=useId("flatlist"),id=ref,className,containerClassName,popupClassName,renderItem,onReachEnd,onRemoveItem,onAddItems,horizontal,backwards,pagingEnabled=false,threshold=0.5,transition="250ms",onSwipe}=props;
-    const flatlist=View({id,parent,className:`${css.flatlist} ${className||""}`}),state={
+    const {parent,ref=useId("flatlist"),id=ref,position,style,className,containerClassName,popupClassName,renderItem,onReachEnd,onRemoveItem,onAddItems,horizontal,backwards,pagingEnabled=false,threshold=0.5,transition="250ms",onSwipe}=props;
+    const flatlist=View({parent,id,position,style,className:`${css.flatlist} ${className||""}`}),state={
         data:Array.isArray(props.data)&&[...props.data],
         index:null,
         itemEl:null,
