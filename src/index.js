@@ -8,6 +8,18 @@ export {default as DraggableView} from "./DraggableView/DraggableView";
 export {default as Modal} from "./Modal/Modal";
 export {default as FlatList} from "./FlatList/FlatList";
 
+export const getTimeDuration=(start,end)=>{
+    const [starth=0,startmin=0,startsec=0]=start.split(":").map(str=>parseInt(str));
+    const [endh=0,endmin=0,endsec=0]=end.split(":").map(str=>parseInt(str));
+    const startsecs=starth*3600+startmin*60+startsec;
+    const endsecs=endh*3600+endmin*60+endsec;
+    let duration=endsecs-startsecs;
+    if(duration<0){
+        duration+=86400;
+    }
+    return duration;
+}
+
 export const getMonths=(isLeapYear=false)=>[
     {name:"january",length:31},
     {name:"february",length:isLeapYear?29:28},

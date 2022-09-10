@@ -9,6 +9,16 @@ export {default as FlatList} from "./src/FlatList/FlatList";
 export {default as Modal} from "./src/Modal/Modal";
 
 /**
+ * Returns the duration between two times in seconds
+ * @formats 
+ * hh:mm:ss 
+ * h:m:s
+ * h:m::
+ * h::
+ */
+export function getTimeDuration(start:String,end:String):Number;
+
+/**
  * returns an array of objects representing the months of the year;
  * @param isLeapYear
  * if true, february length value would be 29 else 28
