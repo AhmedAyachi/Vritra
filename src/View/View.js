@@ -9,10 +9,16 @@ export default function View(props){
     view.innerHTML=`
     `;
 
-    Object.defineProperty(view,"beforeEndHTML",{
-        set:(html)=>{
+    Object.defineProperties(view,{
+        beforeEndHTML:{set:(html)=>{
             view.insertAdjacentHTML("beforeend",html);
-        }
+        }},
+        afterBeginHTML:{set:(html)=>{
+            view.insertAdjacentHTML("afterbegin",html);
+        }},
+        innateHTML:{set:(html)=>{
+            view.innerHTML=html;
+        }},
     });
 
     return view;
