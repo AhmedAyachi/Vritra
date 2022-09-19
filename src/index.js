@@ -128,7 +128,7 @@ export const sanitize=(str="")=>{
             i++;
         }
     }
-    return (onlynumbers?"-":"")+str.replace(onlynumbers?/[^0-9]/g:/[^a-zA-Z0-9]/g,"");
+    return (onlynumbers?"-":"")+str.trim().replace(onlynumbers?/[^0-9]/g:/[^a-zA-Z0-9\s]/g,"");
 }
 
 export const fadeIn=(element,props={},callback)=>{
