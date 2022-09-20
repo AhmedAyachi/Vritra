@@ -97,18 +97,18 @@ export const useSwipeGesture=(params)=>{
         const {onSwipeLeft,onSwipeRight}=state;
         if(swipeheight<60){
             if(onSwipeLeft&&(swipewidth>length)){
-                onSwipeLeft(()=>{
-                    state.onSwipeLeft=null;
-                },()=>{
-                    state.onSwipeLeft=params.onSwipeLeft;
+                Object.assign(event,{
+                    remove:()=>{state.onSwipeLeft=null},
+                    //add:()=>{state.onSwipeLeft=params.onSwipeLeft},
                 });
+                onSwipeLeft(event);
             }
             else if(onSwipeRight&&(swipewidth<-length)){
-                onSwipeRight(()=>{
-                    state.onSwipeRight=null;
-                },()=>{
-                    state.onSwipeRight=params.onSwipeRight;
+                Object.assign(event,{
+                    remove:()=>{state.onSwipeRight=null},
+                    //add:()=>{state.onSwipeRight=params.onSwipeRight},
                 });
+                onSwipeRight(event);
             }
         }
     }

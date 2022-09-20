@@ -49,12 +49,21 @@ export function useRef(startsWith:String):String;
 export function groupBy<type>(array:type[],filter:(item:type,index:Number,array:type[])=>any):{predicate:any,items:type[]}[];
 export function map<type>(array:type[],callback:(item:type,index:Number,array:type[])=>String):String;
 export function map(iteration:Number,callback:(index:Number)=>String):String;
+
 export function useSwipeGesture(params:{
     element:HTMLElement,
     length:number,
-    onSwipeLeft(eventRemover:()=>void,eventAdder:()=>void):void,
-    onSwipeRight(eventRemover:()=>void,eventAdder:()=>void):void,
+    onSwipeLeft(event:SwipeEvent):void,
+    onSwipeRight(event:SwipeEvent):void,
 }):void;
+new HTMLElement().removeEventListener()
+interface SwipeEvent extends TouchEvent {
+    /**
+     * Removes the event listener
+     */
+    remove():void,
+}
+
 /**
  * @param str String to sanitize
  * @returns string that only contains numbers or letters
