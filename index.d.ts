@@ -52,6 +52,10 @@ export function map(iteration:Number,callback:(index:Number)=>String):String;
 
 export function useSwipeGesture(params:{
     element:HTMLElement,
+    /**
+     * Minimum swipe length in pixels from start position to the end position that triggers listeners
+     * @default 40
+     */
     length:number,
     onSwipeLeft(event:SwipeEvent):void,
     onSwipeRight(event:SwipeEvent):void,
@@ -61,7 +65,7 @@ interface SwipeEvent extends TouchEvent {
     /**
      * Removes the event listener
      */
-    remove():void,
+     removeListener():void,
 }
 
 /**

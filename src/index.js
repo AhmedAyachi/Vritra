@@ -92,21 +92,20 @@ export const useSwipeGesture=(params)=>{
         state.touchY=clientY;
     },{passive:true});
     const onTouchEnd=(event)=>{
+        event.stopPropagation();
         const {clientX,clientY}=event.changedTouches[0];
         const swipewidth=state.touchX-clientX,swipeheight=Math.abs(clientY-state.touchY);
         const {onSwipeLeft,onSwipeRight}=state;
         if(swipeheight<60){
             if(onSwipeLeft&&(swipewidth>length)){
                 Object.assign(event,{
-                    remove:()=>{state.onSwipeLeft=null},
-                    //add:()=>{state.onSwipeLeft=params.onSwipeLeft},
+                    removeListener:()=>{state.onSwipeLeft=null},
                 });
                 onSwipeLeft(event);
             }
             else if(onSwipeRight&&(swipewidth<-length)){
                 Object.assign(event,{
-                    remove:()=>{state.onSwipeRight=null},
-                    //add:()=>{state.onSwipeRight=params.onSwipeRight},
+                    removeListener:()=>{state.onSwipeRight=null},
                 });
                 onSwipeRight(event);
             }
