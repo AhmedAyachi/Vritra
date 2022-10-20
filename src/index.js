@@ -8,6 +8,24 @@ export {default as DraggableView} from "./DraggableView/DraggableView";
 export {default as Modal} from "./Modal/Modal";
 export {default as FlatList} from "./FlatList/FlatList";
 
+export const useBlobImageData=(blob,callback)=>{
+    const filereader=new FileReader();
+    filereader.onloadend=()=>{
+        const image=new Image();
+        image.onload=()=>{
+            const canvas=document.createElement("canvas");
+            canvas.width=image.width;
+            canvas.height=image.height;
+            const context=canvas.getContext("2d");
+            context.drawImage(image,0,0);
+            const imageData=context.getImageData(0,0,image.width,image.height);
+            callback&&callback(imageData);
+        } 
+        image.src=filereader.result;
+    }
+    filereader.readAsDataURL(blob);
+}
+
 export const getTimeDuration=(start,end)=>{
     const [starth=0,startmin=0,startsec=0]=start.split(":").map(str=>parseInt(str));
     const [endh=0,endmin=0,endsec=0]=end.split(":").map(str=>parseInt(str));

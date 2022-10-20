@@ -8,6 +8,9 @@ export {default as DraggableView} from "./src/DraggableView/DraggableView";
 export {default as FlatList} from "./src/FlatList/FlatList";
 export {default as Modal} from "./src/Modal/Modal";
 
+
+export function useBlobImageData(blob:Blob,callback:(imageData:ImageData)=>void):ImageData;
+
 /**
  * Returns the duration between two times in seconds
  * @formats 
