@@ -5,7 +5,6 @@ export {HashRouter} from "./HashRouter/HashRouter";
 export {default as HashMap} from "./HashMap/HashMap";
 export {default as View} from "./View/View";
 export {default as DraggableView} from "./DraggableView/DraggableView";
-export {default as Modal} from "./Modal/Modal";
 export {default as FlatList} from "./FlatList/FlatList";
 
 export const parseJSON=(json)=>{
@@ -157,33 +156,32 @@ export const sanitize=(str="")=>{
     return (onlynumbers?"-":"")+str.trim().replace(onlynumbers?/[^0-9]/g:/[^a-zA-Z0-9\s]/g,"");
 }
 
-export const fadeIn=(element,props={},callback)=>{
-    if(element!==null){
-        const {display="block",duration=200}=props;
-        const style=element.style;
-        style.display=display;
+export const fadeIn=(element,duration=200,callback)=>{
+    if(element instanceof HTMLElement){
+        const onElementShown=typeof(duration)==="function"?duration:callback;
+        const {style}=element;
+        style.display=getComputedStyle(element).display||null;
         style.animation=`${css.fadeIn} ${duration}ms 1 linear forwards`;
-        callback&&setTimeout(()=>{
-            callback&&callback();
-        },duration);
+        onElementShown&&setTimeout(onElementShown,duration);
     }
 }
 
 export const fadeOut=(element,duration=200,callback)=>{
-    if(element!==null){
-        const style=element.style;
+    if(element instanceof HTMLElement){
+        const onElementHidden=typeof(duration)==="function"?duration:callback;
+        const {style}=element;
         style.animation=`${css.fadeOut} ${duration}ms 1 linear forwards`;
         setTimeout(()=>{
             style.display="none";
-            style.animation="";
-            callback&&callback();
+            style.animation=null;
+            onElementHidden&&onElementHidden();
         },duration);
     }
 }
 
-export const toggle=(element,{display="block",duration=0.2},callback)=>{
-    if(element.style.display==="none"){
-        fadeIn(element,{display,duration},callback);
+export const toggle=(element,duration=200,callback)=>{
+    if((element instanceof HTMLElement)&&(getComputedStyle(element).display==="none")){
+        fadeIn(element,duration,callback);
     }
     else{
         fadeOut(element,duration,callback);

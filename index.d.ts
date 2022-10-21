@@ -6,7 +6,6 @@ export {default as HashMap} from "./src/HashMap/HashMap";
 export {default as View} from "./src/View/View";
 export {default as DraggableView} from "./src/DraggableView/DraggableView";
 export {default as FlatList} from "./src/FlatList/FlatList";
-export {default as Modal} from "./src/Modal/Modal";
 
 /**
  * Uses JSON.parse method to parse json parameter but returns null in case of an error
@@ -81,21 +80,20 @@ interface SwipeEvent extends TouchEvent {
  * @see If the string starts with "-" and contains numbers then only numbers are kept 
  */
 export function sanitize(str:String):String;
-export function fadeIn(
-    element:HTMLElement,
-    props:{display:String,duration:Number},
-    callback:()=>void,
-):void;
-export function fadeOut(
-    element:HTMLElement,
-    duration:Number,
-    callback:()=>void,
-):void;
-export function toggle(
-    element:HTMLElement,
-    props:{display:String,duration:Number},
-    callback:()=>void,
-):void;
+
+export function fadeIn(element:HTMLElement,duration:Number,callback:()=>void):void;
+export function fadeIn(element:HTMLElement,callback:()=>void):void;
+export function fadeOut(element:HTMLElement,duration:Number,callback:()=>void):void;
+export function fadeOut(element:HTMLElement,callback:()=>void):void;
+/**
+ * alternates between fadeIn and fadeOut
+ * @param element target HTMLElement
+ * @param duration fade duration
+ * @param callback 
+ */
+export function toggle(element:HTMLElement,duration:Number,callback:()=>void):void;
+export function toggle(element:HTMLElement,callback:()=>void):void;
+
 export function randomColor(from?:String[]):String;
 export function createCode(length:Number):String;
 export function replaceAt(index:Number,replaceValue:String,targetString:String):String;
