@@ -68,7 +68,6 @@ export function useSwipeGesture(params:{
     onSwipeLeft(event:SwipeEvent):void,
     onSwipeRight(event:SwipeEvent):void,
 }):void;
-new HTMLElement().removeEventListener()
 interface SwipeEvent extends TouchEvent {
     /**
      * Removes the event listener
