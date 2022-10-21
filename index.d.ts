@@ -84,7 +84,7 @@ export function sanitize(str:String):String;
 /**
  * 
  * @param element 
- * @param duration fade duration in ms
+ * @param duration fade duration in ms, default: 200
  * @param callback 
  */
 export function fadeIn(element:HTMLElement,duration:Number,callback:()=>void):void;
@@ -92,7 +92,7 @@ export function fadeIn(element:HTMLElement,callback:()=>void):void;
 /**
  * 
  * @param element 
- * @param duration fade duration in ms
+ * @param duration fade duration in ms, default: 200
  * @param callback 
  */
 export function fadeOut(element:HTMLElement,duration:Number,callback:()=>void):void;
@@ -100,7 +100,7 @@ export function fadeOut(element:HTMLElement,callback:()=>void):void;
 /**
  * alternates between fadeIn and fadeOut
  * @param element target HTMLElement
- * @param duration fade duration in ms
+ * @param duration fade duration in ms, default: 200
  * @param callback 
  */
 export function toggle(element:HTMLElement,duration:Number,callback:()=>void):void;

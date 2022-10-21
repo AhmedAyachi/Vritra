@@ -156,30 +156,36 @@ export const sanitize=(str="")=>{
     return (onlynumbers?"-":"")+str.trim().replace(onlynumbers?/[^0-9]/g:/[^a-zA-Z0-9\s]/g,"");
 }
 
-export const fadeIn=(element,duration=200,callback)=>{
+export const fadeIn=(element,duration,callback)=>{
     if(element instanceof HTMLElement){
-        const onElementShown=typeof(duration)==="function"?duration:callback;
+        if(typeof(duration)==="function"){
+            callback=duration;
+            duration=200;
+        }
         const {style}=element;
         style.display=getComputedStyle(element).display||null;
         style.animation=`${css.fadeIn} ${duration}ms 1 linear forwards`;
-        onElementShown&&setTimeout(onElementShown,duration);
+        callback&&setTimeout(callback,duration);
     }
 }
 
-export const fadeOut=(element,duration=200,callback)=>{
+export const fadeOut=(element,duration,callback)=>{
     if(element instanceof HTMLElement){
-        const onElementHidden=typeof(duration)==="function"?duration:callback;
+        if(typeof(duration)==="function"){
+            callback=duration;
+            duration=200;
+        }
         const {style}=element;
         style.animation=`${css.fadeOut} ${duration}ms 1 linear forwards`;
         setTimeout(()=>{
             style.display="none";
             style.animation=null;
-            onElementHidden&&onElementHidden();
+            callback&&callback();
         },duration);
     }
 }
 
-export const toggle=(element,duration=200,callback)=>{
+export const toggle=(element,duration,callback)=>{
     if((element instanceof HTMLElement)&&(getComputedStyle(element).display==="none")){
         fadeIn(element,duration,callback);
     }
