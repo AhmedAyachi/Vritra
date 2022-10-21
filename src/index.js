@@ -156,7 +156,7 @@ export const sanitize=(str="")=>{
     return (onlynumbers?"-":"")+str.trim().replace(onlynumbers?/[^0-9]/g:/[^a-zA-Z0-9\s]/g,"");
 }
 
-export const fadeIn=(element,duration,callback)=>{
+export const fadeIn=(element,duration=200,callback)=>{
     if(element instanceof HTMLElement){
         if(typeof(duration)==="function"){
             callback=duration;
@@ -169,7 +169,7 @@ export const fadeIn=(element,duration,callback)=>{
     }
 }
 
-export const fadeOut=(element,duration,callback)=>{
+export const fadeOut=(element,duration=200,callback)=>{
     if(element instanceof HTMLElement){
         if(typeof(duration)==="function"){
             callback=duration;
@@ -185,7 +185,7 @@ export const fadeOut=(element,duration,callback)=>{
     }
 }
 
-export const toggle=(element,duration,callback)=>{
+export const toggle=(element,duration=200,callback)=>{
     if((element instanceof HTMLElement)&&(getComputedStyle(element).display==="none")){
         fadeIn(element,duration,callback);
     }
