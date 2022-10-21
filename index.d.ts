@@ -100,10 +100,16 @@ export function fadeOut(element:HTMLElement,callback:()=>void):void;
 /**
  * alternates between fadeIn and fadeOut
  * @param element target HTMLElement
- * @param duration fade duration in ms, default: 200
+ * @param props 
+ * display: element display (flex,block,...), default: block
+ * duration: fade duration in ms, default: 200
  * @param callback 
  */
-export function toggle(element:HTMLElement,duration:Number,callback:()=>void):void;
+export function toggle(
+    element:HTMLElement,
+    props:{display:String,duration:Number},
+    callback:()=>void,
+):void;
 export function toggle(element:HTMLElement,callback:()=>void):void;
 
 export function randomColor(from?:String[]):String;

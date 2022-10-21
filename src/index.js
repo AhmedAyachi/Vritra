@@ -185,12 +185,13 @@ export const fadeOut=(element,duration=200,callback)=>{
     }
 }
 
-export const toggle=(element,duration=200,callback)=>{
-    if((element instanceof HTMLElement)&&(getComputedStyle(element).display==="none")){
+export const toggle=(element,{display="block",duration=200},callback)=>{
+    if(getComputedStyle(element).display==="none"){
+        element.style.display=display;
         fadeIn(element,duration,callback);
     }
     else{
-        fadeOut(element,duration,callback);
+        display=fadeOut(element,duration,callback);
     }
 }
 
