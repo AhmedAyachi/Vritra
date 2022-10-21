@@ -8,6 +8,11 @@ export {default as DraggableView} from "./src/DraggableView/DraggableView";
 export {default as FlatList} from "./src/FlatList/FlatList";
 export {default as Modal} from "./src/Modal/Modal";
 
+/**
+ * Uses JSON.parse method to parse json parameter but returns null in case of an error
+ * @param json json string to parse
+ */
+export function parseJSON(json:String):any|null;
 
 export function useBlobImageData(blob:Blob,callback:(imageData:ImageData)=>void):ImageData;
 

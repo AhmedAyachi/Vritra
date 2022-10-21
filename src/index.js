@@ -8,6 +8,15 @@ export {default as DraggableView} from "./DraggableView/DraggableView";
 export {default as Modal} from "./Modal/Modal";
 export {default as FlatList} from "./FlatList/FlatList";
 
+export const parseJSON=(json)=>{
+    let data=null;
+    try{
+        data=JSON.parse(json);
+    }
+    catch{}
+    return data;
+}
+
 export const useBlobImageData=(blob,callback)=>{
     const filereader=new FileReader();
     filereader.onloadend=()=>{
