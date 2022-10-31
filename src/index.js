@@ -141,19 +141,26 @@ export const useSwipeGesture=(params)=>{
 }
 
 //export const specialchars="+=}°)]@ç^_\\`-|(['{\"#~&²£$¤*µ%ù§!/:.;?,<>";
-export const sanitize=(str="")=>{
+export const sanitize=(str="",whilelist="")=>{
+    let sanitized;
     const {length}=str;
-    let onlynumbers=str.startsWith("-")&&(length>1);
+    let onlynumbers=str.startsWith("-")&&(length>1)&&(!whilelist);
     if(onlynumbers){
-        onlynumbers=false;
-        let i=1;
-        while((!onlynumbers)&&(i<length)){
-            const char=str[i];
-            onlynumbers=("0"<=char)&&(char<="9");
-            i++;
+        const secondchar=str[1];
+        onlynumbers=("0"<=secondchar)&&(secondchar<="9");
+    }
+    if(onlynumbers){
+        sanitized=`-${str.replace(/[^0-9]/g,"")}`;
+    }
+    else{
+        sanitized="";
+        for(const char of str){
+            if((whilelist&&whilelist.includes(char))||char.match(/[a-zA-Z0-9\s]/g)){
+                sanitized+=char;
+            }
         }
     }
-    return (onlynumbers?"-":"")+str.trim().replace(onlynumbers?/[^0-9]/g:/[^a-zA-Z0-9\s]/g,"");
+    return sanitized||"";
 }
 
 export const fadeIn=(element,duration=200,callback)=>{
