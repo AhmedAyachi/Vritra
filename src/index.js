@@ -141,7 +141,9 @@ export const useSwipeGesture=(params)=>{
 }
 
 //export const specialchars="+=}°)]@ç^_\\`-|(['{\"#~&²£$¤*µ%ù§!/:.;?,<>";
-export const sanitize=(str="",whilelist="")=>{
+export const sanitize=(str="",param0,param1)=>{
+    const escape=(typeof(param0)==="boolean")&&param0;
+    const whilelist=(typeof(param0)==="string")?param0:param1;
     let sanitized;
     const {length}=str;
     let onlynumbers=str.startsWith("-")&&(length>1)&&(!whilelist);
@@ -159,6 +161,9 @@ export const sanitize=(str="",whilelist="")=>{
                 sanitized+=char;
             }
         }
+    }
+    if(escape){
+        sanitized=encodeURIComponent(sanitized);
     }
     return sanitized||"";
 }
