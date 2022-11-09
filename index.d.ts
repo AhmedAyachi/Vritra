@@ -78,15 +78,14 @@ interface SwipeEvent extends TouchEvent {
  * @param str String to sanitize
  * @param whitelist Characters to keep in addition to letters, numbers and spaces
  * @returns string that only contains numbers, letters and spaces along with the whitelisted characters
- * @see If the string starts with "-" followed by a number and there are no whitelisted characters
- * then only numbers are kept along with "-"
+ * @see If the string starts with "-" or "+" followed by a number and there are no whitelisted characters
+ * then only numbers are kept along with "-"/"+"
  */
 export function sanitize(str:string,whitelist?:string):String;
 /**
- * 
- * @param str 
  * @param escape if true, certain characters will be replaced by a hexadecimal escape sequence 
- * @param whitelist 
+ * @param whitelist characters to skip escaping, skips spaces by default
+ * @default " "
  */
 export function sanitize(str:string,escape?:boolean,whitelist?:string):String;
 

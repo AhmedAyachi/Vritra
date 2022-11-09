@@ -142,30 +142,38 @@ export const useSwipeGesture=(params)=>{
 
 //export const specialchars="+=}°)]@ç^_\\`-|(['{\"#~&²£$¤*µ%ù§!/:.;?,<>";
 export const sanitize=(str="",param0,param1)=>{
-    const escape=(typeof(param0)==="boolean")&&param0;
-    const whilelist=(typeof(param0)==="string")?param0:param1;
-    let sanitized;
-    const {length}=str;
-    let onlynumbers=str.startsWith("-")&&(length>1)&&(!whilelist);
-    if(onlynumbers){
-        const secondchar=str[1];
-        onlynumbers=("0"<=secondchar)&&(secondchar<="9");
+    let escape,whilelist,sanitized="";
+    if(typeof(param0)==="boolean"){
+        escape=param0;
+        whilelist=param1===undefined?" ":param1;
     }
-    if(onlynumbers){
-        sanitized=`-${str.replace(/[^0-9]/g,"")}`;
+    else if(typeof(param0)==="string"){
+        whilelist=param0;
+    }
+    if(escape){
+        for(const char of str){
+            sanitized+=(whilelist&&whilelist.includes(char))?char:encodeURIComponent(char);
+        }
     }
     else{
-        sanitized="";
-        for(const char of str){
-            if((whilelist&&whilelist.includes(char))||char.match(/[a-zA-Z0-9\s]/g)){
-                sanitized+=char;
+        const firstchar=str[0];
+        let onlynumbers=((firstchar==="-")||(firstchar==="+"))&&(str.length>1)&&(!whilelist);
+        if(onlynumbers){
+            const secondchar=str[1];
+            onlynumbers=("0"<=secondchar)&&(secondchar<="9");
+        }
+        if(onlynumbers){
+            sanitized=`${firstchar}${str.replace(/[^0-9]/g,"")}`;
+        }
+        else{
+            for(const char of str){
+                if((whilelist&&whilelist.includes(char))||char.match(/[a-zA-Z0-9\s]/g)){
+                    sanitized+=char;
+                }
             }
         }
     }
-    if(escape){
-        sanitized=encodeURIComponent(sanitized);
-    }
-    return sanitized||"";
+    return sanitized;
 }
 
 export const fadeIn=(element,duration=200,callback)=>{
