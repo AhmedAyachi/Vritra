@@ -5,16 +5,15 @@ import css from "./DraggableView.module.css";
 export default function DraggableView(props){
     const {parent,ref=useId("draggableview"),id=ref,position={x:0,y:0},horizontalDrag=true,verticalDrag=true}=props;
     const draggableview=View({parent,id,style:props.style,className:`${css.draggableview} ${props.className||""}`}),state={
-        x:position.x*window.innerWidth,
-        y:position.y*window.innerHeight,
-        dragX:null,dragY:null,dragDX:null,dragDY:null,
-        dropX:null,dropY:null,dropDX:null,dropDY:null,
+        coords:getInitialCoords({parent,position}),
+        dragX:null,dragY:null,//drag position relative to viewport
+        dragDX:null,dragDY:null,//drag position relative to the draggableview
         onDrag:props.onDrag,
         onMove:props.onMove,
-        onDrop:props.onDrag,
+        onDrop:props.onDrop,
         isTouchDevice:isTouchDevice(),
-    }
-    Object.assign(draggableview.style,{left:`${state.x}px`,top:`${state.y}px`});
+    },{coords}=state;
+    Object.assign(draggableview.style,{left:`${coords.px}px`,top:`${coords.py}px`});
     
     draggableview.innerHTML="";
 
@@ -22,32 +21,49 @@ export default function DraggableView(props){
         const {style}=draggableview,{isTouchDevice}=state;
         style.position="absolute";
         draggableview.addEventListener(isTouchDevice?"touchstart":"mousedown",(event)=>{
-            const {clientX:x,clientY:y}=(isTouchDevice?event.changedTouches[0]:event),{offsetLeft,offsetTop}=draggableview,{onDrag}=state;
-            state.dragX=x;
-            state.dragY=y;
-            state.dragDX=x-offsetLeft;
-            state.dragDY=y-offsetTop;
-            onDrag&&onDrag(draggableview,state);
+            const {clientX:cx,clientY:cy}=(isTouchDevice?event.changedTouches[0]:event);
+            const {offsetLeft,offsetTop}=draggableview,{left,top}=draggableview.getBoundingClientRect();
+            Object.assign(coords,{
+                x:left,y:top,
+                dx:0,dy:0,
+                px:offsetLeft,py:offsetTop,
+            });
+            state.dragX=left;
+            state.dragY=top;
+            state.dragDX=cx-offsetLeft;
+            state.dragDY=cy-offsetTop;
+            const {onDrag}=state;
+            onDrag&&onDrag(structuredClone(coords),draggableview);
             function onPointerMove(event){
-                const {clientX:x,clientY:y}=(isTouchDevice?event.changedTouches[0]:event),{onMove,dragDX,dragDY}=state;
-                state.x=x-dragDX;
-                state.y=y-dragDY;
+                const {clientX:cx,clientY:cy}=(isTouchDevice?event.changedTouches[0]:event),{left,top}=draggableview.getBoundingClientRect();
+                Object.assign(coords,{
+                    x:left,y:top,
+                    dx:left-state.dragX,
+                    dy:top-state.dragY,
+                    px:cx-state.dragDX,
+                    py:cy-state.dragDY,
+                });
                 if(horizontalDrag){
-                    style.left=`${state.x}px`;
+                    style.left=`${coords.px}px`;
                 }
                 if(verticalDrag){
-                    style.top=`${state.y}px`;
+                    style.top=`${coords.py}px`;
                 }
-                onMove&&onMove(draggableview,state);
+                const {onMove}=state;
+                onMove&&onMove(structuredClone(coords,draggableview));
             }
             window.addEventListener(isTouchDevice?"touchmove":"mousemove",onPointerMove);
             window.addEventListener(isTouchDevice?"touchend":"mouseup",(event)=>{
-                const {clientX:x,clientY:y}=(isTouchDevice?event.changedTouches[0]:event),{onDrop}=state,{offsetLeft,offsetTop}=draggableview;
-                state.dropX=x;
-                state.dropY=y;
-                state.dropDX=x-offsetLeft;
-                state.dropDY=y-offsetTop;
-                onDrop&&onDrop(draggableview,state);
+                const {left,top}=draggableview.getBoundingClientRect();
+                Object.assign(coords,{
+                    x:left,y:top,
+                    dx:left-state.dragX,
+                    dy:top-state.dragY,
+                    px:draggableview.offsetLeft,
+                    py:draggableview.offsetTop,
+                });
+                const {onDrop}=state;
+                onDrop&&onDrop(structuredClone(coords,draggableview));
                 window.removeEventListener(isTouchDevice?"touchmove":"mousemove",onPointerMove);
             },{once:true})
         });
@@ -59,23 +75,30 @@ export default function DraggableView(props){
             state[`on${type}`]=listener;
         }
     }
-    draggableview.getPosition=()=>({
-        x:state.x/window.innerWidth,
-        y:state.y/window.innerHeight,
-    });
+    draggableview.getPosition=()=>{
+        const {width,height}=parent.getBoundingClientRect();
+        const {x,y,px,py}=coords;
+        return {
+            x,y,px,py,
+            xpercent:x/window.innerWidth,
+            ypercent:y/window.innerHeight,
+            pxpercent:px/width,
+            pypercent:py/height,
+        }
+    };
     draggableview.setPosition=({x,y})=>{
-        const xchanged=state.x!==x,ychanged=state.y!==y;
+        const xchanged=coords.x!==x,ychanged=coords.y!==y;
         if(xchanged){
-            state.x=x*window.innerWidth;
-            draggableview.style.left=`${state.x}px`;
+            coords.x=x*window.innerWidth;
+            draggableview.style.left=`${coords.x}px`;
         }
         if(ychanged){
-            state.y=y*window.innerHeight;
-            draggableview.style.top=`${state.y}px`;
+            coords.y=y*window.innerHeight;
+            draggableview.style.top=`${coords.y}px`;
         }
         if(xchanged||ychanged){
             const {onMove}=state;
-            onMove&&onMove(draggableview,state);
+            onMove&&onMove(structuredClone(coords,draggableview));
         }
     }
 
@@ -84,3 +107,13 @@ export default function DraggableView(props){
 
 const eventtypes=["drag","move","drop"];
 const isTouchDevice=()=>((("ontouchstart" in window)||(navigator.maxTouchPoints>0)||(navigator.msMaxTouchPoints>0)));
+
+const getInitialCoords=({parent,position})=>{
+    const {width,height}=parent.getBoundingClientRect();
+    return {
+        x:null,y:null,//relative to viewport
+        px:position.x*width,//relative to parent
+        py:position.y*height,
+        dx:null,dy:null,//relative to last position
+    }
+}

@@ -18,36 +18,83 @@ export default function DraggableView(props:{
     horizontalDrag:boolean,
     verticalDrag:boolean,
     style:String,
-    onDrag(element:DraggableView,state:DraggableViewState):void,
-    onMove(element:DraggableView,state:DraggableViewState):void,
-    onDrop(element:DraggableView,state:DraggableViewState):void,
+    onDrag(coords:DraggableViewCoords,element:DraggableView):void,
+    onMove(coords:DraggableViewCoords,element:DraggableView):void,
+    onDrop(coords:DraggableViewCoords,element:DraggableView):void,
 }):DraggableView;
 
 interface DraggableView extends View {
     setEventListener(
         type:"drag"|"move"|"drop",
-        listener:(element:DraggableView,state:DraggableViewState)=>void,
+        listener:(coords:DraggableViewCoords,element:DraggableView)=>void,
     ):void,
     getPosition():DraggableViewPosition,
-    setPosition(position:DraggableViewPosition):void,
+    setPosition(position:DraggableViewPositionSetter):void,
 }
-interface DraggableViewState{
-    x:Number,y:Number,
-    dragX:Number,dragY:Number,dragDX:Number,dragDY:Number,
-    dropX:Number,dropY:Number,dropDX:Number,dropDY:Number,
-    onDrag(element:DraggableView,state:DraggableViewState):void,
-    onMove(element:DraggableView,state:DraggableViewState):void,
-    onDrop(element:DraggableView,state:DraggableViewState):void,
-
+interface DraggableViewCoords {
+    /**
+     * X-position relative to viewport
+     */
+    x:Number,
+    /**
+     * Y-position relative to viewport
+     */
+    y:Number,
+    /**
+     * X-distance relative to last position
+     * @see value is always 0 on onDrop event
+     * 
+     * \>0 : element went right
+     * 
+     * \<0 : element went left
+     */
+    dx:Number,
+    /**
+     * Y-distance relative to last position
+     * @see value is always 0 on onDrop event
+     * 
+     * \>0 : element went down
+     * 
+     * \<0 : element went up
+     */
+    dy:Number,
+    /**
+     * X-position relative to parent
+     */
+    px:Number,
+    /**
+     * Y-position relative to parent
+     */
+    py:Number,
 }
 
-interface DraggableViewPosition{
+interface DraggableViewPositionSetter {
     /**
-     * value in 0..1
-    */
-    x:number,
+     * value between 0..1 relative to parent width
+     */
+    x:Number,
     /**
-     * value in 0..1
+     * value between 0..1 relative to parent height
+     */
+    y:Number,
+}
+
+interface DraggableViewPosition extends DraggableViewPositionSetter {
+    px:Number,py:Number,
+    /**
+     * value between 0 and 1 relative to viewport width
     */
-    y:number,
+    xpercent:Number
+    /**
+     * value between 0 and 1 relative to viewport height
+    */
+    ypercent:Number,
+    /**
+     * value between 0 and 1 relative to parent width
+    */
+    pxpercent:Number
+    /**
+     * value between 0 and 1 relative to parent height
+    */
+    pypercent:Number,
 }
