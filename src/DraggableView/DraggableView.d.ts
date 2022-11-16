@@ -82,19 +82,19 @@ interface DraggableViewPositionSetter {
 interface DraggableViewPosition extends DraggableViewPositionSetter {
     px:Number,py:Number,
     /**
-     * value between 0 and 1 relative to viewport width
+     * value between 0 and 100 relative to viewport width
     */
     xpercent:Number
     /**
-     * value between 0 and 1 relative to viewport height
+     * value between 0 and 100 relative to viewport height
     */
     ypercent:Number,
     /**
-     * value between 0 and 1 relative to parent width
+     * value between 0 and 100 relative to parent width
     */
     pxpercent:Number
     /**
-     * value between 0 and 1 relative to parent height
+     * value between 0 and 100 relative to parent height
     */
     pypercent:Number,
 }

@@ -75,15 +75,15 @@ export default function DraggableView(props){
             state[`on${type}`]=listener;
         }
     }
-    draggableview.getPosition=()=>{
+    draggableview.getPosition=(aspercentage)=>{
         const {width,height}=parent.getBoundingClientRect();
         const {x,y,px,py}=coords;
         return {
             x,y,px,py,
-            xpercent:x/window.innerWidth,
-            ypercent:y/window.innerHeight,
-            pxpercent:px/width,
-            pypercent:py/height,
+            xpercent:100*x/window.innerWidth,
+            ypercent:100*y/window.innerHeight,
+            pxpercent:100*px/width,
+            pypercent:100*py/height,
         }
     };
     draggableview.setPosition=({x,y})=>{
