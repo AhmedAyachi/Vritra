@@ -75,7 +75,7 @@ export default function DraggableView(props){
             state[`on${type}`]=listener;
         }
     }
-    draggableview.getPosition=(aspercentage)=>{
+    draggableview.getPosition=()=>{
         const {width,height}=parent.getBoundingClientRect();
         const {x,y,px,py}=coords;
         return {
