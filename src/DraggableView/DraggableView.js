@@ -5,7 +5,12 @@ import css from "./DraggableView.module.css";
 export default function DraggableView(props){
     const {parent,ref=useId("draggableview"),id=ref,position={x:0,y:0},horizontalDrag=true,verticalDrag=true}=props;
     const draggableview=View({parent,id,style:props.style,className:`${css.draggableview} ${props.className||""}`}),state={
-        coords:getInitialCoords({parent,position}),
+        coords:{
+            pagex:null,pagey:null,//relative to viewport
+            x:position.x,//relative to parent
+            y:position.y,//relative to parent
+            dx:null,dy:null,//relative to last position
+        },
         dragX:null,dragY:null,//drag position relative to viewport
         dragDX:null,dragDY:null,//drag position relative to the draggableview
         onDrag:props.onDrag,
@@ -13,7 +18,7 @@ export default function DraggableView(props){
         onDrop:props.onDrop,
         isTouchDevice:isTouchDevice(),
     },{coords}=state;
-    Object.assign(draggableview.style,{left:`${coords.px}px`,top:`${coords.py}px`});
+    Object.assign(draggableview.style,{left:`${coords.x}px`,top:`${coords.y}px`});
     
     draggableview.innerHTML="";
 
@@ -24,9 +29,9 @@ export default function DraggableView(props){
             const {clientX:cx,clientY:cy}=(isTouchDevice?event.changedTouches[0]:event);
             const {offsetLeft,offsetTop}=draggableview,{left,top}=draggableview.getBoundingClientRect();
             Object.assign(coords,{
-                x:left,y:top,
+                pagex:left,pagey:top,
                 dx:0,dy:0,
-                px:offsetLeft,py:offsetTop,
+                x:offsetLeft,y:offsetTop,
             });
             state.dragX=left;
             state.dragY=top;
@@ -35,32 +40,21 @@ export default function DraggableView(props){
             const {onDrag}=state;
             onDrag&&onDrag(structuredClone(coords),draggableview);
             function onPointerMove(event){
-                const {clientX:cx,clientY:cy}=(isTouchDevice?event.changedTouches[0]:event),{left,top}=draggableview.getBoundingClientRect();
-                Object.assign(coords,{
-                    x:left,y:top,
-                    dx:left-state.dragX,
-                    dy:top-state.dragY,
-                    px:cx-state.dragDX,
-                    py:cy-state.dragDY,
+                const {clientX:cx,clientY:cy}=(isTouchDevice?event.changedTouches[0]:event);
+                draggableview.setPosition({
+                    x:cx-state.dragDX,
+                    y:cy-state.dragDY,
                 });
-                if(horizontalDrag){
-                    style.left=`${coords.px}px`;
-                }
-                if(verticalDrag){
-                    style.top=`${coords.py}px`;
-                }
-                const {onMove}=state;
-                onMove&&onMove(structuredClone(coords),draggableview);
             }
             window.addEventListener(isTouchDevice?"touchmove":"mousemove",onPointerMove);
             window.addEventListener(isTouchDevice?"touchend":"mouseup",(event)=>{
                 const {left,top}=draggableview.getBoundingClientRect();
                 Object.assign(coords,{
-                    x:left,y:top,
+                    pagex:left,pagey:top,
                     dx:left-state.dragX,
                     dy:top-state.dragY,
-                    px:draggableview.offsetLeft,
-                    py:draggableview.offsetTop,
+                    x:draggableview.offsetLeft,
+                    y:draggableview.offsetTop,
                 });
                 const {onDrop}=state;
                 onDrop&&onDrop(structuredClone(coords),draggableview);
@@ -75,31 +69,46 @@ export default function DraggableView(props){
             state[`on${type}`]=listener;
         }
     }
-    draggableview.getPosition=()=>{
-        const {width,height}=parent.getBoundingClientRect();
-        const {x,y,px,py}=coords;
-        return {
-            x,y,px,py,
-            xpercent:100*x/window.innerWidth,
-            ypercent:100*y/window.innerHeight,
-            pxpercent:100*px/width,
-            pypercent:100*py/height,
+    draggableview.getPosition=(asratio)=>{
+        const {x,y,pagex,pagey}=coords;
+        let position;
+        if(asratio){
+            const {width,height}=parent.getBoundingClientRect();
+            position={
+                x:x/width,
+                y:y/height,
+                pagex:pagex/window.innerWidth,
+                pagey:pagey/window.innerHeight,
+            };
         }
+        else{
+            position={x,y,pagex,pagey};
+        }
+        return position;
     };
     draggableview.setPosition=({x,y},triggerOnMove=true)=>{
-        const xchanged=coords.x!==x,ychanged=coords.y!==y;
-        if(xchanged){
-            coords.x=x*window.innerWidth;
-            draggableview.style.left=`${coords.x}px`;
+        Object.assign(coords,{x,y});
+        const {style}=draggableview;
+        if(horizontalDrag){
+            style.left=`${coords.x}px`;
         }
-        if(ychanged){
-            coords.y=y*window.innerHeight;
-            draggableview.style.top=`${coords.y}px`;
+        if(verticalDrag){
+            style.top=`${coords.y}px`;
         }
-        if(triggerOnMove&&(xchanged||ychanged)){
+        const {left,top}=draggableview.getBoundingClientRect();
+        Object.assign(coords,{
+            pagex:left,pagey:top,
+            dx:left-state.dragX,
+            dy:top-state.dragY,
+        });
+        if(triggerOnMove){
             const {onMove}=state;
             onMove&&onMove(structuredClone(coords),draggableview);
         }
+    }
+    draggableview.setPositionRatio=({x,y},triggerOnMove=true)=>{
+        const {width,height}=parent.getBoundingClientRect();
+        draggableview.setPosition({x:x*width,y:y*height},triggerOnMove);
     }
 
     return draggableview;    
@@ -107,13 +116,3 @@ export default function DraggableView(props){
 
 const eventtypes=["drag","move","drop"];
 const isTouchDevice=()=>((("ontouchstart" in window)||(navigator.maxTouchPoints>0)||(navigator.msMaxTouchPoints>0)));
-
-const getInitialCoords=({parent,position})=>{
-    const {width,height}=parent.getBoundingClientRect();
-    return {
-        x:null,y:null,//relative to viewport
-        px:position.x*width,//relative to parent
-        py:position.y*height,
-        dx:null,dy:null,//relative to last position
-    }
-}

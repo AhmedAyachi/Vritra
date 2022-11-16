@@ -28,21 +28,41 @@ interface DraggableView extends View {
         type:"drag"|"move"|"drop",
         listener:(coords:DraggableViewCoords,element:DraggableView)=>void,
     ):void,
-    getPosition():DraggableViewPosition,
+    /**
+     * @param asratio if true returns values as fractions relative to width and height of parent/viewport
+     * @default false
+     */
+    getPosition(asratio:Boolean):DraggableViewPosition,
     /**
      * 
      * @param position 
      * @param triggerOnMove default: true
      */
-    setPosition(position:DraggableViewPositionSetter,triggerOnMove?:Boolean):void,
+    setPosition(position:{x:number,y:number},triggerOnMove?:Boolean):void,
+    /**
+     * 
+     * @param ratio
+     * @param triggerOnMove default: true
+     * 
+     * Sets the position of the draggableview with values relative to the width and height of the parent element 
+     */
+    setPositionRatio(ratio:DraggableViewPositionRatio,triggerOnMove?:Boolean):void,
 }
 interface DraggableViewCoords {
     /**
      * X-position relative to viewport
      */
+     pagex:Number,
+     /**
+      * Y-position relative to viewport
+      */
+     pagey:Number,
+    /**
+     * X-position relative to parent
+     */
     x:Number,
     /**
-     * Y-position relative to viewport
+     * Y-position relative to parent
      */
     y:Number,
     /**
@@ -63,43 +83,20 @@ interface DraggableViewCoords {
      * \<0 : element went up
      */
     dy:Number,
-    /**
-     * X-position relative to parent
-     */
-    px:Number,
-    /**
-     * Y-position relative to parent
-     */
-    py:Number,
 }
 
-interface DraggableViewPositionSetter {
+interface DraggableViewPositionRatio {
     /**
-     * value between 0..1 relative to parent width
+     * value between 0 and 1 relative to parent width
      */
     x:Number,
     /**
-     * value between 0..1 relative to parent height
+     * value between 0 and 1 relative to parent height
      */
     y:Number,
 }
 
-interface DraggableViewPosition extends DraggableViewPositionSetter {
-    px:Number,py:Number,
-    /**
-     * value between 0 and 100 relative to viewport width
-    */
-    xpercent:Number
-    /**
-     * value between 0 and 100 relative to viewport height
-    */
-    ypercent:Number,
-    /**
-     * value between 0 and 100 relative to parent width
-    */
-    pxpercent:Number
-    /**
-     * value between 0 and 100 relative to parent height
-    */
-    pypercent:Number,
+interface DraggableViewPosition {
+    pagex:Number,pagey:Number,
+    x:Number,y:Number,
 }
