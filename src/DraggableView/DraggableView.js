@@ -50,7 +50,7 @@ export default function DraggableView(props){
                     style.top=`${coords.py}px`;
                 }
                 const {onMove}=state;
-                onMove&&onMove(structuredClone(coords,draggableview));
+                onMove&&onMove(structuredClone(coords),draggableview);
             }
             window.addEventListener(isTouchDevice?"touchmove":"mousemove",onPointerMove);
             window.addEventListener(isTouchDevice?"touchend":"mouseup",(event)=>{
@@ -63,7 +63,7 @@ export default function DraggableView(props){
                     py:draggableview.offsetTop,
                 });
                 const {onDrop}=state;
-                onDrop&&onDrop(structuredClone(coords,draggableview));
+                onDrop&&onDrop(structuredClone(coords),draggableview);
                 window.removeEventListener(isTouchDevice?"touchmove":"mousemove",onPointerMove);
             },{once:true})
         });
@@ -98,7 +98,7 @@ export default function DraggableView(props){
         }
         if(xchanged||ychanged){
             const {onMove}=state;
-            onMove&&onMove(structuredClone(coords,draggableview));
+            onMove&&onMove(structuredClone(coords),draggableview);
         }
     }
 
