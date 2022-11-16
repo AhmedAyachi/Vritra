@@ -29,7 +29,12 @@ interface DraggableView extends View {
         listener:(coords:DraggableViewCoords,element:DraggableView)=>void,
     ):void,
     getPosition():DraggableViewPosition,
-    setPosition(position:DraggableViewPositionSetter):void,
+    /**
+     * 
+     * @param position 
+     * @param triggerOnMove default: true
+     */
+    setPosition(position:DraggableViewPositionSetter,triggerOnMove?:Boolean):void,
 }
 interface DraggableViewCoords {
     /**

@@ -86,7 +86,7 @@ export default function DraggableView(props){
             pypercent:100*py/height,
         }
     };
-    draggableview.setPosition=({x,y})=>{
+    draggableview.setPosition=({x,y},triggerOnMove=true)=>{
         const xchanged=coords.x!==x,ychanged=coords.y!==y;
         if(xchanged){
             coords.x=x*window.innerWidth;
@@ -96,7 +96,7 @@ export default function DraggableView(props){
             coords.y=y*window.innerHeight;
             draggableview.style.top=`${coords.y}px`;
         }
-        if(xchanged||ychanged){
+        if(triggerOnMove&&(xchanged||ychanged)){
             const {onMove}=state;
             onMove&&onMove(structuredClone(coords),draggableview);
         }
