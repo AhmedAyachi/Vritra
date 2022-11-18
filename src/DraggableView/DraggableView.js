@@ -3,7 +3,7 @@ import css from "./DraggableView.module.css";
 
 
 export default function DraggableView(props){
-    const {parent,ref=useId("draggableview"),id=ref,position={x:0,y:0},horizontalDrag=true,verticalDrag=true}=props;
+    const {parent,ref=useId("draggableview"),id=ref,position,horizontalDrag=true,verticalDrag=true}=props;
     const draggableview=View({
         parent,id,
         style:props.style,
@@ -64,17 +64,14 @@ export default function DraggableView(props){
         let position;
         if(asratio){
             const {width,height}=parent.getBoundingClientRect();
-            position={
-                x:x/width,
-                y:y/height,
-            };
+            position={x:x/width,y:y/height};
         }
         else{
             position={x,y};
         }
         return position;
     };
-    draggableview.setPosition=({x,y,asratio=true},triggerOnMove=true)=>{
+    draggableview.setPosition=({x,y,asratio=true,duration,easing},triggerOnMove=true)=>{
         const {width=1,height=1}=asratio?parent.getBoundingClientRect():{};
         if(typeof(x)==="number"){
             coords.x=x*width;
@@ -82,8 +79,14 @@ export default function DraggableView(props){
         if(typeof(y)==="number"){
             coords.y=y*height;
         }
-        const {style}=draggableview;
+        const hasDuration=typeof(duration)==="number",{style}=draggableview;;
+        if(hasDuration){
+            style.transition=`${duration}ms ${easing||"ease-out"}`;
+        } 
         style.transform=`translate(${horizontalDrag?coords.x:0}px,${verticalDrag?coords.y:0}px)`;
+        hasDuration&&setTimeout(()=>{
+            style.transition=null;
+        },duration);
         Object.assign(coords,{
             dx:coords.x+state.dragDX-state.dragX,
             dy:coords.y+state.dragDY-state.dragY,
@@ -93,9 +96,9 @@ export default function DraggableView(props){
             onMove&&onMove(structuredClone(coords),draggableview);
         }
     }
-    draggableview.setPosition(position,false);
+    position&&draggableview.setPosition(position,false);
 
-    return draggableview;    
+    return draggableview;
 }
 
 const eventtypes=["drag","move","drop"];
