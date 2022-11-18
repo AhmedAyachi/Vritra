@@ -10,11 +10,7 @@ export default function DraggableView(props:{
      */
     ref:String,
     className:String,
-    /**
-     * @param x in 0..1
-     * @param y in 0..1
-     */
-    position:{x:number,y:number},
+    position:DraggableViewPositionSetter,
     horizontalDrag:boolean,
     verticalDrag:boolean,
     style:String,
@@ -38,33 +34,46 @@ interface DraggableView extends View {
      * @param position 
      * @param triggerOnMove default: true
      */
-    setPosition(position:{x:number,y:number},triggerOnMove?:Boolean):void,
-    /**
-     * 
-     * @param ratio
-     * @param triggerOnMove default: true
-     * 
-     * Sets the position of the draggableview with values relative to the width and height of the parent element 
-     */
-    setPositionRatio(ratio:DraggableViewPositionRatio,triggerOnMove?:Boolean):void,
+    setPosition(position:DraggableViewPositionSetter,triggerOnMove?:Boolean):void,
+
 }
-interface DraggableViewCoords {
+
+interface DraggableViewParentRelativePosition {
     /**
-     * X-position relative to viewport
-     */
-     pagex:Number,
-     /**
-      * Y-position relative to viewport
-      */
-     pagey:Number,
-    /**
-     * X-position relative to parent
-     */
+    * X-position relative to parent
+    */
     x:Number,
     /**
      * Y-position relative to parent
      */
     y:Number,
+}
+
+interface DraggableViewPositionSetter extends DraggableViewParentRelativePosition {
+    /**
+     * if true, x and y values will be multiplied respectively by width and height of the parent element.
+     * 
+     * if false, x and y values are pixel values.
+     * @example 
+     * x=1 : left value of the draggableview is 100% of the width of its parent
+     * y=0.5 : top value of the draggableview is 50% of the height of its parent
+     * @default true
+     */
+    asratio:Boolean,
+}
+
+interface DraggableViewPosition extends DraggableViewParentRelativePosition {
+    /**
+    * X-position relative to viewport
+    */
+    pagex:Number,
+    /**
+     * Y-position relative to viewport
+     */
+    pagey:Number,
+}
+
+interface DraggableViewCoords extends DraggableViewPosition {
     /**
      * X-distance relative to last position
      * @see value is always 0 on onDrop event
@@ -83,20 +92,4 @@ interface DraggableViewCoords {
      * \<0 : element went up
      */
     dy:Number,
-}
-
-interface DraggableViewPositionRatio {
-    /**
-     * value between 0 and 1 relative to parent width
-     */
-    x:Number,
-    /**
-     * value between 0 and 1 relative to parent height
-     */
-    y:Number,
-}
-
-interface DraggableViewPosition {
-    pagex:Number,pagey:Number,
-    x:Number,y:Number,
 }

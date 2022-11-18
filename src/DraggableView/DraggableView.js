@@ -4,7 +4,11 @@ import css from "./DraggableView.module.css";
 
 export default function DraggableView(props){
     const {parent,ref=useId("draggableview"),id=ref,position={x:0,y:0},horizontalDrag=true,verticalDrag=true}=props;
-    const draggableview=View({parent,id,style:props.style,className:`${css.draggableview} ${props.className||""}`}),state={
+    const draggableview=View({
+        parent,id,
+        style:props.style,
+        className:`${css.draggableview} ${props.className||""}`,
+    }),state={
         coords:{
             pagex:null,pagey:null,//relative to viewport
             x:position.x,//relative to parent
@@ -18,7 +22,6 @@ export default function DraggableView(props){
         onDrop:props.onDrop,
         isTouchDevice:isTouchDevice(),
     },{coords}=state;
-    Object.assign(draggableview.style,{left:`${coords.x}px`,top:`${coords.y}px`});
     
     draggableview.innerHTML="";
 
@@ -30,8 +33,8 @@ export default function DraggableView(props){
             const {offsetLeft,offsetTop}=draggableview,{left,top}=draggableview.getBoundingClientRect();
             Object.assign(coords,{
                 pagex:left,pagey:top,
-                dx:0,dy:0,
                 x:offsetLeft,y:offsetTop,
+                dx:0,dy:0,
             });
             state.dragX=left;
             state.dragY=top;
@@ -44,10 +47,11 @@ export default function DraggableView(props){
                 draggableview.setPosition({
                     x:cx-state.dragDX,
                     y:cy-state.dragDY,
+                    asratio:false,
                 });
             }
             window.addEventListener(isTouchDevice?"touchmove":"mousemove",onPointerMove);
-            window.addEventListener(isTouchDevice?"touchend":"mouseup",(event)=>{
+            window.addEventListener(isTouchDevice?"touchend":"mouseup",()=>{
                 const {left,top}=draggableview.getBoundingClientRect();
                 Object.assign(coords,{
                     pagex:left,pagey:top,
@@ -86,8 +90,14 @@ export default function DraggableView(props){
         }
         return position;
     };
-    draggableview.setPosition=({x,y},triggerOnMove=true)=>{
-        Object.assign(coords,{x,y});
+    draggableview.setPosition=({x,y,asratio=true},triggerOnMove=true)=>{
+        const {width=1,height=1}=asratio?parent.getBoundingClientRect():{};
+        if(typeof(x)==="number"){
+            coords.x=x*width;
+        }
+        if(typeof(y)==="number"){
+            coords.y=y*height;
+        }
         const {style}=draggableview;
         if(horizontalDrag){
             style.left=`${coords.x}px`;
@@ -106,10 +116,7 @@ export default function DraggableView(props){
             onMove&&onMove(structuredClone(coords),draggableview);
         }
     }
-    draggableview.setPositionRatio=({x,y},triggerOnMove=true)=>{
-        const {width,height}=parent.getBoundingClientRect();
-        draggableview.setPosition({x:x*width,y:y*height},triggerOnMove);
-    }
+    draggableview.setPosition(position,false);
 
     return draggableview;    
 }
