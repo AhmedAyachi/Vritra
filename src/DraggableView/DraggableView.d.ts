@@ -38,7 +38,7 @@ interface DraggableView extends View {
 
 }
 
-interface DraggableViewParentRelativePosition {
+interface DraggableViewPosition {
     /**
     * X-position relative to parent
     */
@@ -49,7 +49,7 @@ interface DraggableViewParentRelativePosition {
     y:Number,
 }
 
-interface DraggableViewPositionSetter extends DraggableViewParentRelativePosition {
+interface DraggableViewPositionSetter extends DraggableViewPosition {
     /**
      * if true, x and y values will be multiplied respectively by width and height of the parent element.
      * 
@@ -60,17 +60,6 @@ interface DraggableViewPositionSetter extends DraggableViewParentRelativePositio
      * @default true
      */
     asratio:Boolean,
-}
-
-interface DraggableViewPosition extends DraggableViewParentRelativePosition {
-    /**
-    * X-position relative to viewport
-    */
-    pagex:Number,
-    /**
-     * Y-position relative to viewport
-     */
-    pagey:Number,
 }
 
 interface DraggableViewCoords extends DraggableViewPosition {

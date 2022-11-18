@@ -10,12 +10,11 @@ export default function DraggableView(props){
         className:`${css.draggableview} ${props.className||""}`,
     }),state={
         coords:{
-            pagex:null,pagey:null,//relative to viewport
-            x:position.x,//relative to parent
-            y:position.y,//relative to parent
+            x:null,//relative to parent
+            y:null,//relative to parent
             dx:null,dy:null,//relative to last position
         },
-        dragX:null,dragY:null,//drag position relative to viewport
+        dragX:null,dragY:null,//drag position relative to parent
         dragDX:null,dragDY:null,//drag position relative to the draggableview
         onDrag:props.onDrag,
         onMove:props.onMove,
@@ -30,16 +29,11 @@ export default function DraggableView(props){
         style.position="absolute";
         draggableview.addEventListener(isTouchDevice?"touchstart":"mousedown",(event)=>{
             const {clientX:cx,clientY:cy}=(isTouchDevice?event.changedTouches[0]:event);
-            const {offsetLeft,offsetTop}=draggableview,{left,top}=draggableview.getBoundingClientRect();
-            Object.assign(coords,{
-                pagex:left,pagey:top,
-                x:offsetLeft,y:offsetTop,
-                dx:0,dy:0,
-            });
-            state.dragX=left;
-            state.dragY=top;
-            state.dragDX=cx-offsetLeft;
-            state.dragDY=cy-offsetTop;
+            Object.assign(coords,{dx:0,dy:0});
+            state.dragX=cx;
+            state.dragY=cy;
+            state.dragDX=cx-coords.x;
+            state.dragDY=cy-coords.y;
             const {onDrag}=state;
             onDrag&&onDrag(structuredClone(coords),draggableview);
             function onPointerMove(event){
@@ -52,18 +46,10 @@ export default function DraggableView(props){
             }
             window.addEventListener(isTouchDevice?"touchmove":"mousemove",onPointerMove);
             window.addEventListener(isTouchDevice?"touchend":"mouseup",()=>{
-                const {left,top}=draggableview.getBoundingClientRect();
-                Object.assign(coords,{
-                    pagex:left,pagey:top,
-                    dx:left-state.dragX,
-                    dy:top-state.dragY,
-                    x:draggableview.offsetLeft,
-                    y:draggableview.offsetTop,
-                });
                 const {onDrop}=state;
                 onDrop&&onDrop(structuredClone(coords),draggableview);
                 window.removeEventListener(isTouchDevice?"touchmove":"mousemove",onPointerMove);
-            },{once:true})
+            },{once:true});
         });
     }
 
@@ -74,19 +60,17 @@ export default function DraggableView(props){
         }
     }
     draggableview.getPosition=(asratio)=>{
-        const {x,y,pagex,pagey}=coords;
+        const {x,y}=coords;
         let position;
         if(asratio){
             const {width,height}=parent.getBoundingClientRect();
             position={
                 x:x/width,
                 y:y/height,
-                pagex:pagex/window.innerWidth,
-                pagey:pagey/window.innerHeight,
             };
         }
         else{
-            position={x,y,pagex,pagey};
+            position={x,y};
         }
         return position;
     };
@@ -99,17 +83,10 @@ export default function DraggableView(props){
             coords.y=y*height;
         }
         const {style}=draggableview;
-        if(horizontalDrag){
-            style.left=`${coords.x}px`;
-        }
-        if(verticalDrag){
-            style.top=`${coords.y}px`;
-        }
-        const {left,top}=draggableview.getBoundingClientRect();
+        style.transform=`translate(${horizontalDrag?coords.x:0}px,${verticalDrag?coords.y:0}px)`;
         Object.assign(coords,{
-            pagex:left,pagey:top,
-            dx:left-state.dragX,
-            dy:top-state.dragY,
+            dx:coords.x+state.dragDX-state.dragX,
+            dy:coords.y+state.dragDY-state.dragY,
         });
         if(triggerOnMove){
             const {onMove}=state;
