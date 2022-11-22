@@ -19,6 +19,14 @@ export default function View(props){
         innateHTML:{set:(html)=>{
             view.innerHTML=html;
         }},
+        addBefore:{value:(element)=>{
+            element.before(view);
+            return view;
+        }},
+        addAfter:{value:(element)=>{
+            element.after(view);
+            return view;
+        }},
     });
 
     return view;

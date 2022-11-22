@@ -7,7 +7,7 @@ type ViewProps={
     id:String,
     className:String,
     style:String,
-    position:"beforebegin"|"afterbegin"|"beforeend"|"afterend",
+    position:"afterbegin"|"beforeend",
 }
 
 interface View extends HTMLDivElement {
@@ -23,4 +23,12 @@ interface View extends HTMLDivElement {
      * Sets the HTML or XML markup contained within the element.
      */
     innateHTML:string,
+    /**
+     * @param element element before which the view is inserted 
+     */
+    addBefore(element:Element):View,
+    /**
+     * @param element element after which the view is inserted 
+     */
+    addAfter(element:Element):View,
 }
