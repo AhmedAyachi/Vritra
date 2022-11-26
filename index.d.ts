@@ -8,6 +8,12 @@ export {default as DraggableView} from "./src/DraggableView/DraggableView";
 export {default as FlatList} from "./src/FlatList/FlatList";
 
 /**
+ * returns a random item for an array 
+ * @param array
+ */
+export function randomItem<type>(array:type[]):type;
+
+/**
  * Uses JSON.parse method to parse json parameter but returns null in case of an error
  * @param json json string to parse
  */

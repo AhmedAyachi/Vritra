@@ -7,6 +7,8 @@ export {default as View} from "./View/View";
 export {default as DraggableView} from "./DraggableView/DraggableView";
 export {default as FlatList} from "./FlatList/FlatList";
 
+export const randomItem=(array)=>array[Math.floor(Math.random()*array.length)]
+
 export const parseJSON=(json)=>{
     let data=null;
     try{
