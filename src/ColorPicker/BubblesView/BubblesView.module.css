@@ -1,0 +1,16 @@
+.bubblesview{
+    position:absolute;
+    width:fit-content;
+    inset:0;margin:auto;
+    --diameter:8em;
+    --range:calc(2 * var(--diameter));
+    --left:calc(var(--diameter) / -2);
+}
+.bubble{
+    position:absolute;
+    width:var(--diameter);
+    height:var(--diameter);
+    border-radius:50%;
+    left:var(--left);
+    transition:350ms;
+}

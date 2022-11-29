@@ -6,6 +6,7 @@ export {default as HashMap} from "./HashMap/HashMap";
 export {default as View} from "./View/View";
 export {default as DraggableView} from "./DraggableView/DraggableView";
 export {default as FlatList} from "./FlatList/FlatList";
+export {default as ColorPicker} from "./ColorPicker/ColorPicker";
 
 export const randomItem=(array)=>array[Math.floor(Math.random()*array.length)]
 

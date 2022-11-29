@@ -6,6 +6,7 @@ export {default as HashMap} from "./src/HashMap/HashMap";
 export {default as View} from "./src/View/View";
 export {default as DraggableView} from "./src/DraggableView/DraggableView";
 export {default as FlatList} from "./src/FlatList/FlatList";
+export {default as ColorPicker} from "./src/ColorPicker/ColorPicker";
 
 /**
  * returns a random item for an array 
