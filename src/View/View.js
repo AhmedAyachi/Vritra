@@ -27,6 +27,10 @@ export default function View(props){
             element.after(view);
             return view;
         }},
+        substitute:{value:(element)=>{
+            view.replaceWith(element);
+            return element;
+        }},
     });
 
     return view;

@@ -31,4 +31,9 @@ interface View extends HTMLDivElement {
      * @param element element after which the view is inserted 
      */
     addAfter(element:Element):View,
+    /**
+     * Replaces the view by another node and returns the substitute
+     * @param substitute 
+     */
+    substitute<type>(substitute:type):type,
 }
