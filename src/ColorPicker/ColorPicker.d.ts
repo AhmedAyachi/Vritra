@@ -2,16 +2,20 @@ import {View} from "../View/View";
 
 
 export default function ColorPicker(props:{
+    parent:HTMLElement,
+    id?:String,
+    style?:String,
+    className?:String,
     /**
      * initial icon color
      * @default "#B5B9BD"
      */
-    color:string,
+    color?:String,
     /**
      * colors to pick from
      * @default ["black","red","blue","green"]
      */
-    colors:string[],
+    colors?:String[],
     onShowColors(element:ColorPicker):void,
     onChange(color:String):void,
 }):ColorPicker;
@@ -24,5 +28,5 @@ interface ColorPicker extends View {
      * Value shoud be in colors array.
      * Closes the picker if already open.
      */
-    setColor(color:string):void,
+    setColor(color:String):void,
 }

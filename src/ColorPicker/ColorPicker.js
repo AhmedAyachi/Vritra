@@ -5,8 +5,8 @@ import palette0 from "./Palette_0";
 
 
 export default function ColorPicker(props){
-    const {parent,id=useId("colorpicker"),color,colors,onShowColors,onChange}=props;
-    const colorpicker=View({parent,id,className:css.colorpicker}),state={
+    const {parent,id=useId("colorpicker"),style,color,colors,onShowColors,onChange}=props;
+    const colorpicker=View({parent,id,style,className:`${css.colorpicker} ${props.className}`}),state={
         bubblesview:null,
     };
 
