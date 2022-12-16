@@ -53,6 +53,10 @@ type PopupProps<Type>=ViewProps&{
     ref:String,
     horizontal:boolean,
     /**
+     * Message to show when the flatlist is empty
+     */
+    emptymessage:string,
+    /**
      * Make Flatlist scrollable from bottom to top.
      * Specify a flatlist height value if elemnts get shown at once.
      * Should not be used with pagingEnabled true.
