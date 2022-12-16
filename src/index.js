@@ -253,7 +253,10 @@ export function createCode(length){
 
 export const replaceAt=(index=0,replaceValue="",targetString="")=>targetString.substr(0,index-1)+replaceValue+targetString.substr(index+1,targetString.length);
 
-export const capitalize=(str)=>str?replaceAt(0,str[0].toUpperCase(),str.toLowerCase()):"";
+export const capitalize=(str="",count=0)=>str.split(" ").map((word,i)=>{
+    const capitalized=(!count)||(i<count);
+    return capitalized?word[0].toUpperCase()+word.substring(1):word
+}).join(" ");
 
 export const isEmail=(str)=>{
     str=str.trim();

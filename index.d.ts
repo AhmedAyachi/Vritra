@@ -40,7 +40,7 @@ export function getTimeDuration(start:String,end:String):Number;
  * @property name 
  * @property length : number of days
  */
-export function getMonths(isLeapYear:Boolean=false):{name:String,length:Number}[];
+export function getMonths(isLeapYear=false):{name:String,length:Number}[];
 
 /**
  * @param year year to check, default to current year
@@ -107,7 +107,7 @@ export function fadeIn(element:HTMLElement,callback:()=>void):void;
 /**
  * 
  * @param element 
- * @param duration fade duration in ms, default: 200
+ * @param duration fade duration in ms, default: 200 
  * @param callback 
  */
 export function fadeOut(element:HTMLElement,duration:Number,callback:()=>void):void;
@@ -130,7 +130,19 @@ export function toggle(element:HTMLElement,callback:()=>void):void;
 export function randomColor(from?:String[]):String;
 export function createCode(length:Number):String;
 export function replaceAt(index:Number,replaceValue:String,targetString:String):String;
-export function capitalize(str:String):String;
+
+/**
+ * 
+ * @param str string to capitalize
+ * @param count number of words to capitalize
+ * 
+ * 0 => all
+ * 
+ * 2 => first two words
+ * @default 0 => all
+ */
+export function capitalize(str:String,count=0):String;
+
 export function isEmail(str:String):boolean;
 export function getArrayMax<type>(array:type[],start:Number,end:Number):{
     value:type,
