@@ -22,7 +22,8 @@ export default function DraggableView(props){
         isTouchDevice:isTouchDevice(),
     },{coords}=state;
     
-    draggableview.innerHTML="";
+    draggableview.innateHTML=`
+    `;
 
     if(verticalDrag||horizontalDrag){
         const {style}=draggableview,{isTouchDevice}=state;

@@ -81,9 +81,11 @@ type PopupProps<Type>=ViewProps&{
     transition:String,
      /**
       * Function to execute on each data item
-      * @param props 
+      * 
+      * Must return a HTMLElement
+      * @param props component props
       */
-    renderItem:renderItem<Type>,
+    renderItem(props:{parent:HTMLElement,item:Type,index:Number,data:Type[]}):HTMLElement,
     onSwipe(params:{direction:"left"|"right",index:Number,container:HTMLElement}):void,
     /**
      * Triggered each time addItems method called;

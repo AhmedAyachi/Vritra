@@ -1,0 +1,13 @@
+.emptyindicator{
+    max-width:100%;
+}
+.emptymsg{
+    max-width:100%;
+    margin:5% 0;
+    font-weight:700;
+    font-size:7em;
+    text-align:center;
+    text-transform:capitalize;
+    color:inherit;
+}
+
