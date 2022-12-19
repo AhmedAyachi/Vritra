@@ -10,7 +10,7 @@ export default function FlatList(props){
         index:null,//last created element index
         itemEl:null,//last cerated element
         focus:null,//for paging, element in focus
-        items:new HashMap(),// [item,element] map
+        itemsmap:new HashMap(),// [item,element] map
         endreached:!props.data?.length,
         firstOffset:null,//for paging lists: firstEl offset
         popuplist:null,
@@ -44,15 +44,15 @@ export default function FlatList(props){
         }
     },{root:flatlist,threshold});
     if(pagingEnabled&&horizontal){
-        const {items,firstOffset}=state;
+        const {itemsmap,firstOffset}=state;
         container.style.overflow="visible";
         useSwipeGesture({
             element:flatlist,
             onSwipeLeft:()=>{
-                const {focus}=state,lastIndex=items.length-1;
+                const {focus}=state,lastIndex=itemsmap.length-1;
                 if(focus<lastIndex){
                     state.focus=focus+1;
-                    const {offsetLeft}=items.at(state.focus,true);
+                    const {offsetLeft}=itemsmap.at(state.focus,true);
                     container.style.transform=`translateX(-${offsetLeft-firstOffset}px)`;
                     onSwipe&&onSwipe({direction:"left",index:state.focus,container});
                 }
@@ -61,7 +61,7 @@ export default function FlatList(props){
                 const {focus}=state;
                 if(focus){
                     state.focus=focus-1;
-                    const {offsetLeft}=items.at(state.focus,true),offsetX=offsetLeft-firstOffset;
+                    const {offsetLeft}=itemsmap.at(state.focus,true),offsetX=offsetLeft-firstOffset;
                     container.style.transform=`translateX(-${offsetX>0?offsetX:0}px)`;
                     onSwipe&&onSwipe({direction:"right",index:state.focus,container});
                 }
@@ -71,8 +71,9 @@ export default function FlatList(props){
     if(data&&data.length&&renderItem){
         state.index=state.focus=0;
         createElement({item:data[0],index:0});
-        state.firstOffset=horizontal?state.itemEl.offsetLeft:state.itemEl.offsetTop;
-        observer.observe(state.itemEl);
+        const {itemEl}=state;
+        state.firstOffset=horizontal?itemEl.offsetLeft:itemEl.offsetTop;
+        observer.observe(itemEl);
     }
 
     flatlist.addItems=(items)=>{
@@ -94,8 +95,8 @@ export default function FlatList(props){
     flatlist.removeItem=(predicate,withElement=true)=>{
         const {length}=data,item=removeItem(data,predicate),removed={item,element:null}; 
         if(data.length<length){
-            const {items}=state;
-            removed.element=items.get(item);
+            const {itemsmap}=state;
+            removed.element=itemsmap.get(item);
             if(withElement){
                 const {element}=removed;
                 (element instanceof Element)&&element.remove();
@@ -103,7 +104,7 @@ export default function FlatList(props){
             else{
                 state.isolatedcount++;
             }
-            items.delete(item);
+            itemsmap.delete(item);
             state.index--;
             if((!data.length)&&(!state.isolatedcount)){
                 container.style.display="none";
@@ -153,7 +154,7 @@ export default function FlatList(props){
         else{
             element=renderItem({parent:container,item,index,data});
         }
-        state.items.set(item,element);
+        state.itemsmap.set(item,element);
         state.itemEl=element;
         observer&&observer.observe(element);
     }
