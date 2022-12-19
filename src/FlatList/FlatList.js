@@ -43,6 +43,15 @@ export default function FlatList(props){
             }
         }
     },{root:flatlist,threshold});
+    
+    if(data&&data.length&&renderItem){
+        state.index=state.focus=0;
+        createElement({item:data[0],index:0});
+        const {itemEl}=state;
+        state.firstOffset=horizontal?itemEl.offsetLeft:itemEl.offsetTop;
+        observer.observe(itemEl);
+    }
+
     if(pagingEnabled&&horizontal){
         const {itemsmap,firstOffset}=state;
         container.style.overflow="visible";
@@ -67,13 +76,6 @@ export default function FlatList(props){
                 }
             },
         });
-    }
-    if(data&&data.length&&renderItem){
-        state.index=state.focus=0;
-        createElement({item:data[0],index:0});
-        const {itemEl}=state;
-        state.firstOffset=horizontal?itemEl.offsetLeft:itemEl.offsetTop;
-        observer.observe(itemEl);
     }
 
     flatlist.addItems=(items)=>{
