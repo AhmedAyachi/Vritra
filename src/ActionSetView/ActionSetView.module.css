@@ -1,7 +1,6 @@
 .actionsetview{
     width:fit-content;
     white-space:nowrap;
-    overflow:auto hidden;
     --spacing:5em;
 }
 .action{

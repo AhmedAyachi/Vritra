@@ -47,5 +47,6 @@
 }
 .actionset{
     flex:1;
+    overflow:auto hidden;
     --spacing:var(--actionspacing) !important;
 }
