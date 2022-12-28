@@ -1,11 +1,11 @@
 import {useId,View,ActionSetView} from "../index";
 import css from "./AccordionView.module.css";
 import ContentView from "./ContentView/ContentView";
-import arrow1 from "./Arrow_1";
+import icon from "./IndicatorIcon";
 
 
 export default function AccordionView(props){
-    const {parent,id=useId("accordionview"),headerStyle,renderHeader,indicator=arrow1,renderContent,actions,color="black",memorize=true,separate,onOpen,onClose}=props;
+    const {parent,id=useId("accordionview"),headerStyle,renderHeader,indicator=icon,renderContent,actions,color="black",memorize=true,separate,onOpen,onClose}=props;
     const accordionview=View({
         parent,id,
         position:props.position,
