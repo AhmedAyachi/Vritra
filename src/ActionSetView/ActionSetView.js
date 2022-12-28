@@ -39,6 +39,7 @@ export default function ActionSetView(props){
                 onTrigger&&onTrigger(action);
             }
         }
+        action.element=actionEl;
     });
 
     return actionsetview;
