@@ -4,10 +4,18 @@ export default function View(props:ViewProps):View;
 
 type ViewProps={
     parent:HTMLElement,
-    id:String,
-    className:String,
-    style:String,
-    position:"afterbegin"|"beforeend",
+    id?:String,
+    className?:String,
+    style?:String,
+    /**
+     * top : same as afterbegin
+     * 
+     * bottom : same as beforeend
+     * @default "beforeend"
+     * @see
+     * For between-elements insertion use addBefore/addAfter
+     */
+    position?:"afterbegin"|"beforeend"|"top"|"bottom",
 }
 
 interface View extends HTMLDivElement {
@@ -24,11 +32,13 @@ interface View extends HTMLDivElement {
      */
     innateHTML:string,
     /**
-     * @param element element before which the view is inserted 
+     * @param element Element before which the view is inserted 
+     * @returns The current view
      */
     addBefore(element:Element):View,
     /**
-     * @param element element after which the view is inserted 
+     * @param element Element after which the view is inserted 
+     * @returns The current view
      */
     addAfter(element:Element):View,
     /**

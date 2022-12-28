@@ -1,0 +1,24 @@
+.actionsetview{
+    width:fit-content;
+    white-space:nowrap;
+    overflow:auto hidden;
+    --spacing:5em;
+}
+.action{
+    position:relative;
+    display:inline;
+    margin-left:var(--spacing);
+}
+.action:first-of-type{
+    margin-left:0;
+}
+.action>img{
+    width:6.4em;
+}
+.alertbadge{
+    position:absolute;
+    top:0;
+    right:0;
+    border:1px solid var(--mainColor);
+    transform:translate(31.25%,-31.25%);
+}

@@ -1,12 +1,14 @@
 declare module "vanilla";
 
 
-export {HashRouter} from "./src/HashRouter/HashRouter";
-export {default as HashMap} from "./src/HashMap/HashMap";
-export {default as View} from "./src/View/View";
-export {default as DraggableView} from "./src/DraggableView/DraggableView";
-export {default as FlatList} from "./src/FlatList/FlatList";
+export {default as ActionSetView} from "./src/ActionSetView/ActionSetView";
+export {default as AccordionView} from "./src/AccordionView/AccordionView";
 export {default as ColorPicker} from "./src/ColorPicker/ColorPicker";
+export {default as FlatList} from "./src/FlatList/FlatList";
+export {default as DraggableView} from "./src/DraggableView/DraggableView";
+export {default as View} from "./src/View/View";
+export {default as HashMap} from "./src/HashMap/HashMap";
+export {HashRouter} from "./src/HashRouter/HashRouter";
 
 /**
  * returns a random item for an array 

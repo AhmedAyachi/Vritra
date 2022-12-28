@@ -1,12 +1,15 @@
 import css from "./index.module.css";
 
 
-export {HashRouter} from "./HashRouter/HashRouter";
-export {default as HashMap} from "./HashMap/HashMap";
-export {default as View} from "./View/View";
-export {default as DraggableView} from "./DraggableView/DraggableView";
-export {default as FlatList} from "./FlatList/FlatList";
+export {default as ActionSetView} from "./ActionSetView/ActionSetView";
+export {default as AccordionView} from "./AccordionView/AccordionView";
 export {default as ColorPicker} from "./ColorPicker/ColorPicker";
+export {default as FlatList} from "./FlatList/FlatList";
+export {default as DraggableView} from "./DraggableView/DraggableView";
+export {default as View} from "./View/View";
+export {default as HashMap} from "./HashMap/HashMap";
+export {HashRouter} from "./HashRouter/HashRouter";
+
 
 export const randomItem=(array)=>array[Math.floor(Math.random()*array.length)]
 

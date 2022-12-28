@@ -3,7 +3,7 @@ import {useId} from "../index";
 
 export default function View(props){
     const {parent,id=useId("view"),className,style,position="beforeend"}=props;
-    parent.insertAdjacentHTML(position,`<div id="${id}" ${className?`class="${className}"`:""} ${style?`style="${style}"`:""}></div>`);
+    parent.insertAdjacentHTML(getPosition(position),`<div id="${id}" ${className?`class="${className}"`:""} ${style?`style="${style}"`:""}></div>`);
     const view=parent.querySelector(`#${id}`);
 
     view.innerHTML=`
@@ -34,4 +34,12 @@ export default function View(props){
     });
 
     return view;
+}
+
+const getPosition=(position)=>{
+    switch(position){
+        case "top": return "afterbegin";
+        case "bottom": return "beforeend";
+        default: return position;
+    }
 }
