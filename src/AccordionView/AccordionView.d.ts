@@ -32,6 +32,10 @@ export default function AccordionView(props:ViewProps&{
      */
     memorize?:boolean,
     /**
+     * Default header indicator icon as url/base64 string or function
+     */
+    indicator?:string|((color="black",weight=1)=>string),
+    /**
      * Specifies if the content view will be connected to the header or not to 
      * remove header bottom border radius when open
      * @default false

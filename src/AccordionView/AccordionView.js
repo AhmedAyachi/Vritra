@@ -5,7 +5,7 @@ import arrow1 from "./Arrow_1";
 
 
 export default function AccordionView(props){
-    const {parent,id=useId("accordionview"),headerStyle,renderHeader,renderContent,actions,color="black",memorize=true,separate,onOpen,onClose}=props;
+    const {parent,id=useId("accordionview"),headerStyle,renderHeader,indicator=arrow1,renderContent,actions,color="black",memorize=true,separate,onOpen,onClose}=props;
     const accordionview=View({
         parent,id,
         position:props.position,
@@ -23,7 +23,7 @@ export default function AccordionView(props){
             ${renderHeader?"":`
                 <h3 class="${css.title}" style="color:${color};">${props.title||""}</h3>
                 <div class="${css.actions}">
-                    <img class="${css.indicator}" src="${arrow1(color,2)}" alt=""/>
+                    <img class="${css.indicator}" src="${typeof(indicator)==="function"?indicator(color,2):indicator}" alt=""/>
                 </div>
             `}
         </div>
