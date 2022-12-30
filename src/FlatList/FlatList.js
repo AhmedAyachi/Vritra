@@ -8,13 +8,13 @@ export default function FlatList(props){
     const flatlist=View({parent,id,position,style,className:`${css.flatlist} ${className||""}`}),state={
         data:Array.isArray(props.data)&&[...props.data],
         index:null,//last created element index
-        itemEl:null,//last cerated element
+        itemEl:null,//last created element (observed)
         focus:null,//for paging, element in focus
         itemsmap:new HashMap(),// [item,element] map
         endreached:!props.data?.length,
         firstOffset:null,//for paging lists: firstEl offset
         popuplist:null,
-        observer:null,
+        //observer:null,
         isolatedcount:0,//elements with removed items count
     },{data}=state;
 
@@ -27,7 +27,7 @@ export default function FlatList(props){
     let emptyindicator=(!(data&&data.length))&&EmptyIndicator({parent:flatlist,message:emptymessage});
 
     const container=flatlist.querySelector(`.${css.container}`);
-    const observer=state.observer=new IntersectionObserver(([entry])=>{
+    const observer=/* state.observer= */new IntersectionObserver(([entry])=>{
         const {isIntersecting}=entry;
         if(isIntersecting){
             state.index++;
@@ -53,26 +53,23 @@ export default function FlatList(props){
     }
 
     if(pagingEnabled&&horizontal){
-        const {itemsmap,firstOffset}=state;
         container.style.overflow="visible";
         useSwipeGesture({
             element:flatlist,
             onSwipeLeft:()=>{
-                const {focus}=state,lastIndex=itemsmap.length-1;
-                if(focus<lastIndex){
-                    state.focus=focus+1;
-                    const {offsetLeft}=itemsmap.at(state.focus,true);
-                    container.style.transform=`translateX(-${offsetLeft-firstOffset}px)`;
-                    onSwipe&&onSwipe({direction:"left",index:state.focus,container});
+                const {focus,itemsmap}=state;
+                if(focus<(itemsmap.length-1)){
+                    const index=focus+1;
+                    flatlist.scrollToIndex(index);
+                    onSwipe&&onSwipe({direction:"left",index,container});
                 }
             },
             onSwipeRight:()=>{
                 const {focus}=state;
                 if(focus){
-                    state.focus=focus-1;
-                    const {offsetLeft}=itemsmap.at(state.focus,true),offsetX=offsetLeft-firstOffset;
-                    container.style.transform=`translateX(-${offsetX>0?offsetX:0}px)`;
-                    onSwipe&&onSwipe({direction:"right",index:state.focus,container});
+                    const index=focus-1;
+                    flatlist.scrollToIndex(index);
+                    onSwipe&&onSwipe({direction:"left",index,container});
                 }
             },
         });
@@ -140,10 +137,32 @@ export default function FlatList(props){
         return state.popuplist;
     }
 
+    flatlist.scrollToIndex=horizontal&&pagingEnabled&&((i)=>{
+        const {index}=state,lastIndex=data.length-1;
+        if(i>lastIndex){i=lastIndex} else if(i<0){i=0}
+        if(state.focus!==i){
+            state.focus=i;
+            let element;
+            if(i>index){
+                observer.unobserve(state.itemEl);
+                for(let j=index+1;j<=i;j++){
+                    state.index=j;
+                    createElement({item:data[j],index:j},i===j);
+                }
+                element=state.itemEl;
+            }
+            else{
+                element=state.itemsmap.at(i,true);
+            }
+            const {offsetLeft}=element,offsetX=offsetLeft-state.firstOffset;
+            container.style.transform=`translateX(-${offsetX>0?offsetX:0}px)`;
+        }
+    });
+
     flatlist.container=container;
 
-    function createElement(params){
-        const {item,index}=params,{observer}=state;
+    function createElement(params,observe=true){
+        const {item,index}=params;//,{observer}=state;
         let element;
         if(backwards){
             const {scrollTop,scrollHeight,scrollLeft,scrollWidth}=container;
@@ -158,7 +177,7 @@ export default function FlatList(props){
         }
         state.itemsmap.set(item,element);
         state.itemEl=element;
-        observer&&observer.observe(element);
+        observe&&observer&&observer.observe(element);
     }
 
     return flatlist;
@@ -169,9 +188,11 @@ const styles={
         display:${nodata?"none":"block"};
         overflow-x:${horizontal?"auto":"hidden"};
         white-space:${horizontal?"nowrap":"normal"};
-        transition:${transition||"250ms"};
         ${pagingEnabled?`
             overflow:visible !important;
+            ${horizontal?`
+                transition:${transition||"250ms"};
+            `:""}
         `:""}
     `,
 }

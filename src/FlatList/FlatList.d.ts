@@ -4,6 +4,16 @@ import {View,ViewProps} from "../View/View";
 export default function FlatList<Type>(props:FlatListProps<Type>):FlatList<Type>;
 
 interface FlatList<Type> extends View {
+    /**
+     * Returns the popup flatlist 
+     */
+    readonly container:HTMLElement,
+    /**
+     * Scrolls to item at index
+     * @param index 
+     * @see Only available when horizontal and pagingEnabled
+     */
+    scrollToIndex(index:number):void,
     addItems(items:Type[]):void,
     /**
      * removeItem calls predicate once for each element of the data array, in ascending order, 
@@ -38,10 +48,6 @@ interface FlatList<Type> extends View {
      * If items is not an array, The method removes the popup flatlist.
      */
     showItems<Type>(predicate:(item:Type,index:Number,array:Type[])=>Boolean,props?:PopupProps<Type>):FlatList<Type>|null,
-    /**
-     * Returns the popup flatlist 
-     */
-    readonly container:HTMLElement,
 }
 
 type PopupProps<Type>=ViewProps&{
