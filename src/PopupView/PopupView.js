@@ -21,9 +21,12 @@ export default function PopupView(props){
         }
     }
     avoidable&&statics.avoidevents.forEach(type=>{window.addEventListener(type,onTouchScreen)});
+    popupview.cleanupEventListeners=()=>{
+        avoidable&&statics.avoidevents.forEach(type=>{window.removeEventListener(type,onTouchScreen)});
+    }
 
     popupview.unmount=()=>{
-        avoidable&&statics.avoidevents.forEach(type=>{window.removeEventListener(type,onTouchScreen)});
+        (!keepinDOM)&&popupview.cleanupEventListeners();
         fadeOut(popupview,keepinDOM?undefined:()=>{
             popupview.remove();
         });

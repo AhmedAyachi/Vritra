@@ -13,7 +13,7 @@ export default function PopupView(props:ViewProps&{
      */
     avoidable?:boolean,
     /**
-     * If true, unmounting will not remove the popupview from DOM
+     * If true, unmounting will not cleanup the event listeners nor remove the popupview from DOM
      * @default false
      */
     keepinDOM?:boolean,
@@ -23,6 +23,10 @@ export default function PopupView(props:ViewProps&{
 
 
 interface PopupView extends View {
+    /**
+     * Cleans up the added event listeners
+     */
+    cleanupEventListeners():void,
     /**
      * Cleans up the added event listeners and removes the popupview from DOM
      */
