@@ -1,6 +1,7 @@
 import css from "./index.module.css";
 
 
+export {default as PopupView} from "./PopupView/PopupView";
 export {default as ActionSetView} from "./ActionSetView/ActionSetView";
 export {default as AccordionView} from "./AccordionView/AccordionView";
 export {default as ColorPicker} from "./ColorPicker/ColorPicker";
@@ -116,7 +117,10 @@ export const useId=(startswith="")=>`${startswith}_${Math.random().toString(36).
 export const useRef=useId;
 
 export const useSwipeGesture=(params)=>{
-    const state={...params},{element,length=40}=state;
+    const offset=40,state={
+        ...params,
+        length:Math.max(offset,params?.length||0),
+    },{element,length}=state;
     element.addEventListener("touchstart",(event)=>{
         event.stopPropagation();
         const {clientX,clientY}=event.changedTouches[0];
@@ -126,20 +130,35 @@ export const useSwipeGesture=(params)=>{
     const onTouchEnd=(event)=>{
         event.stopPropagation();
         const {clientX,clientY}=event.changedTouches[0];
-        const swipewidth=state.touchX-clientX,swipeheight=Math.abs(clientY-state.touchY);
-        const {onSwipeLeft,onSwipeRight}=state;
-        if(swipeheight<60){
-            if(onSwipeLeft&&(swipewidth>length)){
+        const swipex=state.touchX-clientX,swipey=clientY-state.touchY;
+        const swipewidth=Math.abs(swipex),swipeheight=Math.abs(swipey);
+        const {onSwipeLeft,onSwipeRight,onSwipeBottom,onSwipeTop}=state;
+        if((swipeheight<offset)&&(swipewidth>=length)){
+            if(onSwipeLeft&&(swipex>length)){
                 Object.assign(event,{
                     removeListener:()=>{state.onSwipeLeft=null},
                 });
                 onSwipeLeft(event);
             }
-            else if(onSwipeRight&&(swipewidth<-length)){
+            else if(onSwipeRight&&(swipex<-length)){
                 Object.assign(event,{
                     removeListener:()=>{state.onSwipeRight=null},
                 });
                 onSwipeRight(event);
+            }
+        }
+        else if((swipewidth<offset)&&(swipeheight>=length)){
+            if(onSwipeBottom&&(swipey>length)){
+                Object.assign(event,{
+                    removeListener:()=>{state.onSwipeBottom=null},
+                });
+                onSwipeBottom(event);
+            }
+            else if(onSwipeTop&&(swipey<-length)){
+                Object.assign(event,{
+                    removeListener:()=>{state.onSwipeTop=null},
+                });
+                onSwipeTop(event);
             }
         }
     }
@@ -182,14 +201,20 @@ export const sanitize=(str="",param0,param1)=>{
     return sanitized;
 }
 
-export const fadeIn=(element,duration=200,callback)=>{
+export const fadeIn=(element,display,duration=200,callback)=>{
     if(element instanceof HTMLElement){
-        if(typeof(duration)==="function"){
+        if(typeof(display)==="number"){
             callback=duration;
+            duration=display;
+            display=undefined;
+        }
+        else if(typeof(display)==="function"){
+            callback=display;
             duration=200;
+            display=undefined;
         }
         const {style}=element;
-        style.display=getComputedStyle(element).display||null;
+        style.display=display||getComputedStyle(element).display||null;
         style.animation=`${css.fadeIn} ${duration}ms 1 linear forwards`;
         callback&&setTimeout(callback,duration);
     }
@@ -213,8 +238,7 @@ export const fadeOut=(element,duration=200,callback)=>{
 
 export const toggle=(element,{display="block",duration=200},callback)=>{
     if(getComputedStyle(element).display==="none"){
-        element.style.display=display;
-        fadeIn(element,duration,callback);
+        fadeIn(element,display,duration,callback);
     }
     else{
         display=fadeOut(element,duration,callback);

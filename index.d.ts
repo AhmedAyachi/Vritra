@@ -1,6 +1,7 @@
 declare module "vanilla";
 
 
+export {default as PopupView} from "./src/PopupView/PopupView";
 export {default as ActionSetView} from "./src/ActionSetView/ActionSetView";
 export {default as AccordionView} from "./src/AccordionView/AccordionView";
 export {default as ColorPicker} from "./src/ColorPicker/ColorPicker";
@@ -70,11 +71,14 @@ export function useSwipeGesture(params:{
     element:HTMLElement,
     /**
      * Minimum swipe length in pixels from start position to the end position that triggers listeners
+     * @see Minimum possible value : 40
      * @default 40
      */
     length:number,
     onSwipeLeft(event:SwipeEvent):void,
     onSwipeRight(event:SwipeEvent):void,
+    onSwipeTop(event:SwipeEvent):void,
+    onSwipeBottom(event:SwipeEvent):void,
 }):void;
 interface SwipeEvent extends TouchEvent {
     /**
@@ -101,9 +105,11 @@ export function sanitize(str:string,escape?:boolean,whitelist?:string):String;
 /**
  * 
  * @param element 
+ * @param display element display value when visible, default: element's display value when fadeIn called
  * @param duration fade duration in ms, default: 200
  * @param callback 
  */
+export function fadeIn(element:HTMLElement,display:String,duration:Number,callback:()=>void):void;
 export function fadeIn(element:HTMLElement,duration:Number,callback:()=>void):void;
 export function fadeIn(element:HTMLElement,callback:()=>void):void;
 /**
