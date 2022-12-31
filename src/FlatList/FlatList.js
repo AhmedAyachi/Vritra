@@ -157,7 +157,7 @@ export default function FlatList(props){
                 const {offsetLeft}=element,offsetX=offsetLeft-state.firstOffset;
                 if(!smooth){
                     container.style.transition="none";
-                    setTimeout(()=>{container.style.transition="250ms"},0);
+                    setTimeout(()=>{container.style.transition=transition},0);
                 }
                 container.style.transform=`translateX(-${offsetX>0?offsetX:0}px)`;
             }
@@ -199,7 +199,7 @@ const styles={
         ${pagingEnabled?`
             overflow:visible !important;
             ${horizontal?`
-                transition:${transition||"250ms"};
+                transition:${transition};
             `:""}
         `:""}
     `,

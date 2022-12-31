@@ -84,6 +84,7 @@ type PopupProps<Type>=ViewProps&{
     /**
      * Used with pagingEnabled true.
      * Specifies the transition animation from one element to the next
+     * @default "250ms"
      */
     transition:String,
      /**
