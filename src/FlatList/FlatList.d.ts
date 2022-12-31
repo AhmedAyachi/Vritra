@@ -11,9 +11,10 @@ interface FlatList<Type> extends View {
     /**
      * Scrolls to item at index
      * @param index 
-     * @see Only available when horizontal and pagingEnabled
+     * @param smooth default: true
+     * @see Only available when horizontal true
      */
-    scrollToIndex(index:number):void,
+    scrollToIndex(index:number,smooth=true):void,
     addItems(items:Type[]):void,
     /**
      * removeItem calls predicate once for each element of the data array, in ascending order, 
@@ -92,6 +93,10 @@ type PopupProps<Type>=ViewProps&{
       * @param props component props
       */
     renderItem(props:{parent:HTMLElement,item:Type,index:Number,data:Type[]}):HTMLElement,
+    /**
+     * Used with pagingEnabled true.
+     * @param params 
+     */
     onSwipe(params:{direction:"left"|"right",index:Number,container:HTMLElement}):void,
     /**
      * Triggered each time addItems method called;

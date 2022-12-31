@@ -14,7 +14,6 @@ export default function FlatList(props){
         endreached:!props.data?.length,
         firstOffset:null,//for paging lists: firstEl offset
         popuplist:null,
-        //observer:null,
         isolatedcount:0,//elements with removed items count
     },{data}=state;
 
@@ -27,7 +26,7 @@ export default function FlatList(props){
     let emptyindicator=(!(data&&data.length))&&EmptyIndicator({parent:flatlist,message:emptymessage});
 
     const container=flatlist.querySelector(`.${css.container}`);
-    const observer=/* state.observer= */new IntersectionObserver(([entry])=>{
+    const observer=new IntersectionObserver(([entry])=>{
         const {isIntersecting}=entry;
         if(isIntersecting){
             state.index++;
@@ -137,7 +136,7 @@ export default function FlatList(props){
         return state.popuplist;
     }
 
-    flatlist.scrollToIndex=horizontal&&pagingEnabled&&((i)=>{
+    flatlist.scrollToIndex=horizontal&&((i,smooth=true)=>{
         const {index}=state,lastIndex=data.length-1;
         if(i>lastIndex){i=lastIndex} else if(i<0){i=0}
         if(state.focus!==i){
@@ -154,15 +153,24 @@ export default function FlatList(props){
             else{
                 element=state.itemsmap.at(i,true);
             }
-            const {offsetLeft}=element,offsetX=offsetLeft-state.firstOffset;
-            container.style.transform=`translateX(-${offsetX>0?offsetX:0}px)`;
+            if(pagingEnabled){
+                const {offsetLeft}=element,offsetX=offsetLeft-state.firstOffset;
+                if(!smooth){
+                    container.style.transition="none";
+                    setTimeout(()=>{container.style.transition="250ms"},0);
+                }
+                container.style.transform=`translateX(-${offsetX>0?offsetX:0}px)`;
+            }
+            else{
+                element.scrollIntoView({behavior:smooth?"smooth":"auto",inline:"start"});
+            }
         }
     });
 
     flatlist.container=container;
 
     function createElement(params,observe=true){
-        const {item,index}=params;//,{observer}=state;
+        const {item,index}=params;
         let element;
         if(backwards){
             const {scrollTop,scrollHeight,scrollLeft,scrollWidth}=container;
