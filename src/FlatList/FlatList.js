@@ -68,7 +68,7 @@ export default function FlatList(props){
                 if(focus){
                     const index=focus-1;
                     flatlist.scrollToIndex(index);
-                    onSwipe&&onSwipe({direction:"left",index,container});
+                    onSwipe&&onSwipe({direction:"right",index,container});
                 }
             },
         });
