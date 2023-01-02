@@ -2,6 +2,7 @@
     position:absolute;
     width:fit-content;
     inset:0;margin:auto;
+    z-index:2;
     --diameter:8em;
     --range:calc(2 * var(--diameter));
     --left:calc(var(--diameter) / -2);
