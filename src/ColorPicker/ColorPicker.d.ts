@@ -1,11 +1,12 @@
-import {View} from "../View/View";
+import {ViewProps,View} from "../View/View";
 
 
-export default function ColorPicker(props:{
-    parent:HTMLElement,
-    id?:String,
-    style?:String,
-    className?:String,
+export default function ColorPicker(props:ViewProps&{
+    /**
+     * Picker icon
+     * @default palette icon
+     */
+    icon:string|((color="#B5B9BD",weight=2)=>string),
     /**
      * initial icon color
      * @default "#B5B9BD"

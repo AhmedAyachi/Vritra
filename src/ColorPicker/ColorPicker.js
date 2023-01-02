@@ -5,13 +5,18 @@ import palette0 from "./Palette_0";
 
 
 export default function ColorPicker(props){
-    const {parent,id=useId("colorpicker"),style,color,colors,onShowColors,onChange}=props;
-    const colorpicker=View({parent,id,style,className:`${css.colorpicker} ${props.className}`}),state={
+    const {parent,id=useId("colorpicker"),icon=palette0,color="#B5B9BD",colors,onShowColors,onChange}=props;
+    const colorpicker=View({
+        parent,id,
+        style:props.style,
+        position:props.position,
+        className:`${css.colorpicker} ${props.className}`,
+    }),state={
         bubblesview:null,
     };
 
     colorpicker.innateHTML=`
-        <img class="${css.button}" alt="Pick" src="${palette0(color||"#B5B9BD")}"/>
+        <img class="${css.button}" alt="Pick" src="${typeof(icon)==="function"?icon(color,2):icon}"/>
     `;
 
     const button=colorpicker.querySelector(`.${css.button}`);
