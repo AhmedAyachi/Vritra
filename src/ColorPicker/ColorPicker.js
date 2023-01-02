@@ -39,7 +39,7 @@ export default function ColorPicker(props){
             state.bubblesview=null;
         }
         if(color){
-            button.src=palette0(color);
+            if(typeof(icon)==="function"){button.src=icon(color)};
             onChange&&onChange(color);
         }
     }
