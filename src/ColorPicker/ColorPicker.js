@@ -16,7 +16,7 @@ export default function ColorPicker(props){
     };
 
     colorpicker.innateHTML=`
-        <img class="${css.button}" alt="Pick" src="${typeof(icon)==="function"?icon(color,2):icon}"/>
+        <img class="${css.button}" alt="Pick" src="${typeof(icon)==="function"?icon(color,2):(icon||"")}"/>
     `;
 
     const button=colorpicker.querySelector(`.${css.button}`);

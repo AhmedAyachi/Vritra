@@ -12,10 +12,10 @@ export default function ActionSetView(props){
     });
 
     actionsetview.innateHTML=`
-        ${map(actions.filter(action=>action.shape||action.icon),({id,icon,shape,size,alt})=>`
+        ${map(actions.filter(action=>action.icon),({id,icon,size,alt})=>`
             <div id="${id}" class="button ${css.action}">
                 <img 
-                    src="${icon||(shape&&shape(color))}" alt="${alt||""}"
+                    src="${typeof(icon)==="function"?icon(color,2):(icon||"")}" alt="${alt||""}"
                     ${size?`style="width:${size}em"`:""}
                 />
             </div>

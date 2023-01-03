@@ -29,14 +29,14 @@ export type ActionSetActionProp={
      */
     component:(props:ActionSetActionProp&{parent:ActionSetView})=>HTMLElement,
     /**
-     * Action icon as url or base64 string
-     * @see Prioritized over shape prop
+     * Action icon as url, base64 string or function;
      */
-    icon:string,
+    icon:string|((color:string,weight=2)=>string),
     /**
      * 
      * @param color ActionSet color prop value
      * @returns url or base64 string
+     * @deprecated use icon prop instead
      */
     shape:(color:string)=>string,
     /**
