@@ -29,9 +29,7 @@ export default function AccordionView(props){
         </div>
     `;
     const headerEl=accordionview.querySelector(`.${css.header}`);
-    if(renderHeader){
-        renderHeader(headerEl);
-    }
+    if(renderHeader){renderHeader(headerEl)}
     else if(actions){
         const actionsEl=accordionview.querySelector(`.${css.actions}`);
         const actionsetview=ActionSetView({
@@ -52,7 +50,9 @@ export default function AccordionView(props){
                 });
             }
             const indicator=accordionview.querySelector(`.${css.indicator}`);
-            indicator.style.transform=`rotateZ(${expanded?-180:0}deg)`;
+            if(indicator){
+                indicator.style.transform=`rotateZ(${expanded?-180:0}deg)`;
+            }
             if(expanded){
                 const contentview=state.contentview=ContentView({parent:accordionview});
                 if(memorize&&state.contentEl){
