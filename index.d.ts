@@ -1,6 +1,8 @@
 declare module "vanilla";
 
 
+export {default as DrawerNavigator} from "./src/DrawerNavigator/DrawerNavigator";
+export {default as SwitchView} from "./src/SwitchView/SwitchView";
 export {default as PopupView} from "./src/PopupView/PopupView";
 export {default as ActionSetView} from "./src/ActionSetView/ActionSetView";
 export {default as AccordionView} from "./src/AccordionView/AccordionView";

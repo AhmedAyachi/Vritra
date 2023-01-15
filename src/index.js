@@ -1,6 +1,8 @@
 import css from "./index.module.css";
 
 
+export {default as DrawerNavigator} from "./DrawerNavigator/DrawerNavigator";
+export {default as SwitchView} from "./SwitchView/SwitchView";
 export {default as PopupView} from "./PopupView/PopupView";
 export {default as ActionSetView} from "./ActionSetView/ActionSetView";
 export {default as AccordionView} from "./AccordionView/AccordionView";

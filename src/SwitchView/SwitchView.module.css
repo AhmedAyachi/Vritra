@@ -1,0 +1,14 @@
+.switchview{
+    width:calc(2 * var(--diameter));
+    height:fit-content;
+    padding:0.533em;
+    border-radius:6.133em;
+    transition:200ms;
+    --diameter:4.8em;
+}
+.thumb{
+    width:var(--diameter);
+    height:var(--diameter);
+    border-radius:50%;
+    transition:inherit;
+}
