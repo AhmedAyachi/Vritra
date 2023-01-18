@@ -2,7 +2,7 @@ declare module "vanilla";
 
 
 export {default as DrawerNavigator} from "./src/DrawerNavigator/DrawerNavigator";
-export {default as SwitchView} from "./src/SwitchView/SwitchView";
+export {default as Switch} from "./src/Switch/Switch";
 export {default as PopupView} from "./src/PopupView/PopupView";
 export {default as ActionSetView} from "./src/ActionSetView/ActionSetView";
 export {default as AccordionView} from "./src/AccordionView/AccordionView";
@@ -12,6 +12,7 @@ export {default as DraggableView} from "./src/DraggableView/DraggableView";
 export {default as View} from "./src/View/View";
 export {default as HashMap} from "./src/HashMap/HashMap";
 export {HashRouter} from "./src/HashRouter/HashRouter";
+export {default as usePinchGesture} from "./src/usePinchGesture/usePinchGesture";
 
 /**
  * returns a random item for an array 
@@ -58,13 +59,19 @@ export function isLeapYear(year?:Number):Boolean;
  * @default "monday"
  */
 export function getDays(start?:"monday"|"tuesday"|"wednesday"|"thursday"|"friday"|"saturday"|"sunday"):String[];
-
-export function useId(startsWith:String):String;
+/**
+ * Returns a random string
+ * @param prefix 
+ * A string prefixing the random part
+ * @param separator A string separating the prefix and the random part
+ * @default prefix "" separator "_"
+ */
+export function useId(prefix="",separator="_"):String;
 /**
  * @deprecated
  * use useId instead
  */
-export function useRef(startsWith:String):String;
+export function useRef(prefix:String):String;
 export function groupBy<type>(array:type[],filter:(item:type,index:Number,array:type[])=>any):{predicate:any,items:type[]}[];
 export function map<type>(array:type[],callback:(item:type,index:Number,array:type[])=>String):String;
 export function map(iteration:Number,callback:(index:Number)=>String):String;
@@ -86,7 +93,7 @@ interface SwipeEvent extends TouchEvent {
     /**
      * Removes the event listener
      */
-     removeListener():void,
+    removeListener():void,
 }
 
 /**

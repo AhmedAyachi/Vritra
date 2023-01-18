@@ -1,4 +1,4 @@
-.switchview{
+.switch{
     width:calc(2 * var(--diameter));
     height:fit-content;
     padding:0.533em;

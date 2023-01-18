@@ -1,16 +1,16 @@
 import {ViewProps,View} from "../View/View";
 
 
-export default function SwitchView(props:ViewProps&{
+export default function Switch(props:ViewProps&{
     active?:boolean,
     thumbColor?:String|SwitchColor,
     trackColor?:String|SwitchColor,
     onChange(active:Boolean):void,
-}):SwitchView;
+}):Switch;
 
-interface SwitchView extends View {
+interface Switch extends View {
     /**
-     * Sets the switchview status. Toggling behavior by default
+     * Sets the switch status. Toggling behavior by default
      * @param active 
      */
     toggle(active:boolean):void,

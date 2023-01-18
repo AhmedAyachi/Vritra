@@ -2,7 +2,7 @@ import css from "./index.module.css";
 
 
 export {default as DrawerNavigator} from "./DrawerNavigator/DrawerNavigator";
-export {default as SwitchView} from "./SwitchView/SwitchView";
+export {default as Switch} from "./Switch/Switch";
 export {default as PopupView} from "./PopupView/PopupView";
 export {default as ActionSetView} from "./ActionSetView/ActionSetView";
 export {default as AccordionView} from "./AccordionView/AccordionView";
@@ -12,6 +12,7 @@ export {default as DraggableView} from "./DraggableView/DraggableView";
 export {default as View} from "./View/View";
 export {default as HashMap} from "./HashMap/HashMap";
 export {HashRouter} from "./HashRouter/HashRouter";
+export {default as usePinchGesture} from "./usePinchGesture/usePinchGesture";
 
 
 export const randomItem=(array)=>array[Math.floor(Math.random()*array.length)]
@@ -114,8 +115,7 @@ export const map=(array=[],treatment)=>{
     }
     return str;
 }
-
-export const useId=(startswith="")=>`${startswith}_${Math.random().toString(36).slice(2)}${Math.random().toString(36).slice(2)}`;
+export const useId=(prefix="",separator="_")=>`${prefix}${prefix||separator}${Math.random().toString(36).slice(2)}${Math.random().toString(36).slice(2)}`;
 export const useRef=useId;
 
 export const useSwipeGesture=(params)=>{

@@ -1,35 +1,35 @@
 import {useId,View,sanitize} from "../index";
-import css from "./SwitchView.module.css";
+import css from "./Switch.module.css";
 
 
-export default function SwitchView(props){
-    const {parent,id=useId("switchview"),thumbColor=statics.thumbColor,trackColor=statics.trackColor,onChange}=props;
-    const switchview=View({
+export default function Switch(props){
+    const {parent,id=useId("switch"),thumbColor=statics.thumbColor,trackColor=statics.trackColor,onChange}=props;
+    const switchEl=View({
         parent,id,
         style:props.style,
         position:props.position,
-        className:`${css.switchview} ${props.className}`,
+        className:`${css.switch} ${props.className}`,
     }),state={
         active:!Boolean(props.active),
     };
 
-    switchview.innateHTML=`
+    switchEl.innateHTML=`
         <div class="${css.thumb}"></div>
     `;
 
-    switchview.onclick=()=>{switchview.toggle()};
+    switchEl.onclick=()=>{switchEl.toggle()};
 
-    switchview.toggle=(active=!state.active)=>{
+    switchEl.toggle=(active=!state.active)=>{
         state.active=active;
-        const thumb=switchview.querySelector(`.${css.thumb}`);
+        const thumb=switchEl.querySelector(`.${css.thumb}`);
         thumb.style.transform=`translateX(${active?100:0}%)`;
         thumb.style.backgroundColor=getColor(thumbColor,active),
-        switchview.style.backgroundColor=getColor(trackColor,active);
+        switchEl.style.backgroundColor=getColor(trackColor,active);
         onChange&&onChange(active);
     }
-    switchview.toggle();
+    switchEl.toggle();
 
-    return switchview;
+    return switchEl;
 }
 
 const statics={
