@@ -1,3 +1,4 @@
+import {getBaryCenter} from "./index";
 
 
 export default function usePinchGesture(options){
@@ -7,12 +8,12 @@ export default function usePinchGesture(options){
         stime:null,
         perimeter:null,
         minPointerCount:Math.max(2,options.minPointerCount||0),
-        maxPointerCount:Math.max(2,options.maxPointerCount||0),
+        maxPointerCount:Math.max(2,options.maxPointerCount||Infinity),
     },{minPointerCount,maxPointerCount}=state;
     element.addEventListener("touchstart",(event)=>{
         const touchlist=event.touches,touchcount=touchlist.length;
         if(touchcount>maxPointerCount){
-            cancelPinchGesture();
+            endPinchGesture();
         }
         else if(touchcount>=minPointerCount){
             const touches=[...touchlist];
@@ -35,10 +36,10 @@ export default function usePinchGesture(options){
 
     function onTouchEnd(event){
         const touchlist=event.touches;
-        (touchlist.length<minPointerCount)&&cancelPinchGesture();
+        (touchlist.length<minPointerCount)&&endPinchGesture();
     }
 
-    function cancelPinchGesture(){
+    function endPinchGesture(){
         element.removeEventListener("touchmove",onTouchMove);
         element.removeEventListener("touchend",onTouchEnd);
         const {pinchevent}=state;
@@ -50,23 +51,15 @@ export default function usePinchGesture(options){
         const pinchevent=event;
         pinchevent.scale=getPerimeter(touches)/state.perimeter;
         const barycenter=pinchevent.barycenter=getBaryCenter(touches),startbarycenter=state.barycenter;
-        pinchevent.dx=barycenter.x-startbarycenter.x;
-        pinchevent.dy=barycenter.y-startbarycenter.y;
-        pinchevent.distance=getDistance(barycenter,startbarycenter);
+        const dx=pinchevent.dx=barycenter.x-startbarycenter.x;
+        const dy=pinchevent.dy=barycenter.y-startbarycenter.y;
+        pinchevent.distance=Math.sqrt(dx**2+dy**2);
         pinchevent.dtime=Date.now()-state.stime;
         return pinchevent;
     }
 }
 
-const getBaryCenter=(touches)=>{
-    const touchcount=touches.length;
-    let totalx=0,totaly=0;
-    for(let i=0;i<touchcount;i++){
-        totalx+=touches[i].clientX;
-        totaly+=touches[i].clientY;
-    }
-    return {x:totalx/touchcount,y:totaly/touchcount}
-}
+
 
 const getPerimeter=(touches)=>{
     let perimeter=0;

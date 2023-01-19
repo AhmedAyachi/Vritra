@@ -10,9 +10,9 @@ export default function usePinchGesture(options:{
     minPointerCount?:Number,
     /**
      * Maximum number of pointers for the pinch gesture.
-     * If the number of pointers is high, the gesture is cancelled
+     * If the number of pointers is higher, the gesture is ended
      * @see Minimum possible value : 2
-     * @default 2
+     * @default Infinity
      */
     maxPointerCount?:Number,
     onStart(event:PinchEvent):void,

@@ -12,7 +12,7 @@ export {default as DraggableView} from "./src/DraggableView/DraggableView";
 export {default as View} from "./src/View/View";
 export {default as HashMap} from "./src/HashMap/HashMap";
 export {HashRouter} from "./src/HashRouter/HashRouter";
-export {default as usePinchGesture} from "./src/usePinchGesture/usePinchGesture";
+export {useZoomGesture,usePinchGesture,useSwipeGesture} from "./src/Gestures";
 
 /**
  * returns a random item for an array 
@@ -75,26 +75,6 @@ export function useRef(prefix:String):String;
 export function groupBy<type>(array:type[],filter:(item:type,index:Number,array:type[])=>any):{predicate:any,items:type[]}[];
 export function map<type>(array:type[],callback:(item:type,index:Number,array:type[])=>String):String;
 export function map(iteration:Number,callback:(index:Number)=>String):String;
-
-export function useSwipeGesture(params:{
-    element:HTMLElement,
-    /**
-     * Minimum swipe length in pixels from start position to the end position that triggers listeners
-     * @see Minimum possible value : 40
-     * @default 40
-     */
-    length:number,
-    onSwipeLeft(event:SwipeEvent):void,
-    onSwipeRight(event:SwipeEvent):void,
-    onSwipeTop(event:SwipeEvent):void,
-    onSwipeBottom(event:SwipeEvent):void,
-}):void;
-interface SwipeEvent extends TouchEvent {
-    /**
-     * Removes the event listener
-     */
-    removeListener():void,
-}
 
 /**
  * @param str String to sanitize

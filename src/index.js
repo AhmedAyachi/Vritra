@@ -12,7 +12,7 @@ export {default as DraggableView} from "./DraggableView/DraggableView";
 export {default as View} from "./View/View";
 export {default as HashMap} from "./HashMap/HashMap";
 export {HashRouter} from "./HashRouter/HashRouter";
-export {default as usePinchGesture} from "./usePinchGesture/usePinchGesture";
+export {useZoomGesture,usePinchGesture,useSwipeGesture} from "./Gestures";
 
 
 export const randomItem=(array)=>array[Math.floor(Math.random()*array.length)]
@@ -115,57 +115,8 @@ export const map=(array=[],treatment)=>{
     }
     return str;
 }
-export const useId=(prefix="",separator="_")=>`${prefix}${prefix||separator}${Math.random().toString(36).slice(2)}${Math.random().toString(36).slice(2)}`;
+export const useId=(prefix="",separator="_")=>`${prefix}${prefix?separator:""}${Math.random().toString(36).slice(2)}${Math.random().toString(36).slice(2)}`;
 export const useRef=useId;
-
-export const useSwipeGesture=(params)=>{
-    const offset=40,state={
-        ...params,
-        length:Math.max(offset,params?.length||0),
-    },{element,length}=state;
-    element.addEventListener("touchstart",(event)=>{
-        event.stopPropagation();
-        const {clientX,clientY}=event.changedTouches[0];
-        state.touchX=clientX;
-        state.touchY=clientY;
-    },{passive:true});
-    const onTouchEnd=(event)=>{
-        event.stopPropagation();
-        const {clientX,clientY}=event.changedTouches[0];
-        const swipex=state.touchX-clientX,swipey=clientY-state.touchY;
-        const swipewidth=Math.abs(swipex),swipeheight=Math.abs(swipey);
-        const {onSwipeLeft,onSwipeRight,onSwipeBottom,onSwipeTop}=state;
-        if((swipeheight<offset)&&(swipewidth>=length)){
-            if(onSwipeLeft&&(swipex>length)){
-                Object.assign(event,{
-                    removeListener:()=>{state.onSwipeLeft=null},
-                });
-                onSwipeLeft(event);
-            }
-            else if(onSwipeRight&&(swipex<-length)){
-                Object.assign(event,{
-                    removeListener:()=>{state.onSwipeRight=null},
-                });
-                onSwipeRight(event);
-            }
-        }
-        else if((swipewidth<offset)&&(swipeheight>=length)){
-            if(onSwipeBottom&&(swipey>length)){
-                Object.assign(event,{
-                    removeListener:()=>{state.onSwipeBottom=null},
-                });
-                onSwipeBottom(event);
-            }
-            else if(onSwipeTop&&(swipey<-length)){
-                Object.assign(event,{
-                    removeListener:()=>{state.onSwipeTop=null},
-                });
-                onSwipeTop(event);
-            }
-        }
-    }
-    element.addEventListener("touchend",onTouchEnd,{passive:true});
-}
 
 //export const specialchars="+=}°)]@ç^_\\`-|(['{\"#~&²£$¤*µ%ù§!/:.;?,<>";
 export const sanitize=(str="",param0,param1)=>{
@@ -203,7 +154,7 @@ export const sanitize=(str="",param0,param1)=>{
     return sanitized;
 }
 
-export const fadeIn=(element,display,duration=200,callback)=>{
+export const fadeIn=(element,display=200,duration,callback)=>{
     if(element instanceof HTMLElement){
         if(typeof(display)==="number"){
             callback=duration;
@@ -218,7 +169,10 @@ export const fadeIn=(element,display,duration=200,callback)=>{
         const {style}=element;
         style.display=display||getComputedStyle(element).display||null;
         style.animation=`${css.fadeIn} ${duration}ms 1 linear forwards`;
-        callback&&setTimeout(callback,duration);
+        setTimeout(()=>{
+            style.animation=null;
+            callback&&callback();
+        },duration);
     }
 }
 

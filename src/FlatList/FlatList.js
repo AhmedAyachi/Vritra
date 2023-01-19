@@ -55,20 +55,24 @@ export default function FlatList(props){
         container.style.overflow="visible";
         useSwipeGesture({
             element:flatlist,
-            onSwipeLeft:()=>{
-                const {focus,itemsmap}=state;
-                if(focus<(itemsmap.length-1)){
-                    const index=focus+1;
-                    flatlist.scrollToIndex(index);
-                    onSwipe&&onSwipe({direction:"left",index,container});
-                }
-            },
-            onSwipeRight:()=>{
+            onSwipe:({direction})=>{
                 const {focus}=state;
-                if(focus){
-                    const index=focus-1;
+                let index;
+                switch(direction){
+                    case "left":
+                        const {itemsmap}=state;
+                        if(focus<(itemsmap.length-1)){
+                            index=focus+1;
+                        }
+                        break;
+                    case "right":
+                        if(focus){index=focus-1}
+                        break;
+                    default:break;
+                }
+                if(index!==undefined){
                     flatlist.scrollToIndex(index);
-                    onSwipe&&onSwipe({direction:"right",index,container});
+                    onSwipe&&onSwipe({direction,index,container});
                 }
             },
         });
