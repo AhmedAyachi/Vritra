@@ -22,10 +22,11 @@ export default function useZoomGesture(options){
             }
         },
         onEnd:()=>{
-            element.style.transition=`${statics.transition}ms`;
-            element.style.transform="scale(1) translate(0,0)";
+            const transition=element.style.transition,{style}=element;
+            style.transition=`${statics.transition}ms`;
+            style.transform="scale(1) translate(0,0)";
             setTimeout(()=>{
-                element.style.transition=null;
+                style.transition=transition;
             },statics.transition);
             onZoomEnd&&onZoomEnd();
         },

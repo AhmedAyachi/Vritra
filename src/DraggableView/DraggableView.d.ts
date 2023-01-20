@@ -40,11 +40,11 @@ interface DraggableView extends View {
 
 interface DraggableViewPosition {
     /**
-    * X-position relative to parent
+    * X-position relative to its initial position
     */
     x:Number,
     /**
-     * Y-position relative to parent
+     * Y-position relative to its initial position
      */
     y:Number,
 }
