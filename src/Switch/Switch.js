@@ -3,7 +3,7 @@ import css from "./Switch.module.css";
 
 
 export default function Switch(props){
-    const {parent,id=useId("switch"),thumbColor=statics.thumbColor,trackColor=statics.trackColor,onChange}=props;
+    const {parent,id=useId("switch"),thumbColor=statics.thumbColor,trackColor=statics.trackColor,readonly,onChange}=props;
     const switchEl=View({
         parent,id,
         style:props.style,
@@ -11,13 +11,14 @@ export default function Switch(props){
         className:`${css.switch} ${props.className}`,
     }),state={
         active:!Boolean(props.active),
-    };
+        editable:!readonly,
+    },{editable}=state;
 
     switchEl.innateHTML=`
         <div class="${css.thumb}"></div>
     `;
 
-    switchEl.onclick=()=>{switchEl.toggle()};
+    switchEl.onclick=editable&&(()=>{switchEl.toggle()});
 
     switchEl.toggle=(active=!state.active)=>{
         state.active=active;
@@ -25,7 +26,7 @@ export default function Switch(props){
         thumb.style.transform=`translateX(${active?100:0}%)`;
         thumb.style.backgroundColor=getColor(thumbColor,active),
         switchEl.style.backgroundColor=getColor(trackColor,active);
-        onChange&&onChange(active);
+        editable&&onChange&&onChange(active);
     }
     switchEl.toggle();
 

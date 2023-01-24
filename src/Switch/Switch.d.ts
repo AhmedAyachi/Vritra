@@ -5,12 +5,18 @@ export default function Switch(props:ViewProps&{
     active?:boolean,
     thumbColor?:String|SwitchColor,
     trackColor?:String|SwitchColor,
+    /**
+     * @default false
+     */
+    readonly:boolean,
     onChange(active:Boolean):void,
 }):Switch;
 
 interface Switch extends View {
     /**
-     * Sets the switch status. Toggling behavior by default
+     * Sets the switch status. Toggling behavior by default.
+     * 
+     * If readonly is false, onChange is called
      * @param active 
      */
     toggle(active:boolean):void,
