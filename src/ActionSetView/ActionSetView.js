@@ -28,8 +28,13 @@ export default function ActionSetView(props){
             actionEl=component({...action,parent:actionsetview});
             actionEl?.classList.add(css.action);
             actionEl?.addEventListener("click",(event)=>{event.stopPropagation()});
-            const pvaction=i&&actions[i-1];
-            pvaction?.element?.insertAdjacentElement("afterend",actionEl);
+            if(!i){
+                actionsetview.insertAdjacentElement("afterbegin",actionEl);
+            }
+            else{
+                const pvaction=actions[i-1];
+                pvaction?.element?.insertAdjacentElement("afterend",actionEl);
+            }
         }
         else{
             actionEl=actionsetview.querySelector(`:scope>#${action.id}.${css.action}`);
