@@ -14,7 +14,6 @@ export default function useSwipeGesture(params:{
     offset?:number,
     /**
      * The exact number of pointers that triggers the Swipe Gesture.
-     * @see A higer number will cancel the gesture
      * @default 1 
      */
     pointerCount?:number,
