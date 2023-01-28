@@ -10,9 +10,8 @@ export default function DraggableView(props){
         className:`${css.draggableview} ${props.className||""}`,
     }),state={
         coords:{
-            x:null,//relative to parent
-            y:null,//relative to parent
-            dx:null,dy:null,//relative to last position
+            x:0,y:0,//relative to parent
+            dx:0,dy:0,//relative to last position
         },
         dragX:null,dragY:null,//drag position relative to parent
         dragDX:null,dragDY:null,//drag position relative to the draggableview
@@ -86,11 +85,11 @@ export default function DraggableView(props){
         if(typeof(y)==="number"){
             coords.y=y*height;
         }
-        const hasDuration=typeof(duration)==="number",{style}=draggableview;;
+        const hasDuration=typeof(duration)==="number",{style}=draggableview;
         if(hasDuration){
             style.transition=`${duration}ms ${easing||"ease-out"}`;
         } 
-        style.transform=`translate(${horizontalDrag?coords.x:0}px,${verticalDrag?coords.y:0}px)`;
+        style.transform=`translate(${coords.x||0}px,${coords.y||0}px)`;
         hasDuration&&setTimeout(()=>{
             style.transition=null;
         },duration);
