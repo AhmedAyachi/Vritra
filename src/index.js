@@ -6,7 +6,7 @@ export {default as Switch} from "./Switch/Switch";
 export {default as PopupView} from "./PopupView/PopupView";
 export {default as ActionSetView} from "./ActionSetView/ActionSetView";
 export {default as AccordionView} from "./AccordionView/AccordionView";
-export {default as ColorPicker} from "./ColorPicker/ColorPicker";
+export {default as Palette} from "./Palette/Palette";
 export {default as FlatList} from "./FlatList/FlatList";
 export {default as DraggableView} from "./DraggableView/DraggableView";
 export {default as View} from "./View/View";

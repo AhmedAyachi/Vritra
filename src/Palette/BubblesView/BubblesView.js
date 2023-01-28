@@ -3,7 +3,7 @@ import css from "./BubblesView.module.css";
 
 
 export default function BubblesView(props){
-    const {parent,id=useId("bubblesview"),colors=["black","red","blue","green"]}=props;
+    const {parent,id=useId("bubblesview"),colors}=props;
     const bubblesview=View({
         parent,id,
         style:styles.bubblesview(colors),
