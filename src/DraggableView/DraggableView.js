@@ -40,13 +40,13 @@ export default function DraggableView(props){
                 let x,y;
                 if(horizontalDrag){
                     x=cx-state.dragDX;
-                    if(xmin&&(x<xmin)){x=xmin}
-                    else if(xmax&&(x>xmax)){x=xmax}
+                    if((typeof(xmin)==="number")&&(x<xmin)){x=xmin}
+                    else if((typeof(xmax)==="number")&&(x>xmax)){x=xmax}
                 }
                 if(verticalDrag){
                     y=cy-state.dragDY;
-                    if(ymin&&(y<ymin)){y=ymin}
-                    else if(ymax&&(y>ymax)){y=ymax}
+                    if((typeof(ymin)==="number")&&(y<ymin)){y=ymin}
+                    else if((typeof(ymax)==="number")&&(y>ymax)){y=ymax}
                 }
                 draggableview.setPosition({x,y,asratio:false});
             }
