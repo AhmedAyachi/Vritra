@@ -3,7 +3,7 @@ import css from "./DraggableView.module.css";
 
 
 export default function DraggableView(props){
-    const {parent,ref=useId("draggableview"),id=ref,position,horizontalDrag=true,verticalDrag=true}=props;
+    const {parent,ref=useId("draggableview"),id=ref,position,boundary,horizontalDrag=true,verticalDrag=true}=props;
     const draggableview=View({
         parent,id,
         style:props.style,
@@ -26,8 +26,7 @@ export default function DraggableView(props){
     `;
 
     if(verticalDrag||horizontalDrag){
-        const {style}=draggableview,{isTouchDevice}=state;
-        style.position="absolute";
+        const {isTouchDevice}=state,{xmin,xmax,ymin,ymax}=boundary||{};
         draggableview.addEventListener(isTouchDevice?"touchstart":"mousedown",(event)=>{
             const {clientX:cx,clientY:cy}=(isTouchDevice?event.changedTouches[0]:event);
             Object.assign(coords,{dx:0,dy:0});
@@ -39,11 +38,18 @@ export default function DraggableView(props){
             onDrag&&onDrag(structuredClone(coords),draggableview);
             function onPointerMove(event){
                 const {clientX:cx,clientY:cy}=(isTouchDevice?event.changedTouches[0]:event);
-                draggableview.setPosition({
-                    x:cx-state.dragDX,
-                    y:cy-state.dragDY,
-                    asratio:false,
-                });
+                let x,y;
+                if(horizontalDrag){
+                    x=cx-state.dragDX;
+                    if(xmin&&(x<xmin)){x=xmin}
+                    else if(xmax&&(x>xmax)){x=xmax}
+                }
+                if(verticalDrag){
+                    y=cy-state.dragDY;
+                    if(ymin&&(y<ymin)){y=ymin}
+                    else if(ymax&&(y>ymax)){y=ymax}
+                }
+                draggableview.setPosition({x,y,asratio:false});
             }
             window.addEventListener(isTouchDevice?"touchmove":"mousemove",onPointerMove);
             window.addEventListener(isTouchDevice?"touchend":"mouseup",()=>{

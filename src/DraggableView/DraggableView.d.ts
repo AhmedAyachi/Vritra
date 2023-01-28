@@ -11,6 +11,12 @@ export default function DraggableView(props:{
     ref?:String,
     className?:String,
     position?:DraggableViewPositionSetter,
+    /**
+     * Sets the DraggableView boundaries
+     * 
+     * Values can be exceeded with setPosition method
+     */
+    boundary?:DraggableViewBoundary,
     horizontalDrag?:boolean,
     verticalDrag?:boolean,
     style?:String,
@@ -47,6 +53,25 @@ interface DraggableViewPosition {
      * Y-position relative to its initial position
      */
     y:Number,
+}
+
+interface DraggableViewBoundary {
+    /**
+     * minimum x value in pixels
+     */
+    xmin:number,
+    /**
+     * maximum x value in pixels
+     */
+    xmax:number,
+    /**
+     * minimum y value in pixels
+     */
+    ymin:number,
+    /**
+     * maximum y value in pixels
+     */
+    ymax:number,
 }
 
 interface DraggableViewPositionSetter extends DraggableViewPosition {
