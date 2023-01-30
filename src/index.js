@@ -15,7 +15,7 @@ export {HashRouter} from "./HashRouter/HashRouter";
 export {useZoomGesture,usePinchGesture,useSwipeGesture} from "./Gestures";
 
 
-export const randomItem=(array)=>array[Math.floor(Math.random()*array.length)]
+export const randomItem=(array)=>array[Math.floor(Math.random()*array.length)];
 
 export const parseJSON=(json)=>{
     let data=null;
@@ -202,15 +202,11 @@ export const toggle=(element,{display="block",duration=200},callback)=>{
 }
 
 export function randomColor(colors=[]){
-    if(Array.isArray(colors)&&colors.length){
-        return colors[Math.floor(Math.random()*colors.length)];
+    if(Array.isArray(colors)){
+        return randomItem(colors);
     }
     else{
-        return `rgb(
-            ${Math.floor(Math.random()*255)},
-            ${Math.floor(Math.random()*255)},
-            ${Math.floor(Math.random()*255)}
-        )`
+        return `hsl(${Math.round(360*Math.random())},100%,50%)`;
     }
 }
 
