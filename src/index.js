@@ -201,7 +201,7 @@ export const toggle=(element,{display="block",duration=200},callback)=>{
     }
 }
 
-export function randomColor(colors=[]){
+export function randomColor(colors){
     if(Array.isArray(colors)){
         return randomItem(colors);
     }
