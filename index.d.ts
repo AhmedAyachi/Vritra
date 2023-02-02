@@ -1,4 +1,4 @@
-declare module "vanilla";
+declare module "cherries";
 
 
 export {default as DrawerNavigator} from "./src/DrawerNavigator/DrawerNavigator";

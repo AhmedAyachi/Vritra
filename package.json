@@ -1,13 +1,13 @@
 {
-  "name": "vanilla",
-  "version": "7.2.4",
+  "name": "cherries",
+  "version": "1.0.0",
   "description": "",
   "main": "src/index.js",
   "types": "index.d.ts",
   "scripts": {},
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/AhmedAyachi/Vanilla.git"
+    "url": "git+https://github.com/AhmedAyachi/Cherries.git"
   },
   "keywords": [
     "vanilla"
@@ -15,7 +15,7 @@
   "author": "Ahmed Ayachi",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/AhmedAyachi/Vanilla/issues"
+    "url": "https://github.com/AhmedAyachi/Cherries/issues"
   },
-  "homepage": "https://github.com/AhmedAyachi/Vanilla#readme"
+  "homepage": "https://github.com/AhmedAyachi/Cherries#readme"
 }
