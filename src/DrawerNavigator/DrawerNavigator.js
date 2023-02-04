@@ -5,14 +5,14 @@ import icon0 from "./Icon_0";
 
 
 export default function DrawerNavigator(props){
-    const {parent,id=useId("drawernavigator"),routes}=props;
+    const {parent,id=useId("drawernavigator"),routes,initialId}=props;
     const drawernavigator=View({
         parent,id,
         style:props.style,
         position:props.position,
         className:`${css.drawernavigator} ${props.className}`,
     }),state={
-        activeId:routes[0].id,
+        activeId:initialId&&routes.some(({id})=>initialId===id)?initialId:routes[0].id,
     };
 
     drawernavigator.innateHTML=`

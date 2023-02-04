@@ -13,10 +13,6 @@ export default function DrawerView(props){
     const routepicker=RoutePicker({...props,parent:drawerview,id:undefined});
     const background=drawerview.querySelector(`.${css.background}`);
 
-    drawerview.onclick=()=>{
-        drawerview.unmount();
-    }
-
     drawerview.unmount=()=>{
         routepicker.unmount();
         fadeOut(background,RoutePicker.statics.duration+100,()=>{
@@ -24,6 +20,10 @@ export default function DrawerView(props){
         });
     }
 
-    fadeIn(background,RoutePicker.statics.duration);
+    fadeIn(background,RoutePicker.statics.duration,()=>{
+        background.onclick=()=>{
+            drawerview.unmount();
+        }
+    });
     return drawerview;
 }
