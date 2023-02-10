@@ -26,7 +26,6 @@ export default function useSwipeGesture(options){
     });
 
     const onTouchEnd=(event)=>{
-        event.stopPropagation();
         const {changedTouches,touches}=event,touchcount=changedTouches.length+touches.length;
         if(touchcount===pointerCount){
             const {x,y}=getBaryCenter([...touches,...changedTouches]),{barycenter}=state;
