@@ -89,7 +89,7 @@ export default function DraggableView(props){
         if(hasDuration){
             style.transition=`${duration}ms ${easing||"ease-out"}`;
         } 
-        style.transform=`translate(${coords.x||0}px,${coords.y||0}px)`;
+        style.translate=`${coords.x||0}px ${coords.y||0}px`;
         hasDuration&&setTimeout(()=>{
             style.transition=null;
         },duration);
