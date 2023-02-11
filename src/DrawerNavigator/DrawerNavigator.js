@@ -16,15 +16,15 @@ export default function DrawerNavigator(props){
     };
 
     drawernavigator.innateHTML=`
-        <div class="${css.header}">
+        <div class="${css.header} ${props.headerClassName||""}">
             <img class="${css.showbtn}" src="${icon0()}"/>
             <h3 class="${css.title}"></h3>
         </div>
-        <div class="${css.content}"></div>
+        <div class="${css.container} ${props.containerClassName||""}"></div>
     `;
 
     const titleEl=drawernavigator.querySelector(`.${css.title}`);
-    const contentEl=drawernavigator.querySelector(`.${css.content}`);
+    const container=drawernavigator.querySelector(`.${css.container}`);
     const showbtn=drawernavigator.querySelector(`.${css.showbtn}`);
     showbtn.onclick=()=>{
         DrawerView({
@@ -42,16 +42,16 @@ export default function DrawerNavigator(props){
         if(route){
             const {id,title=id,component,memorize=true,element,scrollTop=0,scrollLeft=0}=route;
             state.activeId=id;
-            contentEl.innerHTML="";
+            container.innerHTML="";
             titleEl.innerHTML="";
             titleEl.innerText=title;
             if(memorize&&(element instanceof HTMLElement)){
-                contentEl.appendChild(element);
+                container.appendChild(element);
                 element.scrollTop=scrollTop
                 element.scrollLeft=scrollLeft;
             }
             else if(component){
-                const instance=component({parent:contentEl});
+                const instance=component({parent:container});
                 if(memorize){
                     route.element=instance;
                 }

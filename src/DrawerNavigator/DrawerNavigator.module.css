@@ -14,7 +14,7 @@
     align-items:center;
     padding:4em;
 }
-.content{
+.container{
     max-width:100%;
     flex:1;
     overflow:hidden auto;

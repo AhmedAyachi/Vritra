@@ -2,6 +2,14 @@ import {ViewProps,View} from "../View/View";
 
 
 export default function DrawerNavigator(props:ViewProps&{
+    /**
+     * Header container className
+     */
+    headerClassName?:string,
+    /**
+     * Route component container className
+     */
+    containerClassName?:string,
     routes:DrawerNavigatorRoute[],
     /**
      * First chosen route id
