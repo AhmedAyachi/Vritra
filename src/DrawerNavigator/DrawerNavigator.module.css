@@ -42,5 +42,6 @@
     .showbtn:hover{
         filter:brightness(0.65);
         opacity:0.2;
+        cursor:pointer;
     }
 }

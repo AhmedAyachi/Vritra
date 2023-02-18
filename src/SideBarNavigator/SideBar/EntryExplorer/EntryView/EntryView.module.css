@@ -1,0 +1,61 @@
+.entryview{
+    position:relative;
+    max-width:100%;
+}
+.header{
+    position:relative;
+    width:fit-content;
+    display:flex;
+    justify-content:flex-start;
+    align-items:center;
+    flex-wrap:nowrap;
+    transition:var(--transition);
+}
+.header[folder]{
+    font-weight:bold;
+}
+.header:not([folder]){
+    width:fit-content;
+    padding:1.5em var(--entryspacing);
+    margin:0 calc(-1 * var(--entryspacing));
+    border-radius:1.125em;
+}
+.explorer{
+    margin-top:1em;
+    margin-left:3em;
+    overflow:visible !important;
+}
+.indicator{
+    position:absolute;
+    width:4em;
+    left:0;
+    transform:translateX(-100%);
+    top:0;bottom:0;margin:auto 0;
+    transition:var(--transition);
+}
+.name{
+    font-size:3em;
+    white-space:nowrap;
+    text-transform:capitalize;
+    color:inherit;
+    transition:var(--transition);
+}
+.icon{
+    width:4em;
+    margin-left:1em;
+}
+
+@media(any-hover){
+    .header{
+        cursor:pointer;
+    }
+    .header[folder]:hover{
+        transform:scale(1.05);
+    }
+}
+
+@media(hover:none){
+    .header[folder]:active{
+        transform:scale(1.05);
+    }
+}

@@ -1,6 +1,7 @@
 import css from "./index.module.css";
 
 
+export {default as SideBarNavigator} from "./SideBarNavigator/SideBarNavigator";
 export {default as DrawerNavigator} from "./DrawerNavigator/DrawerNavigator";
 export {default as Switch} from "./Switch/Switch";
 export {default as PopupView} from "./PopupView/PopupView";

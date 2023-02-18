@@ -1,6 +1,7 @@
 declare module "cherries";
 
 
+export {default as SideBarNavigator} from "./src/SideBarNavigator/SideBarNavigator";
 export {default as DrawerNavigator} from "./src/DrawerNavigator/DrawerNavigator";
 export {default as Switch} from "./src/Switch/Switch";
 export {default as PopupView} from "./src/PopupView/PopupView";
