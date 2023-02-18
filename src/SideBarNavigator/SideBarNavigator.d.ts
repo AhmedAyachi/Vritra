@@ -57,12 +57,14 @@ type SideBarNavigatorEntry={
     renderContent:(container:HTMLElement)=>HTMLElement,
     /**
      * If true, the content element returned by renderContent is used
+     * @default true
      */
     memorize?:boolean,
     /**
      * For folder entries only.
      * 
      * Parent-folders are automatically expanded
+     * @default false
      */
     expanded?:boolean,
 }
