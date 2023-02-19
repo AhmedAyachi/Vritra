@@ -1,11 +1,11 @@
-import {useId,View} from "../index";
+import {useId,CherryView} from "../index";
 import css from "./SideBarNavigator.module.css";
 import SideBar from "./SideBar/SideBar";
 
 
 export default function SideBarNavigator(props){
     const {parent,id=useId("sidebarnavigator"),entries,tintColor="dodgerblue",folderColor="black",endpointColor="rgba(0,0,0,0.35)",onNavigate}=props;
-    const sidebarnavigator=View({
+    const sidebarnavigator=CherryView({
         parent,id,
         style:props.style,
         position:props.position,

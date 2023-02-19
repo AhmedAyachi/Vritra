@@ -1,10 +1,10 @@
-import {useId,View,fadeIn,fadeOut} from "../index";
+import {useId,CherryView,fadeIn,fadeOut} from "../index";
 import css from "./PopupView.module.css";
 
 
 export default function PopupView(props){
     const {target,parent=target?target.parentNode:document.body,id=useId("popupview"),avoidable=true,keepinDOM,onUnmount}=props;
-    const popupview=View({
+    const popupview=CherryView({
         parent,id,
         style:props.style,
         position:props.position,

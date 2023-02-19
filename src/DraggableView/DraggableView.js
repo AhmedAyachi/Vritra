@@ -1,10 +1,10 @@
-import {useId,View,capitalize} from "../index";
+import {useId,CherryView,capitalize} from "../index";
 import css from "./DraggableView.module.css";
 
 
 export default function DraggableView(props){
     const {parent,ref=useId("draggableview"),id=ref,position,boundary,horizontalDrag=true,verticalDrag=true}=props;
-    const draggableview=View({
+    const draggableview=CherryView({
         parent,id,
         style:props.style,
         className:`${css.draggableview} ${props.className||""}`,

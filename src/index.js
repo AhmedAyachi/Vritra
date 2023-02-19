@@ -1,6 +1,8 @@
 import css from "./index.module.css";
 
 
+export {default as View,ViewProps,View as ViewInterface} from "./View/View";
+export {default as CherryView} from "./CherryView/CherryView";
 export {default as SideBarNavigator} from "./SideBarNavigator/SideBarNavigator";
 export {default as DrawerNavigator} from "./DrawerNavigator/DrawerNavigator";
 export {default as Switch} from "./Switch/Switch";
@@ -10,7 +12,6 @@ export {default as AccordionView} from "./AccordionView/AccordionView";
 export {default as Palette} from "./Palette/Palette";
 export {default as FlatList} from "./FlatList/FlatList";
 export {default as DraggableView} from "./DraggableView/DraggableView";
-export {default as View} from "./View/View";
 export {default as HashMap} from "./HashMap/HashMap";
 export {HashRouter} from "./HashRouter/HashRouter";
 export {useZoomGesture,usePinchGesture,useSwipeGesture} from "./Gestures";

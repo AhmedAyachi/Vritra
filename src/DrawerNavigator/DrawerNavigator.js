@@ -1,4 +1,5 @@
-import {useId,View} from "../index";
+import {useId,CherryView} from "../index";
+/* import CherryView from "../CherryView/CherryView"; */
 import css from "./DrawerNavigator.module.css";
 import DrawerView from "./DrawerView/DrawerView";
 import icon0 from "./Icon_0";
@@ -6,7 +7,7 @@ import icon0 from "./Icon_0";
 
 export default function DrawerNavigator(props){
     const {parent,id=useId("drawernavigator"),routes,initialId}=props;
-    const drawernavigator=View({
+    const drawernavigator=CherryView({
         parent,id,
         style:props.style,
         position:props.position,
