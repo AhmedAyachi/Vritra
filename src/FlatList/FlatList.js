@@ -197,6 +197,7 @@ export default function FlatList(props){
 
 const styles={
     container:({transition,horizontal,pagingEnabled,nodata})=>`
+        height:${horizontal?"100%":"auto"};
         display:${nodata?"none":"block"};
         overflow-x:${horizontal?"auto":"hidden"};
         white-space:${horizontal?"nowrap":"normal"};
