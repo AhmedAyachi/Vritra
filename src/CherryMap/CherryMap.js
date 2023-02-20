@@ -1,6 +1,6 @@
 
 
-export default class HashMap extends Map {
+export default class CherryMap extends Map {
     constructor(params){
         super(params);
     }
@@ -17,6 +17,22 @@ export default class HashMap extends Map {
             item=items.next().value;
         }
         return item;
+    }
+
+    keys(){
+        return Object.freeze([...super.keys()]);
+    }
+
+    values(){
+        return Object.freeze([...super.values()]);
+    }
+
+    valuesAsIterableIterator(){
+        return super.values();
+    }
+
+    keysAsIterableIterator(){
+        return super.keys();
     }
 
     get length(){

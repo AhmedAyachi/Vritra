@@ -1,4 +1,4 @@
-import {useId,CherryView,removeItem,HashMap,useSwipeGesture} from "../index";
+import {useId,CherryView,removeItem,CherryMap,useSwipeGesture} from "../index";
 import css from "./FlatList.module.css";
 import EmptyIndicator from "./EmptyIndicator/EmptyIndicator";
 
@@ -10,7 +10,7 @@ export default function FlatList(props){
         index:null,//last created element index
         itemEl:null,//last created element (observed)
         focus:null,//for paging, element in focus
-        itemsmap:new HashMap(),// [item,element] map
+        itemsmap:new CherryMap(),// [item,element] map
         endreached:!props.data?.length,
         firstOffset:null,//for paging lists: firstEl offset
         popuplist:null,

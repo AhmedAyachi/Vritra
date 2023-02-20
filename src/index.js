@@ -12,7 +12,7 @@ export {default as AccordionView} from "./AccordionView/AccordionView";
 export {default as Palette} from "./Palette/Palette";
 export {default as FlatList} from "./FlatList/FlatList";
 export {default as DraggableView} from "./DraggableView/DraggableView";
-export {default as HashMap} from "./HashMap/HashMap";
+export {default as CherryMap} from "./CherryMap/CherryMap";
 export {HashRouter} from "./HashRouter/HashRouter";
 export {useZoomGesture,usePinchGesture,useSwipeGesture} from "./Gestures";
 
