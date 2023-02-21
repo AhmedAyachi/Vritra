@@ -9,7 +9,7 @@ export default function EntryExplorer(props){
         parent,id,
         className:`${css.entryexplorer} ${props.className||""}`,
         containerClassName:css.container,
-        data:entries,
+        data:entries,emptymessage:"",
         renderItem:({parent,item})=>EntryView({...props,parent,entry:item}),
     });
 

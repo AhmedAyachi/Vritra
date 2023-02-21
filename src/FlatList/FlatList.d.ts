@@ -60,7 +60,8 @@ type PopupProps<Type>=ViewProps&{
     ref:String,
     horizontal:boolean,
     /**
-     * Message to show when the flatlist is empty
+     * Message to show when the flatlist is empty.
+     * @default "no data"
      */
     emptymessage:string,
     /**

@@ -7,7 +7,7 @@ export default function EmptyIndicator(props){
     const emptyindicator=View({parent,id,className:css.emptyindicator});
 
     emptyindicator.innateHTML=`
-        <p class="${css.emptymsg}">${message||"no data"}</p>
+        <p class="${css.emptymsg}">${typeof(message)==="string"?message:"no data"}</p>
     `;
 
 
