@@ -17,6 +17,11 @@ export default function AccordionView(props:ViewProps&{
      */
     headerStyle?:string,
     /**
+     * Content container className
+     * @see when separate is true, specify a paddingTop value to get the desired behavior 
+     */
+    containerClassName?:string,
+    /**
      * For custom header generation
      * @param container custom header container
      */

@@ -4,8 +4,9 @@ import css from "./ContentView.module.css";
 
 export default function ContentView(props){
     const {parent,id=useId("contentview")}=props;
-    const contentview=View({parent,id,className:css.contentview}),state={
+    const contentview=View({parent,id,className:`${css.contentview} ${props.className||""}`}),state={
         siblingstyle:null,
+        marginTop:null,
         nextEl:getNextElement(parent),
     },{nextEl}=state;
 
@@ -18,8 +19,9 @@ export default function ContentView(props){
         ["marginTop","transition"].forEach(key=>{
             state.siblingstyle[key]=style[key];
         });
+        state.marginTop=`calc(${getComputedStyle(parent).getPropertyValue("margin-top")||"0px"} + ${(100*contentview.clientHeight/window.innerWidth)}vw)`;
         Object.assign(style,{
-            marginTop:`${3.2+(100*contentview.clientHeight/window.innerWidth)}rem`,
+            marginTop:state.marginTop,
             transition:`${statics.transition}ms`,
         });
     },0);
@@ -41,7 +43,8 @@ export default function ContentView(props){
         //parent.style.backgroundColor=null;
         Object.assign(contentview.style,{position:null,transform:null});
         if(nextEl){
-            nextEl.style.marginTop=`${3.2+(100*contentview.clientHeight/window.innerWidth)}rem`;
+            nextEl.style.marginTop=state.marginTop;
+            state.marginTop=null;
             setTimeout(()=>{
                 const {siblingstyle}=state;
                 Object.assign(nextEl.style,{

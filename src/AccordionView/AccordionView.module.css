@@ -1,7 +1,7 @@
 .accordionview{
     position:relative;
     max-width:100%;
-    box-shadow:0px 2px 7px rgba(0,0,0,0.08);
+    filter:drop-shadow(0px 2px 7px rgba(0,0,0,0.08));
     --paddingHorizontal:3.733em;
     --borderRadius:4px;
 }
@@ -49,4 +49,10 @@
     flex:1;
     overflow:auto hidden;
     --spacing:var(--actionspacing) !important;
+}
+
+@media(any-hover){
+    .defaultheader:hover{
+        cursor:pointer;
+    }
 }

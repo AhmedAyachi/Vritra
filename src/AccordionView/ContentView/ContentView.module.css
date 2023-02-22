@@ -6,7 +6,6 @@
     bottom:0;
     border-bottom-left-radius:var(--borderRadius);
     border-bottom-right-radius:var(--borderRadius);
-    background-color:white;
     transform:translateY(100%);
     transition:250ms;
     z-index:2;

@@ -11,11 +11,14 @@ export default function AccordionView(props){
         position:props.position,
         className:`${css.accordionview} ${props.className||""}`,
         style:`opacity:${props.locked?0.5:1};${props.style||""}`,
+        
     }),state={
         expanded:false,
         locked:Boolean(props.locked),
         contentEl:null,
         contentview:null,
+        borderBottomLeftRadius:null,
+        borderBottomRightRadius:null,
     };
 
     accordionview.innateHTML=`
@@ -44,9 +47,16 @@ export default function AccordionView(props){
         if(!state.locked){
             const expanded=state.expanded=(typeof(status)==="boolean")?status:(!state.expanded);
             if(!separate){
-                Object.assign(headerEl.style,{
-                    borderBottomLeftRadius:expanded?0:null,
-                    borderBottomRightRadius:expanded?0:null,
+                const {style}=headerEl,{borderBottomLeftRadius,borderBottomRightRadius}=state;
+                if(!borderBottomLeftRadius){
+                    state.borderBottomLeftRadius=style.borderBottomLeftRadius;
+                }
+                if(!borderBottomRightRadius){
+                    state.borderBottomRightRadius=style.borderBottomRightRadius;
+                }
+                Object.assign(style,{
+                    borderBottomLeftRadius:expanded?0:borderBottomLeftRadius,
+                    borderBottomRightRadius:expanded?0:borderBottomRightRadius,
                 });
             }
             const indicator=accordionview.querySelector(`.${css.indicator}`);
@@ -54,7 +64,7 @@ export default function AccordionView(props){
                 indicator.style.transform=`rotateZ(${expanded?-180:0}deg)`;
             }
             if(expanded){
-                const contentview=state.contentview=ContentView({parent:accordionview});
+                const contentview=state.contentview=ContentView({parent:accordionview,className:props.containerClassName});
                 if(memorize&&state.contentEl){
                     contentview.appendChild(state.contentEl);
                 }
