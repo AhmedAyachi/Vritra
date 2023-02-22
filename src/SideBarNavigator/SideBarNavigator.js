@@ -54,6 +54,7 @@ export default function SideBarNavigator(props){
 
 const renderEntryContent=(entry,container)=>{
     const {content,memorize=true}=entry;
+    container.scrollTop=0;
     if(memorize&&(content instanceof HTMLElement)){
         container.appendChild(content);
     }
