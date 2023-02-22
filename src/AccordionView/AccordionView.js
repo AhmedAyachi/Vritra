@@ -11,7 +11,6 @@ export default function AccordionView(props){
         position:props.position,
         className:`${css.accordionview} ${props.className||""}`,
         style:`opacity:${props.locked?0.5:1};${props.style||""}`,
-        
     }),state={
         expanded:false,
         locked:Boolean(props.locked),
