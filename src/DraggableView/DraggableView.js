@@ -77,7 +77,7 @@ export default function DraggableView(props){
         }
         return position;
     };
-    draggableview.setPosition=({x,y,asratio=true,duration,easing},triggerOnMove=true)=>{
+    draggableview.setPosition=({x,y,asratio,duration,easing},triggerOnMove=true)=>{
         const {width=1,height=1}=asratio?parent.getBoundingClientRect():{};
         if(typeof(x)==="number"){
             coords.x=x*width;
@@ -86,13 +86,11 @@ export default function DraggableView(props){
             coords.y=y*height;
         }
         const hasDuration=typeof(duration)==="number",{style}=draggableview;
-        if(hasDuration){
+        if(hasDuration&&(duration>0)){
             style.transition=`${duration}ms ${easing||"ease-out"}`;
+            setTimeout(()=>{style.transition=null},duration);
         } 
         style.translate=`${coords.x||0}px ${coords.y||0}px`;
-        hasDuration&&setTimeout(()=>{
-            style.transition=null;
-        },duration);
         Object.assign(coords,{
             dx:coords.x+state.dragDX-state.dragX,
             dy:coords.y+state.dragDY-state.dragY,
@@ -102,7 +100,7 @@ export default function DraggableView(props){
             onMove&&onMove(structuredClone(coords),draggableview);
         }
     }
-    position&&draggableview.setPosition(position,false);
+    position&&draggableview.setPosition({asratio:true,...position},false);
 
     return draggableview;
 }

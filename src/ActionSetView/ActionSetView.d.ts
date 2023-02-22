@@ -6,7 +6,7 @@ import {View,ViewProps} from "../View/View";
  * @see CSS variables : spacing
  */
 export default function ActionSetView(props:ViewProps&{
-    actions:ActionSetActionProp[],
+    actions:ActionSetAction[],
     /**
      * ActionSet Actions Icons color
      */
@@ -18,7 +18,7 @@ interface ActionSetView extends View {
 
 }
 
-export type ActionSetActionProp={
+export type ActionSetAction={
     /**
      * Action id. Required
      */
@@ -27,7 +27,7 @@ export type ActionSetActionProp={
      * Used to add custom action component 
      * @returns action HTMLElement
      */
-    component:(props:ActionSetActionProp&{parent:ActionSetView})=>HTMLElement,
+    component:(props:ActionSetAction&{parent:ActionSetView})=>HTMLElement,
     /**
      * Action icon as url, base64 string or function
      */
@@ -48,5 +48,5 @@ export type ActionSetActionProp={
      * Not triggered when action created with component prop
      * @param action this object with element property
      */
-    onTrigger(action:ActionSetActionProp&{element:HTMLElement}):void,
+    onTrigger(action:ActionSetAction&{element:HTMLElement}):void,
 };

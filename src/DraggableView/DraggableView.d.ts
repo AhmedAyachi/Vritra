@@ -1,16 +1,12 @@
-import {View} from "../View/View";
+import {View,ViewProps} from "../View/View";
 
 
 export default function DraggableView(props:{
     parent:HTMLElement,
     id?:String,
-    /**
-     * @deprecated
-     * use id prop instead
-     */
-    ref?:String,
     className?:String,
-    position?:DraggableViewPositionSetter,
+    style?:String,
+    position:DraggableViewPositionSetter,
     /**
      * Sets the DraggableView boundaries
      * 
@@ -19,7 +15,6 @@ export default function DraggableView(props:{
     boundary?:DraggableViewBoundary,
     horizontalDrag?:boolean,
     verticalDrag?:boolean,
-    style?:String,
     onDrag?(coords:DraggableViewCoords,element:DraggableView):void,
     onMove?(coords:DraggableViewCoords,element:DraggableView):void,
     onDrop?(coords:DraggableViewCoords,element:DraggableView):void,
@@ -83,18 +78,18 @@ interface DraggableViewPositionSetter extends DraggableViewPosition {
      * x=1 : left offset of the draggableview is 100% of the width of its parent
      * 
      * y=0.5 : top offset of the draggableview is 50% of the height of its parent
-     * @default true
+     * @default true when setting the position prop, false when using setPosition method
      */
-    asratio:Boolean,
+    asratio?:Boolean,
     /**
      * if the value is of type number, an animation is triggered 
      */
-    duration:Number|undefined,
+    duration?:Number,
     /**
      * Animation Easing function. Same as transition-timing-function CSS property.
      * @default "ease-out"
      */
-    easing:String,
+    easing?:String,
 }
 
 interface DraggableViewCoords extends DraggableViewPosition {
