@@ -48,5 +48,22 @@ export type ActionSetAction={
      * Not triggered when action created with component prop
      * @param action this object with element property
      */
-    onTrigger(action:ActionSetAction&{element:HTMLElement}):void,
+    onTrigger(action:ActionSetAction&{
+        element:ActionSetActionElement|HTMLElement,
+        /**
+         * The color prop value
+         */
+        color:string,
+    }):void,
 };
+
+interface ActionSetActionElement extends HTMLDivElement {
+    /**
+     * Not available for custom actions
+     * @param icon 
+     * @param save if true, sets the action.icon property, default false
+     * @see you can just edit the img element src yourself, but this method will make sure that your code
+     * keeps behaving the same way independently of package versions.
+     */
+    setIcon(icon:string|((color:string,weight=2)=>string),save=true):void,
+}

@@ -43,7 +43,13 @@ export default function ActionSetView(props){
                 const {onTrigger}=action;
                 onTrigger&&onTrigger(action);
             }
+            actionEl.setIcon=(icon,save)=>{
+                if(save){action.icon=icon};
+                const img=actionEl.querySelector(":scope>img");
+                img.src=typeof(icon)==="function"?icon(color):icon;
+            }
         }
+        action.color=color;
         action.element=actionEl;
     });
 
