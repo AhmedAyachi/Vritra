@@ -8,7 +8,7 @@ import {View,ViewProps} from "../View/View";
 export default function ActionSetView(props:ViewProps&{
     actions:ActionSetAction[],
     /**
-     * ActionSet Actions Icons color
+     * Function-icon color param value
      */
     color?:string,
 }):ActionSetView;
@@ -49,7 +49,7 @@ export type ActionSetAction={
      * @param action this object with element property
      */
     onTrigger(action:ActionSetAction&{
-        element:ActionSetActionElement|HTMLElement,
+        element:ActionSetActionElement,
         /**
          * The color prop value
          */
@@ -65,5 +65,5 @@ interface ActionSetActionElement extends HTMLDivElement {
      * @see you can just edit the img element src yourself, but this method will make sure that your code
      * keeps behaving the same way independently of package versions.
      */
-    setIcon(icon:string|((color:string,weight=2)=>string),save=true):void,
+    setIcon(icon:string|((color:string,weight=2)=>string),save?:boolean):void,
 }
