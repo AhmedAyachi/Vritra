@@ -6,7 +6,7 @@ import icon0 from "./Icon_0";
 
 
 export default function DrawerNavigator(props){
-    const {parent,id=useId("drawernavigator"),routes,initialId}=props;
+    const {parent,id=useId("drawernavigator"),routes,initialId,renderHeader}=props;
     const drawernavigator=CherryView({
         parent,id,
         style:props.style,
@@ -14,38 +14,65 @@ export default function DrawerNavigator(props){
         className:`${css.drawernavigator} ${props.className}`,
     }),state={
         activeId:initialId&&routes.some(({id})=>initialId===id)?initialId:routes[0].id,
+        drawerview:null,
     };
 
     drawernavigator.innateHTML=`
-        <div class="${css.header} ${props.headerClassName||""}">
-            <img class="${css.showbtn}" src="${icon0()}"/>
-            <h3 class="${css.title}"></h3>
+        <div 
+            class="${css.header} 
+            ${props.headerClassName||""}" 
+            ${renderHeader?"":`style="padding:4em"`}
+        >
+            ${renderHeader?"":`
+                <img class="${css.showbtn}" src="${icon0()}"/>
+                <h3 class="${css.title}"></h3>
+            `}
         </div>
         <div class="${css.container} ${props.containerClassName||""}"></div>
     `;
 
-    const titleEl=drawernavigator.querySelector(`.${css.title}`);
-    const container=drawernavigator.querySelector(`.${css.container}`);
-    const showbtn=drawernavigator.querySelector(`.${css.showbtn}`);
-    showbtn.onclick=()=>{
-        DrawerView({
+    routes?.forEach(route=>{
+        if(!route.title){route.title=id};
+    });
+
+    
+    if(!renderHeader){
+        const showbtn=drawernavigator.querySelector(`.${css.showbtn}`);
+        showbtn.onclick=()=>{drawernavigator.showDrawer()};
+    }
+    
+
+    drawernavigator.showDrawer=()=>{
+        const {drawerview}=state;
+        drawerview&&drawerview.unmount();
+        state.drawerview=DrawerView({
             parent:drawernavigator,
             routes:routes,
             activeId:state.activeId,
-            onChange:(route)=>{
-                drawernavigator.setRoute(route.id);
-            },
+            drawerClassName:props.drawerClassName,
+            tintColor:props.tintColor||"#1e90ff",
+            onChange:(route)=>{drawernavigator.navigate(route.id)},
+            onHide:()=>{state.drawerview=null},
         });
     }
 
-    drawernavigator.setRoute=(id)=>{
+    drawernavigator.navigate=(id)=>{
         const route=routes.find(route=>route.id===id);
         if(route){
-            const {id,title=id,component,memorize=true,element,scrollTop=0,scrollLeft=0}=route;
+            const {id,component,memorize=true,element,scrollTop=0,scrollLeft=0}=route;
             state.activeId=id;
+            const container=drawernavigator.querySelector(`.${css.container}`);
             container.innerHTML="";
-            titleEl.innerHTML="";
-            titleEl.innerText=title;
+            if(renderHeader){
+                const header=drawernavigator.querySelector(`.${css.header}`);
+                header.innerHTML="";
+                renderHeader&&renderHeader({parent:header,route:{...route}});
+            }
+            else{
+                const titleEl=drawernavigator.querySelector(`.${css.title}`);
+                titleEl.innerHTML="";
+                titleEl.innerText=route.title;
+            }
             if(memorize&&(element instanceof HTMLElement)){
                 container.appendChild(element);
                 element.scrollTop=scrollTop
@@ -59,7 +86,7 @@ export default function DrawerNavigator(props){
             }
         }
     }
-    drawernavigator.setRoute(state.activeId);
+    drawernavigator.navigate(state.activeId);
 
     return drawernavigator;
 }

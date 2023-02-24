@@ -7,7 +7,10 @@
     overflow:hidden auto;
     z-index:2;
 }
-.drawer{
+.routepicker::-webkit-scrollbar{
+    display:none;
+}
+.entry{
     max-width:100%;
     font-size:5em;
     padding:1em;
@@ -16,21 +19,18 @@
     margin-top:0.5em;
     transition:200ms;
 }
-.drawer[active]{
-    color:dodgerblue;
-    background-color:rgba(30,144,255,0.15);
-}
+
 
 @media(hover:none){
-    .drawer:active{
-        background-color:rgba(0,0,0,0.2);
+    .entry:active{
+        background-color:rgba(0,0,0,0.05);
     }
 }
 
 @media(any-hover){
-    .drawer:hover{
+    .entry:hover{
         cursor:pointer;
-        background-color:rgba(0,0,0,0.2);
+        background-color:rgba(0,0,0,0.05);
     }
 }
 

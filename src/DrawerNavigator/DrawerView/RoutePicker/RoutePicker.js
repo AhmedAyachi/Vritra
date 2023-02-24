@@ -3,19 +3,27 @@ import css from "./RoutePicker.module.css";
 
 
 export default function RoutePicker(props){
-    const {parent,id=useId("routepicker"),routes,activeId,onChange}=props;
-    const routepicker=View({parent,id,style:styles.routepicker(),className:css.routepicker});
+    const {parent,id=useId("routepicker"),routes,activeId,tintColor,onChange}=props;
+    const routepicker=View({
+        parent,id,
+        style:styles.routepicker(),
+        className:`${css.routepicker} ${props.className||""}`,
+    });
 
     routepicker.innateHTML=`
         ${map(routes,({id,title})=>`
-            <p id="${id}" class="${css.drawer}" ${id===activeId?"active":""}>${title||id||""}</p>
+            <p 
+                id="${id}" 
+                class="${css.entry}" 
+                ${id===activeId?`style="${styles.entry(tintColor)}"`:""}
+            >${title||id||""}</p>
         `)}
     `;
 
-    const drawerEls=routepicker.querySelectorAll(`.${css.drawer}`);
-    drawerEls.forEach(drawerEl=>{
-        const {id}=drawerEl,route=routes.find(route=>route.id===id);
-        drawerEl.onclick=()=>{
+    const entryEls=routepicker.querySelectorAll(`.${css.entry}`);
+    entryEls.forEach(entryEl=>{
+        const {id}=entryEl,route=routes.find(route=>route.id===id);
+        entryEl.onclick=()=>{
             if(id!==activeId){
                 const activeroute=routes.find(({id})=>activeId===id),{element}=activeroute;
                 if(element instanceof HTMLElement){
@@ -49,5 +57,9 @@ const statics=RoutePicker.statics={
 },styles={
     routepicker:(reversed)=>`
         animation:${css.slideRight} ${statics.duration}ms ${reversed?statics.closeeasing:"ease-in-out"} 1 ${reversed?"reverse":"normal"} forwards;
+    `,
+    entry:(tintColor)=>`
+        color:${tintColor};
+        background-color:${tintColor}26;
     `,
 }

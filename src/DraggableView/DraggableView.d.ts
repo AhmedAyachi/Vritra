@@ -95,7 +95,7 @@ interface DraggableViewPositionSetter extends DraggableViewPosition {
 interface DraggableViewCoords extends DraggableViewPosition {
     /**
      * X-distance relative to last position
-     * @see value is always 0 on onDrop event
+     * @see value is always 0 on onDrag event
      * 
      * \>0 : element went right
      * 
@@ -104,7 +104,7 @@ interface DraggableViewCoords extends DraggableViewPosition {
     dx:Number,
     /**
      * Y-distance relative to last position
-     * @see value is always 0 on onDrop event
+     * @see value is always 0 on onDrag event
      * 
      * \>0 : element went down
      * 

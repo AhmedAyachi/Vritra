@@ -10,16 +10,35 @@ export default function DrawerNavigator(props:ViewProps&{
      * Route component container className
      */
     containerClassName?:string,
+    drawerClassName?:string,
     routes:DrawerNavigatorRoute[],
     /**
      * First chosen route id
      * @default routes[0].id
      */
     initialId?:string,
+    /**
+     * Hexadecimal format required
+     * @default "#1e90ff"
+     */
+    tintColor?:string,
+    /**
+     * For custom header generation
+     * @param container custom header container
+     */
+    renderHeader(props:{parent:HTMLElement,route:DrawerNavigatorRoute}):HTMLElement,
 }):DrawerNavigator;
 
 interface DrawerNavigator extends View {
-    
+    /**
+     * Shows the drawer view
+     */
+    showDrawer():void,
+    /**
+     * Shows a specific route programmatically
+     * @param routeId 
+     */
+    navigate(routeId:string):void,
 }
 
 type DrawerNavigatorRoute={
