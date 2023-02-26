@@ -12,3 +12,9 @@
     border-radius:50%;
     transition:inherit;
 }
+
+@media(any-hover){
+    .switch:hover{
+        cursor:pointer;
+    }
+}

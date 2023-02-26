@@ -54,7 +54,7 @@ type SideBarNavigatorEntry={
      * @param container Content container
      * @returns The content element
      */
-    renderContent:(container:HTMLElement)=>HTMLElement,
+    renderContent(container:HTMLElement):HTMLElement,
     /**
      * If true, the content element returned by renderContent is used
      * @default true

@@ -13,7 +13,7 @@ type ViewProps={
      * bottom : same as beforeend
      * @default "beforeend"
      * @see
-     * For between-elements insertion use addBefore/addAfter
+     * For between-elements insertion, use addBefore/addAfter methods
      */
     position?:"afterbegin"|"beforeend"|"top"|"bottom",
 }
