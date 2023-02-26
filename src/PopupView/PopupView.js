@@ -3,7 +3,7 @@ import css from "./PopupView.module.css";
 
 
 export default function PopupView(props){
-    const {target,parent=target?target.parentNode:document.body,id=useId("popupview"),avoidable=true,keepinDOM,onUnmount}=props;
+    const {parent=document.documentElement,id=useId("popupview"),target,avoidable=true,keepinDOM,onUnmount}=props;
     const popupview=CherryView({
         parent,id,
         style:props.style,
@@ -14,6 +14,7 @@ export default function PopupView(props){
     popupview.innateHTML=`
     `;
 
+    parent.style.position="relative";
     function onTouchScreen(event){
         const {target}=event;
         if(!target.closest(`#${id}`)){
@@ -35,7 +36,7 @@ export default function PopupView(props){
         onUnmount&&onUnmount();
     }
     fadeIn(popupview,200);
-    target&&setTimeout(()=>{Object.assign(popupview.style,getPosition(popupview,target))},0);
+    target&&setTimeout(()=>{Object.assign(popupview.style,getPosition(popupview,target,parent))},0);
     return popupview;
 }
 
@@ -44,17 +45,20 @@ const statics={
     avoidevents:["touchstart","mousedown"],
 }
 
-const getPosition=(popupview,target)=>{
-    const {left:targetLeft,top:targetTop,width:targetWidth,height:targetHeight}=target.getBoundingClientRect();
+const getPosition=(popupview,target,container)=>{
+    const {left,top,width:targetWidth,height:targetHeight}=target.getBoundingClientRect();
+    const {left:containerLeft,top:containerTop}=container.getBoundingClientRect();
+    const targetLeft=left-containerLeft;
+    const targetTop=top-containerTop;
     const {clientWidth:width,clientHeight:height}=popupview,position={};
-    const spacingRight=window.innerWidth-targetLeft+statics.offset;
+    const spacingRight=container.clientWidth-targetLeft+statics.offset;
     if(width<spacingRight){
         position.left=targetLeft-statics.offset;
     }
     else{
         position.right=spacingRight-targetWidth;
     }
-    const spacingBottom=window.innerHeight-targetTop+statics.offset;
+    const spacingBottom=container.clientHeight-targetTop+statics.offset;
     if(height<spacingBottom){
         position.top=targetTop-statics.offset;
     }

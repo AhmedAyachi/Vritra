@@ -1,6 +1,6 @@
 .popupview{
-    position:fixed;
+    position:absolute;
     height:fit-content;
     box-shadow:0px 2px 7px rgba(0,0,0,0.08);
-    z-index:4;
+    z-index:9;
 }

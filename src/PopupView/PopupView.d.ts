@@ -1,12 +1,19 @@
 import {ViewProps,View} from "../View/View";
 
-
+/**
+ * A self-position-adjustment view
+ * @param props 
+ */
 export default function PopupView(props:ViewProps&{
     /**
      * Near which the popupview is shown
-     * @see If target is specified, parent prop is ignored and target.parentNode is used instead
      */
     target?:HTMLElement,
+    /**
+     * If target is specified, parent is the element relative to which the PopupView will adjust its position 
+     * @default document.documentElement
+     */
+    parent?:HTMLElement,
     /**
      * Unmounts the popupview on outside click
      * @default true
