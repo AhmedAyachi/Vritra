@@ -207,13 +207,14 @@ const styles={
     container:({transition,horizontal,pagingEnabled,nodata})=>`
         height:${horizontal?"fit-content":"auto"};
         display:${nodata?"none":"block"};
-        overflow-x:${horizontal?"auto":"hidden"};
         white-space:${horizontal?"nowrap":"normal"};
         ${pagingEnabled?`
-            overflow:visible !important;
+            overflow:visible;
             ${horizontal?`
                 transition:${transition};
             `:""}
-        `:""}
+        `:`
+            overflow-x:${horizontal?"auto":"hidden"};
+        `}
     `,
 }
