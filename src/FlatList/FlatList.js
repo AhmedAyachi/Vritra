@@ -38,7 +38,7 @@ export default function FlatList(props){
             }
             else{
                 state.endreached=true;
-                onReachEnd&&onReachEnd({parent:container,data});
+                onReachEnd&&onReachEnd({container,data:props.data});
             }
         }
     },{root:flatlist,threshold});
@@ -178,14 +178,22 @@ export default function FlatList(props){
         let element;
         if(backwards){
             const {scrollTop,scrollHeight,scrollLeft,scrollWidth}=container;
-            element=container.insertAdjacentElement("afterbegin",renderItem({parent:container,item,index,data}));
+            element=container.insertAdjacentElement("afterbegin",renderItem({
+                parent:container,
+                item,index,
+                data:props.data,
+            }));
             Object.assign(container,{
                 scrollTop:container.scrollHeight-(scrollHeight-scrollTop),
                 scrollLeft:container.scrollWidth-(scrollWidth-scrollLeft),
             });
         }
         else{
-            element=renderItem({parent:container,item,index,data});
+            element=renderItem({
+                parent:container,
+                item,index,
+                data:props.data,
+            });
         }
         state.itemsmap.set(item,element);
         state.itemEl=element;
@@ -197,7 +205,7 @@ export default function FlatList(props){
 
 const styles={
     container:({transition,horizontal,pagingEnabled,nodata})=>`
-        height:${horizontal?"100%":"auto"};
+        height:${horizontal?"fit-content":"auto"};
         display:${nodata?"none":"block"};
         overflow-x:${horizontal?"auto":"hidden"};
         white-space:${horizontal?"nowrap":"normal"};
