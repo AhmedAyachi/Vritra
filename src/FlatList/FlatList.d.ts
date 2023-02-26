@@ -121,8 +121,11 @@ type FlatListProps<Type>=PopupProps<Type>&{
     containerClassName:string,
     popupClassName:string,
     /**
-     * Flatlist data array.
-     * The flatlist doesn't use this array but its shallow copy.
+     * Flatlist data array
+     * 
+     * Items should be unique
+     * 
+     * The flatlist doesn't use this array but its shallow copy
      */
     data:Type[],
 }

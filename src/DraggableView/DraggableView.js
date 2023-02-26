@@ -1,4 +1,4 @@
-import {useId,CherryView,capitalize} from "../index";
+import {useId,CherryView,capitalize,isTouchDevice} from "../index";
 import css from "./DraggableView.module.css";
 
 
@@ -106,4 +106,4 @@ export default function DraggableView(props){
 }
 
 const eventtypes=["drag","move","drop"];
-const isTouchDevice=()=>((("ontouchstart" in window)||(navigator.maxTouchPoints>0)||(navigator.msMaxTouchPoints>0)));
+

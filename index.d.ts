@@ -17,10 +17,15 @@ export {HashRouter} from "./src/HashRouter/HashRouter";
 export {useZoomGesture,usePinchGesture,useSwipeGesture} from "./src/Gestures";
 
 /**
+ * Returns true if this device supports touch gestures
+ */
+export function isTouchDevice():Boolean;
+
+/**
  * returns a random item for an array 
  * @param array
  */
-export function randomItem<type>(array:type[]):type;
+export function randomItem<Type>(array:Type[]):Type;
 
 /**
  * Uses JSON.parse method to parse json parameter but returns null in case of an error
@@ -74,8 +79,8 @@ export function useId(prefix="",separator="_"):String;
  * use useId instead
  */
 export function useRef(prefix:String):String;
-export function groupBy<type>(array:type[],filter:(item:type,index:Number,array:type[])=>any):{predicate:any,items:type[]}[];
-export function map<type>(array:type[],callback:(item:type,index:Number,array:type[])=>String):String;
+export function groupBy<Type>(array:Type[],filter:(item:Type,index:Number,array:Type[])=>any):{predicate:any,items:Type[]}[];
+export function map<Type>(array:Type[],callback:(item:Type,index:Number,array:Type[])=>String):String;
 export function map(iteration:Number,callback:(index:Number)=>String):String;
 
 /**
@@ -143,12 +148,12 @@ export function replaceAt(index:Number,replaceValue:String,targetString:String):
 export function capitalize(str:String,count=0):String;
 
 export function isEmail(str:String):boolean;
-export function getArrayMax<type>(array:type[],start:Number,end:Number):{
-    value:type,
+export function getArrayMax<Type>(array:Type[],start:Number,end:Number):{
+    value:Type,
     index:Number,
 };
-export function removeItem<type>(array:type[],predicate:(item:type,index:Number,array:type[])=>boolean):type;
-export function removeItem<type>(array:type[],item:type):type;
+export function removeItem<Type>(array:Type[],predicate:(item:Type,index:Number,array:Type[])=>boolean):Type;
+export function removeItem<Type>(array:Type[],item:Type):Type;
 /**
  * 
  * @param array array to search
@@ -157,7 +162,7 @@ export function removeItem<type>(array:type[],item:type):type;
  * until it finds one where predicate returns true. If such an element is found,
  * an object containing the element and its index is returned, else null is returned.
 */
-export function findItem<type>(array:type[],predicate:(item:type,index:Number,array:type[])=>boolean):{value:type,index:number};
+export function findItem<Type>(array:Type[],predicate:(item:Type,index:Number,array:Type[])=>boolean):{value:Type,index:number};
 export function replaceAll(target:String,searchValue:String,replaceValue:String):String;
 export function factorial(n:Number):Number;
 /**

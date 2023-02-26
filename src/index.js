@@ -19,6 +19,8 @@ export {useZoomGesture,usePinchGesture,useSwipeGesture} from "./Gestures";
 
 export const randomItem=(array)=>array[Math.floor(Math.random()*array.length)];
 
+export const isTouchDevice=()=>((("ontouchstart" in window)||(navigator.maxTouchPoints>0)||(navigator.msMaxTouchPoints>0)));
+
 export const parseJSON=(json)=>{
     let data=null;
     try{
