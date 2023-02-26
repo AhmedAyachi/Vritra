@@ -16,7 +16,7 @@ export default function Palette(props){
     };
 
     palette.innateHTML=`
-        <img class="${css.button}" alt="Pick" src="${typeof(icon)==="function"?icon(color,2):(icon||"")}"/>
+        <img class="button ${css.button}" alt="Pick" src="${typeof(icon)==="function"?icon(color,2):(icon||"")}"/>
     `;
 
     const button=palette.querySelector(`.${css.button}`);

@@ -8,7 +8,7 @@ export default function Palette(props:ViewProps&{
      */
     icon:string|((color="black",weight=2)=>string),
     /**
-     * initial icon color
+     * default icon color
      * @default "black"
      */
     color?:String,

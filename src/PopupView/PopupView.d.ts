@@ -28,7 +28,7 @@ interface PopupView extends View {
      */
     cleanupEventListeners():void,
     /**
-     * Cleans up the added event listeners and removes the popupview from DOM
+     * Cleans up the event listeners and removes the popupview from DOM
      */
     unmount():void,
 }

@@ -14,7 +14,7 @@ export default function BubblesView(props){
 
     bubblesview.innateHTML=`
         ${map(colors,(color)=>`
-            <div class="${css.bubble}" alt="${color}" style="background-color:${color};"></div>
+            <div class="button ${css.bubble}" alt="${color}" style="background-color:${color};"></div>
         `)}
     `;
 
