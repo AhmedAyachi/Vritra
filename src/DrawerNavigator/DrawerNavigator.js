@@ -1,5 +1,4 @@
 import {useId,CherryView} from "../index";
-/* import CherryView from "../CherryView/CherryView"; */
 import css from "./DrawerNavigator.module.css";
 import DrawerView from "./DrawerView/DrawerView";
 import icon0 from "./Icon_0";
@@ -32,7 +31,7 @@ export default function DrawerNavigator(props){
     `;
 
     routes?.forEach(route=>{
-        if(!route.title){route.title=id};
+        if(!route.title){route.title=route.id};
     });
 
     
