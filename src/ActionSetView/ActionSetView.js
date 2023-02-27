@@ -12,14 +12,17 @@ export default function ActionSetView(props){
     });
 
     actionsetview.innateHTML=`
-        ${map(actions.filter(action=>action.icon),({id,icon,size,alt})=>`
-            <div id="${id}" class="button ${css.action}">
-                <img 
-                    src="${typeof(icon)==="function"?icon(color,2):(icon||"")}" alt="${alt||""}"
-                    ${size?`style="width:${size}em"`:""}
-                />
-            </div>
-        `)}
+        ${map(actions.filter(action=>action.icon),(action)=>{
+            const {id,icon,size,alt}=action;
+            return `
+                <div id="${id}" class="button ${css.action}">
+                    <img 
+                        src="${typeof(icon)==="function"?action.icon(color,2):(icon||"")}" alt="${alt||""}"
+                        ${size?`style="width:${size}em"`:""}
+                    />
+                </div>
+            `
+        })}
     `;
     actions.forEach((action,i)=>{
         const {component}=action;
