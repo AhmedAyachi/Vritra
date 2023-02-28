@@ -1,41 +1,52 @@
-import {getArrayMax} from "../index";
 
 
-export function HashRouter(target=new HTMLElement(),routes){
+export function HashRouter({target,routes,globalize=true}){
     const {history,location}=window;
-    let data=null,route=null;
+    const state={
+        data:null,
+        route:null,//{...,params,data} to store last data and params values
+    };
  
     setRoute();
     window.addEventListener("hashchange",setRoute);
 
-    history.push=(hash,state)=>{
-        if(typeof(hash)==="string"){
-            setData(hash,state);
-            location.hash=hash;
-        }
+    const hashrouter={
+        push:(hash,data)=>{
+            if(typeof(hash)==="string"){
+                state.data=data;
+                location.hash=getDecentHash(hash);
+            }
+        },
+        append:(hash,data)=>{
+            if(typeof(hash)==="string"){
+                state.data=data;
+                location.hash+=getDecentHash(hash);
+            }
+        },
+        replace:(hash,data)=>{
+            if(typeof(hash)==="string"){
+                const oldhash=location.hash;
+                state.data=data;
+                history.replaceState(null,null,`${location.origin}/${getDecentHash(hash)}`);
+                (location.hash!==oldhash)&&setRoute();
+            }
+        },
+        refresh:()=>{
+            const {route}=state;
+            if(route){
+                const {memorize}=route;
+                route.memorize=false;
+                renderRoute(route,target);
+                if(memorize){route.memorize=true};
+            }
+        },
+    };
+    if(globalize){
+        window.HashRouter=hashrouter;
     }
-    history.append=(hash,state)=>{
-        if(typeof(hash)==="string"){
-            setData(hash,state);
-            location.hash+=hash;
-        }
-    }
-    history.replace=(hash,state)=>{
-        if(typeof(hash)==="string"){
-            const oldhash=location.hash;
-            setData(hash,state);
-            history.replaceState(null,null,`${location.origin}/${hash}`);
-            (location.hash!==oldhash)&&setRoute();
-        }
-    }
-
-    location.refresh=()=>{
-        const {hash}=location;
-       hash?location.replace(`#${hash}`):location.reload();
-    }
-
 
     function setRoute(){
+        let {route}=state;
         if(route){
             const {memorize,element}=route;
             if(memorize&&(element instanceof HTMLElement)){
@@ -44,107 +55,130 @@ export function HashRouter(target=new HTMLElement(),routes){
                 scroll.left=element.scrollLeft;
             }
         }
-        route=getRoute();
-        target.innerHTML="";
+        route=getRoute(routes);
         if(route){
-            if(!(typeof(route.restricted)==="function")||route.restricted()){
-                if(route&&(typeof(route.component)==="function")){
-                    const {element,memorize}=route;
-                    if(memorize&&(element instanceof HTMLElement)){
-                        const {scroll}=route;
-                        target.appendChild(element);
-                        element.scrollTo(scroll);
-                    }
-                    else if(typeof(route.component)==="function"){
-                        route.name=route.component.name;
-                        route.element=route.component({parent:target,...data,...(route.state||{})});
-                    }
-                    (typeof(route.onLoad)==="function")&&route.onLoad(data,target);
-                    window.scrollTo(0,0);
+            new Promise(resolve=>{
+                if(typeof(route.restrictor)==="function"){
+                    route.restrictor(resolve,target);
                 }
-            }
-            else{
-                history.back();
-            }   
+                else{
+                    resolve(true);
+                }  
+            }).
+            then(unlocked=>{
+                if(unlocked){
+                    state.route=route;
+                    route.data=state.data;
+                    renderRoute(route,target);
+                }
+                else{
+                    history.back();
+                }
+            }).
+            finally(()=>{
+                state.data=null;
+            });
         }
-        data=null;
-    }
-    function setData(hash,state={}){
-        if(hash&&!hash.startsWith("#")){
-            hash="#"+hash;
+        else{
+            target.innerHTML="";
         }
-        data={
-            ...(state||{}),
-            location:{
-                hash,
-                url:`${location.origin}/${hash}`,
-            },
-        };
     }
     
-    function getPotentialRoutes(hashs){
-        const hashcount=hashs.length;
-        const fullhash=location.hash;
-        let i=0,routecount=routes.length,exactfound;
-        let potentials=[];
-        while((!exactfound)&&(i<routecount)){
-            const route=routes[i],{hash}=route;
-            route.score=0;
-            let routehashs=route.hashs;
-            if(!routehashs){
-                routehashs=route.hashs=getHashs(hash);
-            }
-            if(fullhash===hash){
-                exactfound=true;
-                potentials=[route];
-            }
-            else{
-                if(routehashs.length===hashcount){
-                    const isProbable=routehashs.every((hash,i)=>{
-                        const match=hash===hashs[i];
-                        if(match){
-                            route.score++;
-                        }
-                        return match||hash.startsWith(":");
-                    });
-                    if(isProbable){
-                        potentials.push(route);
-                    }
-                }
-                i++;
-            }
-        }
-        return potentials;
-    }
 
-    function getRoute(){
-        const hashs=getHashs(location.hash);
-        const potentials=getPotentialRoutes(hashs);
-        const potentialcount=potentials.length;
-        let route;
-        if(potentialcount===1){
-            route=potentials[0]||null;
-        }
-        else if(potentialcount){
-            console.log(potentials);
-            const {index}=getArrayMax(potentials.map(({score})=>score));
-            route=potentials[index];
-            
-        }
-        if(route){
-            const state=route.state={};
-            route.hashs.forEach((hash,i)=>{
-                if(hash.startsWith(":")){
-                    const varname=hash.substring(1);
-                    state[varname]=hashs[i];
-                }
-            });
-            if(!route.scroll){
-                route.scroll={top:0,left:0};
-            }
-        }
-        return route;
+    return hashrouter;
+}
+
+const renderRoute=(route,target)=>{
+    const context=getContext(route);
+    target.innerHTML="";
+    const {memorize}=route;
+    let {element}=route;
+    if(memorize&&(element instanceof HTMLElement)){
+        const {scroll}=route;
+        target.appendChild(element);
+        element.scrollTo(scroll);
     }
+    else if(typeof(route.component)==="function"){
+        route.name=route.component.name;
+        element=route.element=route.component({...context,parent:target});
+    }
+    route.onLoaded?.(context);
+    element.onLoaded?.(context);
+    window.scrollTo(0,0);
+}
+
+const getDecentHash=(hash)=>hash.startsWith("#")?hash:("#"+hash);
+
+const getContext=({params,data})=>{
+    let {hash}=location;
+    if(hash&&!hash.startsWith("#")){
+        hash="#"+hash;
+    }
+    const context={
+        params,
+        location:{
+            hash,
+            url:`${location.origin}/${hash}`,
+        },
+    };
+    if(data){
+        context.data=data;
+    }
+    return context;
+}
+
+const getRoute=(routes)=>{
+    const hashs=getHashs(location.hash);
+    const route=findBestRoute(hashs,routes);
+    if(route){
+        const params=route.params={};
+        route.hashs.forEach((hash,i)=>{
+            if(hash.startsWith(":")){
+                const varname=hash.substring(1);
+                params[varname]=hashs[i];
+            }
+        });
+        if(!route.scroll){
+            route.scroll={top:0,left:0};
+        }
+    }
+    return route;
+}
+
+const findBestRoute=(hashs,routes)=>{
+    const hashcount=hashs.length;
+    const fullhash=location.hash;
+    let i=0,routecount=routes.length,exactfound;
+    let bestroute,bestscore=-1;
+    while((!exactfound)&&(i<routecount)){
+        const route=routes[i],{hash}=route;
+        let routehashs=route.hashs;
+        if(!routehashs){
+            routehashs=route.hashs=getHashs(hash);
+        }
+        if(fullhash===hash){
+            exactfound=true;
+            bestroute=route;
+        }
+        else{
+            if(routehashs.length===hashcount){
+                let score=0;
+                const isProbable=routehashs.every((hash,i)=>{
+                    const match=hash===hashs[i];
+                    if(match){
+                        score++;
+                    }
+                    return match||hash.startsWith(":");
+                });
+                if(isProbable&&(score>bestscore)){
+                    bestscore=score;
+                    bestroute=route;
+                }
+            }
+            i++;
+        }
+    }
+    return bestroute;
 }
 
 const getHashs=(hash)=>{
