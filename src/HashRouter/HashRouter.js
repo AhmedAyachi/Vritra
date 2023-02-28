@@ -1,3 +1,5 @@
+import {getArrayMax} from "../index";
+
 
 export function HashRouter(target=new HTMLElement(),routes){
     const {history,location}=window;
@@ -36,7 +38,7 @@ export function HashRouter(target=new HTMLElement(),routes){
     function setRoute(){
         if(route){
             const {memorize,element}=route;
-            if(memorize&&element){
+            if(memorize&&(element instanceof HTMLElement)){
                 const {scroll}=route;
                 scroll.top=element.scrollTop;
                 scroll.left=element.scrollLeft;
@@ -47,7 +49,6 @@ export function HashRouter(target=new HTMLElement(),routes){
         if(route){
             if(!(typeof(route.restricted)==="function")||route.restricted()){
                 if(route&&(typeof(route.component)==="function")){
-                    
                     const {element,memorize}=route;
                     if(memorize&&(element instanceof HTMLElement)){
                         const {scroll}=route;
@@ -80,41 +81,76 @@ export function HashRouter(target=new HTMLElement(),routes){
             },
         };
     }
-    function getRoute(){
-        const hashs=location.hash.split("#").reverse().map(hash=>hash&&("#"+hash));
-        let target=null,routefound=false,i=0;
-        const hashlength=hashs.length,routelength=routes.length;
-        while(!routefound&&(i<hashlength)){
-            let j=0;
-            const thishash=hashs[i];
-            while(!routefound&&(j<routelength)){
-                const route=routes[j];
-                routefound=route.hash===thishash;
-                if(routefound){
-                    target=route;
-                }
-                j++;
+    
+    function getPotentialRoutes(hashs){
+        const hashcount=hashs.length;
+        const fullhash=location.hash;
+        let i=0,routecount=routes.length,exactfound;
+        let potentials=[];
+        while((!exactfound)&&(i<routecount)){
+            const route=routes[i],{hash}=route;
+            route.score=0;
+            let routehashs=route.hashs;
+            if(!routehashs){
+                routehashs=route.hashs=getHashs(hash);
             }
-            if(!routefound&&(i<hashlength-1)){
-                const nexthash=hashs[i+1];
-                j=0;
-                while(!routefound&&(j<routelength)){
-                    const route=routes[j],routehash=route.hash;
-                    routefound=routehash.startsWith(nexthash+"#:");
-                    if(routefound){
-                        const datakey=routehash.substring(nexthash.length+2);
-                        route.state={};
-                        route.state[datakey]=thishash.substring(1);
-                        target=route;
+            if(fullhash===hash){
+                exactfound=true;
+                potentials=[route];
+            }
+            else{
+                if(routehashs.length===hashcount){
+                    const isProbable=routehashs.every((hash,i)=>{
+                        const match=hash===hashs[i];
+                        if(match){
+                            route.score++;
+                        }
+                        return match||hash.startsWith(":");
+                    });
+                    if(isProbable){
+                        potentials.push(route);
                     }
-                    j++;
                 }
+                i++;
             }
-            i++;
         }
-        if(target&&!target.scroll){
-            target.scroll={top:0,left:0};
-        }
-        return target;
+        return potentials;
     }
+
+    function getRoute(){
+        const hashs=getHashs(location.hash);
+        const potentials=getPotentialRoutes(hashs);
+        const potentialcount=potentials.length;
+        let route;
+        if(potentialcount===1){
+            route=potentials[0]||null;
+        }
+        else if(potentialcount){
+            console.log(potentials);
+            const {index}=getArrayMax(potentials.map(({score})=>score));
+            route=potentials[index];
+            
+        }
+        if(route){
+            const state=route.state={};
+            route.hashs.forEach((hash,i)=>{
+                if(hash.startsWith(":")){
+                    const varname=hash.substring(1);
+                    state[varname]=hashs[i];
+                }
+            });
+            if(!route.scroll){
+                route.scroll={top:0,left:0};
+            }
+        }
+        return route;
+    }
+}
+
+const getHashs=(hash)=>{
+    const hashs=hash.split("#");
+    if((hashs.length>1)&&(!hashs[0])){
+        hashs.shift();
+    }
+    return hashs;
 }
