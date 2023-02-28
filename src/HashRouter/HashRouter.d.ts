@@ -19,11 +19,16 @@ export function HashRouter(props:{
 }):HashRouter;
  
 interface HashRouter {
+    /**
+     * Adds an entry to the browser's session history stack 
+     * @param hash 
+     * @param data Data object to pass to the new route component
+     */
     push(hash:string,data:object):void,
     /**
      * Appends the hash to the end of the current hash
      * @param hash Hash to append
-     * @param data 
+     * @param data Data object to pass to the new route component
      */
     append(hash:string,data:object):void,
     /**
