@@ -1,9 +1,30 @@
 
-
-export function HashRouter(props:{
+/**
+ * A HashRouter with nested hash params support
+ * Only one route is shown at a time
+ * 
+ * Prioritizes exact matches
+ * 
+ * If more than one route matches the hash, the first one is picked
+ * @param options HashRouter options
+ */
+export function HashRouter(options:{
+    /**
+     * Element to insert the route component element in
+     */
     target:HTMLElement,
     routes:[{
-        hash:String,
+        /**
+         * Route hash
+         * @example "#one"
+         * @for hash params use "#:"
+         * @examples
+         * 1) #:something
+         * 2) #things#:name
+         * @for nested hash params, just add more params, like this :
+         * @#categry#:things#:name
+         */
+        hash:string,
         memorize:boolean,
         restrictor:(unlock:(unlocked:boolean)=>void,target:HTMLElement)=>void,
         onLoaded(context:HashRouteContext&{target:HTMLElement}):void,
