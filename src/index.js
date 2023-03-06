@@ -238,7 +238,7 @@ export const replaceAt=(index=0,replaceValue="",targetString="")=>targetString.s
 
 export const capitalize=(str="",count=0)=>str.split(" ").map((word,i)=>{
     const capitalized=(!count)||(i<count);
-    return capitalized?word[0].toUpperCase()+word.substring(1):word
+    return (capitalized&&word.length)?(word[0].toUpperCase()+word.substring(1)):word;
 }).join(" ");
 
 export const isEmail=(str)=>{
