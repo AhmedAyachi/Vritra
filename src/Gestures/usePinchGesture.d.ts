@@ -26,5 +26,8 @@ interface PinchEvent extends TouchEvent {
     dx:Number,
     dy:Number,
     distance:Number,
+    /**
+     * Gesture delta time in milliseconds
+     */
     dtime:Number,
 }

@@ -1,6 +1,6 @@
 
 
-export default function useSwipeGesture(params:{
+export default function useSwipeGesture(options:{
     element:HTMLElement,
     /**
      * Minimum swipe length in pixels from start position to the end position that triggers listeners
