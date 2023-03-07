@@ -17,7 +17,7 @@ export {HashRouter} from "./src/HashRouter/HashRouter";
 export {useZoomGesture,usePinchGesture,useSwipeGesture} from "./src/Gestures";
 
 /**
- * Returns true if this device supports touch gestures
+ * Returns true if device supports touch gestures
  */
 export function isTouchDevice():Boolean;
 
@@ -33,7 +33,12 @@ export function randomItem<Type>(array:Type[]):Type;
  */
 export function parseJSON(json:String):any|null;
 
-export function useBlobImageData(blob:Blob,callback:(imageData:ImageData)=>void):ImageData;
+/**
+ * Extratcts ImageData from Blob
+ * @param blob 
+ * @param callback 
+ */
+export function useBlobImageData(blob:Blob,callback:(imageData:ImageData)=>void):void;
 
 /**
  * Returns the duration between two times in seconds
@@ -46,7 +51,7 @@ export function useBlobImageData(blob:Blob,callback:(imageData:ImageData)=>void)
 export function getTimeDuration(start:String,end:String):Number;
 
 /**
- * returns an array of objects representing the months of the year;
+ * returns an array of objects representing the months of the year
  * @param isLeapYear
  * if true, february length value would be 29 else 28
  * @default false
@@ -61,7 +66,7 @@ export function getMonths(isLeapYear=false):{name:String,length:Number}[];
 export function isLeapYear(year?:Number):Boolean;
 
 /**
- * returns an array containing the 7 days of the week
+ * returns an array containing the 7 days of the week with start as first day
  * @param start first day of the week
  * @default "monday"
  */
