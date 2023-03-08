@@ -27,12 +27,22 @@ export default class CherryMap extends Map {
         return Object.freeze([...super.values()]);
     }
 
+    entries(){
+        const entries=Object.freeze([...super.entries()]);
+        entries.forEach(Object.freeze);
+        return entries;
+    }
+
     valuesAsIterableIterator(){
         return super.values();
     }
 
     keysAsIterableIterator(){
         return super.keys();
+    }
+
+    entriesAsIterableIterator(){
+        return super.entries();
     }
 
     get length(){

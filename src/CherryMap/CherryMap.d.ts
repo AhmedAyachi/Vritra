@@ -25,6 +25,14 @@ export default class CherryMap extends Map {
      */
     valuesAsIterableIterator():IterableIterator<any>;
     /**
+     * Returns a frozen array of frozen key, value pairs for every entry in the map
+     */
+    entries():Array<[any,any]>;
+    /**
+     * Returns an iterable of key, value pairs for every entry in the map
+     */
+    entriesAsIterableIterator():IterableIterator<[any,any]>;
+    /**
      * Same as size property
      */
     readonly length:Number;
