@@ -5,7 +5,7 @@
 }
 .action{
     position:relative;
-    display:inline;
+    display:inline-block;
     margin-left:var(--spacing);
 }
 .action:first-of-type{
