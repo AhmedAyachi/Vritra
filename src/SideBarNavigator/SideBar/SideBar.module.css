@@ -26,15 +26,26 @@
 .entryexplorer::-webkit-scrollbar{
     display:block;
 }
-.entryexplorer::-webkit-scrollbar-track{
-    background-color:rgba(0,0,0,0.05);
-}
 .entryexplorer::-webkit-scrollbar-thumb{
-    background-color:rgba(0,0,0,0.1);
     transition:150ms;
 }
-.entryexplorer::-webkit-scrollbar-thumb:active{
+.darkexplorer::-webkit-scrollbar-track{
+    background-color:rgba(0,0,0,0.05);
+}
+.darkexplorer::-webkit-scrollbar-thumb{
+    background-color:rgba(0,0,0,0.1);
+}
+.darkexplorer::-webkit-scrollbar-thumb:active{
     background-color:rgba(0,0,0,0.2);
+}
+.lightexplorer::-webkit-scrollbar-track{
+    background-color:rgba(255,255,255,0.05);
+}
+.lightexplorer::-webkit-scrollbar-thumb{
+    background-color:rgba(255,255,255,0.1);
+}
+.lightexplorer::-webkit-scrollbar-thumb:active{
+    background-color:rgba(255,255,255,0.2);
 }
 .bartoggler{
     position:absolute;

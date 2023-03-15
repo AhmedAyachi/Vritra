@@ -21,6 +21,7 @@ export default function SideBarNavigator(props){
         parent:sidebarnavigator,entries,
         className:props.sidebarClassName,
         tintColor,folderColor,endpointColor,
+        scrollTheme:props.sideBarScrollTheme,
     });
 
 

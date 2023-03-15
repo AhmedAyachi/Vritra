@@ -18,6 +18,10 @@ export default function SideBarNavigator(props:ViewProps&{
      * @default rgba(0,0,0,0.35)
      */
     endpointColor?:string,
+    /**
+     * @default "dark"
+     */
+    sideBarScrollTheme:"light"|"dark",
     onNavigate(currentId:String,previousId:String|null):void,
 }):SideBarNavigator;
 

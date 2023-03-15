@@ -5,7 +5,7 @@ import icon0 from "./Icon_0";
 
 
 export default function SideBar(props){
-    const {parent,id=useId("sidebar"),entries,tintColor}=props;
+    const {parent,id=useId("sidebar"),entries,tintColor,scrollTheme="dark"}=props;
     const sidebar=View({parent,id,position:"top",className:`${css.sidebar} ${props.className||""}`}),state={
         shown:true,
         width:sidebar.clientWidth,
@@ -22,7 +22,7 @@ export default function SideBar(props){
     EntryExplorer({
         ...props,entries,
         parent:sidebar,
-        className:css.entryexplorer,
+        className:`${css.entryexplorer} ${css[scrollTheme+"explorer"]||""}`,
     });
 
     const bartoggler=sidebar.querySelector(`.${css.bartoggler}`);
