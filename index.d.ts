@@ -152,7 +152,7 @@ export function replaceAt(index:Number,replaceValue:String,targetString:String):
  */
 export function capitalize(str:String,count=0):String;
 
-export function isEmail(str:String):boolean;
+export function isEmail(str:String):Boolean;
 export function getArrayMax<Type>(array:Type[],start:Number,end:Number):{
     value:Type,
     index:Number,
@@ -167,7 +167,7 @@ export function removeItem<Type>(array:Type[],item:Type):Type;
  * until it finds one where predicate returns true. If such an element is found,
  * an object containing the element and its index is returned, else null is returned.
 */
-export function findItem<Type>(array:Type[],predicate:(item:Type,index:Number,array:Type[])=>boolean):{value:Type,index:number};
+export function findItem<Type>(array:Type[],predicate:(item:Type,index:Number,array:Type[])=>boolean):{value:Type,index:Number};
 export function replaceAll(target:String,searchValue:String,replaceValue:String):String;
 export function factorial(n:Number):Number;
 /**
