@@ -6,6 +6,7 @@
 .action{
     position:relative;
     display:inline-block;
+    vertical-align:middle;
     margin-left:var(--spacing);
 }
 .action:first-of-type{
