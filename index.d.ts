@@ -16,6 +16,29 @@ export {default as CherryMap} from "./src/CherryMap/CherryMap";
 export {HashRouter} from "./src/HashRouter/HashRouter";
 export {useZoomGesture,usePinchGesture,useSwipeGesture} from "./src/Gestures";
 
+
+/**
+ * 
+ * @param date supported delimiters: "/" "-" " " ","
+ * @param format date format:
+ * 
+ * "dmy" : day-month-year
+ * 
+ * "mdy" : month-day-year
+ * 
+ * "ymd" : year-month-day
+ * @default "dmy"
+ * @param offset 
+ * 
+ * 1 will return tomorrow's date
+ * 
+ * -1 will return yesterday's date
+ * @default 1
+ * @returns a date with the chosen format
+ */
+export function getAdjacentDate(date:String,format:"dmy"|"mdy"|"ymd",offset=1):String;
+export function getAdjacentDate(date:String,offset=1):String;
+
 /**
  * Returns true if device supports touch gestures
  */

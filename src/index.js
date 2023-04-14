@@ -16,6 +16,29 @@ export {default as CherryMap} from "./CherryMap/CherryMap";
 export {HashRouter} from "./HashRouter/HashRouter";
 export {useZoomGesture,usePinchGesture,useSwipeGesture} from "./Gestures";
 
+export const getAdjacentDate=(str,...args)=>{
+    const format=args.find(arg=>typeof(arg)==="string")||"dmy";
+    const offset=args.find(arg=>typeof(arg)==="number")||1;
+    if(format!=="ymd"){
+        const parts=str.split(/-| |\/|,/g).slice(0,3);
+        switch(format){
+            case "dmy": parts.reverse();break;
+            case "mdy": parts.unshift(parts.pop());break;
+            default:break;
+        }
+        str=parts.join("-");
+    }
+    const date=new Date(new Date(str).getTime()+86400000*offset);
+    const day=date.getDate(),month=date.getMonth()+1,year=date.getFullYear();
+    let parts;
+    switch(format){
+        case "mdy":parts=[month,day,year];break; 
+        case "ymd":parts=[year,month,day];break;
+        case "dmy":
+        default:parts=[day,month,year];break;
+    }
+    return parts.map(part=>`${part<10?"0":""}${part}`).join("/");
+}
 
 export const randomItem=(array)=>array[Math.floor(Math.random()*array.length)];
 
