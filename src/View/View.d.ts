@@ -8,14 +8,25 @@ type ViewProps={
     className?:String,
     style?:String,
     /**
-     * top : same as afterbegin
+     * Sets the element initial location.
      * 
-     * bottom : same as beforeend
+     * start : at the beginning of the parent
+     * 
+     * end : at the end of the parent
+     * @default "end"
+     * @see For between-elements insertion, use adjacentTo method
+     */
+    at?:"start"|"end";
+    /**
+     * start/top : same as afterbegin
+     * 
+     * end/bottom : same as beforeend
      * @default "beforeend"
      * @see
      * For between-elements insertion, use addBefore/addAfter methods
+     * @deprecated Use the at prop instead
      */
-    position?:"afterbegin"|"beforeend"|"top"|"bottom",
+    position?:"start"|"end"|"afterbegin"|"beforeend"|"top"|"bottom",
 }
 
 interface View extends HTMLDivElement {
@@ -28,22 +39,33 @@ interface View extends HTMLDivElement {
      */
     afterBeginHTML:string,
     /**
-     * Sets the HTML or XML markup contained within the element.
+     * Sets safely the HTML or XML markup contained within the element.
+     * @see Removes script/style elements and any element that has at least one attribute starting with "on".
      */
     innateHTML:string,
-    /**
-     * @param element Element before which the view is inserted 
-     * @returns The current view
-     */
-    addBefore(element:Element):View,
-    /**
-     * @param element Element after which the view is inserted 
-     * @returns The current view
-     */
-    addAfter(element:Element):View,
     /**
      * Replaces the view by another node and returns the substitute
      * @param substitute 
      */
     substitute<type>(substitute:type):type,
+    /**
+     * Inserts the view before or after an element
+     * @param element Element before/after which the view is inserted
+     * @param before if true the view is inserted before the element otherwise after
+     * @default false
+     * @returns The current view
+     */
+    adjacentTo(element:Element,before:boolean):View,
+    /**
+     * @param element Element before which the view is inserted 
+     * @returns The current view
+     * @deprecated
+     */
+    addBefore(element:Element):View,
+    /**
+     * @param element Element after which the view is inserted 
+     * @returns The current view
+     * @deprecated
+     */
+    addAfter(element:Element):View,
 }
