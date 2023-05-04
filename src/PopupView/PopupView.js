@@ -7,7 +7,7 @@ export default function PopupView(props){
     const popupview=CherryView({
         parent,id,
         style:props.style,
-        position:props.position,
+        at:props.at,
         className:`${css.popupview} ${props.className||""}`,
     });
 

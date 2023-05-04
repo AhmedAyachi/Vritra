@@ -1,11 +1,7 @@
 import {View,ViewProps} from "../View/View";
 
 
-export default function DraggableView(props:{
-    parent:HTMLElement,
-    id?:String,
-    className?:String,
-    style?:String,
+export default function DraggableView(props:ViewProps&{
     position:DraggableViewPositionSetter,
     /**
      * Sets the DraggableView boundaries

@@ -8,7 +8,7 @@ export default function SideBarNavigator(props){
     const sidebarnavigator=CherryView({
         parent,id,
         style:props.style,
-        position:props.position,
+        at:props.at,
         className:`${css.sidebarnavigator} ${props.className||""}`,
     }),state={
         current:null,

@@ -8,7 +8,7 @@ export default function AccordionView(props){
     const {parent,id=useId("accordionview"),headerStyle,renderHeader,indicator=icon,renderContent,actions,color="black",memorize=true,separate,onOpen,onClose}=props;
     const accordionview=CherryView({
         parent,id,
-        position:props.position,
+        at:props.at,
         className:`${css.accordionview} ${props.className||""}`,
         style:`opacity:${props.locked?0.5:1};${props.style||""}`,
     }),state={

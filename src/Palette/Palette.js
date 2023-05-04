@@ -9,7 +9,7 @@ export default function Palette(props){
     const palette=CherryView({
         parent,id,
         style:props.style,
-        position:props.position,
+        at:props.at,
         className:`${css.palette} ${props.className}`,
     }),state={
         bubblesview:null,

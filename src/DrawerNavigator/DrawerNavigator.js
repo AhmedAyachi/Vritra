@@ -9,7 +9,7 @@ export default function DrawerNavigator(props){
     const drawernavigator=CherryView({
         parent,id,
         style:props.style,
-        position:props.position,
+        at:props.at,
         className:`${css.drawernavigator} ${props.className}`,
     }),state={
         activeId:initialId&&routes.some(({id})=>initialId===id)?initialId:routes[0].id,

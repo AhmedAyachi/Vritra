@@ -7,7 +7,7 @@ export default function Switch(props){
     const switchEl=CherryView({
         parent,id,
         style:props.style,
-        position:props.position,
+        at:props.at,
         className:`${css.switch} ${props.className}`,
     }),state={
         active:!Boolean(props.active),

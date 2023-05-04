@@ -6,7 +6,7 @@ export default function ActionSetView(props){
     const {parent,id=useId("actionsetview"),actions,color="black"}=props;
     const actionsetview=CherryView({
         parent,id,
-        position:props.position,
+        at:props.at,
         style:props.style,
         className:`${css.actionsetview} ${props.className||""}`,
     });

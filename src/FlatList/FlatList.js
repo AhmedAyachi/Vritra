@@ -4,8 +4,8 @@ import EmptyIndicator from "./EmptyIndicator/EmptyIndicator";
 
 
 export default function FlatList(props){
-    const {parent,ref=useId("flatlist"),id=ref,position,style,className,containerClassName,popupClassName,emptymessage,renderItem,onReachEnd,onRemoveItem,onAddItems,horizontal,backwards,pagingEnabled=false,threshold=0.5,transition="250ms",onSwipe}=props;
-    const flatlist=CherryView({parent,id,position,style,className:`${css.flatlist} ${className||""}`}),state={
+    const {parent,ref=useId("flatlist"),id=ref,at,style,className,containerClassName,popupClassName,emptymessage,renderItem,onReachEnd,onRemoveItem,onAddItems,horizontal,backwards,pagingEnabled=false,threshold=0.5,transition="250ms",onSwipe}=props;
+    const flatlist=CherryView({parent,id,at,style,className:`${css.flatlist} ${className||""}`}),state={
         data:Array.isArray(props.data)&&[...props.data],
         index:null,//last created element index
         itemEl:null,//last created element (observed)

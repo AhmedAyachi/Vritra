@@ -17,16 +17,6 @@ type ViewProps={
      * @see For between-elements insertion, use adjacentTo method
      */
     at?:"start"|"end";
-    /**
-     * start/top : same as afterbegin
-     * 
-     * end/bottom : same as beforeend
-     * @default "beforeend"
-     * @see
-     * For between-elements insertion, use addBefore/addAfter methods
-     * @deprecated Use the at prop instead
-     */
-    position?:"start"|"end"|"afterbegin"|"beforeend"|"top"|"bottom",
 }
 
 interface View extends HTMLDivElement {
