@@ -3,22 +3,21 @@ import HtmlSanitizer from "./HtmlSanitizer";
 
 
 export default function View(props){
-    const {parent,id=useId("view"),className,style,at=props.position||"end"}=props;
-    parent.insertAdjacentHTML(getPosition(at),`<div id="${id}" ${className?`class="${className}"`:""} ${style?`style="${style}"`:""}></div>`);
+    const {parent,id=useId("view"),className,style,at}=props;
+    parent.insertAdjacentHTML(at==="start"?"afterbegin":"beforeend",`<div id="${id}" ${className?`class="${className}"`:""} ${style?`style="${style}"`:""}></div>`);
     const view=parent.querySelector(`#${id}`);
 
-    view.innerHTML=`
-    `;
+    view.innerHTML="";
 
     Object.defineProperties(view,{
-        beforeEndHTML:{set:(html)=>{
-            view.insertAdjacentHTML("beforeend",html);
-        }},
-        afterBeginHTML:{set:(html)=>{
-            view.insertAdjacentHTML("afterbegin",html);
-        }},
         innateHTML:{set:(html)=>{
             view.innerHTML=HtmlSanitizer.sanitizeHtml(html);
+        }},
+        beforeEndHTML:{set:(html)=>{
+            view.insertAdjacentHTML("beforeend",HtmlSanitizer.sanitizeHtml(html));
+        }},
+        afterBeginHTML:{set:(html)=>{
+            view.insertAdjacentHTML("afterbegin",HtmlSanitizer.sanitizeHtml(html));
         }},
         substitute:{value:(element)=>{
             view.replaceWith(element);
@@ -39,14 +38,4 @@ export default function View(props){
     });
 
     return view;
-}
-
-const getPosition=(position)=>{
-    switch(position){
-        case "top": 
-        case "start": return "afterbegin";
-        case "bottom": 
-        case "end": return "beforeend";
-        default: return position;
-    }
 }

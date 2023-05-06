@@ -31,14 +31,14 @@ export default new (function(){
 					let i=0;
 					while(newNode&&(i<attrcount)){
 						const attr=attributes[i],{name}=attr;
-						if(name.startsWith("on")){newNode=null}
+						if(name.startsWith("on")){newNode=null;continue}
 						if(newNode&&(!attributeBlackList[name])){
 							const {value}=attr;
 							if(name==="style"){
-								if(hasJavascriptScheme(value)){newNode=null};
+								if(hasJavascriptScheme(value)){newNode=null;continue};
 							}
 							else if(uriAttributes[name]){
-								if(value.includes(":")&&(!startsWithAny(value,schemaWhiteList))){newNode=null};
+								if(value.includes(":")&&(!startsWithAny(value,schemaWhiteList))){newNode=null;continue};
 							}
 							newNode?.setAttribute(attr.name,value);
 						}

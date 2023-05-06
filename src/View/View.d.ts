@@ -21,18 +21,26 @@ type ViewProps={
 
 interface View extends HTMLDivElement {
     /**
-     * Inserts the HTML or XML markup at the end of the element.
+     * Sets safely the HTML or XML markup contained within the element.
+     * 
+     * Removes script/style elements.
+     * 
+     * Removes any element that has at least one attribute starting with "on".
+     * 
+     * Removes any element whose style attribute containes "javascript:"
+     * 
+     * Removes any element whose href attribute does not start with ["http:","https:","data:","m-files:","file:","ftp:","mailto:","pw:"]
+     * @see Safer version of innerHTML
+     */
+    innateHTML:string,
+    /**
+     * Inserts safely the HTML or XML markup at the end of the element.
      */
     beforeEndHTML:string,
     /**
-     * Inserts the HTML or XML markup at the beginning of the element.
+     * Inserts safely the HTML or XML markup at the beginning of the element.
      */
     afterBeginHTML:string,
-    /**
-     * Sets safely the HTML or XML markup contained within the element.
-     * @see Removes script/style elements and any element that has at least one attribute starting with "on".
-     */
-    innateHTML:string,
     /**
      * Replaces the view by another node and returns the substitute
      * @param substitute 
