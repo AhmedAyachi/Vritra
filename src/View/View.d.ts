@@ -4,9 +4,16 @@ export default function View(props:ViewProps):View;
 
 type ViewProps={
     parent:HTMLElement,
+    /**
+     * @default useId("view")
+     */
     id?:String,
     className?:String,
     style?:String,
+    /**
+     * @default "div"
+     */
+    tag?:keyof HTMLElementTagNameMap,
     /**
      * Sets the element initial location.
      * 

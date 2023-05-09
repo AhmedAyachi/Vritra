@@ -3,11 +3,12 @@ import HtmlSanitizer from "./HtmlSanitizer";
 
 
 export default function View(props){
-    const {parent,id=useId("view"),className,style,at}=props;
-    parent.insertAdjacentHTML(at==="start"?"afterbegin":"beforeend",`<div id="${id}" ${className?`class="${className}"`:""} ${style?`style="${style}"`:""}></div>`);
-    const view=parent.querySelector(`#${id}`);
-
-    view.innerHTML="";
+    const {parent,id=useId("view"),className,style,at,tag}=props;
+    const view=document.createElement(tag||"div");
+    view.id=id;
+    view.className=className;
+    view.setAttribute("style",style);
+    (at==="start")?parent.insertAdjacentElement("afterbegin",view):parent.appendChild(view);
 
     Object.defineProperties(view,{
         innateHTML:{set:(html)=>{
