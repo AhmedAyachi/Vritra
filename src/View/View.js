@@ -7,7 +7,7 @@ export default function View(props){
     const view=document.createElement(tag||"div");
     view.id=id;
     view.className=className;
-    view.setAttribute("style",style);
+    style&&(typeof(style)==="string")&&view.setAttribute("style",style);
     (at==="start")?parent.insertAdjacentElement("afterbegin",view):parent.appendChild(view);
 
     Object.defineProperties(view,{
