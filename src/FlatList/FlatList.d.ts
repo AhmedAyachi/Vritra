@@ -5,7 +5,7 @@ export default function FlatList<Type>(props:FlatListProps<Type>):FlatList<Type>
 
 interface FlatList<Type> extends View {
     /**
-     * Returns the popup flatlist 
+     * Returns the flatlist items container element 
      */
     readonly container:HTMLElement,
     /**
