@@ -16,6 +16,39 @@ export {default as CherryMap} from "./CherryMap/CherryMap";
 export {HashRouter} from "./HashRouter/HashRouter";
 export {useZoomGesture,usePinchGesture,useSwipeGesture} from "./Gestures";
 
+export const interpolate=(invalue,inrange,outrange,extrapolationType="extend")=>{
+    const {length}=inrange;
+    if((length>1)&&outrange.length===length){
+        let inmin,inmax;
+        let outmin,outmax;
+        if(length===2){
+            [inmin,inmax]=inrange;
+            [outmin,outmax]=outrange;
+        }
+        else{
+            let {index,value}=findItem(inrange,(item)=>item<invalue,true)||{value:inrange[0],index:0};
+            if(index>=(length-1)){
+                index=length-2;
+                value=inrange[length-2];
+            }
+            inmin=value;
+            inmax=inrange[index+1];
+            outmin=outrange[index];
+            outmax=outrange[index+1];
+        }
+        let outvalue=outmin+((invalue-inmin)/(inmax-inmin))*(outmax-outmin);
+        if(extrapolationType!=="extend"){
+            const clamp=extrapolationType==="clamp";
+            if(outvalue>outmax){outvalue=clamp?outmax:invalue}
+            else if(outvalue<outmin){outvalue=clamp?outmin:invalue};
+        }
+        return outvalue;
+    }
+    else{
+        throw "inrange and outrange must be of same length >=2";
+    }
+}
+
 export const getAdjacentDate=(str,...args)=>{
     const format=args.find(arg=>typeof(arg)==="string")||"dmy";
     const offset=args.find(arg=>typeof(arg)==="number")||1;
@@ -320,16 +353,17 @@ export const removeItem=(array,predicate)=>{
     return item;
 };
 
-export const findItem=(array=[],predicate)=>{
+export const findItem=(array=[],predicate,descending)=>{
     let item=null;
     if(Array.isArray(array)&&array.length){
         const {length}=array;
         let found=false,i=0;
         while((!found)&&(i<length)){
-            const target=array[i];
-            if(predicate(target,i,array)){
+            const index=descending?length-i-1:i;
+            const target=array[index];
+            if(predicate(target,index,array)){
                 found=true;
-                item={value:target,index:i}
+                item={value:target,index}
             };
             i++;
         }

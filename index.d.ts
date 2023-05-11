@@ -19,6 +19,28 @@ export {useZoomGesture,usePinchGesture,useSwipeGesture} from "./src/Gestures";
 
 /**
  * 
+ * @param invalue 
+ * Value from within the input range that should be mapped to a value from the output range
+ * @param inrange 
+ * An array of numbers that contains points that indicate the range of the input value. 
+ * Values in the input range should be increasing
+ * @param outrange 
+ * An array of numbers that contains points that indicate the range of the output value. 
+ * It should have the exact same number of points as the input range.
+ * @param extrapolationType >
+ * - extend : approximates the value even outside of the range
+ * - clamp : clamps the value to the edge of the output range
+ * - identity : returns the value that is being interpolated
+ * @default "extend"
+ */
+export function interpolate(
+    invalue:number,
+    inrange:number[],
+    outrange:number[],
+    extrapolationType:"extend"|"clamp"|"identity",
+):Number;
+
+/**
  * @param date supported delimiters: "/" "-" " " ","
  * @param format date format:
  * 
@@ -151,6 +173,7 @@ export function fadeOut(element:HTMLElement,callback:()=>void):void;
  * display: element display (flex,block,...), default: block
  * duration: fade duration in ms, default: 200
  * @param callback 
+ * @deprecated
  */
 export function toggle(
     element:HTMLElement,
@@ -189,8 +212,13 @@ export function removeItem<Type>(array:Type[],item:Type):Type;
  * Calls predicate once for each element of the array, in ascending order, 
  * until it finds one where predicate returns true. If such an element is found,
  * an object containing the element and its index is returned, else null is returned.
+ * @param descending default to false
 */
-export function findItem<Type>(array:Type[],predicate:(item:Type,index:Number,array:Type[])=>boolean):{value:Type,index:Number};
+export function findItem<Type>(
+    array:Type[],
+    predicate:(item:Type,index:Number,array:Type[])=>boolean,
+    descending:boolean,
+):{value:Type,index:Number};
 export function replaceAll(target:String,searchValue:String,replaceValue:String):String;
 export function factorial(n:Number):Number;
 /**
