@@ -12,7 +12,6 @@ interface FlatList<Type> extends View {
      * Scrolls to item at index
      * @param index 
      * @param smooth default: true
-     * @see Only available when horizontal true
      */
     scrollToIndex(index:number,smooth:boolean):void,
     /**
@@ -73,9 +72,6 @@ type PopupProps<Type>=ViewProps&{
      * Still not supported with pagingEnabled true.
      */
     backwards:boolean,
-    /**
-     * Only with horizontal true.
-     */
     pagingEnabled:boolean,
     /**
      * A number in range 0..1.
