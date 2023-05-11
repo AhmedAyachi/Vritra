@@ -14,7 +14,7 @@ interface FlatList<Type> extends View {
      * @param smooth default: true
      * @see Only available when horizontal true
      */
-    scrollToIndex(index:number,smooth=true):void,
+    scrollToIndex(index:number,smooth:boolean):void,
     /**
      * Appends more data items to the data array
      * @param items 
@@ -27,14 +27,14 @@ interface FlatList<Type> extends View {
      * @param withElement if true removes the html element associated with the item. Default: true.
      * @returns the removed data {item,element}
      */
-    removeItem(predicate:(item:Type,index:Number,data:Type[])=>Boolean,withElement:Boolean=true):ItemData<Type>,
+    removeItem(predicate:(item:Type,index:Number,data:Type[])=>Boolean,withElement:boolean):ItemData<Type>,
     /**
      * Removes item if found
      * @param item item to remove
      * @param withElement if true removes the html element associated with the item. Default: true
      * @returns the removed data {item,element}
      */
-    removeItem(item:any,withElement:Boolean=true):ItemData<Type>,
+    removeItem(item:any,withElement:boolean):ItemData<Type>,
     /**
      * Creates a flatlist on top of the original flatlist as a popup using the same props
      * @param items data to show
@@ -58,6 +58,9 @@ interface FlatList<Type> extends View {
 }
 
 type PopupProps<Type>=ViewProps&{
+    /**
+     * @see Do not forget to set the item element display to inline 
+     */
     horizontal:boolean,
     /**
      * Message to show when the flatlist is empty.
