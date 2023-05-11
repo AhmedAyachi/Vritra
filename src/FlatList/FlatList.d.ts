@@ -1,4 +1,5 @@
 import {View,ViewProps} from "../View/View";
+import {SwipeEvent} from "../Gestures/useSwipeGesture";
 
 
 export default function FlatList<Type>(props:FlatListProps<Type>):FlatList<Type>;
@@ -72,7 +73,18 @@ type PopupProps<Type>=ViewProps&{
      * Still not supported with pagingEnabled true.
      */
     backwards:boolean,
+    /**
+     * Item element should have a specified height/width value (depending on the horizontal prop value)
+     * for the paging to function properly
+     */
     pagingEnabled:boolean,
+    /**
+     * When false, the flatlist cannot be scrolled via touch interaction.
+     * 
+     * Used with pagingEnabled true
+     * @default true
+     */
+    swipeEnabled:boolean,
     /**
      * A number in range 0..1.
      * The visiblity fraction of an element in order to create the next one.
@@ -93,12 +105,17 @@ type PopupProps<Type>=ViewProps&{
       * Must return a HTMLElement
       * @param props component props
       */
-    renderItem(props:{parent:HTMLElement,item:Type,index:Number,data:Type[]}):HTMLElement,
+    renderItem(props:{
+        parent:HTMLDivElement,
+        item:Type,
+        index:Number,
+        data:Type[],
+    }):HTMLElement,
     /**
      * Used with pagingEnabled true.
      * @param params 
      */
-    onSwipe(params:{direction:"left"|"right",index:Number,container:HTMLElement}):void,
+    onSwipe(event:FlatListSwipeEvent):void,
     /**
      * Triggered each time addItems method called;
      * @param items added items array
@@ -141,4 +158,7 @@ type ItemData<Type>={
     element:HTMLElement|null,
 }
 
-/* type renderItem<Type>=(props:{parent:HTMLElement,item:Type,index:Number,data:Type[]})=>HTMLElement; */
+type FlatListSwipeEvent=SwipeEvent&{
+    readonly index:Number,
+    readonly container:HTMLDivElement,
+}

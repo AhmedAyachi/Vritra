@@ -4,7 +4,7 @@ import EmptyIndicator from "./EmptyIndicator/EmptyIndicator";
 
 
 export default function FlatList(props){
-    const {parent,id=useId("flatlist"),emptymessage,renderItem,horizontal,backwards,pagingEnabled,threshold=0.5,transition="250ms",onReachEnd,onRemoveItem,onAddItems,onSwipe}=props;
+    const {parent,id=useId("flatlist"),emptymessage,renderItem,horizontal,backwards,pagingEnabled,swipeEnabled=true,threshold=0.5,transition="250ms",onReachEnd,onRemoveItem,onAddItems,onSwipe}=props;
     const flatlist=CherryView({
         parent,id,
         at:props.at,
@@ -59,12 +59,12 @@ export default function FlatList(props){
     if(pagingEnabled){
         container.style.overflow="visible";
         flatlist.style.overflow="hidden";
-        useSwipeGesture({
+        swipeEnabled&&useSwipeGesture({
             element:flatlist,
-            onSwipe:({axis,direction})=>{if((horizontal&&(axis==="horizontal"))||((!horizontal)&&(axis==="vertical"))){
+            onSwipe:(event)=>{if((horizontal&&(event.axis==="horizontal"))||((!horizontal)&&(event.axis==="vertical"))){
                 const {focus}=state;
                 let index;
-                switch(direction){
+                switch(event.direction){
                     case "top":
                     case "left":
                         const {itemsmap}=state;
@@ -78,7 +78,8 @@ export default function FlatList(props){
                 }
                 if(index!==undefined){
                     flatlist.scrollToIndex(index);
-                    onSwipe&&onSwipe({direction,index,container});
+                    Object.assign(event,{index,container});
+                    onSwipe&&onSwipe(event);
                 }
             }},
         });
@@ -172,7 +173,10 @@ export default function FlatList(props){
                 container.style.transform=`translate${horizontal?"X":"Y"}(-${offset>0?offset:0}px)`;
             }
             else{
-                element.scrollIntoView({behavior:smooth?"smooth":"auto",inline:"start"});
+                element.scrollIntoView({
+                    behavior:smooth?"smooth":"auto",
+                    block:"start",inline:"start",
+                });
             }
         }
     };
