@@ -60,7 +60,7 @@ interface View extends HTMLDivElement {
      * @default false
      * @returns The current view
      */
-    adjacentTo(element:Element,before:boolean):View,
+    adjacentTo(element:Element,before?:boolean):View,
     /**
      * @param element Element before which the view is inserted 
      * @returns The current view

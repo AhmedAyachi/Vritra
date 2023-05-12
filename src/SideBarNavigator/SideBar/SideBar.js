@@ -6,7 +6,7 @@ import icon0 from "./Icon_0";
 
 export default function SideBar(props){
     const {parent,id=useId("sidebar"),entries,tintColor,scrollTheme="dark"}=props;
-    const sidebar=View({parent,id,position:"top",className:`${css.sidebar} ${props.className||""}`}),state={
+    const sidebar=View({parent,id,at:"start",className:`${css.sidebar} ${props.className||""}`}),state={
         shown:true,
         width:sidebar.clientWidth,
     };

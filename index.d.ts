@@ -23,10 +23,11 @@ export {useZoomGesture,usePinchGesture,useSwipeGesture} from "./src/Gestures";
  * Value from within the input range that should be mapped to a value from the output range
  * @param inrange 
  * An array of numbers that contains points that indicate the range of the input value. 
- * Values in the input range should be increasing
+ * Values should be increasing
  * @param outrange 
  * An array of numbers that contains points that indicate the range of the output value. 
  * It should have the exact same number of points as the input range.
+ * Values should be increasing
  * @param extrapolationType >
  * - extend : approximates the value even outside of the range
  * - clamp : clamps the value to the edge of the output range
