@@ -19,8 +19,9 @@ export default function FlatList(props){
         endreached:!props.data?.length,
         firstOffset:null,//for paging lists: firstEl offset
         popuplist:null,
-        isolatedcount:0,//elements with removed items count
-    },{data}=state;
+        isolatedcount:0,//elements with removed items count,
+        offsetSide:"offset"+(horizontal?"Left":"Top"),
+    },{data,offsetSide}=state;
 
     flatlist.innateHTML=`
         <div 
@@ -52,7 +53,7 @@ export default function FlatList(props){
         state.index=state.focus=0;
         createElement({item:data[0],index:0});
         const {itemEl}=state;
-        state.firstOffset=horizontal?itemEl.offsetLeft:itemEl.offsetTop;
+        state.firstOffset=itemEl[offsetSide];
         observer.observe(itemEl);
     }
 
@@ -73,6 +74,7 @@ export default function FlatList(props){
                     case "bottom":
                     case "right":
                         if(focus){index=focus-1}
+                        else{index=0}
                         break;
                     default:break;
                 }
@@ -153,19 +155,19 @@ export default function FlatList(props){
     flatlist.scrollToOffset=(offset,smooth=true)=>{
         if(offset<0){offset=0};
         let lastEl=state.itemEl;
-        let reachedOffset=lastEl.offsetLeft;
+        let reachedOffset=lastEl[offsetSide];
         const lastIndex=data.length-1;
         while((offset>=reachedOffset)&&(state.index<lastIndex)){
             observer.unobserve(state.itemEl);
             const i=state.index=state.index+1;
             createElement({item:data[i],index:i},true);
             lastEl=state.itemEl;
-            reachedOffset=lastEl.offsetLeft;
+            reachedOffset=lastEl[offsetSide];
         }
         if(offset>=reachedOffset){offset=reachedOffset};
         if(pagingEnabled){
             if(scrollEnabled){
-                const item=findItem(state.itemsmap.values(),(element)=>element.offsetLeft>=offset);
+                const item=findItem(state.itemsmap.values(),(element)=>offset>=element[offsetSide],true);
                 if(item){state.focus=item.index}
             }
             if(!smooth){
@@ -199,7 +201,7 @@ export default function FlatList(props){
         else{
             element=state.itemsmap.at(i,true);
         }
-        const offset=element["offset"+(horizontal?"Left":"Top")]-state.firstOffset;
+        const offset=element[offsetSide]-state.firstOffset;
         flatlist.scrollToOffset(offset,smooth);
     };
 
