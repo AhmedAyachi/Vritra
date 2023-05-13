@@ -26,6 +26,7 @@ export default function FlatList(props){
     flatlist.innateHTML=`
         <div 
             class="${css.container} ${props.containerClassName||""}" 
+            ${backwards?"backwards"+(horizontal?"Horizontal":"Vertical"):""}
             style="${styles.container({nodata:state.endreached,pagingEnabled,transition,horizontal})}"
         ></div>
     `;
@@ -64,19 +65,17 @@ export default function FlatList(props){
             element:flatlist,
             onSwipe:(event)=>{if((horizontal&&(event.axis==="horizontal"))||((!horizontal)&&(event.axis==="vertical"))){
                 const {focus}=state;
+                const {direction}=event;
                 let index;
-                switch(event.direction){
-                    case "top":
-                    case "left":
-                        const {itemsmap}=state;
-                        if(focus<(itemsmap.length-1)){index=focus+1}
-                        break;
-                    case "bottom":
-                    case "right":
-                        if(focus){index=focus-1}
-                        else{index=0}
-                        break;
-                    default:break;
+                const forward=(direction==="left")||(direction==="top");
+                const backward=(direction==="right")||(direction==="bottom");
+                if(backwards?backward:forward){
+                    const {itemsmap}=state;
+                    if(focus<(itemsmap.length-1)){index=focus+1}
+                }
+                else{
+                    if(focus){index=focus-1}
+                    else{index=0}
                 }
                 if(index!==undefined){
                     flatlist.scrollToIndex(index);
@@ -210,25 +209,11 @@ export default function FlatList(props){
     function createElement(params,observe=true){
         const {item,index}=params;
         let element;
-        if(backwards){
-            const {scrollTop,scrollHeight,scrollLeft,scrollWidth}=container;
-            element=container.insertAdjacentElement("afterbegin",renderItem({
-                parent:container,
-                item,index,
-                data:props.data,
-            }));
-            Object.assign(container,{
-                scrollTop:container.scrollHeight-(scrollHeight-scrollTop),
-                scrollLeft:container.scrollWidth-(scrollWidth-scrollLeft),
-            });
-        }
-        else{
-            element=renderItem({
-                parent:container,
-                item,index,
-                data:props.data,
-            });
-        }
+        element=renderItem({
+            parent:container,
+            item,index,
+            data:props.data,
+        });
         state.itemsmap.set(item,element);
         state.itemEl=element;
         observe&&observer&&observer.observe(element);

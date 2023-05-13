@@ -74,9 +74,9 @@ type PopupProps<Type>=ViewProps&{
      */
     emptymessage:string,
     /**
-     * Make Flatlist scrollable from bottom to top.
+     * Make Flatlist scrollable from bottom/right to top/left.
+     * 
      * Specify a flatlist height value if elements get shown at once.
-     * Still not supported with pagingEnabled true.
      */
     backwards:boolean,
     /**
