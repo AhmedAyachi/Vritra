@@ -10,7 +10,7 @@ interface FlatList<Type> extends View {
      * @param offset 
      * @param smooth default: true
      */
-    scrollToOffset(offset:number,smooth:boolean):void,
+    scrollToOffset(offset:number,smooth?:boolean):void,
     /**
      * Returns the flatlist items container element 
      */
@@ -20,7 +20,7 @@ interface FlatList<Type> extends View {
      * @param index 
      * @param smooth default: true
      */
-    scrollToIndex(index:number,smooth:boolean):void,
+    scrollToIndex(index:number,smooth?:boolean):void,
     /**
      * Appends more data items to the data array
      * @param items 
