@@ -183,7 +183,15 @@ export function toggle(
 ):void;
 export function toggle(element:HTMLElement,callback:()=>void):void;
 
-export function randomColor(from?:String[]):String;
+/**
+ * 
+ * @param andFrom
+ * Array of colors to add to the possible returned values 
+ * @returns 
+ * hsl(*,100%,50%) color in rgb format 
+ * or a color from the andFrom array if specified
+ */
+export function randomColor(andFrom?:String[]):String;
 export function createCode(length:Number):String;
 export function replaceAt(index:Number,replaceValue:String,targetString:String):String;
 

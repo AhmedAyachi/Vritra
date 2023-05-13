@@ -262,12 +262,19 @@ export const toggle=(element,{display="block",duration=200},callback)=>{
 }
 
 export function randomColor(colors){
-    if(Array.isArray(colors)){
-        return randomItem(colors);
-    }
+    const fromColors=Array.isArray(colors)&&colors.length&&(Math.random()>0.5);
+    if(fromColors) return randomItem(colors)
     else{
-        return `hsl(${Math.round(360*Math.random())},100%,50%)`;
-    }
+        const coef=Math.round(Math.random()*360);
+        const r=coef%((Math.floor(coef/60)||1)*60);
+        const value=Math.round(17*r/4);
+        if((coef<60)||(coef===360)) return `rgb(255,${value},0)`;
+        else if(coef<120) return `rgb(${255-value},255,0)`;
+        else if(coef<180) return `rgb(0,255,${value})`;
+        else if(coef<240) return `rgb(0,${255-value},255)`;
+        else if(coef<300) return `rgb(${value},0,255)`;
+        else if(coef<360) return `rgb(255,0,${255-value})`;
+    };
 }
 
 export function createCode(length){
