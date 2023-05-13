@@ -1,4 +1,4 @@
-import {useId,CherryView,removeItem,CherryMap,useSwipeGesture} from "../index";
+import {useId,CherryView,removeItem,CherryMap,useSwipeGesture,findItem} from "../index";
 import css from "./FlatList.module.css";
 import EmptyIndicator from "./EmptyIndicator/EmptyIndicator";
 
@@ -164,6 +164,10 @@ export default function FlatList(props){
         }
         if(offset>=reachedOffset){offset=reachedOffset};
         if(pagingEnabled){
+            if(scrollEnabled){
+                const item=findItem(state.itemsmap.values(),(element)=>element.offsetLeft>=offset);
+                if(item){state.focus=item.index}
+            }
             if(!smooth){
                 container.style.transition="none";
                 setTimeout(()=>{container.style.transition=transition},0);
@@ -175,10 +179,6 @@ export default function FlatList(props){
                 [horizontal?"left":"top"]:offset,
                 behavior:smooth?"smooth":"auto",
             });
-            /* element.scrollIntoView({
-                behavior:smooth?"smooth":"auto",
-                block:"start",inline:"start",
-            }); */
         }
     }
 
@@ -207,7 +207,6 @@ export default function FlatList(props){
 
     function createElement(params,observe=true){
         const {item,index}=params;
-        //const index=data.indexOf(item);
         let element;
         if(backwards){
             const {scrollTop,scrollHeight,scrollLeft,scrollWidth}=container;
