@@ -6,6 +6,12 @@ export default function FlatList<Type>(props:FlatListProps<Type>):FlatList<Type>
 
 interface FlatList<Type> extends View {
     /**
+     * Scrolls to a specific content pixel offset in the list
+     * @param offset 
+     * @param smooth default: true
+     */
+    scrollToOffset(offset:number,smooth:boolean):void,
+    /**
      * Returns the flatlist items container element 
      */
     readonly container:HTMLElement,
@@ -79,12 +85,10 @@ type PopupProps<Type>=ViewProps&{
      */
     pagingEnabled:boolean,
     /**
-     * When false, the flatlist cannot be scrolled via touch interaction.
-     * 
-     * Used with pagingEnabled true
+     * When false, the flatlist cannot be scrolled via touch interaction
      * @default true
      */
-    swipeEnabled:boolean,
+    scrollEnabled:boolean,
     /**
      * A number in range 0..1.
      * The visiblity fraction of an element in order to create the next one.

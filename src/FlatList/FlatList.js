@@ -4,7 +4,7 @@ import EmptyIndicator from "./EmptyIndicator/EmptyIndicator";
 
 
 export default function FlatList(props){
-    const {parent,id=useId("flatlist"),emptymessage,renderItem,horizontal,backwards,pagingEnabled,swipeEnabled=true,threshold=0.5,transition="250ms",onReachEnd,onRemoveItem,onAddItems,onSwipe}=props;
+    const {parent,id=useId("flatlist"),emptymessage,renderItem,horizontal,backwards,pagingEnabled,scrollEnabled=true,threshold=0.5,transition="250ms",onReachEnd,onRemoveItem,onAddItems,onSwipe}=props;
     const flatlist=CherryView({
         parent,id,
         at:props.at,
@@ -59,7 +59,7 @@ export default function FlatList(props){
     if(pagingEnabled){
         container.style.overflow="visible";
         flatlist.style.overflow="hidden";
-        swipeEnabled&&useSwipeGesture({
+        scrollEnabled&&useSwipeGesture({
             element:flatlist,
             onSwipe:(event)=>{if((horizontal&&(event.axis==="horizontal"))||((!horizontal)&&(event.axis==="vertical"))){
                 const {focus}=state;
@@ -83,6 +83,9 @@ export default function FlatList(props){
                 }
             }},
         });
+    }
+    else if(!scrollEnabled){
+        container.style.overflow="hidden";
     }
 
     flatlist.addItems=(items)=>{
@@ -147,44 +150,64 @@ export default function FlatList(props){
         return state.popuplist;
     }
 
-    flatlist.scrollToIndex=(i,smooth=true)=>{
-        const {index}=state,lastIndex=data.length-1;
-        if(i>lastIndex){i=lastIndex} else if(i<0){i=0}
-        if(state.focus!==i){
-            state.focus=i;
-            let element;
-            if(i>index){
-                observer.unobserve(state.itemEl);
-                for(let j=index+1;j<=i;j++){
-                    state.index=j;
-                    createElement({item:data[j],index:j},i===j);
-                }
-                element=state.itemEl;
-            }
-            else{
-                element=state.itemsmap.at(i,true);
-            }
-            if(pagingEnabled){
-                const offset=element["offset"+(horizontal?"Left":"Top")]-state.firstOffset;
-                if(!smooth){
-                    container.style.transition="none";
-                    setTimeout(()=>{container.style.transition=transition},0);
-                }
-                container.style.transform=`translate${horizontal?"X":"Y"}(-${offset>0?offset:0}px)`;
-            }
-            else{
-                element.scrollIntoView({
-                    behavior:smooth?"smooth":"auto",
-                    block:"start",inline:"start",
-                });
-            }
+    flatlist.scrollToOffset=(offset,smooth=true)=>{
+        if(offset<0){offset=0};
+        let lastEl=state.itemEl;
+        let reachedOffset=lastEl.offsetLeft;
+        const lastIndex=data.length-1;
+        while((offset>=reachedOffset)&&(state.index<lastIndex)){
+            observer.unobserve(state.itemEl);
+            const i=state.index=state.index+1;
+            createElement({item:data[i],index:i},true);
+            lastEl=state.itemEl;
+            reachedOffset=lastEl.offsetLeft;
         }
+        if(offset>=reachedOffset){offset=reachedOffset};
+        if(pagingEnabled){
+            if(!smooth){
+                container.style.transition="none";
+                setTimeout(()=>{container.style.transition=transition},0);
+            }
+            container.style.transform=`translate${horizontal?"X":"Y"}(-${offset>0?offset:0}px)`;
+        }
+        else{
+            container.scrollTo({
+                [horizontal?"left":"top"]:offset,
+                behavior:smooth?"smooth":"auto",
+            });
+            /* element.scrollIntoView({
+                behavior:smooth?"smooth":"auto",
+                block:"start",inline:"start",
+            }); */
+        }
+    }
+
+    flatlist.scrollToIndex=(i,smooth=true)=>{
+        const lastIndex=data.length-1;
+        if(i>lastIndex){i=lastIndex} else if(i<0){i=0}
+        state.focus=i;
+        let element;
+        const {index}=state;
+        if(i>index){
+            observer.unobserve(state.itemEl);
+            for(let j=index+1;j<=i;j++){
+                state.index=j;
+                createElement({item:data[j],index:j},i===j);
+            }
+            element=state.itemEl;
+        }
+        else{
+            element=state.itemsmap.at(i,true);
+        }
+        const offset=element["offset"+(horizontal?"Left":"Top")]-state.firstOffset;
+        flatlist.scrollToOffset(offset,smooth);
     };
 
     flatlist.container=container;
 
     function createElement(params,observe=true){
         const {item,index}=params;
+        //const index=data.indexOf(item);
         let element;
         if(backwards){
             const {scrollTop,scrollHeight,scrollLeft,scrollWidth}=container;
