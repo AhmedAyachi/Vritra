@@ -69,3 +69,13 @@
         opacity:1;
     }
 }
+
+@media(max-width:15cm){
+    .sidebar{
+        position:absolute;
+        left:0;
+        top:0;
+        z-index:10;
+        background-color:red;
+    }
+}
