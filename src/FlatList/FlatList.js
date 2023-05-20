@@ -167,11 +167,9 @@ export default function FlatList(props){
         if(offset>=reachedOffset){offset=reachedOffset};
         if(pagingEnabled){
             if(scrollEnabled){
-                const item=findItem(state.itemsmap.values(),(element)=>{
+                const item=findItem(state.itemsmap.values(),(element,i)=>{
                     const value=offset>=element[offsetSide];
-                    if(value){
-                        console.log({offset,offsetSide:element[offsetSide]});
-                    }
+                    console.log({offset,offsetSide:element[offsetSide],index:i});
                     return value;
                 },true);
                 console.log(item,state.focus);
