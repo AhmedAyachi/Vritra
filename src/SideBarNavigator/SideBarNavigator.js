@@ -33,7 +33,7 @@ export default function SideBarNavigator(props){
             if(entry){
                 current?.element.toggle(Boolean(current.entries));
                 state.current=entry;
-                const {path}=entry;
+                const {path=[entry]}=entry;
                 let i=path.length-1;
                 !function selectEntry(){
                     if(i>-1){
