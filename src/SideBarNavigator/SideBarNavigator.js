@@ -27,23 +27,29 @@ export default function SideBarNavigator(props){
 
     sidebarnavigator.navigate=(entryId,triggerOnNavigate=true)=>{
         const {current}=state;
-        const container=sidebarnavigator.querySelector(`:scope>.${css.container}`);
         if(entryId&&(current?.id!==entryId)){
+            const container=sidebarnavigator.querySelector(`:scope>.${css.container}`);
             const entry=entryId&&findEntry(entryId,entries);
-            current&&current.element.toggle(Boolean(current.entries));
-            state.current=entry;
             if(entry){
+                current?.element.toggle(Boolean(current.entries));
+                state.current=entry;
+                const {path}=entry;
+                let i=path.length-1;
+                !function selectEntry(){
+                    if(i>-1){
+                        const {element}=path[i];
+                        element?.toggle(true,()=>{
+                            i--;
+                            selectEntry();
+                        });
+                    }
+                }();
                 delete entry.parentId;
+                delete entry.path;
                 container.innerHTML="";
-                entry.element.toggle(true);
-                renderEntryContent(entry,container);
+                renderEntry(entry,container);
                 triggerOnNavigate&&onNavigate&&onNavigate(entry.id,current?.id);
             }
-        }
-        else{
-            container.innerHTML="";
-            state.current=null;
-            current&&current.element?.toggle(false);
         }
     }
 
@@ -53,7 +59,7 @@ export default function SideBarNavigator(props){
     return sidebarnavigator;
 }
 
-const renderEntryContent=(entry,container)=>{
+const renderEntry=(entry,container)=>{
     const {content,memorize=true}=entry;
     container.scrollTop=0;
     if(memorize&&(content instanceof HTMLElement)){
@@ -86,9 +92,10 @@ const findEntry=(entryId,entries)=>{
         if(target){
             const entry=entries.find(entry=>entry.id===target.parentId);
             if(entry){
+                if(!target.path){target.path=[target]};
                 target.parentId=entry.parentId;
                 delete entry.parentId;
-                entry.element.toggle(true);
+                target.path.push(entry);
             }
         }
     }

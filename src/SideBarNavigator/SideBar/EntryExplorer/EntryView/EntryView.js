@@ -10,7 +10,6 @@ export default function EntryView(props){
         explorer:null,
         highlighted:false,
         isfolder:Boolean(entry.entries),
-        
     },{isfolder}=state,{icon}=entry;
 
     entryview.innateHTML=`
@@ -37,7 +36,7 @@ export default function EntryView(props){
         }
     };
     
-    entryview.toggle=(highlighted=!state.highlighted)=>{
+    entryview.toggle=(highlighted=!state.highlighted,callback)=>{
         state.highlighted=highlighted;
         if(isfolder){
             const indicator=entryview.querySelector(`.${css.indicator}`);
@@ -45,7 +44,10 @@ export default function EntryView(props){
             const {explorer}=state;
             if(highlighted){
                 if(explorer){
-                   entryview.contains(explorer)||entryview.appendChild(explorer);
+                    if(!entryview.contains(explorer)){
+                        entryview.appendChild(explorer);
+                    }
+                    callback&&callback();
                 }
                 else{
                     state.explorer=EntryExplorer({
@@ -53,6 +55,8 @@ export default function EntryView(props){
                         parent:entryview,
                         className:css.explorer,
                         entries:entry.entries,
+                        lazy:true,
+                        onExpanded:callback,
                     });
                 }
             }
@@ -71,7 +75,7 @@ export default function EntryView(props){
             }
         }
     }
-    isfolder&&entry.expanded&&entryview.toggle(true);
+    //isfolder&&entry.expanded&&entryview.toggle(true);
 
     entryview.style.marginTop=isfolder?"1.5em":null;
     return entryview;

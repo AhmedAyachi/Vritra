@@ -23,6 +23,7 @@ export default function SideBar(props){
         ...props,entries,
         parent:sidebar,
         className:`${css.entryexplorer} ${css[scrollTheme+"explorer"]||""}`,
+        lazy:false,
     });
 
     const bartoggler=sidebar.querySelector(`.${css.bartoggler}`);
