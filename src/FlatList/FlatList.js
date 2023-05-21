@@ -4,7 +4,7 @@ import EmptyIndicator from "./EmptyIndicator/EmptyIndicator";
 
 
 export default function FlatList(props){
-    const {parent,id=useId("flatlist"),emptymessage,renderItem,horizontal,backwards,pagingEnabled,scrollEnabled=true,threshold=0.5,transition="250ms",onReachEnd,onRemoveItem,onAddItems,onSwipe}=props;
+    const {parent,id=useId("flatlist"),emptymessage,renderItem,horizontal,backwards,pagingEnabled,scrollEnabled=true,threshold=0.5,transition="ease 300ms",onReachEnd,onRemoveItem,onAddItems,onSwipe}=props;
     const flatlist=CherryView({
         parent,id,
         at:props.at,
@@ -59,7 +59,7 @@ export default function FlatList(props){
     }
 
     if(pagingEnabled){
-        container.style.overflow="visible";
+        //container.style.overflow="visible";
         flatlist.style.overflow="hidden";
         scrollEnabled&&useSwipeGesture({
             element:flatlist,
@@ -154,15 +154,16 @@ export default function FlatList(props){
     flatlist.scrollToOffset=(offset,smooth=true)=>{
         if(offset<0){offset=0};
         let lastEl=state.itemEl;
+        observer.unobserve(lastEl);
         let reachedOffset=lastEl[offsetSide];
         const lastIndex=data.length-1;
         while((offset>=reachedOffset)&&(state.index<lastIndex)){
-            observer.unobserve(state.itemEl);
             const i=state.index=state.index+1;
-            createElement({item:data[i],index:i},true);
+            createElement({item:data[i],index:i},false);
             lastEl=state.itemEl;
             reachedOffset=lastEl[offsetSide];
         }
+        observer.observe(lastEl);
         if(offset>=reachedOffset){offset=reachedOffset};
         if(pagingEnabled){
             if(scrollEnabled){
