@@ -30,9 +30,9 @@ export default function EntryView(props){
         if(isfolder){
             entryview.toggle();
         }
-        else{
+        else if(!state.highlighted){
             const sidebarnavigator=entryview.closest("div[id^=sidebarnavigator]");
-            sidebarnavigator.navigate(state.highlighted?null:entry.id);
+            sidebarnavigator.navigate(entry.id);
         }
     };
     
@@ -75,7 +75,7 @@ export default function EntryView(props){
             }
         }
     }
-    //isfolder&&entry.expanded&&entryview.toggle(true);
+    isfolder&&entry.expanded&&entryview.toggle(true);
 
     entryview.style.marginTop=isfolder?"1.5em":null;
     return entryview;
