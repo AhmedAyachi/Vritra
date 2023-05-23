@@ -1,8 +1,8 @@
  
 
-export default function View(props:ViewProps):View;
+export default function View<Tag extends keyof HTMLElementTagNameMap|undefined=undefined>(props:ViewProps<Tag>):Tag extends undefined?View<"div">:View<Tag>;
 
-type ViewProps={
+type ViewProps<Tag>={
     parent?:HTMLElement,
     /**
      * @default useId("view")
@@ -13,7 +13,7 @@ type ViewProps={
     /**
      * @default "div"
      */
-    tag?:keyof HTMLElementTagNameMap,
+    tag?:Tag,
     /**
      * Sets the element initial location.
      * 
@@ -24,9 +24,9 @@ type ViewProps={
      * @see For between-elements insertion, use adjacentTo method
      */
     at?:"start"|"end";
-}
+};
 
-interface View extends HTMLDivElement {
+type View<Tag>=HTMLElementTagNameMap[Tag]&{
     /**
      * Sets safely the HTML or XML markup contained within the element.
      * 
@@ -60,17 +60,17 @@ interface View extends HTMLDivElement {
      * @default false
      * @returns The current view
      */
-    adjacentTo(element:Element,before?:boolean):View,
+    adjacentTo(element:Element,before?:boolean):View<Tag>,
     /**
      * @param element Element before which the view is inserted 
      * @returns The current view
      * @deprecated
      */
-    addBefore(element:Element):View,
+    addBefore(element:Element):View<Tag>,
     /**
      * @param element Element after which the view is inserted 
      * @returns The current view
      * @deprecated
      */
-    addAfter(element:Element):View,
+    addAfter(element:Element):View<Tag>,
 }
