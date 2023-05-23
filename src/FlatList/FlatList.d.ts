@@ -4,7 +4,7 @@ import {SwipeEvent} from "../Gestures/useSwipeGesture";
 
 export default function FlatList<Type>(props:FlatListProps<Type>):FlatList<Type>;
 
-interface FlatList<Type> extends View {
+interface FlatList<Type> extends View<"div"> {
     /**
      * Scrolls to a specific content pixel offset in the list
      * @param offset 
@@ -63,7 +63,7 @@ interface FlatList<Type> extends View {
     showItems<Type>(predicate:(item:Type,index:Number,data:Type[])=>Boolean,props?:PopupProps<Type>):FlatList<Type>|null,
 }
 
-type PopupProps<Type>=ViewProps&{
+type PopupProps<Type>=ViewProps<"div">&{
     /**
      * @see Do not forget to set the item element display to inline 
      */

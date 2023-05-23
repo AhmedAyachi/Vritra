@@ -1,7 +1,7 @@
 import {View,ViewProps} from "../View/View";
 
 
-export default function DraggableView(props:ViewProps&{
+export default function DraggableView(props:ViewProps<"div">&{
     position:DraggableViewPositionSetter,
     /**
      * Sets the DraggableView boundaries
@@ -16,7 +16,7 @@ export default function DraggableView(props:ViewProps&{
     onDrop?(coords:DraggableViewCoords,element:DraggableView):void,
 }):DraggableView;
 
-interface DraggableView extends View {
+interface DraggableView extends View<"div"> {
     setEventListener(
         type:"drag"|"move"|"drop",
         listener:(coords:DraggableViewCoords,element:DraggableView)=>void,

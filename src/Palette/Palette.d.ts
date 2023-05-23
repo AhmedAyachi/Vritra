@@ -1,7 +1,7 @@
 import {ViewProps,View} from "../View/View";
 
 
-export default function Palette(props:ViewProps&{
+export default function Palette(props:ViewProps<"div">&{
     /**
      * Picker icon
      * @default palette icon
@@ -22,7 +22,7 @@ export default function Palette(props:ViewProps&{
 }):Palette;
 
 
-interface Palette extends View {
+interface Palette extends View<"div"> {
     /**
      * 
      * Sets the palette color, closes the picker if already open

@@ -1,5 +1,5 @@
 import {View,ViewProps} from "../View/View";
-import {ActionSetActionProp} from "../ActionSetView/ActionSetView";
+import {ActionSetAction} from "../ActionSetView/ActionSetView";
 
 
 /**
@@ -7,7 +7,7 @@ import {ActionSetActionProp} from "../ActionSetView/ActionSetView";
  * @param props AccordionView props
  * @see AccordionView css variables : paddingHorizontal borderRadius
  */
-export default function AccordionView(props:ViewProps&{
+export default function AccordionView(props:ViewProps<"div">&{
     /**
      * Default header title
      */
@@ -54,7 +54,7 @@ export default function AccordionView(props:ViewProps&{
     /**
      * Actions of the default header ActionsSetView
      */
-    actions?:ActionSetActionProp[],
+    actions?:ActionSetAction[],
     /**
      * title, indicator and actions color of the default header
      */
@@ -73,7 +73,7 @@ export default function AccordionView(props:ViewProps&{
 
 //type AccordionViewProps=
 
-interface AccordionView extends View {
+interface AccordionView extends View<"div"> {
     /**
      * Locks and unlocks the accordionview
      * @param locked 

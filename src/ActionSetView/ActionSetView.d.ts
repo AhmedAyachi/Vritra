@@ -5,7 +5,7 @@ import {View,ViewProps} from "../View/View";
  * @param props ActionSetView props
  * @see CSS variables : spacing
  */
-export default function ActionSetView(props:ViewProps&{
+export default function ActionSetView(props:ViewProps<"div">&{
     actions:ActionSetAction[],
     /**
      * Function-icon color param value
@@ -14,7 +14,7 @@ export default function ActionSetView(props:ViewProps&{
 }):ActionSetView;
 
 
-interface ActionSetView extends View {
+interface ActionSetView extends View<"div"> {
 
 }
 

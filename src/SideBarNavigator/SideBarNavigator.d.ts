@@ -1,7 +1,9 @@
 import {ViewProps,View} from "../View/View";
 
 
-export default function SideBarNavigator(props:ViewProps&{
+export default function SideBarNavigator(props:SideBarNavigatorProps):SideBarNavigator;
+
+interface SideBarNavigatorProps extends ViewProps<"div"> {
     sidebarClassName?:string,
     containerClassName?:string,
     entries:SideBarNavigatorEntry[],
@@ -23,9 +25,9 @@ export default function SideBarNavigator(props:ViewProps&{
      */
     sideBarScrollTheme:"light"|"dark",
     onNavigate(currentId:String,previousId:String|null):void,
-}):SideBarNavigator;
+}
 
-interface SideBarNavigator extends View {
+interface SideBarNavigator extends View<"div"> {
     /**
      * Toggles the entry with such id
      * 
