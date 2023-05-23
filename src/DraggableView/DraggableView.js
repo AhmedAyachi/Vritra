@@ -37,25 +37,28 @@ export default function DraggableView(props){
             const {onDrag}=state;
             onDrag&&onDrag(structuredClone(coords),draggableview);
             function onPointerMove(event){
-                const {clientX:cx,clientY:cy}=(isTouchDevice?event.changedTouches[0]:event);
-                let x,y;
-                if(horizontalDrag){
-                    x=cx-state.dragDX;
-                    if((typeof(xmin)==="number")&&(x<xmin)){x=xmin}
-                    else if((typeof(xmax)==="number")&&(x>xmax)){x=xmax}
-                }
-                if(verticalDrag){
-                    y=cy-state.dragDY;
-                    if((typeof(ymin)==="number")&&(y<ymin)){y=ymin}
-                    else if((typeof(ymax)==="number")&&(y>ymax)){y=ymax}
-                }
-                draggableview.setPosition({x,y,asratio:false});
+                requestAnimationFrame(()=>{
+                    const {clientX:cx,clientY:cy}=(isTouchDevice?event.changedTouches[0]:event);
+                    let x,y;
+                    if(horizontalDrag){
+                        x=cx-state.dragDX;
+                        if((typeof(xmin)==="number")&&(x<xmin)){x=xmin}
+                        else if((typeof(xmax)==="number")&&(x>xmax)){x=xmax}
+                    }
+                    if(verticalDrag){
+                        y=cy-state.dragDY;
+                        if((typeof(ymin)==="number")&&(y<ymin)){y=ymin}
+                        else if((typeof(ymax)==="number")&&(y>ymax)){y=ymax}
+                    }
+                    draggableview.setPosition({x,y,asratio:false});
+                });
             }
-            window.addEventListener(isTouchDevice?"touchmove":"mousemove",onPointerMove);
+            const onPointerMoveEvent=isTouchDevice?"touchmove":"mousemove";
+            window.addEventListener(onPointerMoveEvent,onPointerMove);
             window.addEventListener(isTouchDevice?"touchend":"mouseup",()=>{
                 const {onDrop}=state;
                 onDrop&&onDrop(structuredClone(coords),draggableview);
-                window.removeEventListener(isTouchDevice?"touchmove":"mousemove",onPointerMove);
+                window.removeEventListener(onPointerMoveEvent,onPointerMove);
             },{once:true});
         });
     }
@@ -79,27 +82,30 @@ export default function DraggableView(props){
         return position;
     };
     draggableview.setPosition=({x,y,asratio,duration,easing},triggerOnMove=true)=>{
-        const {width=1,height=1}=asratio?parent.getBoundingClientRect():{};
-        if(typeof(x)==="number"){
-            coords.x=x*width;
-        }
-        if(typeof(y)==="number"){
-            coords.y=y*height;
-        }
-        const hasDuration=typeof(duration)==="number",{style}=draggableview;
-        if(hasDuration&&(duration>0)){
-            style.transition=`${duration}ms ${easing||"ease-out"}`;
-            setTimeout(()=>{style.transition=null},duration);
-        } 
-        style.translate=`${coords.x||0}px ${coords.y||0}px`;
-        Object.assign(coords,{
-            dx:coords.x+state.dragDX-state.dragX,
-            dy:coords.y+state.dragDY-state.dragY,
+        requestAnimationFrame(()=>{
+            const {width=1,height=1}=asratio?parent.getBoundingClientRect():{};
+            if(typeof(x)==="number"){
+                coords.x=x*width;
+            }
+            if(typeof(y)==="number"){
+                coords.y=y*height;
+            }
+            const hasDuration=typeof(duration)==="number",{style}=draggableview;
+            if(hasDuration&&(duration>0)){
+                const {transition}=style
+                style.transition=`${duration}ms ${easing||"ease-out"}`;
+                setTimeout(()=>{style.transition=transition},duration);
+            } 
+            style.translate=`${coords.x||0}px ${coords.y||0}px`;
+            Object.assign(coords,{
+                dx:coords.x+state.dragDX-state.dragX,
+                dy:coords.y+state.dragDY-state.dragY,
+            });
+            if(triggerOnMove){
+                const {onMove}=state;
+                onMove&&onMove(structuredClone(coords),draggableview);
+            }
         });
-        if(triggerOnMove){
-            const {onMove}=state;
-            onMove&&onMove(structuredClone(coords),draggableview);
-        }
     }
     position&&draggableview.setPosition({asratio:true,...position},false);
 

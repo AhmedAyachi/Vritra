@@ -8,7 +8,7 @@ export default function View(props){
     view.id=id;
     view.className=className;
     style&&(typeof(style)==="string")&&view.setAttribute("style",style);
-    (at==="start")?parent.insertAdjacentElement("afterbegin",view):parent.appendChild(view);
+    parent&&(at==="start")?parent.insertAdjacentElement("afterbegin",view):parent.appendChild(view);
 
     Object.defineProperties(view,{
         innateHTML:{set:(html)=>{

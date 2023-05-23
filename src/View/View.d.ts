@@ -3,7 +3,7 @@
 export default function View(props:ViewProps):View;
 
 type ViewProps={
-    parent:HTMLElement,
+    parent?:HTMLElement,
     /**
      * @default useId("view")
      */
