@@ -4,66 +4,7 @@ import {SwipeEvent} from "../Gestures/useSwipeGesture";
 
 export default function FlatList<Type>(props:FlatListProps<Type>):FlatList<Type>;
 
-interface FlatList<Type> extends View<"div"> {
-    /**
-     * Scrolls to a specific content pixel offset in the list
-     * @param offset 
-     * @param smooth default: true
-     */
-    scrollToOffset(offset:number,smooth?:boolean):void,
-    /**
-     * Returns the flatlist items container element 
-     */
-    readonly container:HTMLElement,
-    /**
-     * Scrolls to item at index
-     * @param index 
-     * @param smooth default: true
-     */
-    scrollToIndex(index:number,smooth?:boolean):void,
-    /**
-     * Appends more data items to the data array
-     * @param items 
-     */
-    addItems(items:Type[]):void,
-    /**
-     * removeItem calls predicate once for each element of the data array, in ascending order, 
-     * until it finds one where predicate returns true. If such item is found, it's removed.
-     * @param predicate function used to find the item.
-     * @param withElement if true removes the html element associated with the item. Default: true.
-     * @returns the removed data {item,element}
-     */
-    removeItem(predicate:(item:Type,index:Number,data:Type[])=>Boolean,withElement:boolean):ItemData<Type>,
-    /**
-     * Removes item if found
-     * @param item item to remove
-     * @param withElement if true removes the html element associated with the item. Default: true
-     * @returns the removed data {item,element}
-     */
-    removeItem(item:any,withElement:boolean):ItemData<Type>,
-    /**
-     * Creates a flatlist on top of the original flatlist as a popup using the same props
-     * @param items data to show
-     * @param props Popup Flatlist props
-     * @returns The flatlist popup element if created, null otherwise.
-     * @see
-     * onReachEnd and onRemoveItem props are not passed to the popup faltlist.
-     * If items is not an array, The method removes the popup flatlist.
-     */
-    showItems<Type>(items:Type[],props?:PopupProps<Type>):FlatList<Type>|null,
-    /**
-     * Creates a flatlist on top of the original flatlist as a popup using the same props
-     * @param predicate function to execute to filter items
-     * @param props Popup Flatlist props
-     * @returns The flatlist popup element if created, null otherwise.
-     * @see
-     * onReachEnd and onRemoveItem props are not passed to the popup faltlist.
-     * If items is not an array, The method removes the popup flatlist.
-     */
-    showItems<Type>(predicate:(item:Type,index:Number,data:Type[])=>Boolean,props?:PopupProps<Type>):FlatList<Type>|null,
-}
-
-type PopupProps<Type>=ExtendableViewProps<"div">&{
+type PopupProps<Type>=Omit<ExtendableViewProps<"div">,"at">&{
     /**
      * @see Do not forget to set the item element display to inline 
      */
@@ -148,6 +89,65 @@ type FlatListProps<Type>=PopupProps<Type>&{
      * The flatlist doesn't use this array but its shallow copy
      */
     data:Type[],
+}
+
+interface FlatList<Type> extends View<"div"> {
+    /**
+     * Scrolls to a specific content pixel offset in the list
+     * @param offset 
+     * @param smooth default: true
+     */
+    scrollToOffset(offset:number,smooth?:boolean):void,
+    /**
+     * Returns the flatlist items container element 
+     */
+    readonly container:HTMLElement,
+    /**
+     * Scrolls to item at index
+     * @param index 
+     * @param smooth default: true
+     */
+    scrollToIndex(index:number,smooth?:boolean):void,
+    /**
+     * Appends more data items to the data array
+     * @param items 
+     */
+    addItems(items:Type[]):void,
+    /**
+     * removeItem calls predicate once for each element of the data array, in ascending order, 
+     * until it finds one where predicate returns true. If such item is found, it's removed.
+     * @param predicate function used to find the item.
+     * @param withElement if true removes the html element associated with the item. Default: true.
+     * @returns the removed data {item,element}
+     */
+    removeItem(predicate:(item:Type,index:Number,data:Type[])=>Boolean,withElement:boolean):ItemData<Type>,
+    /**
+     * Removes item if found
+     * @param item item to remove
+     * @param withElement if true removes the html element associated with the item. Default: true
+     * @returns the removed data {item,element}
+     */
+    removeItem(item:any,withElement:boolean):ItemData<Type>,
+    /**
+     * Creates a flatlist on top of the original flatlist as a popup using the same props
+     * @param items data to show
+     * @param props Popup Flatlist props
+     * @returns The flatlist popup element if created, null otherwise.
+     * @see
+     * onReachEnd and onRemoveItem props are not passed to the popup faltlist.
+     * If items is not an array, The method removes the popup flatlist.
+     */
+    showItems<Type>(items:Type[],props?:PopupProps<Type>):FlatList<Type>|null,
+    /**
+     * Creates a flatlist on top of the original flatlist as a popup using the same props
+     * @param predicate function to execute to filter items
+     * @param props Popup Flatlist props
+     * @returns The flatlist popup element if created, null otherwise.
+     * @see
+     * onReachEnd and onRemoveItem props are not passed to the popup faltlist.
+     * If items is not an array, The method removes the popup flatlist.
+     */
+    showItems<Type>(predicate:(item:Type,index:Number,data:Type[])=>Boolean,props?:PopupProps<Type>):FlatList<Type>|null,
 }
 
 type ItemData<Type>={
