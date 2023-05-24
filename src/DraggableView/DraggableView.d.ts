@@ -1,7 +1,7 @@
-import {View,ViewProps} from "../View/View";
+import {View,ExtendableViewProps} from "../View/View";
 
 
-export default function DraggableView(props:ViewProps<"div">&{
+export default function DraggableView(props:ExtendableViewProps<"div">&{
     position:DraggableViewPositionSetter,
     /**
      * Sets the DraggableView boundaries

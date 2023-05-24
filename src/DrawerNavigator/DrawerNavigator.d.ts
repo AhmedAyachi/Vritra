@@ -1,7 +1,7 @@
-import {ViewProps,View} from "../View/View";
+import {ExtendableViewProps,View} from "../View/View";
 
 
-export default function DrawerNavigator(props:ViewProps<"div">&{
+export default function DrawerNavigator(props:ExtendableViewProps<"div">&{
     /**
      * Header container className
      */

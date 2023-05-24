@@ -74,3 +74,5 @@ type View<Tag>=HTMLElementTagNameMap[Tag]&{
      */
     addAfter(element:Element):View<Tag>,
 }
+
+type ExtendableViewProps<Tag>=Omit<ViewProps<Tag>,"tag">

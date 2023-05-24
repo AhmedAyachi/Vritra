@@ -1,4 +1,4 @@
-import {View,ViewProps} from "../View/View";
+import {View,ExtendableViewProps} from "../View/View";
 import {SwipeEvent} from "../Gestures/useSwipeGesture";
 
 
@@ -63,7 +63,7 @@ interface FlatList<Type> extends View<"div"> {
     showItems<Type>(predicate:(item:Type,index:Number,data:Type[])=>Boolean,props?:PopupProps<Type>):FlatList<Type>|null,
 }
 
-type PopupProps<Type>=ViewProps<"div">&{
+type PopupProps<Type>=ExtendableViewProps<"div">&{
     /**
      * @see Do not forget to set the item element display to inline 
      */

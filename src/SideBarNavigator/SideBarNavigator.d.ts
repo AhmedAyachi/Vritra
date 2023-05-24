@@ -1,9 +1,9 @@
-import {ViewProps,View} from "../View/View";
+import {ExtendableViewProps,View} from "../View/View";
 
 
 export default function SideBarNavigator(props:SideBarNavigatorProps):SideBarNavigator;
 
-interface SideBarNavigatorProps extends ViewProps<"div"> {
+interface SideBarNavigatorProps extends ExtendableViewProps<"div"> {
     sidebarClassName?:string,
     containerClassName?:string,
     entries:SideBarNavigatorEntry[],

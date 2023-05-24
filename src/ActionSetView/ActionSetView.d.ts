@@ -1,11 +1,11 @@
-import {View,ViewProps} from "../View/View";
+import {View,ExtendableViewProps} from "../View/View";
 
 /**
  * 
  * @param props ActionSetView props
  * @see CSS variables : spacing
  */
-export default function ActionSetView(props:ViewProps<"div">&{
+export default function ActionSetView(props:ExtendableViewProps<"div">&{
     actions:ActionSetAction[],
     /**
      * Function-icon color param value
@@ -31,7 +31,7 @@ export type ActionSetAction={
     /**
      * Action icon as url, base64 string or function
      */
-    icon:string|((color:string,weight=2)=>string),
+    icon:CherryIcon,
     /**
      * Action icon size
      * @unit em
@@ -65,5 +65,13 @@ interface ActionSetActionElement extends HTMLDivElement {
      * @see you can just edit the img element src yourself, but this method will make sure that your code
      * keeps behaving the same way independently of package versions.
      */
-    setIcon(icon:string|((color:string,weight=2)=>string),save?:boolean):void,
+    setIcon(icon:CherryIcon,save?:boolean):void,
 }
+
+type CherryIcon=string|((
+    color?:string,
+    /**
+     * @default 2
+     */
+    weight?:number,
+)=>string);
