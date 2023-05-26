@@ -13,10 +13,10 @@
     flex:1;
 }
 .container[backwardsHorizontal],.container[backwardsHorizontal]>*{
-    transform:scaleX(-1) !important;
+    transform:scaleX(-1);
 }
 .container[backwardsVertical],.container[backwardsVertical]>*{
-    transform:scaleY(-1) !important;
+    transform:scaleY(-1);
 }
 .popuplist{
     position:absolute;
