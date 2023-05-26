@@ -175,7 +175,7 @@ export default function FlatList(props){
                 setTimeout(()=>{container.style.transition=transition},0);
             }
             const axis=horizontal?"X":"Y";
-            container.style.transform=`scale${axis}(-1) translate${axis}(-${offset>0?offset:0}px)`;
+            container.style.transform=`${backwards?`scale${axis}(-1) `:""}translate${axis}(-${offset>0?offset:0}px)`;
         }
         else{
             container.scrollTo({
