@@ -39,7 +39,7 @@ export default function SideBarNavigator(props){
                     i--;
                     if(i>-1){
                         const {element}=path[i];
-                        element?.toggle(true,selectEntry);
+                        element.toggle(true,selectEntry);
                     }
                 }();
                 delete entry.parentId;

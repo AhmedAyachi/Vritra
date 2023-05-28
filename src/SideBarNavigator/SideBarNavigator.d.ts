@@ -1,4 +1,5 @@
 import {ExtendableViewProps,View} from "../View/View";
+import {CherryIcon} from "../ActionSetView/ActionSetView";
 
 
 export default function SideBarNavigator(props:SideBarNavigatorProps):SideBarNavigator;
@@ -45,12 +46,15 @@ interface SideBarNavigator extends View<"div"> {
 }
 
 type SideBarNavigatorEntry={
+    /**
+     * Should be unique among all entries
+     */
     id:string,
     /**
      * If no name is supplied, the id is used as a name
      */
     name?:string,
-    icon?:string|((color:String,weight:Number)=>String),
+    icon?:CherryIcon,
     /**
      * If entries are supplied, the entry is a folder, else an endpoint.
      */

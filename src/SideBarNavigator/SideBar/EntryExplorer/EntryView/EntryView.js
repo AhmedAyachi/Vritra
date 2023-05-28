@@ -10,6 +10,8 @@ export default function EntryView(props){
         explorer:null,
         highlighted:false,
         isfolder:Boolean(entry.entries),
+        rendered:false,
+        expandCallback:null,
     },{isfolder}=state,{icon}=entry;
 
     entryview.innateHTML=`
@@ -17,10 +19,10 @@ export default function EntryView(props){
             ${isfolder?`
                 <img class="${css.indicator}" src="${icon0(folderColor)}"/>
             `:""}
-            <span class="${css.name}">${entry.name||entry.id||""}</span>
             ${icon?
                 `<img class="${css.icon}" src="${typeof(icon)==="function"?icon(isfolder?folderColor:endpointColor):icon}"/>
             `:""}
+            <span class="${css.name}">${entry.name||entry.id||""}</span>
         </div>
     `;
 
@@ -31,7 +33,7 @@ export default function EntryView(props){
             entryview.toggle();
         }
         else if(!state.highlighted){
-            const sidebarnavigator=entryview.closest("div[id^=sidebarnavigator]");
+            const sidebarnavigator=entryview.closest("div[class*= sidebarnavigator]");
             sidebarnavigator.navigate(entry.id);
         }
     };
@@ -39,15 +41,16 @@ export default function EntryView(props){
     entryview.toggle=(highlighted=!state.highlighted,callback)=>{
         state.highlighted=highlighted;
         if(isfolder){
+            state.expandCallback=callback;
             const indicator=entryview.querySelector(`.${css.indicator}`);
             indicator.style.transform=`translateX(-100%) rotateZ(${highlighted?90:0}deg)`;
             const {explorer}=state;
             if(highlighted){
                 if(explorer){
-                    if(!entryview.contains(explorer)){
-                        entryview.appendChild(explorer);
+                    if(state.rendered){
+                        (!entryview.contains(explorer))&&entryview.appendChild(explorer);
+                        callback&&callback();
                     }
-                    callback&&callback();
                 }
                 else{
                     state.explorer=EntryExplorer({
@@ -56,7 +59,12 @@ export default function EntryView(props){
                         className:css.explorer,
                         entries:entry.entries,
                         lazy:true,
-                        onExpanded:callback,
+                        onExpanded:()=>{
+                            const {expandCallback}=state;
+                            state.rendered=true;
+                            expandCallback&&expandCallback();
+                            delete state.expandCallback;
+                        },
                     });
                 }
             }
