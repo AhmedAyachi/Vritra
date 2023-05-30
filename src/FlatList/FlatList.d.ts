@@ -4,7 +4,17 @@ import {SwipeEvent} from "../Gestures/useSwipeGesture";
 
 export default function FlatList<Type>(props:FlatListProps<Type>):FlatList<Type>;
 
-type PopupProps<Type>=Omit<ExtendableViewProps<"div">,"at">&{
+type FlatListProps<Type>=ExtendableViewProps<"div">&{
+    containerClassName:string,
+    popupClassName:string,
+    /**
+     * Flatlist data array
+     * 
+     * Items should be unique
+     * 
+     * The flatlist doesn't use this array but its shallow copy
+     */
+    data:Type[],
     /**
      * @see Do not forget to set the item element display to inline 
      */
@@ -78,18 +88,7 @@ type PopupProps<Type>=Omit<ExtendableViewProps<"div">,"at">&{
     onReachEnd(context:{container:HTMLElement,data:Type[]}):void,
 }
 
-type FlatListProps<Type>=PopupProps<Type>&{
-    containerClassName:string,
-    popupClassName:string,
-    /**
-     * Flatlist data array
-     * 
-     * Items should be unique
-     * 
-     * The flatlist doesn't use this array but its shallow copy
-     */
-    data:Type[],
-}
+type PopupProps<Type>=Omit<FlatList<Type>,"at"|"containerClassName"|"popupClassName"|"data">
 
 interface FlatList<Type> extends View<"div"> {
     /**
