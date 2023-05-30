@@ -88,7 +88,7 @@ type FlatListProps<Type>=ExtendableViewProps<"div">&{
     onReachEnd(context:{container:HTMLElement,data:Type[]}):void,
 }
 
-type PopupProps<Type>=Omit<FlatList<Type>,"at"|"containerClassName"|"popupClassName"|"data">
+type PopupProps<Type>=Omit<FlatListProps<Type>,"at"|"containerClassName"|"popupClassName"|"data">
 
 interface FlatList<Type> extends View<"div"> {
     /**
