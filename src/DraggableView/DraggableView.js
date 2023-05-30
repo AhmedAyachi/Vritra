@@ -56,9 +56,11 @@ export default function DraggableView(props){
             const onPointerMoveEvent=isTouchDevice?"touchmove":"mousemove";
             window.addEventListener(onPointerMoveEvent,onPointerMove);
             window.addEventListener(isTouchDevice?"touchend":"mouseup",()=>{
-                const {onDrop}=state;
-                onDrop&&onDrop(structuredClone(coords),draggableview);
-                window.removeEventListener(onPointerMoveEvent,onPointerMove);
+                requestAnimationFrame(()=>{
+                    const {onDrop}=state;
+                    onDrop&&onDrop(structuredClone(coords),draggableview);
+                    window.removeEventListener(onPointerMoveEvent,onPointerMove);
+                });
             },{once:true});
         });
     }
