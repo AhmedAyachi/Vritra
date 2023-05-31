@@ -13,6 +13,11 @@ export default function withSequence(
          */
         duration:number,
         /**
+         * Animation delay in milliseconds
+         * @default 0
+         */
+        delay:number,
+        /**
          * @default "linear"
          */
         easing:Easing,
