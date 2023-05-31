@@ -15,6 +15,7 @@ export {default as DraggableView} from "./DraggableView/DraggableView";
 export {default as CherryMap} from "./CherryMap/CherryMap";
 export {HashRouter} from "./HashRouter/HashRouter";
 export {useZoomGesture,usePinchGesture,useSwipeGesture} from "./Gestures";
+export {default as withSequence} from "./withSequence/withSequence";
 
 export const interpolate=(invalue,inrange,outrange,extrapolationType="extend")=>{
     const {length}=inrange;
