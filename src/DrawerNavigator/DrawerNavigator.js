@@ -50,7 +50,7 @@ export default function DrawerNavigator(props){
             activeId:state.activeId,
             drawerClassName:props.drawerClassName,
             tintColor:props.tintColor||"#1e90ff",
-            onChange:(route)=>{drawernavigator.navigate(route.id)},
+            onChange:(route)=>{setTimeout(()=>{drawernavigator.navigate(route.id)},0)},
             onHide:()=>{state.drawerview=null},
         });
     }
