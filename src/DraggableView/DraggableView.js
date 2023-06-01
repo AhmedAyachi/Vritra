@@ -7,6 +7,7 @@ export default function DraggableView(props){
     const draggableview=CherryView({
         parent,id,
         at:props.at,
+        tag:props.tag,
         style:props.style,
         className:`${css.draggableview} ${props.className||""}`,
     }),state={

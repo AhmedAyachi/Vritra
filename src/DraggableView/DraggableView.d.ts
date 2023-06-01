@@ -1,7 +1,7 @@
-import {View,ExtendableViewProps} from "../View/View";
+import {View,ViewProps} from "../View/View";
 
 
-export default function DraggableView(props:ExtendableViewProps<"div">&{
+export default function DraggableView<Tag extends keyof HTMLElementTagNameMap|undefined=undefined>(props:ViewProps<Tag>&{
     position:DraggableViewPositionSetter,
     /**
      * Sets the DraggableView boundaries
@@ -11,15 +11,15 @@ export default function DraggableView(props:ExtendableViewProps<"div">&{
     boundary?:DraggableViewBoundary,
     horizontalDrag?:boolean,
     verticalDrag?:boolean,
-    onDrag?(coords:DraggableViewCoords,element:DraggableView):void,
-    onMove?(coords:DraggableViewCoords,element:DraggableView):void,
-    onDrop?(coords:DraggableViewCoords,element:DraggableView):void,
-}):DraggableView;
+    onDrag?(coords:DraggableViewCoords,element:DraggableView<Tag>):void,
+    onMove?(coords:DraggableViewCoords,element:DraggableView<Tag>):void,
+    onDrop?(coords:DraggableViewCoords,element:DraggableView<Tag>):void,
+}):Tag extends undefined?DraggableView<"div">:DraggableView<Tag>;
 
-interface DraggableView extends View<"div"> {
+type DraggableView<Tag>=View<Tag>&{
     setEventListener(
         type:"drag"|"move"|"drop",
-        listener:(coords:DraggableViewCoords,element:DraggableView)=>void,
+        listener:(coords:DraggableViewCoords,element:DraggableView<Tag>)=>void,
     ):void,
     /**
      * @param asratio if true returns values as fractions relative to width and height of parent/viewport
