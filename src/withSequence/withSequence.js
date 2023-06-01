@@ -35,7 +35,7 @@ export default function withSequence(element,animations,callback){
                     const animation=animations[item.index];
                     style.transitionDuration=(animation.duration||0)+"ms";
                     style.transitionTimingFunction=animation.easing||"linear";
-                    Object.assign(style,animation.style);
+                    Object.assign(style,animation.toStyle);
                 }
             }
             requestAnimationFrame(animator);

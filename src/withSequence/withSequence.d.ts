@@ -6,7 +6,7 @@
 export default function withSequence(
     element:HTMLElement,
     animations:{
-        style:withSequenceAnimationStyle,
+        toStyle:withSequenceAnimationStyle,
         /**
          * Animation duration in milliseconds
          * @default 0
