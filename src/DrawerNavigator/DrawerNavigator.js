@@ -50,7 +50,7 @@ export default function DrawerNavigator(props){
             activeId:state.activeId,
             drawerClassName:props.drawerClassName,
             tintColor:props.tintColor||"#1e90ff",
-            onChange:(route)=>{setTimeout(()=>{drawernavigator.navigate(route.id)},0)},
+            onChange:(route)=>{drawernavigator.navigate(route.id)},
             onHide:()=>{state.drawerview=null},
         });
     }
@@ -78,10 +78,12 @@ export default function DrawerNavigator(props){
                 element.scrollLeft=scrollLeft;
             }
             else if(component){
-                const instance=component({parent:container});
-                if(memorize){
-                    route.element=instance;
-                }
+                setTimeout(()=>{
+                    const instance=component({parent:container});
+                    if(memorize){
+                        route.element=instance;
+                    }
+                },20);
             }
         }
     }
