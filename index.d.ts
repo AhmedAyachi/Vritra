@@ -20,6 +20,16 @@ export {default as withSequence} from "./src/withSequence/withSequence";
 
 /**
  * 
+ * @param hexcolor 
+ * @param asarray if true the color rgba representation is returned an an array of decimals [r,g,b,a]
+ * @default false
+ */
+export function hexColorToRGBA(hexcolor:string,asarray:boolean):String|Number[];
+
+export function hexToDecimal(hexcode:string):Number;
+
+/**
+ * 
  * @param invalue 
  * Value from within the input range that should be mapped to a value from the output range
  * @param inrange 

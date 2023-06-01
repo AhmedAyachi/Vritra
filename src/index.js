@@ -17,6 +17,46 @@ export {HashRouter} from "./HashRouter/HashRouter";
 export {useZoomGesture,usePinchGesture,useSwipeGesture} from "./Gestures";
 export {default as withSequence} from "./withSequence/withSequence";
 
+export const hexColorToRGBA=(hexcolor="",asarray)=>{
+    if(hexcolor.startsWith("#")){
+        hexcolor=hexcolor.substring(1);
+    }
+    const hexcodes=["","","",""],count=Math.min(2*hexcodes.length,hexcolor.length);
+    for(let i=0;i<count;i++){
+        const char=hexcolor[i];
+        const index=Math.floor(i/2);
+        hexcodes[index]+=char;
+    }
+    const lastIndex=hexcodes.length-1;
+    hexcodes.forEach((hexcode,i)=>{
+        let decimal=hexToDecimal(hexcode);
+        if(i===lastIndex){
+            decimal=(hexcode.length<2)?1:(decimal/255);
+            if((decimal!==0)&&decimal!==1){
+                decimal=decimal.toFixed(5);
+            }
+        }
+        hexcodes[i]=decimal;
+    });
+
+    return asarray?hexcodes.map(parseFloat):`rgba(${hexcodes.join(",")})`;
+}
+
+export const hexToDecimal=(hexcode)=>{
+    let decimal=0;
+    const lasti=hexcode.length-1;
+    for(let j=0;j<=lasti;j++){
+        const value=hexs.indexOf(hexcode[j].toLowerCase());
+        if(value>-1){
+            decimal+=value*(16**(lasti-j));
+        }
+        else{
+            throw "the hexcode is malformed";
+        }
+    }
+    return decimal;
+},hexs="0123456789abcdef";
+
 export const interpolate=(invalue,inrange,outrange,extrapolationType="extend")=>{
     const {length}=inrange;
     if((length>1)&&outrange.length===length){

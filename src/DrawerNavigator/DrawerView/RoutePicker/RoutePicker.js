@@ -1,4 +1,4 @@
-import {useId,View,map} from "../../../index";
+import {useId,View,map,hexColorToRGBA} from "../../../index";
 import css from "./RoutePicker.module.css";
 
 
@@ -60,6 +60,6 @@ const statics=RoutePicker.statics={
     `,
     entry:(tintColor)=>`
         color:${tintColor};
-        background-color:${tintColor}26;
+        background-color:${hexColorToRGBA(tintColor+"26")};
     `,
 }
