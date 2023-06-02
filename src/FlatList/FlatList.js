@@ -11,7 +11,7 @@ export default function FlatList(props){
         style:props.style,
         className:`${css.flatlist} ${props.className||""}`,
     }),state={
-        data:Array.isArray(props.data)&&[...props.data],
+        data:Array.isArray(props.data)?[...props.data]:[],
         index:null,//last created element index
         itemEl:null,//last created element (observed)
         focus:null,//for paging, element in focus
