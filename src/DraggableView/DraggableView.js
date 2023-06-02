@@ -98,7 +98,7 @@ export default function DraggableView(props){
                 const {transition}=style
                 style.transition=`${duration}ms ${easing||"ease-out"}`;
                 setTimeout(()=>{style.transition=transition},duration);
-            } 
+            }
             style.translate=`${coords.x||0}px ${coords.y||0}px`;
             Object.assign(coords,{
                 dx:coords.x+state.dragDX-state.dragX,

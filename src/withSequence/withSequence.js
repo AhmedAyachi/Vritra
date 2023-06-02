@@ -5,8 +5,9 @@ export default function withSequence(element,animations,callback){
     let start,index;
     const timers=[];
     animations.forEach((animation,i)=>{
-        if(typeof(animation.duration)!=="number"){animation.duration=0};
-        if(typeof(animation.delay)!=="number"){animation.delay=0};
+        const {duration,delay}=animation;
+        if((typeof(duration)!=="number")||(duration<16)){animation.duration=16};
+        if((typeof(delay)!=="number")||(delay<16)){animation.delay=16};
         let timer=animation.delay;
         if(i){
             timer+=timers[i-1]+animations[i-1].duration;
