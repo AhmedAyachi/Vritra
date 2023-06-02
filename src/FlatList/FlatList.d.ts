@@ -14,7 +14,7 @@ type FlatListProps<Type>=ExtendableViewProps<"div">&{
      * 
      * The flatlist doesn't use this array but its shallow copy
      */
-    data:Type[],
+    data?:Type[],
     /**
      * @see Do not forget to set the item element display to inline 
      */
