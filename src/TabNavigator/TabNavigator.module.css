@@ -1,0 +1,38 @@
+.tabnavigator{
+    max-width:100%;
+    height:100%;
+    display:flex;
+    flex-direction:column;
+    justify-content:flex-start;
+    align-items:stretch;
+}
+.header{
+    position:relative;
+    max-width:100%;
+    white-space:nowrap;
+    background-color:white;
+    overflow:auto hidden;
+}
+.container{
+    max-width:100%;
+    flex:1;
+    overflow:hidden auto;
+}
+.tabcontainer{
+    display:flex !important;
+    justify-content:flex-start;
+    align-items:center;
+}
+.bar{
+    position:absolute;
+    height:0.8em;
+    left:0;
+    bottom:0;
+    border-radius:10.667em;
+}
+
+@media(any-hover){
+    .tab:hover,.tab>*{
+        cursor:pointer;
+    }
+}

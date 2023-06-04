@@ -5,6 +5,7 @@ export {default as View} from "./View/View";
 export {default as CherryView} from "./CherryView/CherryView";
 export {default as SideBarNavigator} from "./SideBarNavigator/SideBarNavigator";
 export {default as DrawerNavigator} from "./DrawerNavigator/DrawerNavigator";
+export {default as TabNavigator} from "./TabNavigator/TabNavigator";
 export {default as Switch} from "./Switch/Switch";
 export {default as PopupView} from "./PopupView/PopupView";
 export {default as ActionSetView} from "./ActionSetView/ActionSetView";

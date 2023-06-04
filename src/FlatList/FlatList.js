@@ -4,7 +4,7 @@ import EmptyIndicator from "./EmptyIndicator/EmptyIndicator";
 
 
 export default function FlatList(props){
-    const {parent,id=useId("flatlist"),emptymessage,renderItem,horizontal,backwards,pagingEnabled,scrollEnabled=true,threshold=0.5,transition="ease 300ms",onReachEnd,onRemoveItem,onAddItems,onSwipe}=props;
+    const {parent,id=useId("flatlist"),emptymessage,renderItem,horizontal,backwards,pagingEnabled,scrollEnabled=true,threshold=0.5,transition="ease 300ms",onFilled,onReachEnd,onRemoveItem,onAddItems,onSwipe}=props;
     const flatlist=CherryView({
         parent,id,
         at:props.at,
@@ -21,6 +21,7 @@ export default function FlatList(props){
         popuplist:null,
         isolatedcount:0,//elements with removed items count,
         offsetSide:"offset"+(horizontal?"Left":"Top"),
+        filled:false,
     },{data,offsetSide}=state;
 
     flatlist.innateHTML=`
@@ -36,6 +37,13 @@ export default function FlatList(props){
     const observer=new IntersectionObserver(([entry])=>{
         const {isIntersecting}=entry;
         if(isIntersecting){
+            if(onFilled&&(!state.filled)){
+                const {index}=state;
+                if((entry.intersectionRatio<1)||(index>=(data.length-1))){
+                    state.filled=true;
+                    onFilled({element:state.itemEl,item:data[index],index});
+                }
+            }
             state.index++;
             observer.unobserve(state.itemEl);
             const {index}=state;

@@ -1,0 +1,27 @@
+.tabview{
+    position:relative !important;
+    width:fit-content;
+    flex:1;
+    display:inline-flex;
+    vertical-align:middle;
+    justify-content:center;
+    align-items:center;
+    padding:3em 2em;
+    margin:0 2em;
+    background-color:transparent;
+    font-size:0.85em;
+}
+.tabview>img{
+    width:6.4em;
+    flex-shrink:0;
+    margin-right:1.333em;
+}
+.tabview>label{
+    font-family:var(--mainFont);
+    font-weight:600;
+    font-size:4.2667em;
+    white-space:nowrap;
+    text-transform:capitalize;
+    text-overflow:ellipsis;
+    overflow:hidden;
+}

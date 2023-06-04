@@ -82,6 +82,11 @@ type FlatListProps<Type>=ExtendableViewProps<"div">&{
       */
     onRemoveItem(data:ItemData<Type>):void,
     /**
+     * Called once the list element is filled
+     * @param data 
+     */
+    onFilled(data:ItemData<Type>&{index:Number}):void,
+    /**
      * Triggered when the last data item is reached
      * @param context 
      */
