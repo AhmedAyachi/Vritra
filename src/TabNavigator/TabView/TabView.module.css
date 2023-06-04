@@ -25,3 +25,9 @@
     text-overflow:ellipsis;
     overflow:hidden;
 }
+
+@media(any-hover){
+    .tabview:hover,.tabview>*{
+        cursor:pointer;
+    }
+}

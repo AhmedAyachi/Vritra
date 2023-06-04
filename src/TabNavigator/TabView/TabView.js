@@ -19,33 +19,35 @@ export default function TabView(props){
     
     tabview.onclick=()=>{
         const tabnavigator=parent.parentNode.parentNode;
-        const barview=tabnavigator.getIndicator();
-        withSequence(barview,[
-            {
-                toStyle:{
-                    width:`${tabview.offsetWidth}px`,
-                    transform:`translateX(${tabview.offsetLeft-parent.scrollLeft}px)`,
+        if(tabnavigator.getActiveId()!==tab.id){
+            const barview=tabnavigator.getIndicator();
+            withSequence(barview,[
+                {
+                    toStyle:{
+                        width:`${tabview.offsetWidth}px`,
+                        transform:`translateX(${tabview.offsetLeft-parent.scrollLeft}px)`,
+                    },
+                    duration:200,
+                    easing:"ease",
                 },
-                duration:200,
-                easing:"ease",
-            },
-        ],()=>{
-            barview.style.transform=null;
-            tabview.appendChild(barview);
-        });
-        const container=tabnavigator.getContentContainer();
-        container.innerHTML="";
-        const {contentEl}=tab;
-        if(contentEl){container.appendChild(contentEl)}
-        else{
-            const {context}=tab;
-            const contentEl=context.contentEl=tab.renderContent&&tab.renderContent({parent:container,context});
-            if(tab.memorize&&contentEl){tab.contentEl=contentEl};
+            ],()=>{
+                barview.style.transform=null;
+                tabview.appendChild(barview);
+            });
+            const container=tabnavigator.getContentContainer();
+            container.innerHTML="";
+            const {contentEl}=tab;
+            if(contentEl){container.appendChild(contentEl)}
+            else{
+                const {context}=tab;
+                const contentEl=context.contentEl=tab.renderContent&&tab.renderContent({parent:container,context});
+                if(tab.memorize&&contentEl){tab.contentEl=contentEl};
+            }
+            tabview.style.color=tintColor;
+            const iconEl=tabview.querySelector(":scope>img");
+            if(iconEl){iconEl.src=tab.icon(tintColor)};
+            onClick&&onClick();
         }
-        tabview.style.color=tintColor;
-        const iconEl=tabview.querySelector(":scope>img");
-        if(iconEl){iconEl.src=tab.icon(tintColor)};
-        onClick&&onClick();
     }
 
     return tabview;

@@ -30,8 +30,9 @@ export default function TabNavigator(props){
             return TabView({
                 parent,tab,tabTextColor,tintColor,
                 onClick:()=>{
+                    const {activeTab}=state;
                     headerlist.appendChild(barview);
-                    const {activeTab}=state,{scrollLeft}=parent;
+                    const {scrollLeft}=parent;
                     if(activeTab){
                         const activeEl=activeTab.element;
                         const iconEl=activeEl.querySelector(":scope>img");
@@ -59,7 +60,8 @@ export default function TabNavigator(props){
     });
     
     tabnavigator.getIndicator=()=>barview;
-    tabnavigator.getContentContainer=()=>tabnavigator.querySelector(`.${css.container}`)
+    tabnavigator.getContentContainer=()=>tabnavigator.querySelector(`.${css.container}`);
+    tabnavigator.getActiveId=()=>state.activeTab?.id;
 
     return tabnavigator;
 }
