@@ -18,7 +18,7 @@ export default function TabView(props){
     delete tab.contentEl;
     
     tabview.onclick=()=>{
-        const tabnavigator=parent.closest("div[id^=tabnavigator]");
+        const tabnavigator=parent.parentNode.parentNode;
         const barview=tabnavigator.getIndicator();
         withSequence(barview,[
             {
