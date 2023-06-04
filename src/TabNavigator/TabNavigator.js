@@ -38,7 +38,7 @@ export default function TabNavigator(props){
                         const iconEl=activeEl.querySelector(":scope>img");
                         if(iconEl){
                             const {icon}=activeTab;
-                            iconEl.src=icon(tabTextColor,2);
+                            iconEl.src=typeof(icon)==="function"?icon(tabTextColor,2):icon;
                         };
                         activeEl.style.color=tabTextColor;
                         barview.style.transform=`translateX(${activeEl.offsetLeft-scrollLeft}px)`;
