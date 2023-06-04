@@ -21,6 +21,7 @@ export default function TabView(props){
         const tabnavigator=parent.parentNode.parentNode;
         if(tabnavigator.getActiveId()!==tab.id){
             const barview=tabnavigator.getIndicator();
+            barview.style.width=null;
             withSequence(barview,[
                 {
                     toStyle:{
@@ -33,6 +34,7 @@ export default function TabView(props){
             ],()=>{
                 barview.style.transform=null;
                 tabview.appendChild(barview);
+                barview.style.width="100%";
             });
             const container=tabnavigator.getContentContainer();
             container.innerHTML="";
