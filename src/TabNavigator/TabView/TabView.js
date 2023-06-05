@@ -47,7 +47,7 @@ export default function TabView(props){
             }
             tabview.style.color=tintColor;
             const iconEl=tabview.querySelector(":scope>img");
-            if(iconEl){iconEl.src=typeof(icon)==="function"?icon(tabTextColor):icon};
+            if(iconEl){iconEl.src=typeof(icon)==="function"?icon(tintColor):icon};
             onClick&&onClick();
         }
     }
