@@ -12,14 +12,16 @@ export default function View(props){
 
     Object.defineProperties(view,{
         innateHTML:{set:(html)=>{
-            const element=HtmlSanitizer.sanitizeHtml(view,html);
-            element&&view.append(...element.childNodes);
+            view.innerHTML="";
+            view.beforeEndHTML=html;
         }},
         beforeEndHTML:{set:(html)=>{
-            view.insertAdjacentHTML("beforeend",HtmlSanitizer.sanitizeHtml(html));
+            const sanitizedEl=HtmlSanitizer.sanitizeHtml(view,html);
+            sanitizedEl&&view.append(...sanitizedEl.childNodes);
         }},
         afterBeginHTML:{set:(html)=>{
-            view.insertAdjacentHTML("afterbegin",HtmlSanitizer.sanitizeHtml(html));
+            const sanitizedEl=HtmlSanitizer.sanitizeHtml(view,html);
+            sanitizedEl&&view.prepend(...sanitizedEl.childNodes);
         }},
         substitute:{value:(element)=>{
             view.replaceWith(element);
