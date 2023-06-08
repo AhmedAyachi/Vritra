@@ -12,7 +12,8 @@ export default function View(props){
 
     Object.defineProperties(view,{
         innateHTML:{set:(html)=>{
-            view.innerHTML=HtmlSanitizer.sanitizeHtml(html);
+            const element=HtmlSanitizer.sanitizeHtml(view,html);
+            element&&view.append(...element.childNodes);
         }},
         beforeEndHTML:{set:(html)=>{
             view.insertAdjacentHTML("beforeend",HtmlSanitizer.sanitizeHtml(html));

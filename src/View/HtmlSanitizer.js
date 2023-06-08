@@ -8,9 +8,9 @@ export default new (function(){
 
 	const domparser=new DOMParser();
 
-	this.sanitizeHtml=(input)=>{
+	this.sanitizeHtml=(view,input)=>{
 		input=input.trim();
-		if((input=="")||(input==="<br>")) return "";
+		if((input=="")||(input==="<br>")) return null;
 		if(input.includes("<body")){input=`<body>${input}</body>`};
 
 		const doc=domparser.parseFromString(input,"text/html");
@@ -30,8 +30,11 @@ export default new (function(){
 					const attrcount=attributes.length;
 					let i=0;
 					while(newNode&&(i<attrcount)){
-						const attr=attributes[i],{name}=attr;
+						const attr=attributes[i],{name,value}=attr;
 						if(name.startsWith("on")){newNode=null;continue}
+						if(name==="ref"&&value){
+							view[value]=newNode;
+						}
 						if(newNode&&(!attributeBlackList[name])){
 							const {value}=attr;
 							if(name==="style"){
@@ -59,11 +62,11 @@ export default new (function(){
 			return newNode;
 		};
 
-		return getSanitizedClone(body).innerHTML;
+		return getSanitizedClone(body);
 	}
 	const startsWithAny=(str,searchStrs)=>{
 		const {length}=searchStrs;
-		let does=false,i=0;;
+		let does=false,i=0;
 		while((!does)&&(i<length)){
 			if(str.includes(searchStrs[i])){does=true};
 			i++;
