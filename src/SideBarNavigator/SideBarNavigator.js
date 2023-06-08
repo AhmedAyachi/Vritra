@@ -46,7 +46,7 @@ export default function SideBarNavigator(props){
                 delete entry.path;
                 container.innerHTML="";
                 renderEntry(entry,container);
-                triggerOnNavigate&&onNavigate&&onNavigate(entry.id,current?.id);
+                triggerOnNavigate&&onNavigate&&onNavigate({id:entry.id,name:entry.name},current&&{id:current.id,name:current.name});
             }
         }
     }

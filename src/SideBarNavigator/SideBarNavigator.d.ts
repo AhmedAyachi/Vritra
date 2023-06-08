@@ -25,7 +25,10 @@ interface SideBarNavigatorProps extends ExtendableViewProps<"div"> {
      * @default "dark"
      */
     sideBarScrollTheme:"light"|"dark",
-    onNavigate(currentId:String,previousId:String|null):void,
+    onNavigate(
+        current:{id:String,name:String},
+        previousId:{id:String,name:String}|null,
+    ):void,
 }
 
 interface SideBarNavigator extends View<"div"> {
