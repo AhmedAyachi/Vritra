@@ -26,7 +26,7 @@ type ViewProps<Tag>={
     at?:"start"|"end";
 };
 
-type View<Tag>=HTMLElementTagNameMap[Tag]&{
+type View<Tag>=(Tag extends keyof HTMLElementTagNameMap?HTMLElementTagNameMap[Tag]:HTMLDivElement)&{
     /**
      * Sets safely the HTML or XML markup contained within the element.
      * 
