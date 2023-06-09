@@ -28,26 +28,28 @@ export default new (function(){
 					newNode=doc.createElement(tagName);
 					const {attributes}=node;
 					const attrcount=attributes.length;
-					let i=0;
+					let i=0,ref;
 					while(newNode&&(i<attrcount)){
-						const attr=attributes[i],{name,value}=attr;
+						const attribute=attributes[i],{name}=attribute;
 						if(name.startsWith("on")){newNode=null;continue}
-						if(name==="ref"&&value){
-							view[value]=newNode;
-						}
 						if(newNode&&(!attributeBlackList[name])){
-							const {value}=attr;
-							if(name==="style"){
-								if(hasJavascriptScheme(value)){newNode=null;continue};
+							const {value}=attribute;
+							if((name==="ref")&&value){ref=value}
+							else{
+								if(name==="style"){
+									if(hasJavascriptScheme(value)){newNode=null;continue};
+								}
+								else if(uriAttributes[name]){
+									if(value.includes(":")&&(!startsWithAny(value,schemaWhiteList))){newNode=null;continue};
+								} 
+								newNode?.setAttribute(attribute.name,value);
 							}
-							else if(uriAttributes[name]){
-								if(value.includes(":")&&(!startsWithAny(value,schemaWhiteList))){newNode=null;continue};
-							}
-							newNode?.setAttribute(attr.name,value);
 						}
 						i++;
 					}
 					if(newNode){
+						view[ref]=newNode;
+						fixNode(tagName,newNode);
 						const {childNodes}=node,{length}=childNodes;
 						for(let i=0;i<length;i++){
 							const clone=getSanitizedClone(childNodes[i]);
@@ -73,5 +75,18 @@ export default new (function(){
 		}
 		return does;
 	}
+
+	const fixNode=(tagName,node)=>{
+		switch(tagName){
+			case "BUTTON":
+				if(!node.hasAttribute("type")){node.setAttribute("type","button")};
+				break;
+			case "IMG":
+				if(!node.hasAttribute("alt")){node.setAttribute("alt","img")};
+				break;
+			default:break;
+		}
+	}
+
 	const hasJavascriptScheme=(str)=>Boolean(str.includes(":")&&str.match(/javascript:/im));
 });
