@@ -1,11 +1,10 @@
-import {useId} from "../index";
 import HtmlSanitizer from "./HtmlSanitizer";
 
 
 export default function View(props){
-    const {parent,id=useId("view"),tag,className,at,style}=props;
+    const {parent,id,tag,className,at,style}=props;
     const view=document.createElement(tag||"div");
-    view.id=id;
+    if(id){view.id=id};
     view.className=className;
     style&&(typeof(style)==="string")&&view.setAttribute("style",style);
     parent&&((at==="start")?parent.insertAdjacentElement("afterbegin",view):parent.appendChild(view));
