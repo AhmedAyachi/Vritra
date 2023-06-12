@@ -32,24 +32,25 @@ export default new (function(){
 					while(newNode&&(i<attrcount)){
 						const attribute=attributes[i],{name}=attribute;
 						if(name.startsWith("on")){newNode=null;continue}
-						if(newNode&&(!attributeBlackList[name])){
+						else if(name==="ref"){
 							const {value}=attribute;
-							if((name==="ref")&&value){ref=value}
-							else{
-								if(name==="style"){
-									if(hasJavascriptScheme(value)){newNode=null;continue};
-								}
-								else if(uriAttributes[name]){
-									if(value.includes(":")&&(!startsWithAny(value,schemaWhiteList))){newNode=null;continue};
-								} 
-								newNode?.setAttribute(attribute.name,value);
+							if(value){ref=value};
+						}
+						else if(!attributeBlackList[name]){
+							const {value}=attribute;
+							if(name==="style"){
+								if(hasJavascriptScheme(value)){newNode=null;continue};
 							}
+							else if(uriAttributes[name]){
+								if(value.includes(":")&&(!startsWithAny(value,schemaWhiteList))){newNode=null;continue};
+							} 
+							newNode.setAttribute(attribute.name,value);
 						}
 						i++;
 					}
 					if(newNode){
-						view[ref]=newNode;
-						fixNode(tagName,newNode);
+						if(ref){view[ref]=newNode};
+						setNode(tagName,newNode);
 						const {childNodes}=node,{length}=childNodes;
 						for(let i=0;i<length;i++){
 							const clone=getSanitizedClone(childNodes[i]);
@@ -76,13 +77,30 @@ export default new (function(){
 		return does;
 	}
 
-	const fixNode=(tagName,node)=>{
+	const setNode=(tagName,node)=>{
 		switch(tagName){
 			case "BUTTON":
 				if(!node.hasAttribute("type")){node.setAttribute("type","button")};
 				break;
 			case "IMG":
 				if(!node.hasAttribute("alt")){node.setAttribute("alt","img")};
+				break;
+			case "EMBED":
+				console.time("svg");
+				const {color,fill,weight}=node.attributes;
+				node.addEventListener("load",()=>{
+					const svgdoc=node.getSVGDocument();
+					const svg=svgdoc?.querySelector("svg");
+					if(svg){
+						const {style}=svg;
+						svg.classList.add(node.className);
+						if(color){style.stroke=color.value};
+						if(fill){style.fill=fill.value};
+						if(weight){style.strokeWidth=weight.value};
+						node.replaceWith(svg);
+					}
+					console.timeEnd("svg");
+				},{once:true});
 				break;
 			default:break;
 		}
