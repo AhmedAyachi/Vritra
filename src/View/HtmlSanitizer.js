@@ -1,14 +1,14 @@
 
 
 export default new (function(){
-	const tagBlackList={"SCRIPT":true,"STYLE":true};
+	const tagBlackList={"script":true,"SCRIPT":true,"STYLE":true,"OBJECT":true};
 	const attributeBlackList={}
 	const schemaWhiteList=["http:","https:","data:","m-files:","file:","ftp:","mailto:","pw:"]; //which "protocols" are allowed in "href", "src" etc
 	const uriAttributes={"href":true,"action":true};
 
 	const domparser=new DOMParser();
 
-	this.sanitizeHtml=(view,input)=>{
+	this.sanitizeHtml=(input,view)=>{
 		input=input.trim();
 		if((input=="")||(input==="<br>")) return null;
 		if(input.includes("<body")){input=`<body>${input}</body>`};
@@ -25,8 +25,8 @@ export default new (function(){
 			else{
 				const {tagName}=node;
 				if((node.nodeType===Node.ELEMENT_NODE)&&((!tagBlackList[tagName]))){
-					newNode=doc.createElement(tagName);
 					const {attributes}=node;
+					newNode=isDecentNode(tagName,attributes)&&doc.createElement(tagName);
 					const attrcount=attributes.length;
 					let i=0,ref;
 					while(newNode&&(i<attrcount)){
@@ -49,7 +49,7 @@ export default new (function(){
 						i++;
 					}
 					if(newNode){
-						if(ref){view[ref]=newNode};
+						if(ref&&view){view[ref]=newNode};
 						setNode(tagName,newNode);
 						const {childNodes}=node,{length}=childNodes;
 						for(let i=0;i<length;i++){
@@ -77,6 +77,23 @@ export default new (function(){
 		return does;
 	}
 
+	const isDecentNode=(tagName,attributes)=>{
+		let decent;
+		switch(tagName){
+			case "EMBED":
+				const {src}=attributes;
+				if(src){
+					const {value}=src;
+					if(value&&value.endsWith(".svg")){decent=true}
+				}
+				break;
+			default:
+				decent=true;
+				break;
+		}
+		return decent;
+	}
+
 	const setNode=(tagName,node)=>{
 		switch(tagName){
 			case "BUTTON":
@@ -85,22 +102,30 @@ export default new (function(){
 			case "IMG":
 				if(!node.hasAttribute("alt")){node.setAttribute("alt","img")};
 				break;
+			case "IFRAME":
+				node.setAttribute("sandbox","");
+				break;
 			case "EMBED":
-				console.time("svg");
-				const {color,fill,weight}=node.attributes;
-				node.addEventListener("load",()=>{
-					const svgdoc=node.getSVGDocument();
-					const svg=svgdoc?.querySelector("svg");
-					if(svg){
-						const {style}=svg;
-						svg.classList.add(node.className);
-						if(color){style.stroke=color.value};
-						if(fill){style.fill=fill.value};
-						if(weight){style.strokeWidth=weight.value};
-						node.replaceWith(svg);
+				const {attributes}=node,{value}=attributes.src;
+				node.removeAttribute("src");
+				const request=new XMLHttpRequest();
+				request.open("GET",value,true);
+				request.onreadystatechange=()=>{
+					if((request.readyState===4)&&(request.status===200)){
+						const svgbody=this.sanitizeHtml(request.responseText);
+						const svg=svgbody.getElementsByTagName("svg")[0];
+						if(svg){
+							const {color,fill,weight}=attributes;
+							const {style}=svg,{className}=node;
+							className&&svg.classList.add(className);
+							if(color){style.stroke=color.value};
+							if(fill){style.fill=fill.value};
+							if(weight){style.strokeWidth=weight.value};
+							node.outerHTML=svg.outerHTML;
+						}
 					}
-					console.timeEnd("svg");
-				},{once:true});
+				};
+				request.send();
 				break;
 			default:break;
 		}

@@ -9,7 +9,7 @@ type ViewProps<Tag>={
      */
     id?:String,
     className?:String,
-    style?:String,
+    style?:String|CSSStyleDeclaration,
     /**
      * @default "div"
      */
