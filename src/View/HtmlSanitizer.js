@@ -2,7 +2,7 @@
 
 export default new (function(){
 	const tagBlackList={"script":true,"SCRIPT":true,"STYLE":true,"OBJECT":true};
-	const attributeBlackList={}
+	const attributeBlackList={"as":true}
 	const schemaWhiteList=["http:","https:","data:","m-files:","file:","ftp:","mailto:","pw:"]; //which "protocols" are allowed in "href", "src" etc
 	const uriAttributes={"href":true,"action":true};
 
@@ -23,22 +23,26 @@ export default new (function(){
 				newNode=node.cloneNode(true);
 			} 
 			else{
-				const {tagName}=node;
+				let {tagName}=node;
 				if((node.nodeType===Node.ELEMENT_NODE)&&((!tagBlackList[tagName]))){
 					const {attributes}=node;
+					const istext=tagName==="TEXT";
+					if(istext){
+						const {as}=attributes;
+						tagName=(as&&as.value)||"p";
+					}
 					newNode=isDecentNode(tagName,attributes)&&doc.createElement(tagName);
 					const attrcount=attributes.length;
 					let i=0,ref;
 					while(newNode&&(i<attrcount)){
 						const attribute=attributes[i],{name}=attribute;
 						if(name.startsWith("on")){newNode=null;continue}
-						else if(name==="ref"){
-							const {value}=attribute;
-							if(value){ref=value};
-						}
 						else if(!attributeBlackList[name]){
 							const {value}=attribute;
-							if(name==="style"){
+							if(name==="ref"){
+								if(value){ref=value};
+							}
+							else if(name==="style"){
 								if(hasJavascriptScheme(value)){newNode=null;continue};
 							}
 							else if(uriAttributes[name]){
@@ -51,10 +55,15 @@ export default new (function(){
 					if(newNode){
 						if(ref&&view){view[ref]=newNode};
 						setNode(tagName,newNode);
-						const {childNodes}=node,{length}=childNodes;
-						for(let i=0;i<length;i++){
-							const clone=getSanitizedClone(childNodes[i]);
-							(clone instanceof Node)&&newNode.appendChild(clone);
+						if(istext){
+							newNode.innerText=node.innerHTML;
+						}
+						else{
+							const {childNodes}=node,{length}=childNodes;
+							for(let i=0;i<length;i++){
+								const clone=getSanitizedClone(childNodes[i]);
+								(clone instanceof Node)&&newNode.appendChild(clone);
+							}
 						}
 					}
 				}
