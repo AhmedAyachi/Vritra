@@ -39,16 +39,16 @@ export default new (function(){
 						if(name.startsWith("on")){newNode=null;continue}
 						else if(!attributeBlackList[name]){
 							const {value}=attribute;
-							if(name==="ref"){
-								if(value){ref=value};
+							if(name==="ref"){if(value){ref=value}}
+							else{
+								if(name==="style"){
+									if(hasJavascriptScheme(value)){newNode=null;continue};
+								}
+								else if(uriAttributes[name]){
+									if(value.includes(":")&&(!startsWithAny(value,schemaWhiteList))){newNode=null;continue};
+								} 
+								newNode.setAttribute(attribute.name,value);
 							}
-							else if(name==="style"){
-								if(hasJavascriptScheme(value)){newNode=null;continue};
-							}
-							else if(uriAttributes[name]){
-								if(value.includes(":")&&(!startsWithAny(value,schemaWhiteList))){newNode=null;continue};
-							} 
-							newNode.setAttribute(attribute.name,value);
 						}
 						i++;
 					}
