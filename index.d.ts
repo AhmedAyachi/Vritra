@@ -3,19 +3,31 @@ declare module "cherries";
 
 export {default as View,ViewProps,View as ViewInterface} from "./src/View/View";
 export {default as CherryView} from "./src/CherryView/CherryView";
-export {default as SideBarNavigator} from "./src/SideBarNavigator/SideBarNavigator";
+export {default as SideBarNavigator,SideBarNavigatorProps} from "./src/SideBarNavigator/SideBarNavigator";
 export {default as DrawerNavigator} from "./src/DrawerNavigator/DrawerNavigator";
+export {default as TabNavigator} from "./src/TabNavigator/TabNavigator";
 export {default as Switch} from "./src/Switch/Switch";
 export {default as PopupView} from "./src/PopupView/PopupView";
 export {default as ActionSetView} from "./src/ActionSetView/ActionSetView";
 export {default as AccordionView} from "./src/AccordionView/AccordionView";
 export {default as Palette} from "./src/Palette/Palette";
 export {default as FlatList} from "./src/FlatList/FlatList";
-export {default as DraggableView} from "./src/DraggableView/DraggableView";
+export {default as DraggableView,} from "./src/DraggableView/DraggableView";
 export {default as CherryMap} from "./src/CherryMap/CherryMap";
 export {HashRouter} from "./src/HashRouter/HashRouter";
 export {useZoomGesture,usePinchGesture,useSwipeGesture} from "./src/Gestures";
+export {default as withSequence} from "./src/withSequence/withSequence";
 
+
+/**
+ * 
+ * @param hexcolor 
+ * @param asarray if true the color rgba representation is returned an an array of decimals [r,g,b,a]
+ * @default false
+ */
+export function hexColorToRGBA(hexcolor:string,asarray:boolean):String|Number[];
+
+export function hexToDecimal(hexcode:string):Number;
 
 /**
  * 

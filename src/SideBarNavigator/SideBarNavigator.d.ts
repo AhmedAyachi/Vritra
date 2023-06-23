@@ -1,7 +1,10 @@
-import {ViewProps,View} from "../View/View";
+import {ExtendableViewProps,View} from "../View/View";
+import {CherryIcon} from "../ActionSetView/ActionSetView";
 
 
-export default function SideBarNavigator(props:ViewProps&{
+export default function SideBarNavigator(props:SideBarNavigatorProps):SideBarNavigator;
+
+interface SideBarNavigatorProps extends ExtendableViewProps<"div"> {
     sidebarClassName?:string,
     containerClassName?:string,
     entries:SideBarNavigatorEntry[],
@@ -22,10 +25,13 @@ export default function SideBarNavigator(props:ViewProps&{
      * @default "dark"
      */
     sideBarScrollTheme:"light"|"dark",
-    onNavigate(currentId:String,previousId:String|null):void,
-}):SideBarNavigator;
+    onNavigate(
+        current:{id:String,name:String},
+        previousId:{id:String,name:String}|null,
+    ):void,
+}
 
-interface SideBarNavigator extends View {
+interface SideBarNavigator extends View<"div"> {
     /**
      * Toggles the entry with such id
      * 
@@ -43,12 +49,15 @@ interface SideBarNavigator extends View {
 }
 
 type SideBarNavigatorEntry={
+    /**
+     * Should be unique among all entries
+     */
     id:string,
     /**
      * If no name is supplied, the id is used as a name
      */
     name?:string,
-    icon?:string|((color:String,weight:Number)=>String),
+    icon?:CherryIcon,
     /**
      * If entries are supplied, the entry is a folder, else an endpoint.
      */
@@ -69,6 +78,7 @@ type SideBarNavigatorEntry={
      * 
      * Parent-folders are automatically expanded
      * @default false
+     * @see If the first entry is a folder entry, it's expanded by default
      */
     expanded?:boolean,
 }

@@ -31,24 +31,22 @@ export default function SideBarNavigator(props){
             const container=sidebarnavigator.querySelector(`:scope>.${css.container}`);
             const entry=entryId&&findEntry(entryId,entries);
             if(entry){
-                current?.element.toggle(Boolean(current.entries));
+                current&&(!current.entries)&&current.element.toggle(false);
                 state.current=entry;
-                const {path}=entry;
-                let i=path.length-1;
+                const {path=[entry]}=entry;
+                let i=path.length;
                 !function selectEntry(){
+                    i--;
                     if(i>-1){
                         const {element}=path[i];
-                        element?.toggle(true,()=>{
-                            i--;
-                            selectEntry();
-                        });
+                        element.toggle(true,selectEntry);
                     }
                 }();
                 delete entry.parentId;
                 delete entry.path;
                 container.innerHTML="";
                 renderEntry(entry,container);
-                triggerOnNavigate&&onNavigate&&onNavigate(entry.id,current?.id);
+                triggerOnNavigate&&onNavigate&&onNavigate({id:entry.id,name:entry.name},current&&{id:current.id,name:current.name});
             }
         }
     }

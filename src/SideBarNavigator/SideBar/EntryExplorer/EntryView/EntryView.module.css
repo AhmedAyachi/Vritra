@@ -1,5 +1,4 @@
 .entryview{
-    position:relative;
     max-width:100%;
 }
 .header{
@@ -42,7 +41,7 @@
 }
 .icon{
     width:4em;
-    margin-left:1em;
+    margin-right:1em;
 }
 
 @media(any-hover){

@@ -1,5 +1,5 @@
-import {View,ViewProps} from "../View/View";
-import {ActionSetActionProp} from "../ActionSetView/ActionSetView";
+import {View,ExtendableViewProps} from "../View/View";
+import {ActionSetAction,CherryIcon} from "../ActionSetView/ActionSetView";
 
 
 /**
@@ -7,7 +7,7 @@ import {ActionSetActionProp} from "../ActionSetView/ActionSetView";
  * @param props AccordionView props
  * @see AccordionView css variables : paddingHorizontal borderRadius
  */
-export default function AccordionView(props:ViewProps&{
+export default function AccordionView(props:ExtendableViewProps<"div">&{
     /**
      * Default header title
      */
@@ -39,7 +39,7 @@ export default function AccordionView(props:ViewProps&{
     /**
      * Default header indicator icon as url/base64 string or function
      */
-    indicator?:string|((color="black",weight=1)=>string),
+    indicator?:CherryIcon,
     /**
      * Specifies if the content view will be connected to the header or not to 
      * remove header bottom border radius when open
@@ -54,7 +54,7 @@ export default function AccordionView(props:ViewProps&{
     /**
      * Actions of the default header ActionsSetView
      */
-    actions?:ActionSetActionProp[],
+    actions?:ActionSetAction[],
     /**
      * title, indicator and actions color of the default header
      */
@@ -70,10 +70,7 @@ export default function AccordionView(props:ViewProps&{
     onClose():void,
 }):AccordionView;
 
-
-//type AccordionViewProps=
-
-interface AccordionView extends View {
+interface AccordionView extends View<"div"> {
     /**
      * Locks and unlocks the accordionview
      * @param locked 

@@ -1,10 +1,10 @@
-import {ViewProps,View} from "../View/View";
+import {ExtendableViewProps,View} from "../View/View";
 
 /**
  * A self-position-adjustment view
  * @param props 
  */
-export default function PopupView(props:ViewProps&{
+export default function PopupView(props:ExtendableViewProps<"div">&{
     /**
      * Near which the popupview is shown
      */
@@ -29,7 +29,7 @@ export default function PopupView(props:ViewProps&{
 }):PopupView;
 
 
-interface PopupView extends View {
+interface PopupView extends View<"div"> {
     /**
      * Cleans up the added event listeners
      */

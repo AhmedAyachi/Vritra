@@ -1,7 +1,7 @@
-import {ViewProps,View} from "../View/View";
+import {ExtendableViewProps,View} from "../View/View";
 
 
-export default function DrawerNavigator(props:ViewProps&{
+export default function DrawerNavigator(props:ExtendableViewProps<"div">&{
     /**
      * Header container className
      */
@@ -29,7 +29,7 @@ export default function DrawerNavigator(props:ViewProps&{
     renderHeader(props:{parent:HTMLElement,route:DrawerNavigatorRoute}):HTMLElement,
 }):DrawerNavigator;
 
-interface DrawerNavigator extends View {
+interface DrawerNavigator extends View<"div"> {
     /**
      * Shows the drawer view
      */

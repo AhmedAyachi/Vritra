@@ -1,7 +1,7 @@
-import {ViewProps,View} from "../View/View";
+import {ExtendableViewProps,View} from "../View/View";
 
 
-export default function Switch(props:ViewProps&{
+export default function Switch(props:ExtendableViewProps<"div">&{
     active?:boolean,
     thumbColor?:String|SwitchColor,
     trackColor?:String|SwitchColor,
@@ -12,7 +12,7 @@ export default function Switch(props:ViewProps&{
     onChange(active:Boolean):void,
 }):Switch;
 
-interface Switch extends View {
+interface Switch extends View<"div"> {
     /**
      * Sets the switch status. Toggling behavior by default.
      * 

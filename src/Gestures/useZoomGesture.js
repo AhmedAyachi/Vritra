@@ -4,12 +4,14 @@ import usePinchGesture from "./usePinchGesture";
 export default function useZoomGesture(options){
     const {element,minScale=1,maxScale=10,onZoomStart,onZoom,onZoomEnd}=options;
     element.style.transformOrigin="50% 50%"; 
-    let origin=getOrigin(element);
+    let origin;
+
     usePinchGesture({
         element,
         maxPointerCount:2,
-        onStart:onZoomStart&&((event)=>{
-            onZoomStart(Object.assign(event,{translateX:0,translateY:0}));
+        onStart:((event)=>{
+            origin=getOrigin(element);
+            onZoomStart&&onZoomStart(Object.assign(event,{translateX:0,translateY:0}));
         }),
         onMove:(event)=>{
             const {scale}=event;
@@ -41,7 +43,7 @@ const statics={
 }
 
 const getOrigin=(element)=>{
-    const {width,height,left,top}=element.getBoundingClientRect(); 
+    const {width,height,left,top}=element.getBoundingClientRect();
     return {
         x:(window.innerWidth/2+(left+width/2))/2,
         y:(window.innerHeight/2+(top+height/2))/2,

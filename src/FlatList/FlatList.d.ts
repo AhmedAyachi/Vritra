@@ -1,10 +1,101 @@
-import {View,ViewProps} from "../View/View";
+import {View,ExtendableViewProps} from "../View/View";
 import {SwipeEvent} from "../Gestures/useSwipeGesture";
 
 
 export default function FlatList<Type>(props:FlatListProps<Type>):FlatList<Type>;
 
-interface FlatList<Type> extends View {
+type FlatListProps<Type>=ExtendableViewProps<"div">&{
+    containerClassName:string,
+    popupClassName:string,
+    /**
+     * Flatlist data array
+     * 
+     * Items should be unique
+     * 
+     * The flatlist doesn't use this array but its shallow copy
+     */
+    data?:Type[],
+    /**
+     * @see Do not forget to set the item element display to inline 
+     */
+    horizontal:boolean,
+    /**
+     * Message to show when the flatlist is empty.
+     * @default "no data"
+     */
+    emptymessage:string,
+    /**
+     * Make Flatlist scrollable from bottom/right to top/left.
+     * 
+     * Specify a flatlist height value if elements get shown at once.
+     */
+    backwards:boolean,
+    /**
+     * Item element should have a specified height/width value (depending on the horizontal prop value)
+     * for the paging to function properly
+     */
+    pagingEnabled:boolean,
+    /**
+     * When false, the flatlist cannot be scrolled via touch interaction
+     * @default true
+     */
+    scrollEnabled:boolean,
+    /**
+     * A number in range 0..1.
+     * The visiblity fraction of an element in order to create the next one.
+     * @example 
+     * 0.5 => When half of the element is visible, the next one is created.
+     * @default 0.5
+     */
+    threshold:number,
+    /**
+     * Used with pagingEnabled true.
+     * Specifies the transition animation from one element to the next
+     * @default "ease 300ms"
+     */
+    transition:string,
+     /**
+      * Function to execute on each data item
+      * 
+      * Must return a HTMLElement
+      * @param props component props
+      */
+    renderItem(props:{
+        parent:HTMLDivElement,
+        item:Type,
+        index:Number,
+        data:Type[],
+    }):HTMLElement,
+    /**
+     * Used with pagingEnabled true.
+     * @param params 
+     */
+    onSwipe(event:FlatListSwipeEvent):void,
+    /**
+     * Triggered each time addItems method called;
+     * @param items added items array
+     */
+    onAddItems(items:Type[]):void,
+     /**
+      * Triggered each time removeItem method called;
+      * @param data
+      */
+    onRemoveItem(data:ItemData<Type>):void,
+    /**
+     * Called once the list element is filled
+     * @param data 
+     */
+    onFilled(data:ItemData<Type>&{index:Number}):void,
+    /**
+     * Triggered when the last data item is reached
+     * @param context 
+     */
+    onReachEnd(context:{container:HTMLElement,data:Type[]}):void,
+}
+
+type PopupProps<Type>=Omit<FlatListProps<Type>,"at"|"containerClassName"|"popupClassName"|"data">
+
+interface FlatList<Type> extends View<"div"> {
     /**
      * Scrolls to a specific content pixel offset in the list
      * @param offset 
@@ -61,93 +152,6 @@ interface FlatList<Type> extends View {
      * If items is not an array, The method removes the popup flatlist.
      */
     showItems<Type>(predicate:(item:Type,index:Number,data:Type[])=>Boolean,props?:PopupProps<Type>):FlatList<Type>|null,
-}
-
-type PopupProps<Type>=ViewProps&{
-    /**
-     * @see Do not forget to set the item element display to inline 
-     */
-    horizontal:boolean,
-    /**
-     * Message to show when the flatlist is empty.
-     * @default "no data"
-     */
-    emptymessage:string,
-    /**
-     * Make Flatlist scrollable from bottom/right to top/left.
-     * 
-     * Specify a flatlist height value if elements get shown at once.
-     */
-    backwards:boolean,
-    /**
-     * Item element should have a specified height/width value (depending on the horizontal prop value)
-     * for the paging to function properly
-     */
-    pagingEnabled:boolean,
-    /**
-     * When false, the flatlist cannot be scrolled via touch interaction
-     * @default true
-     */
-    scrollEnabled:boolean,
-    /**
-     * A number in range 0..1.
-     * The visiblity fraction of an element in order to create the next one.
-     * @example 
-     * 0.5 => When half of the element is visible, the next one is created.
-     * @default 0.5
-     */
-    threshold:number,
-    /**
-     * Used with pagingEnabled true.
-     * Specifies the transition animation from one element to the next
-     * @default "250ms"
-     */
-    transition:string,
-     /**
-      * Function to execute on each data item
-      * 
-      * Must return a HTMLElement
-      * @param props component props
-      */
-    renderItem(props:{
-        parent:HTMLDivElement,
-        item:Type,
-        index:Number,
-        data:Type[],
-    }):HTMLElement,
-    /**
-     * Used with pagingEnabled true.
-     * @param params 
-     */
-    onSwipe(event:FlatListSwipeEvent):void,
-    /**
-     * Triggered each time addItems method called;
-     * @param items added items array
-     */
-    onAddItems(items:Type[]):void,
-     /**
-      * Triggered each time removeItem method called;
-      * @param data
-      */
-    onRemoveItem(data:ItemData<Type>):void,
-    /**
-     * Triggered when the last data item is reached
-     * @param context 
-     */
-    onReachEnd(context:{container:HTMLElement,data:Type[]}):void,
-}
-
-type FlatListProps<Type>=PopupProps<Type>&{
-    containerClassName:string,
-    popupClassName:string,
-    /**
-     * Flatlist data array
-     * 
-     * Items should be unique
-     * 
-     * The flatlist doesn't use this array but its shallow copy
-     */
-    data:Type[],
 }
 
 type ItemData<Type>={

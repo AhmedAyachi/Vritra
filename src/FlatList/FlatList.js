@@ -4,14 +4,14 @@ import EmptyIndicator from "./EmptyIndicator/EmptyIndicator";
 
 
 export default function FlatList(props){
-    const {parent,id=useId("flatlist"),emptymessage,renderItem,horizontal,backwards,pagingEnabled,scrollEnabled=true,threshold=0.5,transition="250ms",onReachEnd,onRemoveItem,onAddItems,onSwipe}=props;
+    const {parent,id=useId("flatlist"),emptymessage,renderItem,horizontal,backwards,pagingEnabled,scrollEnabled=true,threshold=0.5,transition="ease 300ms",onFilled,onReachEnd,onRemoveItem,onAddItems,onSwipe}=props;
     const flatlist=CherryView({
         parent,id,
         at:props.at,
         style:props.style,
         className:`${css.flatlist} ${props.className||""}`,
     }),state={
-        data:Array.isArray(props.data)&&[...props.data],
+        data:Array.isArray(props.data)?[...props.data]:[],
         index:null,//last created element index
         itemEl:null,//last created element (observed)
         focus:null,//for paging, element in focus
@@ -21,6 +21,7 @@ export default function FlatList(props){
         popuplist:null,
         isolatedcount:0,//elements with removed items count,
         offsetSide:"offset"+(horizontal?"Left":"Top"),
+        filled:false,
     },{data,offsetSide}=state;
 
     flatlist.innateHTML=`
@@ -36,6 +37,13 @@ export default function FlatList(props){
     const observer=new IntersectionObserver(([entry])=>{
         const {isIntersecting}=entry;
         if(isIntersecting){
+            if(onFilled&&(!state.filled)){
+                const {index}=state;
+                if((entry.intersectionRatio<1)||(index>=(data.length-1))){
+                    state.filled=true;
+                    onFilled({element:state.itemEl,item:data[index],index});
+                }
+            }
             state.index++;
             observer.unobserve(state.itemEl);
             const {index}=state;
@@ -59,7 +67,7 @@ export default function FlatList(props){
     }
 
     if(pagingEnabled){
-        container.style.overflow="visible";
+        //container.style.overflow="visible";
         flatlist.style.overflow="hidden";
         scrollEnabled&&useSwipeGesture({
             element:flatlist,
@@ -140,7 +148,7 @@ export default function FlatList(props){
                 onRemoveItem:null,
                 ...popupProps,
                 parent:flatlist,
-                className:`${css.popuplist} ${props.popupClassName||""}`,
+                className:`${css.popuplist} ${props.popupClassName||""} ${popupProps.className||""}`,
                 data:items,
             });
             flatlist.style.overflow="hidden";
@@ -154,32 +162,28 @@ export default function FlatList(props){
     flatlist.scrollToOffset=(offset,smooth=true)=>{
         if(offset<0){offset=0};
         let lastEl=state.itemEl;
+        observer.unobserve(lastEl);
         let reachedOffset=lastEl[offsetSide];
         const lastIndex=data.length-1;
         while((offset>=reachedOffset)&&(state.index<lastIndex)){
-            observer.unobserve(state.itemEl);
             const i=state.index=state.index+1;
-            createElement({item:data[i],index:i},true);
+            createElement({item:data[i],index:i},false);
             lastEl=state.itemEl;
             reachedOffset=lastEl[offsetSide];
         }
-        console.log(offset,reachedOffset);
+        observer.observe(lastEl);
         if(offset>=reachedOffset){offset=reachedOffset};
         if(pagingEnabled){
             if(scrollEnabled){
-                const item=findItem(state.itemsmap.values(),(element,i)=>{
-                    const value=offset>=(element[offsetSide]-state.firstOffset);
-                    console.log({offset,offsetSide:element[offsetSide],index:i});
-                    return value;
-                },true);
-                console.log(item,state.focus);
+                const item=findItem(state.itemsmap.values(),(element)=>offset>=(element[offsetSide]-state.firstOffset),true);
                 if(item){state.focus=item.index}
             }
             if(!smooth){
                 container.style.transition="none";
                 setTimeout(()=>{container.style.transition=transition},0);
             }
-            container.style.transform=`translate${horizontal?"X":"Y"}(-${offset>0?offset:0}px)`;
+            const axis=horizontal?"X":"Y";
+            container.style.transform=`${backwards?`scale${axis}(-1) `:""}translate${axis}(-${offset>0?offset:0}px)`;
         }
         else{
             container.scrollTo({

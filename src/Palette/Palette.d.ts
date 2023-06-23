@@ -1,12 +1,13 @@
-import {ViewProps,View} from "../View/View";
+import {ExtendableViewProps,View} from "../View/View";
+import {CherryIcon} from "../ActionSetView/ActionSetView";
 
 
-export default function Palette(props:ViewProps&{
+export default function Palette(props:ExtendableViewProps<"div">&{
     /**
      * Picker icon
      * @default palette icon
      */
-    icon:string|((color="black",weight=2)=>string),
+    icon:CherryIcon,
     /**
      * default icon color
      * @default "black"
@@ -22,7 +23,7 @@ export default function Palette(props:ViewProps&{
 }):Palette;
 
 
-interface Palette extends View {
+interface Palette extends View<"div"> {
     /**
      * 
      * Sets the palette color, closes the picker if already open
@@ -30,5 +31,5 @@ interface Palette extends View {
      * Value shoud be in colors array otherwise color prop is used
      * @param callOnChange If true onChange is called, default to true
      */
-    setColor(color:String,callOnChange=true):void,
+    setColor(color:String,callOnChange?:boolean):void,
 }

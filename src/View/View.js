@@ -1,24 +1,28 @@
-import {useId} from "../index";
 import HtmlSanitizer from "./HtmlSanitizer";
 
 
 export default function View(props){
-    const {parent,id=useId("view"),className,style,at,tag}=props;
+    const {parent,id,tag,className,at,style}=props;
     const view=document.createElement(tag||"div");
-    view.id=id;
-    view.className=className;
-    style&&(typeof(style)==="string")&&view.setAttribute("style",style);
-    (at==="start")?parent.insertAdjacentElement("afterbegin",view):parent.appendChild(view);
+    if(id){view.id=id};
+    if(className){view.className=className};
+    if(style){
+        typeof(style)==="string"?view.setAttribute("style",style):Object.assign(view.style,style);
+    }
+    parent&&((at==="start")?parent.insertAdjacentElement("afterbegin",view):parent.appendChild(view));
 
     Object.defineProperties(view,{
         innateHTML:{set:(html)=>{
-            view.innerHTML=HtmlSanitizer.sanitizeHtml(html);
+            view.innerHTML="";
+            view.beforeEndHTML=html;
         }},
         beforeEndHTML:{set:(html)=>{
-            view.insertAdjacentHTML("beforeend",HtmlSanitizer.sanitizeHtml(html));
+            const sanitizedEl=HtmlSanitizer.sanitizeHtml(html,view);
+            sanitizedEl&&view.append(...sanitizedEl.childNodes);
         }},
         afterBeginHTML:{set:(html)=>{
-            view.insertAdjacentHTML("afterbegin",HtmlSanitizer.sanitizeHtml(html));
+            const sanitizedEl=HtmlSanitizer.sanitizeHtml(html,view);
+            sanitizedEl&&view.prepend(...sanitizedEl.childNodes);
         }},
         substitute:{value:(element)=>{
             view.replaceWith(element);

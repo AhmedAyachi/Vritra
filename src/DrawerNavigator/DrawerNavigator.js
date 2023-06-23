@@ -29,17 +29,14 @@ export default function DrawerNavigator(props){
         </div>
         <div class="${css.container} ${props.containerClassName||""}"></div>
     `;
-
     routes?.forEach(route=>{
         if(!route.title){route.title=route.id};
     });
-
     
     if(!renderHeader){
         const showbtn=drawernavigator.querySelector(`.${css.showbtn}`);
         showbtn.onclick=()=>{drawernavigator.showDrawer()};
     }
-    
 
     drawernavigator.showDrawer=()=>{
         const {drawerview}=state;
@@ -54,11 +51,11 @@ export default function DrawerNavigator(props){
             onHide:()=>{state.drawerview=null},
         });
     }
-
     drawernavigator.navigate=(id)=>{
         const route=routes.find(route=>route.id===id);
         if(route){
-            const {id,component,memorize=true,element,scrollTop=0,scrollLeft=0}=route;
+            const {id,memorize=true,element,scrollTop=0,scrollLeft=0}=route;
+            const blocking=id===state.activeId;
             state.activeId=id;
             const container=drawernavigator.querySelector(`.${css.container}`);
             container.innerHTML="";
@@ -77,15 +74,23 @@ export default function DrawerNavigator(props){
                 element.scrollTop=scrollTop
                 element.scrollLeft=scrollLeft;
             }
-            else if(component){
-                const instance=component({parent:container});
-                if(memorize){
-                    route.element=instance;
-                }
+            else{
+                blocking?instantiateRoute(route,container):setTimeout(()=>{instantiateRoute(route,container)},20);
             }
         }
     }
     drawernavigator.navigate(state.activeId);
 
     return drawernavigator;
+}
+
+const instantiateRoute=(route,parent)=>{
+    const {component}=route;
+    if(component){
+        const {memorize=true}=route; 
+        const instance=component({parent});
+        if(memorize){
+            route.element=instance;
+        }
+    }
 }
