@@ -1,6 +1,6 @@
  
 
-export default function View<Tag extends keyof HTMLElementTagNameMap|undefined=undefined>(props:ViewProps<Tag>):Tag extends undefined?View<"div">:View<Tag>;
+export default function View<Tag extends keyof ViewTagNameMap|undefined=undefined>(props:ViewProps<Tag>):Tag extends undefined?View<"div">:View<Tag>;
 
 type ViewProps<Tag>={
     parent?:HTMLElement,
@@ -26,7 +26,7 @@ type ViewProps<Tag>={
     at?:"start"|"end";
 };
 
-type View<Tag>=(Tag extends keyof HTMLElementTagNameMap?HTMLElementTagNameMap[Tag]:HTMLDivElement)&{
+type View<Tag>=(Tag extends keyof ViewTagNameMap?ViewTagNameMap[Tag]:HTMLDivElement)&{
     /**
      * Sets safely the HTML or XML markup contained within the element.
      * 
@@ -76,3 +76,7 @@ type View<Tag>=(Tag extends keyof HTMLElementTagNameMap?HTMLElementTagNameMap[Ta
 }
 
 type ExtendableViewProps<Tag>=Omit<ViewProps<Tag>,"tag">
+
+type ViewTagNameMap=HTMLElementTagNameMap&{
+    "fragment":DocumentFragment,
+}

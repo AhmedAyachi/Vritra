@@ -1,10 +1,10 @@
+import {findItem} from "../index";
 import HtmlSanitizer from "./HtmlSanitizer";
 
 
 export default function View(props){
     const {parent,id,tag,className,at,style}=props;
-    const isFragment=(tag==="fragment");
-    const nodes=isFragment&&[];
+    const isFragment=(tag==="fragment"),nodes=isFragment&&[];
     const view=isFragment?document.createDocumentFragment():document.createElement(tag||"div");
     if(id){view.id=id};
     if(className){view.className=className};
@@ -14,13 +14,14 @@ export default function View(props){
     if((!isFragment)&&parent){
         (at==="start")?parent.insertAdjacentElement("afterbegin",view):parent.appendChild(view);
     }
-    
 
     Object.defineProperties(view,{
         innateHTML:{set:(html)=>{
             if(!isFragment){view.innerHTML=""};
             view.beforeEndHTML=html;
-            parent?.appendChild(view);
+            if(isFragment&&parent){
+                (at==="start")?parent.prepend(view):parent.appendChild(view);
+            }
         }},
         beforeEndHTML:{set:(html)=>{
             const sanitizedEl=HtmlSanitizer.sanitizeHtml(html,view);
@@ -28,7 +29,8 @@ export default function View(props){
                 const childNodes=[...sanitizedEl.childNodes];
                 view.append(...childNodes);
                 if(isFragment){
-                    const lastNode=nodes[nodes.length-1];
+                    const lastNode=getFragmentTargetNode(nodes,true);
+                    console.log("lastNode",lastNode);
                     nodes.push(...childNodes);
                     lastNode?.parentNode.insertBefore(view,lastNode.nextSibling);
                 }
@@ -40,7 +42,8 @@ export default function View(props){
                 const childNodes=sanitizedEl.childNodes;
                 view.prepend(...childNodes);
                 if(isFragment){
-                    const firstNode=nodes[0]||parent;
+                    const firstNode=getFragmentTargetNode(nodes);
+                    console.log("firstNode",firstNode);
                     nodes.unshift(...childNodes);
                     firstNode?.parentNode.insertBefore(view,firstNode);
                 }
@@ -65,4 +68,36 @@ export default function View(props){
     });
 
     return view;
+}
+
+const getFragmentTargetNode=(nodes,last)=>{
+    console.log("before",nodes);
+    const {length}=nodes;
+    let i=last?length-1:0,target;
+    if(last){
+        while((!target)&&(i>-1)){
+            const node=nodes[i];
+            if(node?.isConnected){
+                target=node;
+            }
+            else{
+                nodes.pop();
+            }
+            i--;
+        }
+    }
+    else{
+        while((!target)&&(i<length)){
+            const node=nodes[i];
+            if(node?.isConnected){
+                target=node;
+                i++;
+            }
+            else{
+                nodes.shift();
+            }
+        }
+    }
+    console.log("after",nodes);
+    return target;
 }
