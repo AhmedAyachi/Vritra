@@ -4,7 +4,8 @@ import HtmlSanitizer from "./HtmlSanitizer";
 
 export default function View(props){
     const {parent,id,tag,className,at,style}=props;
-    const isFragment=(tag==="fragment"),nodes=isFragment&&[];
+    const isFragment=(tag==="fragment");let nodes;
+
     const view=isFragment?document.createDocumentFragment():document.createElement(tag||"div");
     if(id){view.id=id};
     if(className){view.className=className};
@@ -17,7 +18,10 @@ export default function View(props){
 
     Object.defineProperties(view,{
         innateHTML:{set:(html)=>{
-            if(!isFragment){view.innerHTML=""};
+            if(isFragment){
+                nodes=[];
+            }
+            else{view.innerHTML=""};
             view.beforeEndHTML=html;
             if(isFragment&&parent){
                 (at==="start")?parent.prepend(view):parent.appendChild(view);
@@ -29,8 +33,8 @@ export default function View(props){
                 const childNodes=[...sanitizedEl.childNodes];
                 view.append(...childNodes);
                 if(isFragment){
-                    const lastNode=getFragmentTargetNode(nodes,true);
-                    console.log("lastNode",lastNode);
+                    freeNodes(nodes);
+                    const lastNode=nodes[nodes.length-1];
                     nodes.push(...childNodes);
                     lastNode?.parentNode.insertBefore(view,lastNode.nextSibling);
                 }
@@ -39,22 +43,43 @@ export default function View(props){
         afterBeginHTML:{set:(html)=>{
             const sanitizedEl=HtmlSanitizer.sanitizeHtml(html,view);
             if(sanitizedEl){
-                const childNodes=sanitizedEl.childNodes;
+                const childNodes=[...sanitizedEl.childNodes];
                 view.prepend(...childNodes);
                 if(isFragment){
-                    const firstNode=getFragmentTargetNode(nodes);
-                    console.log("firstNode",firstNode);
+                    freeNodes(nodes);
+                    const firstNode=nodes[0];
                     nodes.unshift(...childNodes);
                     firstNode?.parentNode.insertBefore(view,firstNode);
                 }
             }
         }},
         substitute:{value:(element)=>{
-            view.replaceWith(element);
+            if(isFragment){
+                const firstChild=nodes?.find(node=>node.isConnected);
+                if(firstChild){
+                    firstChild.replaceWith(element);
+                    view.remove();
+                }
+            }
+            else{
+                view.replaceWith(element);
+            }
             return element;
         }},
         adjacentTo:{value:(element,before)=>{
-            element[before?"before":"after"](view);
+            if(isFragment){
+                const firstChild=nodes?.find(node=>node.isConnected);
+                if(firstChild){
+                    element[before?"before":"after"](firstChild);
+                    const {length}=nodes;
+                    for(let i=1;i<length;i++){
+                        nodes[i-1].after(nodes[i]);
+                    }
+                }
+            }
+            else{
+                element[before?"before":"after"](view);
+            }
             return view;
         }},
         addBefore:{value:(element)=>{
@@ -66,8 +91,32 @@ export default function View(props){
             return view;
         }},
     });
+    isFragment&&Object.defineProperty(view,"remove",{
+        value:()=>{
+            freeNodes(nodes);
+            const {length}=nodes;
+            for(let i=0;i<length;i++){
+                const node=nodes[i];
+                if(node.remove){
+                    node.remove();
+                    view.appendChild(node);
+                }
+            }
+        },
+    })
 
     return view;
+}
+
+const freeNodes=(nodes)=>{
+    let {length}=nodes;
+    for(let i=0;i<length;i++){
+        const node=nodes[i];
+        if(!node.isConnected){
+            nodes.splice(i,1);
+            length=nodes.length;
+        }
+    }
 }
 
 const getFragmentTargetNode=(nodes,last)=>{
