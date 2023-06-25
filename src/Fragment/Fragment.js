@@ -13,11 +13,11 @@ class CherryFragment extends DocumentFragment {
     }
 
     set innateHTML(html){
-        this.#nodes=[];
-        this.beforeEndHTML=html;
-        const parent=this.#parent;
-        if(parent){
-            (this.#at==="start")?parent.prepend(this):parent.appendChild(this);
+        const sanitizedEl=HtmlSanitizer.sanitizeHtml(html,this);
+        if(sanitizedEl){
+            const childNodes=this.#nodes=[...sanitizedEl.childNodes];
+            const parent=this.#parent||this;
+            (this.#at==="start")?parent.prepend(...childNodes):parent.append(...childNodes);
         }
     }
 
@@ -26,9 +26,9 @@ class CherryFragment extends DocumentFragment {
         if(sanitizedEl){
             const childNodes=[...sanitizedEl.childNodes];
             this.append(...childNodes);
-            const lastNode=this.lastChild;
+            /* const lastNode=this.lastChild;
             this.#nodes.push(...childNodes);
-            lastNode?.parentNode.insertBefore(this,lastNode.nextSibling);
+            lastNode?.parentNode.insertBefore(this,lastNode.nextSibling); */
         }
     }
 
@@ -37,9 +37,9 @@ class CherryFragment extends DocumentFragment {
         if(sanitizedEl){
             const childNodes=[...sanitizedEl.childNodes];
             this.prepend(...childNodes);
-            const firstNode=this.firstChild;
+            /* const firstNode=this.firstChild;
             this.#nodes.unshift(...childNodes);
-            firstNode?.parentNode.insertBefore(this,firstNode);
+            firstNode?.parentNode.insertBefore(this,firstNode); */
         }
     }
 
@@ -69,20 +69,28 @@ class CherryFragment extends DocumentFragment {
         const {length}=this.#nodes;
         for(let i=0;i<length;i++){
             const node=this.#nodes[i];
-            this.appendChild(node);
+            super.appendChild(node);
         }
     }
 
-    prepend(...nodes){
+    prepend(...newNodes){
         const firstNode=this.firstChild;
-        if(firstNode){
-            const {parentNode}=firstNode;
-            for(const node of nodes){
-                if(node instanceof Node){
-                    this.#nodes.push(node);
-                    parentNode.insertBefore(node,firstNode);
-                }
-            }
+        const parentNode=firstNode?.parentNode||this.#parent||this;
+        this.#nodes.unshift(...newNodes);
+        for(const node of newNodes){
+            parentNode.insertBefore(node,firstNode);
+        }
+    }
+
+    append(...newNodes){
+        const lastNode=this.lastChild;
+        const parentNode=lastNode?.parentNode||this.#parent||this;
+        this.#nodes.push(...newNodes);
+        const {length}=newNodes;
+        for(let i=0;i<length;i++){
+            const node=newNodes[i];
+            const prevNode=i?newNodes[i-1]:lastNode;
+            parentNode.insertBefore(node,prevNode?.nextSibling);
         }
     }
 
@@ -124,6 +132,7 @@ class CherryFragment extends DocumentFragment {
         this.#freeNodes(this,this.#nodes);
         return [...this.#nodes]; 
     }
+
     get children(){
         const children=[];
         this.#freeNodes(this,this.#nodes);
@@ -132,8 +141,15 @@ class CherryFragment extends DocumentFragment {
         }
         return children;
     }
+
+    get parentNode(){
+        this.#freeNodes();
+        return this.#parent||this.#nodes[0]?.parentNode;
+    }
+
     #freeNodes(){
-        const nodes=this.#nodes,parent=this.#parent;
+        const nodes=this.#nodes;
+        const parent=this.#parent||nodes[0]?.parentNode;
         let {length}=nodes;
         for(let i=0;i<length;i++){
             const node=nodes[i];

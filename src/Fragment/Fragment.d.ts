@@ -58,4 +58,9 @@ interface CherryFragment extends DocumentFragment {
      * Returns the child elements
      */
     readonly children:Element[];
+    /**
+     * Returns the parent prop if specified
+     * else the parentNode of the first childNode 
+     */
+    readonly parentNode:ParentNode;
 }
