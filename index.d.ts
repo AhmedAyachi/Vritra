@@ -2,6 +2,7 @@ declare module "cherries";
 
 
 export {default as View,ViewProps,View as ViewInterface} from "./src/View/View";
+export {default as Fragment} from "./src/Fragment/Fragment";
 export {default as CherryView} from "./src/CherryView/CherryView";
 export {default as SideBarNavigator,SideBarNavigatorProps} from "./src/SideBarNavigator/SideBarNavigator";
 export {default as DrawerNavigator} from "./src/DrawerNavigator/DrawerNavigator";

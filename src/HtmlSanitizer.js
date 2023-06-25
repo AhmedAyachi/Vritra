@@ -8,7 +8,7 @@ export default new (function(){
 
 	const domparser=new DOMParser();
 
-	this.sanitizeHtml=(input,view)=>{
+	this.sanitizeHtml=(input,cherryEl)=>{
 		input=input.trim();
 		if((input=="")||(input==="<br>")) return null;
 		if(input.includes("<body")){input=`<body>${input}</body>`};
@@ -53,7 +53,7 @@ export default new (function(){
 						i++;
 					}
 					if(newNode){
-						if(ref&&view){view[ref]=newNode};
+						if(ref&&cherryEl){cherryEl[ref]=newNode};
 						setNode(tagName,newNode);
 						if(istext){
 							newNode.innerText=node.innerHTML;

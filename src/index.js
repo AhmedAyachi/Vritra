@@ -2,6 +2,7 @@ import css from "./index.module.css";
 
 
 export {default as View} from "./View/View";
+export {default as Fragment} from "./Fragment/Fragment";
 export {default as CherryView} from "./CherryView/CherryView";
 export {default as SideBarNavigator} from "./SideBarNavigator/SideBarNavigator";
 export {default as DrawerNavigator} from "./DrawerNavigator/DrawerNavigator";

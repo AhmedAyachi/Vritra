@@ -52,7 +52,7 @@ type View<Tag>=(Tag extends keyof HTMLElementTagNameMap?HTMLElementTagNameMap[Ta
      * Replaces the view by another node and returns the substitute
      * @param substitute 
      */
-    substitute<type>(substitute:type):type,
+    substitute<Type>(substitute:Type):Type,
     /**
      * Inserts the view before or after an element
      * @param element Element before/after which the view is inserted
