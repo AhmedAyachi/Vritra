@@ -1,89 +1,148 @@
+import {findItem} from "../index";
 import HtmlSanitizer from "../HtmlSanitizer";
 
 
-export default function Fragment(props){
-    const {parent,at}=props;
-    let nodes;
-    const fragment=new DocumentFragment();
+class CherryFragment extends DocumentFragment {
+    #parent;#at;
+    #nodes;
 
-    Object.defineProperties(fragment,{
-        nodes:{get:()=>{
-            freeNodes(fragment,nodes);
-            return [...nodes];   
-        }},
-        innateHTML:{set:(html)=>{
-            nodes=[];
-            fragment.beforeEndHTML=html;
-            if(parent){
-                (at==="start")?parent.prepend(fragment):parent.appendChild(fragment);
+    constructor(props={}){
+        super(props);
+        this.#parent=props.parent;
+        this.#at=props.at;
+    }
+
+    set innateHTML(html){
+        this.#nodes=[];
+        this.beforeEndHTML=html;
+        const parent=this.#parent;
+        if(parent){
+            (this.#at==="start")?parent.prepend(this):parent.appendChild(this);
+        }
+    }
+
+    set beforeEndHTML(html){
+        const sanitizedEl=HtmlSanitizer.sanitizeHtml(html,this);
+        if(sanitizedEl){
+            const childNodes=[...sanitizedEl.childNodes];
+            this.append(...childNodes);
+            const lastNode=this.lastChild;
+            this.#nodes.push(...childNodes);
+            lastNode?.parentNode.insertBefore(this,lastNode.nextSibling);
+        }
+    }
+
+    set afterBeginHTML(html){
+        const sanitizedEl=HtmlSanitizer.sanitizeHtml(html,this);
+        if(sanitizedEl){
+            const childNodes=[...sanitizedEl.childNodes];
+            this.prepend(...childNodes);
+            const firstNode=this.firstChild;
+            this.#nodes.unshift(...childNodes);
+            firstNode?.parentNode.insertBefore(this,firstNode);
+        }
+    }
+
+    adjacentTo(element,before){
+        const firstChild=this.#nodes?.find(node=>node.isConnected);
+        if(firstChild){
+            element[before?"before":"after"](firstChild);
+            const {length}=this.#nodes;
+            for(let i=1;i<length;i++){
+                this.#nodes[i-1].after(this.#nodes[i]);
             }
-        }},
-        beforeEndHTML:{set:(html)=>{
-            const sanitizedEl=HtmlSanitizer.sanitizeHtml(html,fragment);
-            if(sanitizedEl){
-                const childNodes=[...sanitizedEl.childNodes];
-                fragment.append(...childNodes);
-                freeNodes(fragment,nodes);
-                const lastNode=nodes[nodes.length-1];
-                nodes.push(...childNodes);
-                lastNode?.parentNode.insertBefore(fragment,lastNode.nextSibling);
-            }
-        }},
-        afterBeginHTML:{set:(html)=>{
-            const sanitizedEl=HtmlSanitizer.sanitizeHtml(html,fragment);
-            if(sanitizedEl){
-                const childNodes=[...sanitizedEl.childNodes];
-                fragment.prepend(...childNodes);
-                freeNodes(fragment,nodes);
-                const firstNode=nodes[0];
-                nodes.unshift(...childNodes);
-                firstNode?.parentNode.insertBefore(fragment,firstNode);
-            }
-        }},
-        substitute:{value:(element)=>{
-            const firstChild=nodes?.find(node=>node.isConnected);
-            if(firstChild){
-                firstChild.replaceWith(element);
-                fragment.remove();
-            }
-            return element;
-        }},
-        adjacentTo:{value:(element,before)=>{
-            const firstChild=nodes?.find(node=>node.isConnected);
-            if(firstChild){
-                element[before?"before":"after"](firstChild);
-                const {length}=nodes;
-                for(let i=1;i<length;i++){
-                    nodes[i-1].after(nodes[i]);
+        }
+        return this;
+    }
+
+    substitute(element){
+        const firstChild=this.#nodes?.find(node=>node.isConnected);
+        if(firstChild){
+            firstChild.replaceWith(element);
+            this.remove();
+        }
+        return element;
+    }
+
+    remove(){
+        this.#freeNodes(this,this.#nodes);
+        const {length}=this.#nodes;
+        for(let i=0;i<length;i++){
+            const node=this.#nodes[i];
+            this.appendChild(node);
+        }
+    }
+
+    prepend(...nodes){
+        const firstNode=this.firstChild;
+        if(firstNode){
+            const {parentNode}=firstNode;
+            for(const node of nodes){
+                if(node instanceof Node){
+                    this.#nodes.push(node);
+                    parentNode.insertBefore(node,firstNode);
                 }
             }
-            return fragment;
-        }},
-        remove:{value:()=>{
-            freeNodes(fragment,nodes);
-            const {length}=nodes;
-            for(let i=0;i<length;i++){
-                const node=nodes[i];
-                fragment.appendChild(node);
+        }
+    }
+
+    appendChild(node){
+        if(node instanceof Node){
+            const lastNode=this.lastChild;
+            this.#nodes.push(node);
+            lastNode?.parentNode.insertBefore(node,lastNode.nextSibling);
+            return node;
+        }
+        else{
+            throw "parameter is not of type Node";
+        }
+    }
+
+    get firstChild(){
+        this.#freeNodes(this,this.#nodes);
+        return this.#nodes[0];
+    }
+
+    get firstElementChild(){
+        this.#freeNodes(this,this.#nodes);
+        const firstEl=this.#nodes.find(node=>node instanceof Element);
+        return firstEl;
+    }
+
+    get lastChild(){
+        this.#freeNodes(this,this.#nodes);
+        return this.#nodes[this.#nodes.length-1];
+    }
+
+    get lastElementChild(){
+        this.#freeNodes(this,this.#nodes);
+        const item=findItem(this.#nodes,(node)=>node instanceof Element,true);
+        return item&&item.value;
+    }
+
+    get childNodes(){
+        this.#freeNodes(this,this.#nodes);
+        return [...this.#nodes]; 
+    }
+    get children(){
+        const children=[];
+        this.#freeNodes(this,this.#nodes);
+        for(const node of this.#nodes){
+            (node instanceof Element)&&children.push(children);
+        }
+        return children;
+    }
+    #freeNodes(){
+        const nodes=this.#nodes,parent=this.#parent;
+        let {length}=nodes;
+        for(let i=0;i<length;i++){
+            const node=nodes[i];
+            const {parentNode}=node;
+            if(!((parentNode===parent)||(parentNode===this))){
+                nodes.splice(i,1);
+                length=nodes.length;
             }
-        }},
-    });
-
-    return fragment;
-}
-
-const freeNodes=(fragment,nodes)=>{
-    let {length}=nodes;
-    for(let i=0;i<length;i++){
-        const node=nodes[i];
-        /* console.log({
-            node,
-            parent:node.parentNode,
-            connected:node.isConnected,
-        }); */
-        if(!(node.isConnected||(node.parentNode===fragment))){
-            nodes.splice(i,1);
-            length=nodes.length;
         }
     }
 }
+export default function Fragment(props){return new CherryFragment(props)};

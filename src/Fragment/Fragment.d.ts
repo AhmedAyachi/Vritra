@@ -1,6 +1,9 @@
 import {ViewProps,View} from "../View/View";
 
-
+/**
+ * Experimental
+ * @param props 
+ */
 export default function Fragment(props:FragmentProps):CherryFragment;
 
 type FragmentProps=Pick<ViewProps,"parent"|"at">&{
@@ -34,12 +37,25 @@ interface CherryFragment extends DocumentFragment {
      */
     adjacentTo(element:Element,before?:boolean):CherryFragment,
     /**
+     * Inserts nodes before the first child of the fragment
+     * @param nodes 
+     */
+    prepend(...nodes:Node[]):void,
+    /**
+     * Inserts a node after the last child of the fragment
+     * @param node 
+     */
+    appendChild<Type extends Node>(node:Type):Type;
+    /**
      * Removes All fragment nodes from DOM
      */
     remove():void,
     /**
-     * Returns the fragment childNodes
+     * Returns the children
      */
-    readonly nodes:Node[];
+    readonly childNodes:Node[];
+    /**
+     * Returns the child elements
+     */
+    readonly children:Element[];
 }
-
