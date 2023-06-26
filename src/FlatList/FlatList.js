@@ -148,7 +148,7 @@ export default function FlatList(props){
                 onRemoveItem:null,
                 ...popupProps,
                 parent:flatlist,
-                className:`${css.popuplist} ${props.popupClassName||""} ${popupProps.className||""}`,
+                className:`${css.popuplist} ${props.popupClassName||""} ${popupProps?.className||""}`,
                 data:items,
             });
             flatlist.style.overflow="hidden";
