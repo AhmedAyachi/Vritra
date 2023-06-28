@@ -30,7 +30,7 @@ interface CherryFragment extends DocumentFragment {
     substitute<Type>(substitute:Type):Type,
     /**
      * Inserts the fragment childNodes before or after an element
-     * @param element Element before/after which the view is inserted
+     * @param element Element before/after which the nodes are inserted
      * @param before if true the nodes are inserted before the element otherwise after
      * @default false
      * @returns The current fragment
@@ -41,6 +41,11 @@ interface CherryFragment extends DocumentFragment {
      * @param nodes 
      */
     prepend(...nodes:Node[]):void,
+    /**
+     * Inserts nodes after the last child of the fragment
+     * @param nodes 
+     */
+    append(...nodes:Node[]):void,
     /**
      * Inserts a node after the last child of the fragment
      * @param node 
@@ -59,8 +64,7 @@ interface CherryFragment extends DocumentFragment {
      */
     readonly children:Element[];
     /**
-     * Returns the parent prop if specified
-     * else the parentNode of the first childNode 
+     * Returns the parent prop if specified else null
      */
     readonly parentNode:ParentNode;
 }
