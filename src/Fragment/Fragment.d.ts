@@ -1,4 +1,4 @@
-import {ViewProps,View} from "../View/View";
+import {ViewProps} from "../View/View";
 
 /**
  * Experimental
@@ -6,9 +6,9 @@ import {ViewProps,View} from "../View/View";
  */
 export default function Fragment(props:FragmentProps):CherryFragment;
 
-type FragmentProps=Pick<ViewProps,"parent"|"at">&{
+interface FragmentProps extends Pick<ViewProps<"div">,"parent"|"at"> {
     
-};
+}
 
 interface CherryFragment extends DocumentFragment {
     /**
@@ -51,16 +51,6 @@ interface CherryFragment extends DocumentFragment {
      */
     remove():void,
     /**
-     * Inserts the fragment nodes into a new parent after its last child
-     * @see Should be used instead of newParent.append(fragment)
-     */
-    appendTo(element:HTMLElement):void,
-    /**
-     * Inserts the fragment nodes into a new parent after its first child
-     * @see Should be used instead of newParent.prepend(fragment)
-     */
-    prependTo(element:HTMLElement):void,
-    /**
      * Returns the children
      */
     readonly childNodes:Node[];
@@ -68,5 +58,9 @@ interface CherryFragment extends DocumentFragment {
      * Returns the child elements
      */
     readonly children:Element[];
-    readonly nextElementSibling:Element;
+    /**
+     * Returns the parent prop if specified
+     * else the parentNode of the first childNode 
+     */
+    readonly parentNode:ParentNode;
 }
