@@ -40,7 +40,7 @@ interface SideBarNavigator extends View<"div"> {
      * @param triggerOnNavigate default true
      */
     navigate(entryId:string,triggerOnNavigate?:boolean):void,
-    getCurrentEntryId():String|null,
+    getCurrentEntry():{id:String,name:String}|null,
     /**
      * 
      * @param shown default: toggling behavior

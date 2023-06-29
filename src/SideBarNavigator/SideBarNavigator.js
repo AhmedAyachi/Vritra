@@ -51,7 +51,10 @@ export default function SideBarNavigator(props){
         }
     }
 
-    sidebarnavigator.getCurrentEntryId=()=>state.current?.id;
+    sidebarnavigator.getCurrentEntry=()=>{
+        const {current}=state;
+        return current?{id:current.id,name:current.name}:null;
+    };
     sidebarnavigator.toggleSideBar=sidebar.toggle;
 
     return sidebarnavigator;
