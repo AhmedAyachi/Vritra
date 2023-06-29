@@ -78,7 +78,7 @@ type SideBarNavigatorEntry={
      * 
      * Parent-folders are automatically expanded
      * @default false
-     * @see If the first entry is a folder entry, it's expanded by default
+     * @notice If the first entry is a folder entry, it's expanded by default
      */
     expanded?:boolean,
 }

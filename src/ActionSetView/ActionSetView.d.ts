@@ -3,7 +3,7 @@ import {View,ExtendableViewProps} from "../View/View";
 /**
  * 
  * @param props ActionSetView props
- * @see CSS variables : spacing
+ * @notice CSS variables : spacing
  */
 export default function ActionSetView(props:ExtendableViewProps<"div">&{
     actions:ActionSetAction[],
@@ -62,7 +62,7 @@ interface ActionSetActionElement extends HTMLDivElement {
      * Not available for custom actions
      * @param icon 
      * @param save if true, sets the action.icon property, default false
-     * @see you can just edit the img element src yourself, but this method will make sure that your code
+     * @notice you can just edit the img element src yourself, but this method will make sure that your code
      * keeps behaving the same way independently of package versions.
      */
     setIcon(icon:CherryIcon,save?:boolean):void,

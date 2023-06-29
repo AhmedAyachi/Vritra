@@ -16,7 +16,7 @@ type FlatListProps<Type>=ExtendableViewProps<"div">&{
      */
     data?:Type[],
     /**
-     * @see Do not forget to set the item element display to inline 
+     * @notice Do not forget to set the item element display to inline 
      */
     horizontal:boolean,
     /**
@@ -137,7 +137,7 @@ interface FlatList<Type> extends View<"div"> {
      * @param items data to show
      * @param props Popup Flatlist props
      * @returns The flatlist popup element if created, null otherwise.
-     * @see
+     * @notice
      * onReachEnd and onRemoveItem props are not passed to the popup faltlist.
      * If items is not an array, The method removes the popup flatlist.
      */
@@ -147,7 +147,7 @@ interface FlatList<Type> extends View<"div"> {
      * @param predicate function to execute to filter items
      * @param props Popup Flatlist props
      * @returns The flatlist popup element if created, null otherwise.
-     * @see
+     * @notice
      * onReachEnd and onRemoveItem props are not passed to the popup faltlist.
      * If items is not an array, The method removes the popup flatlist.
      */

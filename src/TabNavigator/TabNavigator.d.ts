@@ -8,7 +8,7 @@ export default function TabNavigator(props:ViewProps<"div">&{
     tabs:TabNavigatorTab[],
     /**
      * Applied to all tabs
-     * @see can be overwritten by tab props
+     * @notice can be overwritten by tab props
      * @default true
      */
     memorize?:boolean,
@@ -40,7 +40,7 @@ type TabNavigatorTab={
     icon:CherryIcon,
     /**
      * Applied to this tab only.
-     * @see Overwrites the parent prop, same as the parent prop value if undefined
+     * @notice Overwrites the parent prop, same as the parent prop value if undefined
      */
     memorize:boolean,
     renderContent(props:{

@@ -5,7 +5,7 @@ import {ActionSetAction,CherryIcon} from "../ActionSetView/ActionSetView";
 /**
  * 
  * @param props AccordionView props
- * @see AccordionView css variables : paddingHorizontal borderRadius
+ * @notice AccordionView css variables : paddingHorizontal borderRadius
  */
 export default function AccordionView(props:ExtendableViewProps<"div">&{
     /**
@@ -18,7 +18,7 @@ export default function AccordionView(props:ExtendableViewProps<"div">&{
     headerStyle?:string,
     /**
      * Content container className
-     * @see when separate is true, specify a paddingTop value to get the desired behavior 
+     * @notice when separate is true, specify a paddingTop value to get the desired behavior 
      */
     containerClassName?:string,
     /**

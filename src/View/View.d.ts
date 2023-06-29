@@ -21,7 +21,7 @@ type ViewProps<Tag>={
      * 
      * end : at the end of the parent
      * @default "end"
-     * @see For between-elements insertion, use adjacentTo method
+     * @notice For between-elements insertion, use adjacentTo method
      */
     at?:"start"|"end";
 };
@@ -37,7 +37,7 @@ type View<Tag>=(Tag extends keyof HTMLElementTagNameMap?HTMLElementTagNameMap[Ta
      * Removes any element whose style attribute containes "javascript:"
      * 
      * Removes any element whose href attribute does not start with ["http:","https:","data:","m-files:","file:","ftp:","mailto:","pw:"]
-     * @see Safer version of innerHTML
+     * @notice Safer version of innerHTML
      */
     innateHTML:string,
     /**

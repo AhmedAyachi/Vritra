@@ -52,6 +52,18 @@ interface CherryFragment extends DocumentFragment {
      */
     appendChild<Type extends Node>(node:Type):Type;
     /**
+     * Inserts the fragment nodes before the first child of the new parent
+     * @param newParent
+     * @ should be used instead of newParent.prepend(fragment)
+    */
+    prependTo(newParent:HTMLElement):void,
+    /**
+     * Inserts the fragment nodes after the last child of the new parent
+     * @param newParent 
+     * @notice should be used instead of newParent.append(fragment)
+    */
+    appendTo(newParent:HTMLElement):void,
+    /**
      * Removes All fragment nodes from DOM
      */
     remove():void,

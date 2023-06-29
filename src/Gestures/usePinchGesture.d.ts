@@ -4,14 +4,14 @@ export default function usePinchGesture(options:{
     element:HTMLElement,
     /**
      * Minimum number of pointers that triggers the pinch gesture
-     * @see Minimum possible value : 2
+     * @notice Minimum possible value : 2
      * @default 2
      */
     minPointerCount?:Number,
     /**
      * Maximum number of pointers for the pinch gesture.
      * If the number of pointers is higher, the gesture is ended
-     * @see Minimum possible value : 2
+     * @notice Minimum possible value : 2
      * @default Infinity
      */
     maxPointerCount?:Number,

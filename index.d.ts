@@ -151,7 +151,7 @@ export function map(iteration:Number,callback:(index:Number)=>String):String;
  * @param str String to sanitize
  * @param whitelist Characters to keep in addition to letters, numbers and spaces
  * @returns string that only contains numbers, letters and spaces along with the whitelisted characters
- * @see If the string starts with "-" or "+" followed by a number and there are no whitelisted characters
+ * @notice If the string starts with "-" or "+" followed by a number and there are no whitelisted characters
  * then only numbers are kept along with "-"/"+"
  */
 export function sanitize(str:string,whitelist?:string):String;
