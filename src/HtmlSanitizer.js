@@ -31,38 +31,40 @@ export default new (function(){
 						const {as}=attributes;
 						tagName=(as&&as.value)||"p";
 					}
-					newNode=isDecentNode(tagName,attributes)&&doc.createElement(tagName);
-					const attrcount=attributes.length;
-					let i=0,ref;
-					while(newNode&&(i<attrcount)){
-						const attribute=attributes[i],{name}=attribute;
-						if(name.startsWith("on")){newNode=null;continue}
-						else if(!attributeBlackList[name]){
-							const {value}=attribute;
-							if(name==="ref"){if(value){ref=value}}
-							else{
-								if(name==="style"){
-									if(hasJavascriptScheme(value)){newNode=null;continue};
+					if(isDecentNode(tagName,attributes)){
+						newNode=tagName==="EMBED"?document.createElementNS("http://www.w3.org/2000/svg","svg"):document.createElement(tagName);
+						const attrcount=attributes.length;
+						let i=0,ref;
+						while(newNode&&(i<attrcount)){
+							const attribute=attributes[i],{name}=attribute;
+							if(name.startsWith("on")){newNode=null;continue}
+							else if(!attributeBlackList[name]){
+								const {value}=attribute;
+								if(name==="ref"){if(value){ref=value}}
+								else{
+									if(name==="style"){
+										if(hasJavascriptScheme(value)){newNode=null;continue};
+									}
+									else if(uriAttributes[name]){
+										if(value.includes(":")&&(!startsWithAny(value,schemaWhiteList))){newNode=null;continue};
+									} 
+									newNode.setAttribute(attribute.name,value);
 								}
-								else if(uriAttributes[name]){
-									if(value.includes(":")&&(!startsWithAny(value,schemaWhiteList))){newNode=null;continue};
-								} 
-								newNode.setAttribute(attribute.name,value);
 							}
+							i++;
 						}
-						i++;
-					}
-					if(newNode){
-						if(ref&&cherryEl){cherryEl[ref]=newNode};
-						setNode(tagName,newNode);
-						if(istext){
-							newNode.innerText=node.innerHTML;
-						}
-						else{
-							const {childNodes}=node,{length}=childNodes;
-							for(let i=0;i<length;i++){
-								const clone=getSanitizedClone(childNodes[i]);
-								(clone instanceof Node)&&newNode.appendChild(clone);
+						if(newNode){
+							if(ref&&cherryEl){cherryEl[ref]=newNode};
+							setNode(tagName,newNode);
+							if(istext){
+								newNode.innerText=node.innerHTML;
+							}
+							else{
+								const {childNodes}=node,{length}=childNodes;
+								for(let i=0;i<length;i++){
+									const clone=getSanitizedClone(childNodes[i]);
+									(clone instanceof Node)&&newNode.appendChild(clone);
+								}
 							}
 						}
 					}
@@ -115,22 +117,23 @@ export default new (function(){
 				node.setAttribute("sandbox","");
 				break;
 			case "EMBED":
-				const {attributes}=node,{value}=attributes.src;
+				const src=node.attributes.src.value;
 				node.removeAttribute("src");
 				const request=new XMLHttpRequest();
-				request.open("GET",value,true);
+				request.open("GET",src,true);
 				request.onreadystatechange=()=>{
 					if((request.readyState===4)&&(request.status===200)){
 						const svgbody=this.sanitizeHtml(request.responseText);
 						const svg=svgbody.getElementsByTagName("svg")[0];
 						if(svg){
-							const {color,fill,weight}=attributes;
-							const {style}=svg,{className}=node;
-							className&&svg.classList.add(className);
-							if(color){style.stroke=color.value};
-							if(fill){style.fill=fill.value};
-							if(weight){style.strokeWidth=weight.value};
-							node.outerHTML=svg.outerHTML;
+							const {attributes}=svg,{length}=attributes;
+							for(let i=0;i<length;i++){
+								const attribute=attributes[i],{name}=attribute;
+								if(!node.hasAttribute(name)){
+									node.setAttribute(attribute.name,attribute.value);
+								}
+							}
+							node.innerHTML=svg.innerHTML;
 						}
 					}
 				};
