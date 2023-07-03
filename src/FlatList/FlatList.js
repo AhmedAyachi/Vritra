@@ -26,6 +26,7 @@ export default function FlatList(props){
 
     flatlist.innateHTML=`
         <div 
+            ref="container"
             class="${css.container} ${props.containerClassName||""}" 
             ${backwards?"backwards"+(horizontal?"Horizontal":"Vertical"):""}
             style="${styles.container({nodata:state.endreached,pagingEnabled,transition,horizontal})}"
@@ -33,7 +34,7 @@ export default function FlatList(props){
     `;
     let emptyindicator=(!(data&&data.length))&&EmptyIndicator({parent:flatlist,message:emptymessage});
 
-    const container=flatlist.querySelector(`.${css.container}`);
+    const {container}=flatlist;
     const observer=new IntersectionObserver(([entry])=>{
         const {isIntersecting}=entry;
         if(isIntersecting){
@@ -97,21 +98,27 @@ export default function FlatList(props){
         container.style.overflow="hidden";
     }
 
-    flatlist.addItems=(items)=>{
-        if(Array.isArray(items)&&items.length){
+    flatlist.addItems=(items)=>{if(Array.isArray(items)){
+        const {length}=items;
+        if(length){
             if(!data.length){
                 container.style.display="block";
                 emptyindicator.remove();
                 emptyindicator=null;
             }
             data.push(...items);
-            if(state.endreached){
+        }
+        if(state.endreached){
+            if(length){
                 createElement({item:items[0],index:state.index});
                 state.endreached=false;
             }
-            onAddItems&&onAddItems(items);
+            else{
+                onReachEnd&&onReachEnd({container,data:props.data});
+            }
         }
-    }
+        onAddItems&&onAddItems(items);
+    }}
 
     flatlist.removeItem=(predicate,withElement=true)=>{
         const {length}=data,item=removeItem(data,predicate),removed={item,element:null}; 
@@ -213,8 +220,6 @@ export default function FlatList(props){
         const offset=element[offsetSide]-state.firstOffset;
         flatlist.scrollToOffset(offset,smooth);
     };
-
-    flatlist.container=container;
 
     function createElement(params,observe=true){
         const {item,index}=params;

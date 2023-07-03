@@ -5,6 +5,12 @@ export default new (function(){
 	const attributeBlackList={"as":true}
 	const schemaWhiteList=["http:","https:","data:","m-files:","file:","ftp:","mailto:","pw:"]; //which "protocols" are allowed in "href", "src" etc
 	const uriAttributes={"href":true,"action":true};
+	const svgSpecialAttributes={
+		"viewbox":"viewBox",
+		"preserveaspectratio":"preserveAspectRatio",
+		"color":"stroke",
+		"weight":"stroke-width",
+	}
 
 	const domparser=new DOMParser();
 
@@ -32,7 +38,8 @@ export default new (function(){
 						tagName=(as&&as.value)||"p";
 					}
 					if(isDecentNode(tagName,attributes)){
-						newNode=tagName==="EMBED"?document.createElementNS("http://www.w3.org/2000/svg","svg"):document.createElement(tagName);
+						const isSvg=tagName==="EMBED";
+						newNode=isSvg?document.createElementNS("http://www.w3.org/2000/svg","svg"):document.createElement(tagName);
 						const attrcount=attributes.length;
 						let i=0,ref;
 						while(newNode&&(i<attrcount)){
@@ -47,8 +54,8 @@ export default new (function(){
 									}
 									else if(uriAttributes[name]){
 										if(value.includes(":")&&(!startsWithAny(value,schemaWhiteList))){newNode=null;continue};
-									} 
-									newNode.setAttribute(attribute.name,value);
+									}
+									newNode.setAttribute((isSvg&&svgSpecialAttributes[name])||name,value);
 								}
 							}
 							i++;
@@ -128,9 +135,10 @@ export default new (function(){
 						if(svg){
 							const {attributes}=svg,{length}=attributes;
 							for(let i=0;i<length;i++){
-								const attribute=attributes[i],{name}=attribute;
+								const attribute=attributes[i];
+								let {name}=attribute;
 								if(!node.hasAttribute(name)){
-									node.setAttribute(attribute.name,attribute.value);
+									node.setAttribute(svgSpecialAttributes[name]||name,attribute.value);
 								}
 							}
 							node.innerHTML=svg.innerHTML;
