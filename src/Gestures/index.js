@@ -1,5 +1,6 @@
 
 
+export {default as usePressGesture} from "./usePressGesture/usePressGesture";
 export {default as useZoomGesture} from "./useZoomGesture";
 export {default as usePinchGesture} from "./usePinchGesture";
 export {default as useSwipeGesture} from "./useSwipeGesture";
