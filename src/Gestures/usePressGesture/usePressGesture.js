@@ -9,7 +9,6 @@ export default function usePressGesture(options){
         const startEvent=touchable?"touchstart":"mousedown";
         const endEvent=touchable?"touchend":"mouseup";
         const onTriggerGesture=(event)=>{
-            event.preventDefault();
             let pressing=true,start,elapsed;
             let triggered=false;
             const toPressEvent=(event)=>{
@@ -38,8 +37,9 @@ export default function usePressGesture(options){
                     }
                 }
                 else if(elapsed>=threshold){
-                    //event.duration=0;
-                    onStart&&onStart(toPressEvent(event));
+                    toPressEvent(event);
+                    event.duration=0;
+                    onStart&&onStart(event);
                     triggered=true;
                 }
                 pressing&&requestAnimationFrame(onPressGesture);
