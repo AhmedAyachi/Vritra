@@ -105,7 +105,7 @@ interface FlatList<Type> extends View<"div"> {
     /**
      * Returns the flatlist items container element 
      */
-    readonly container:HTMLElement,
+    readonly container:HTMLDivElement,
     /**
      * Scrolls to item at index
      * @param index 
