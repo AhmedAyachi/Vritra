@@ -73,6 +73,16 @@ type View<Tag>=(Tag extends keyof HTMLElementTagNameMap?HTMLElementTagNameMap[Ta
      * @deprecated
      */
     addAfter(element:Element):View<Tag>,
+}&{
+    [ref:string]:RefElement,
+}
+
+/**
+ * If such ref is defined, the property points to the HTML element
+ * with such ref else undefined
+ */ 
+interface RefElement extends HTMLElement {
+
 }
 
 type ExtendableViewProps<Tag>=Omit<ViewProps<Tag>,"tag">
