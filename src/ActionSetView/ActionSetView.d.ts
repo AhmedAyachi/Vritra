@@ -43,10 +43,20 @@ export type ActionSetAction={
      */
     alt:string,
     /**
-     * Called when action clicked
-     * 
+     * Called when the action HTMLElement is ready to click on
+     * @param action the action object
+     */
+    onReady(action:ActionSetAction&{
+        element:ActionSetActionElement,
+        /**
+         * The color prop value
+         */
+        color:string,
+    }):void,
+    /**
+     * Called when the action HTMLElement clicked
      * Not triggered when action created with component prop
-     * @param action this object with element property
+     * @param action the action object
      */
     onTrigger(action:ActionSetAction&{
         element:ActionSetActionElement,

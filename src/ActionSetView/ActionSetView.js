@@ -43,8 +43,7 @@ export default function ActionSetView(props){
             actionEl=actionsetview.querySelector(`:scope>#${action.id}.${css.action}`);
             actionEl.onclick=(event)=>{
                 event.stopPropagation();
-                const {onTrigger}=action;
-                onTrigger&&onTrigger(action);
+                action.onTrigger?.(action);
             }
             actionEl.setIcon=(icon,save)=>{
                 if(save){action.icon=icon};
@@ -54,6 +53,7 @@ export default function ActionSetView(props){
         }
         action.color=color;
         action.element=actionEl;
+        action.onReady?.(action);
     });
 
     return actionsetview;
