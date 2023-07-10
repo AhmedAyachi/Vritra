@@ -4,13 +4,13 @@ import {ViewProps} from "../View/View";
  * Experimental
  * @param props 
  */
-export default function Fragment(props:FragmentProps):CherryFragment;
+export default function Fragment(props:FragmentProps):Fragment;
 
 interface FragmentProps extends Pick<ViewProps<"div">,"parent"|"at"> {
     
 }
 
-interface CherryFragment extends DocumentFragment {
+interface Fragment extends DocumentFragment {
     /**
      * Same as View.innateHTML
      */
@@ -35,7 +35,7 @@ interface CherryFragment extends DocumentFragment {
      * @default false
      * @returns The current fragment
      */
-    adjacentTo(element:Element,before?:boolean):CherryFragment,
+    adjacentTo(element:Element,before?:boolean):Fragment,
     /**
      * Inserts nodes before the first child of the fragment
      * @param nodes 
