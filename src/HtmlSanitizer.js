@@ -31,14 +31,10 @@ export default new (function(){
 			else{
 				let {tagName}=node;
 				if((node.nodeType===Node.ELEMENT_NODE)&&((!tagBlackList[tagName]))){
-					const {attributes}=node;
-					const istext=tagName==="TEXT";
-					if(istext){
-						const {as}=attributes;
-						tagName=(as&&as.value)||"p";
-					}
-					if(isDecentNode(tagName,attributes)){
-						const isSvg=tagName==="EMBED";
+					const {attributes}=node,isText=tagName==="TEXT";
+					tagName=getDecentTag(tagName,attributes);
+					if(tagName){
+						const isSvg=tagName==="SVG";
 						newNode=isSvg?document.createElementNS("http://www.w3.org/2000/svg","svg"):document.createElement(tagName);
 						const attrcount=attributes.length;
 						let i=0,ref;
@@ -63,8 +59,8 @@ export default new (function(){
 						if(newNode){
 							if(ref&&cherryEl){cherryEl[ref]=newNode};
 							setNode(tagName,newNode);
-							if(istext){
-								newNode.innerText=node.innerHTML;
+							if(isText){
+								newNode.innerText=node.innerHTML?.trim();
 							}
 							else{
 								const {childNodes}=node,{length}=childNodes;
@@ -95,21 +91,21 @@ export default new (function(){
 		return does;
 	}
 
-	const isDecentNode=(tagName,attributes)=>{
-		let decent;
+	const getDecentTag=(tagName,attributes)=>{
 		switch(tagName){
 			case "EMBED":
 				const {src}=attributes;
 				if(src){
 					const {value}=src;
-					if(value&&value.endsWith(".svg")){decent=true}
+					return value&&value.endsWith(".svg")&&"SVG";
 				}
-				break;
-			default:
-				decent=true;
-				break;
+				else return undefined;
+			case "TEXT":
+				const {as}=attributes;
+				tagName=(as&&as.value?.toUpperCase())||"p";
+				return getDecentTag(tagName,attributes);
+			default: return (!tagBlackList[tagName])&&tagName;
 		}
-		return decent;
 	}
 
 	const setNode=(tagName,node)=>{
@@ -123,7 +119,7 @@ export default new (function(){
 			case "IFRAME":
 				node.setAttribute("sandbox","");
 				break;
-			case "EMBED":
+			case "SVG":
 				const src=node.attributes.src.value;
 				node.removeAttribute("src");
 				const request=new XMLHttpRequest();
