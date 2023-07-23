@@ -12,11 +12,11 @@ export default function RoutePicker(props){
 
     routepicker.innateHTML=`
         ${map(routes,({id,title})=>`
-            <p 
+            <text
                 id="${id}" 
                 class="${css.entry}" 
                 ${id===activeId?`style="${styles.entry(tintColor)}"`:""}
-            >${title||id||""}</p>
+            >${title||id||""}</text>
         `)}
     `;
 
@@ -36,6 +36,9 @@ export default function RoutePicker(props){
         };
     });
 
+    const activeEntry=routepicker.querySelector(`#${activeId}.${css.entry}`);
+    activeEntry.scrollIntoView({behavior:"instant",block:"end"});
+    
     routepicker.onclick=(event)=>{
         event.stopPropagation();
     }

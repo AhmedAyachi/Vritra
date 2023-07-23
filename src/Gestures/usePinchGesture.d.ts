@@ -21,13 +21,16 @@ export default function usePinchGesture(options:{
 }):void;
 
 interface PinchEvent extends TouchEvent {
-    scale:Number,
-    barycenter:{x:Number,y:Number},
-    dx:Number,
-    dy:Number,
-    distance:Number,
+    readonly scale:Number,
+    readonly barycenter:{
+        readonly x:Number,
+        readonly y:Number,
+    },
+    readonly dx:Number,
+    readonly dy:Number,
+    readonly distance:Number,
     /**
      * Gesture delta time in milliseconds
      */
-    dtime:Number,
+    readonly dtime:Number,
 }

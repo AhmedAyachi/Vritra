@@ -7,10 +7,12 @@ export default function usePinchGesture(options){
         barycenter:null,
         stime:null,
         perimeter:null,
+        hasNoScale:true,//Check if the TouchEvent has no read-only scale property 
         minPointerCount:Math.max(2,options.minPointerCount||0),
         maxPointerCount:Math.max(2,options.maxPointerCount||Infinity),
     },{minPointerCount,maxPointerCount}=state;
     element.addEventListener("touchstart",(event)=>{
+        state.hasNoScale=event.scale===undefined;
         const touchlist=event.touches,touchcount=touchlist.length;
         if(touchcount>maxPointerCount){
             endPinchGesture();
@@ -49,7 +51,9 @@ export default function usePinchGesture(options){
 
     const getPinchEvent=(touches,event={})=>{
         const pinchevent=event;
-        pinchevent.scale=getPerimeter(touches)/state.perimeter;
+        if(state.hasNoScale){
+            pinchevent.scale=getPerimeter(touches)/state.perimeter;
+        }
         const barycenter=pinchevent.barycenter=getBaryCenter(touches),startbarycenter=state.barycenter;
         const dx=pinchevent.dx=barycenter.x-startbarycenter.x;
         const dy=pinchevent.dy=barycenter.y-startbarycenter.y;
