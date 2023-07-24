@@ -37,7 +37,7 @@ export default function RoutePicker(props){
     });
 
     const activeEntry=routepicker.querySelector(`#${activeId}.${css.entry}`);
-    activeEntry.scrollIntoView({behavior:"instant",block:"end"});
+    activeEntry.scrollIntoView({behavior:"instant",block:"center"});
     
     routepicker.onclick=(event)=>{
         event.stopPropagation();
