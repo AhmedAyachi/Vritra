@@ -7,9 +7,11 @@ export default function EmptyIndicator(props){
     const emptyindicator=Fragment({parent});
 
     emptyindicator.innateHTML=`
-        <text class="${css.emptymsg}">
-            ${typeof(message)==="string"?message:"no data"}
-        </text>
+        ${message?`
+            <text class="${css.emptymsg}">
+                ${typeof(message)==="string"?message:"no data"}
+            </text>
+        `:""}
     `;
 
     return emptyindicator;

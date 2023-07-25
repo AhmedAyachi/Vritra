@@ -29,12 +29,12 @@ export default function FlatList(props){
             ref="container"
             class="${css.container} ${props.containerClassName||""}" 
             ${backwards?"backwards"+(horizontal?"Horizontal":"Vertical"):""}
-            style="${styles.container({nodata:state.endreached,pagingEnabled,transition,horizontal})}"
+            style="${styles.container({pagingEnabled,transition,horizontal})}"
         ></div>
     `;
-    let emptyindicator=(!(data&&data.length))&&EmptyIndicator({parent:flatlist,message:emptymessage});
-
     const {container}=flatlist;
+    let emptyindicator=(!data.length)&&EmptyIndicator({parent:container,message:emptymessage});
+
     const observer=new IntersectionObserver(([entry])=>{
         const {isIntersecting}=entry;
         if(isIntersecting){
@@ -59,7 +59,7 @@ export default function FlatList(props){
         }
     },{root:flatlist,threshold});
     
-    if(data&&renderItem){
+    if(renderItem){
         if(data.length){
             state.index=state.focus=0;
             createElement({item:data[0],index:0});
@@ -243,9 +243,8 @@ export default function FlatList(props){
 }
 
 const styles={
-    container:({transition,horizontal,pagingEnabled,nodata})=>`
+    container:({transition,horizontal,pagingEnabled})=>`
         height:${horizontal?"fit-content":"auto"};
-        display:${nodata?"none":"block"};
         white-space:${horizontal?"nowrap":"normal"};
         ${pagingEnabled?`
             overflow:visible;
