@@ -59,12 +59,17 @@ export default function FlatList(props){
         }
     },{root:flatlist,threshold});
     
-    if(data&&data.length&&renderItem){
-        state.index=state.focus=0;
-        createElement({item:data[0],index:0});
-        const {itemEl}=state;
-        state.firstOffset=itemEl[offsetSide];
-        observer.observe(itemEl);
+    if(data&&renderItem){
+        if(data.length){
+            state.index=state.focus=0;
+            createElement({item:data[0],index:0});
+            const {itemEl}=state;
+            state.firstOffset=itemEl[offsetSide];
+            observer.observe(itemEl);
+        }
+        else{
+            onReachEnd&&onReachEnd({container,data:props.data});
+        }
     }
 
     if(pagingEnabled){
