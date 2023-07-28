@@ -7,7 +7,7 @@ export default function EmptyIndicator(props){
     const emptyindicator=Fragment({parent});
 
     emptyindicator.innateHTML=`
-        ${message?`
+        ${message!==""?`
             <text class="${css.emptymsg}">
                 ${typeof(message)==="string"?message:"no data"}
             </text>
