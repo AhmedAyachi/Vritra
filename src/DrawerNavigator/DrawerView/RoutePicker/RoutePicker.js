@@ -6,6 +6,7 @@ export default function RoutePicker(props){
     const {parent,id=useId("routepicker"),routes,activeId,tintColor,onChange}=props;
     const routepicker=View({
         parent,id,
+        tag:"nav",
         style:styles.routepicker(),
         className:`${css.routepicker} ${props.className||""}`,
     });

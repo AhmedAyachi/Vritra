@@ -15,7 +15,7 @@ export default function SideBarNavigator(props){
     };
 
     sidebarnavigator.innateHTML=`
-        <div class="${css.container} ${props.containerClassName||""}"></div>
+        <main class="${css.container} ${props.containerClassName||""}"></main>
     `;
     const sidebar=SideBar({
         parent:sidebarnavigator,entries,
@@ -27,9 +27,10 @@ export default function SideBarNavigator(props){
 
     sidebarnavigator.navigate=(entryId,triggerOnNavigate=true)=>{
         const {current}=state;
+        let successful=false;
         if(entryId&&(current?.id!==entryId)){
             const container=sidebarnavigator.querySelector(`:scope>.${css.container}`);
-            const entry=entryId&&findEntry(entryId,entries);
+            const entry=entryId&&getEntry(entryId,entries);
             if(entry){
                 current&&(!current.entries)&&current.element.toggle(false);
                 state.current=entry;
@@ -47,8 +48,10 @@ export default function SideBarNavigator(props){
                 container.innerHTML="";
                 renderEntry(entry,container);
                 triggerOnNavigate&&onNavigate&&onNavigate({id:entry.id,name:entry.name},current&&{id:current.id,name:current.name});
+                successful=true;
             }
         }
+        return successful;
     }
 
     sidebarnavigator.getCurrentEntry=()=>{
@@ -69,6 +72,24 @@ const renderEntry=(entry,container)=>{
     else{
         entry.content=entry.renderContent?.(container);
     }
+}
+
+const getEntry=(entryId,entries)=>{
+    let entry=findEntry(entryId,entries);
+    const subentries=entry?.entries;
+    if(subentries&&subentries.length){
+        let {path}=entry;
+        delete entry.path;
+        if(path){
+            path.unshift(subentries[0]);
+        }
+        else{
+            path=[subentries[0],entry];
+        }
+        entry=path[0];
+        entry.path=path; 
+    }
+    return entry;
 }
 
 const findEntry=(entryId,entries)=>{

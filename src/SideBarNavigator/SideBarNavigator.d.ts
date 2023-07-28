@@ -33,13 +33,14 @@ interface SideBarNavigatorProps extends ExtendableViewProps<"div"> {
 
 interface SideBarNavigator extends View<"div"> {
     /**
-     * Toggles the entry with such id
+     * navigates to the entry with such id if exists
      * 
-     * If the entry is a folder, it's expanded.
+     * If the entry is a folder, it's expanded and its first endpoint is selected if any
      * @param entryId 
      * @param triggerOnNavigate default true
+     * @returns true if the navigation was successful, false otherwise
      */
-    navigate(entryId:string,triggerOnNavigate?:boolean):void,
+    navigate(entryId:string,triggerOnNavigate?:boolean):Boolean,
     getCurrentEntry():{id:String,name:String}|null,
     /**
      * 

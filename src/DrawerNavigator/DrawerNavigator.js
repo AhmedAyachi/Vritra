@@ -17,17 +17,16 @@ export default function DrawerNavigator(props){
     };
 
     drawernavigator.innateHTML=`
-        <div 
-            class="${css.header} 
-            ${props.headerClassName||""}" 
+        <header 
+            class="${css.header} ${props.headerClassName||""}" 
             ${renderHeader?"":`style="padding:4em"`}
         >
             ${renderHeader?"":`
                 <img class="${css.showbtn}" src="${icon0()}"/>
                 <h3 class="${css.title}"></h3>
             `}
-        </div>
-        <div class="${css.container} ${props.containerClassName||""}"></div>
+        </header>
+        <main class="${css.container} ${props.containerClassName||""}"></main>
     `;
     routes?.forEach(route=>{
         if(!route.title){route.title=route.id};
