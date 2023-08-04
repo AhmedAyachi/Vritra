@@ -13,9 +13,9 @@ export default function AccordionView(props:ExtendableViewProps<"div">&{
      */
     title?:string,
     /**
-     * Header container style
+     * Header container className
      */
-    headerStyle?:string,
+    headerClassName?:string,
     /**
      * Content container className
      * @notice when separate is true, specify a paddingTop value to get the desired behavior 

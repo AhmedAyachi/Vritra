@@ -14,7 +14,7 @@ export default function TabNavigator(props){
     };
 
     tabnavigator.innateHTML=`
-        <main class="${css.container} ${props.containerClassName||""}"></main>
+        <div class="${css.container} ${props.containerClassName||""}"></div>
     `;
     const headerlist=FlatList({
         parent:tabnavigator,

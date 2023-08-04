@@ -26,7 +26,7 @@ export default function DrawerNavigator(props){
                 <h3 class="${css.title}"></h3>
             `}
         </header>
-        <main class="${css.container} ${props.containerClassName||""}"></main>
+        <div class="${css.container} ${props.containerClassName||""}"></div>
     `;
     routes?.forEach(route=>{
         if(!route.title){route.title=route.id};

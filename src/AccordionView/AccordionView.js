@@ -5,7 +5,7 @@ import icon from "./IndicatorIcon";
 
 
 export default function AccordionView(props){
-    const {parent,id=useId("accordionview"),headerStyle,renderHeader,indicator=icon,renderContent,actions,color="black",memorize=true,separate,onOpen,onClose}=props;
+    const {parent,id=useId("accordionview"),renderHeader,indicator=icon,renderContent,actions,color="black",memorize=true,separate,onOpen,onClose}=props;
     const accordionview=CherryView({
         parent,id,
         at:props.at,
@@ -21,7 +21,7 @@ export default function AccordionView(props){
     };
 
     accordionview.innateHTML=`
-        <div class="${css.header} ${renderHeader?"":css.defaultheader}" style="${headerStyle||""}">
+        <div class="${css.header} ${renderHeader?"":css.defaultheader} ${props.headerClassName||""}">
             ${renderHeader?"":`
                 <h3 class="${css.title}" style="color:${color};">${props.title||""}</h3>
                 <div class="${css.actions}">
