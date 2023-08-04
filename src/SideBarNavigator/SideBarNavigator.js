@@ -4,11 +4,9 @@ import SideBar from "./SideBar/SideBar";
 
 
 export default function SideBarNavigator(props){
-    const {parent,id=useId("sidebarnavigator"),entries,tintColor="dodgerblue",folderColor="black",endpointColor="rgba(0,0,0,0.35)",onNavigate}=props;
+    const {parent,entries,tintColor="dodgerblue",folderColor="black",endpointColor="rgba(0,0,0,0.35)",onNavigate}=props;
     const sidebarnavigator=CherryView({
-        parent,id,
-        style:props.style,
-        at:props.at,
+        parent,style:props.style,at:props.at,
         className:`${css.sidebarnavigator} ${props.className||""}`,
     }),state={
         current:null,

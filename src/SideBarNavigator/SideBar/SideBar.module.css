@@ -50,8 +50,8 @@
 .bartoggler{
     position:absolute;
     width:5em;
-    bottom:1em;
-    right:3em;
+    bottom:2em;
+    right:2.5em;
     opacity:0.5;
     transition:var(--transition);
     z-index:99;
@@ -76,5 +76,8 @@
         left:0;
         top:0;
         z-index:5;
+    }
+    .bartoggler{
+        width:6.5em;
     }
 }
