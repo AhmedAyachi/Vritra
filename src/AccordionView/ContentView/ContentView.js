@@ -19,7 +19,10 @@ export default function ContentView(props){
         ["marginTop","transition"].forEach(key=>{
             state.siblingstyle[key]=style[key];
         });
-        state.marginTop=`calc(${getComputedStyle(parent).getPropertyValue("margin-top")||"0px"} + ${(100*contentview.clientHeight/window.innerWidth)}vw)`;
+        state.marginTop=`calc(
+            ${(100*contentview.clientHeight/window.innerWidth)}vw +
+            ${getComputedStyle(parent).getPropertyValue("margin-bottom")||"0px"}
+        )`;
         Object.assign(style,{
             marginTop:state.marginTop,
             transition:`${statics.transition}ms`,
