@@ -5,7 +5,7 @@ import css from "./ContentView.module.css";
 export default function ContentView(props){
     const {parent,id=useId("contentview")}=props;
     const contentview=View({parent,id,className:`${css.contentview} ${props.className||""}`}),state={
-        siblingstyle:null,
+        siblingStyle:null,
         marginTop:null,
         nextEl:getNextElement(parent),
     },{nextEl}=state;
@@ -14,10 +14,10 @@ export default function ContentView(props){
     `;
 
     nextEl&&setTimeout(()=>{
-        state.siblingstyle={};
+        state.siblingStyle={};
         const {style}=nextEl;
         ["marginTop","transition"].forEach(key=>{
-            state.siblingstyle[key]=style[key];
+            state.siblingStyle[key]=style[key];
         });
         state.marginTop=`calc(
             ${(100*contentview.clientHeight/window.innerWidth)}vw +
@@ -36,9 +36,9 @@ export default function ContentView(props){
             transition:"none",
         });
         if(nextEl){
-            const {siblingstyle}=state;
-            nextEl.style.marginTop=siblingstyle.marginTop;
-            nextEl.style.transition="none";
+            const {siblingStyle}=state;
+            nextEl.style.marginTop=siblingStyle.marginTop;
+            nextEl.style.transition=siblingStyle.transition;
         }
     });
 
@@ -49,13 +49,13 @@ export default function ContentView(props){
             nextEl.style.marginTop=state.marginTop;
             state.marginTop=null;
             setTimeout(()=>{
-                const {siblingstyle}=state;
+                const {siblingStyle}=state;
                 Object.assign(nextEl.style,{
                     transition:`${statics.transition}ms`,
-                    marginTop:siblingstyle.marginTop,
+                    marginTop:siblingStyle.marginTop,
                 });
                 setTimeout(()=>{
-                    nextEl.style.transition=siblingstyle.transition;
+                    nextEl.style.transition=siblingStyle.transition;
                 },statics.transition);
             },0);
         }
