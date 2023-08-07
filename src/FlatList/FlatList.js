@@ -4,10 +4,10 @@ import EmptyIndicator from "./EmptyIndicator/EmptyIndicator";
 
 
 export default function FlatList(props){
-    const {parent,id=useId("flatlist"),emptymessage,renderItem,horizontal,backwards,pagingEnabled,scrollEnabled=true,threshold=0.5,transition="ease 300ms",onFilled,onReachEnd,onRemoveItem,onAddItems,onSwipe}=props;
+    const {parent,emptymessage,renderItem,horizontal,backwards,pagingEnabled,scrollEnabled=true,threshold=0.5,transition="ease 300ms",onFilled,onReachEnd,onRemoveItem,onAddItems,onSwipe}=props;
     const flatlist=CherryView({
-        parent,id,
-        at:props.at,
+        parent,at:props.at,
+        props:props.id,
         style:props.style,
         className:`${css.flatlist} ${props.className||""}`,
     }),state={
@@ -250,7 +250,8 @@ const styles={
             overflow:visible;
             transition:${transition};
         `:`
-            overflow-x:${horizontal?"auto":"hidden"};
+            overflow-x:${horizontal?"auto":"visible"};
+            overflow-y:${horizontal?"visible":"auto"};
         `}
     `,
 }

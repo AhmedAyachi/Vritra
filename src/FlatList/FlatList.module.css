@@ -6,8 +6,6 @@
     flex-direction:column;
     justify-content:flex-start;
     align-items:stretch;
-    font-size:1em;
-    overflow-x:hidden;
 }
 .container{
     max-width:100%;
