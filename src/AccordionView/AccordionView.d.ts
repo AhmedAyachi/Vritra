@@ -47,7 +47,7 @@ export default function AccordionView(props:ExtendableViewProps<"div">&{
      */
     separate?:boolean,
     /**
-     * If true, prevents accordion opening 
+     * If true, prevents accordion opening via user interaction
      * @default false
      */
     locked?:boolean,
@@ -73,7 +73,7 @@ export default function AccordionView(props:ExtendableViewProps<"div">&{
 interface AccordionView extends View<"div"> {
     /**
      * Locks and unlocks the accordionview
-     * @param locked 
+     * @param locked default to false
      */
     setLocked(locked:boolean):void,
     /**

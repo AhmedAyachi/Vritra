@@ -15,12 +15,15 @@ export default function AccordionView(props){
         locked:Boolean(props.locked),
         contentEl:null,
         contentview:null,
-        borderBottomLeftRadius:null,
-        borderBottomRightRadius:null,
+        borderBottomLeftRadius:undefined,
+        borderBottomRightRadius:undefined,
     };
 
     accordionview.innateHTML=`
-        <div class="${css.header} ${renderHeader?"":css.defaultheader} ${props.headerClassName||""}">
+        <div 
+            ref="headerEl"
+            class="${css.header} ${renderHeader?"":css.defaultheader} ${props.headerClassName||""}"
+        >
             ${renderHeader?"":`
                 <h3 class="${css.title}" style="color:${color};">${props.title||""}</h3>
                 <div class="${css.actions}">
@@ -29,7 +32,7 @@ export default function AccordionView(props){
             `}
         </div>
     `;
-    const headerEl=accordionview.querySelector(`.${css.header}`);
+    const {headerEl}=accordionview;
     if(renderHeader){renderHeader(headerEl)}
     else if(actions){
         const actionsEl=accordionview.querySelector(`.${css.actions}`);
@@ -41,53 +44,47 @@ export default function AccordionView(props){
         actionsetview.scrollLeft=actionsetview.scrollWidth;
     }
 
-    headerEl.onclick=({status})=>{
-        if(!state.locked){
-            const expanded=state.expanded=(typeof(status)==="boolean")?status:(!state.expanded);
-            if(!separate){
-                const {style}=headerEl,{borderBottomLeftRadius,borderBottomRightRadius}=state;
-                if(!borderBottomLeftRadius){
-                    state.borderBottomLeftRadius=style.borderBottomLeftRadius;
-                }
-                if(!borderBottomRightRadius){
-                    state.borderBottomRightRadius=style.borderBottomRightRadius;
-                }
-                Object.assign(style,{
-                    borderBottomLeftRadius:expanded?0:borderBottomLeftRadius,
-                    borderBottomRightRadius:expanded?0:borderBottomRightRadius,
-                });
-            }
-            const indicator=accordionview.querySelector(`.${css.indicator}`);
-            if(indicator){
-                indicator.style.transform=`rotateZ(${expanded?-180:0}deg)`;
-            }
-            if(expanded){
-                const contentview=state.contentview=ContentView({parent:accordionview,className:props.containerClassName});
-                if(memorize&&state.contentEl){
-                    contentview.appendChild(state.contentEl);
-                }
-                else{
-                    state.contentEl=renderContent&&renderContent(contentview);
-                }
-                onOpen&&onOpen(contentview);
-            }
-            else{
-                const {contentview}=state;
-                contentview&&contentview.unmount();
-                state.contentview=null;
-                onClose&&onClose();
-            }
-        }
+    headerEl.onclick=()=>{
+        if(!state.locked){accordionview.toggle()};
     }
 
     accordionview.setLocked=(value)=>{
-        state.expanded&&headerEl.click();
+        state.expanded&&accordionview.toggle(false);
         state.locked=Boolean(value);
         accordionview.style.opacity=state.locked?0.5:1;
     }
-    accordionview.toggle=(value=!state.expanded)=>{
-        headerEl.onclick({status:Boolean(value)});
-    }
+    accordionview.toggle=(expanded=!state.expanded)=>{
+        state.expanded=expanded;
+        if(!separate){
+            const {style}=headerEl,{borderBottomLeftRadius,borderBottomRightRadius}=state;
+            if(expanded){
+                state.borderBottomLeftRadius=style.borderBottomLeftRadius;
+                state.borderBottomRightRadius=style.borderBottomRightRadius;
+            }
+            style.borderBottomLeftRadius=expanded?0:borderBottomLeftRadius;
+            style.borderBottomRightRadius=expanded?0:borderBottomRightRadius;
+        }
+        const indicator=accordionview.querySelector(`.${css.indicator}`);
+        if(indicator){
+            indicator.style.transform=`rotateZ(${expanded?-180:0}deg)`;
+        }
+        if(expanded){
+            const contentview=state.contentview=ContentView({parent:accordionview,className:props.containerClassName});
+            if(memorize&&state.contentEl){
+                contentview.appendChild(state.contentEl);
+            }
+            else{
+                state.contentEl=renderContent&&renderContent(contentview);
+            }
+            onOpen&&onOpen(contentview);
+        }
+        else{
+            const {contentview}=state;
+            contentview&&contentview.unmount();
+            state.contentview=null;
+            onClose&&onClose();
+        }
+    };
 
 
     return accordionview;
