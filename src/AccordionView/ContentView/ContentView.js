@@ -39,24 +39,26 @@ export default function ContentView(props){
         if(nextEl){
             const {siblingStyle}=state;
             nextEl.style.marginTop=siblingStyle.marginTop;
-            nextEl.style.transition=siblingStyle.transition;
+            nextEl.style.transition="none";//overwrite nextEl already-set transition
+            setTimeout(()=>{
+                nextEl.style.transition=siblingStyle.transition;
+            },40);
         }
     });
 
     contentview.unmount=()=>{
-        //parent.style.backgroundColor=null;
         Object.assign(contentview.style,{position:null,transform:null});
         if(nextEl){
-            nextEl.style.marginTop=state.marginTop;
+            const {style}=nextEl;
+            style.transition="none";
+            style.marginTop=state.marginTop;
             state.marginTop=null;
             setTimeout(()=>{
                 const {siblingStyle}=state;
-                Object.assign(nextEl.style,{
-                    transition:`${statics.transition}ms`,
-                    marginTop:siblingStyle.marginTop,
-                });
+                style.transition=`${statics.transition}ms`;
+                style.marginTop=siblingStyle.marginTop;
                 setTimeout(()=>{
-                    nextEl.style.transition=siblingStyle.transition;
+                    style.transition=siblingStyle.transition;
                 },statics.transition);
             },0);
         }

@@ -5,10 +5,9 @@ import icon from "./IndicatorIcon";
 
 
 export default function AccordionView(props){
-    const {parent,id=useId("accordionview"),renderHeader,indicator=icon,renderContent,actions,color="black",memorize=true,separate,onOpen,onClose}=props;
+    const {parent,renderHeader,indicator=icon,renderContent,actions,color="black",memorize=true,separate,onOpen,onClose}=props;
     const accordionview=CherryView({
-        parent,id,
-        at:props.at,
+        parent,id:props.id,at:props.at,
         className:`${css.accordionview} ${props.className||""}`,
         style:`opacity:${props.locked?0.5:1};${props.style||""}`,
     }),state={
