@@ -21,7 +21,8 @@ export default function ContentView(props){
         });
         state.marginTop=`calc(
             ${(100*contentview.clientHeight/window.innerWidth)}vw +
-            ${getComputedStyle(parent).getPropertyValue("margin-bottom")||"0px"}
+            ${getComputedStyle(parent).getPropertyValue("margin-bottom")||"0px"} +
+            ${getComputedStyle(nextEl).getPropertyValue("margin-top")||"0px"}
         )`;
         Object.assign(style,{
             marginTop:state.marginTop,
