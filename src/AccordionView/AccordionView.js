@@ -49,7 +49,7 @@ export default function AccordionView(props){
     }
 
     accordionview.setLocked=(value)=>{
-        state.expanded&&accordionview.toggle(false);
+        (value&&state.expanded)&&accordionview.toggle(false);
         state.locked=Boolean(value);
         accordionview.style.opacity=state.locked?0.5:1;
     }
