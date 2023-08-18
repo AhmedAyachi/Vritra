@@ -9,7 +9,7 @@
 }
 .container{
     max-width:100%;
-    flex:1;
+    flex:1 1 0;
 }
 .container[backwardsHorizontal],.container[backwardsHorizontal]>*{
     transform:scaleX(-1);
