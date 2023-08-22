@@ -1,10 +1,10 @@
-import {useId,CherryView,removeItem,CherryMap,useSwipeGesture,findItem} from "../index";
+import {CherryView,removeItem,CherryMap,useSwipeGesture,findItem} from "../index";
 import css from "./FlatList.module.css";
 import EmptyIndicator from "./EmptyIndicator/EmptyIndicator";
 
 
 export default function FlatList(props){
-    const {parent,emptymessage,renderItem,horizontal,backwards,pagingEnabled,scrollEnabled=true,threshold=0.5,transition="ease 300ms",onFilled,onReachEnd,onRemoveItem,onAddItems,onSwipe}=props;
+    const {parent,EmptyComponent,renderItem,horizontal,backwards,pagingEnabled,scrollEnabled=true,threshold=0.5,transition="ease 300ms",onFilled,onReachEnd,onRemoveItem,onAddItems,onSwipe}=props;
     const flatlist=CherryView({
         parent,at:props.at,
         props:props.id,
@@ -22,6 +22,7 @@ export default function FlatList(props){
         isolatedcount:0,//elements with removed items count,
         offsetSide:"offset"+(horizontal?"Left":"Top"),
         filled:false,
+        emptinessEl:null,
     },{data,offsetSide}=state;
 
     flatlist.innateHTML=`
@@ -33,7 +34,7 @@ export default function FlatList(props){
         ></div>
     `;
     const {container}=flatlist;
-    let emptyindicator=(!data.length)&&EmptyIndicator({parent:container,message:emptymessage});
+    (!data.length)&&showEmptinessElement();
 
     const observer=new IntersectionObserver(([entry])=>{
         const {isIntersecting}=entry;
@@ -108,8 +109,8 @@ export default function FlatList(props){
         if(length){
             if(!data.length){
                 container.style.display="block";
-                emptyindicator.remove();
-                emptyindicator=null;
+                state.emptinessEl.remove();
+                state.emptinessEl=null;
             }
             data.push(...items);
         }
@@ -117,6 +118,7 @@ export default function FlatList(props){
             if(length){
                 createElement({item:items[0],index:state.index});
                 state.endreached=false;
+                state.firstOffset=state.itemEl[offsetSide];
             }
             else{
                 onReachEnd&&onReachEnd({container,data:props.data});
@@ -141,7 +143,7 @@ export default function FlatList(props){
             state.index--;
             if((!data.length)&&(!state.isolatedcount)){
                 container.style.display="none";
-                emptyindicator=EmptyIndicator({parent:flatlist,message:emptymessage});
+                showEmptinessElement();
             }
             onRemoveItem&&onRemoveItem(removed);
         }
@@ -237,6 +239,17 @@ export default function FlatList(props){
         state.itemsmap.set(item,element);
         state.itemEl=element;
         observe&&observer&&observer.observe(element);
+    }
+    function showEmptinessElement(){
+        if(typeof(EmptyComponent)==="function"){
+            state.emptinessEl=EmptyComponent({parent:container});
+        }
+        else{
+            state.emptinessEl=EmptyIndicator({
+                parent:container,
+                message:EmptyComponent||props.emptymessage,
+            });
+        }
     }
 
     return flatlist;

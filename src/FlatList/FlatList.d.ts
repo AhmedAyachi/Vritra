@@ -20,11 +20,6 @@ type FlatListProps<Type>=ExtendableViewProps<"div">&{
      */
     horizontal:boolean,
     /**
-     * Message to show when the flatlist is empty.
-     * @default "no data"
-     */
-    emptymessage:string,
-    /**
      * Make Flatlist scrollable from bottom/right to top/left.
      * 
      * Specify a flatlist height value if elements get shown at once.
@@ -54,6 +49,17 @@ type FlatListProps<Type>=ExtendableViewProps<"div">&{
      * @default "ease 300ms"
      */
     transition:string,
+    /**
+     * Message to show when the flatlist is empty.
+     * @default "no data"
+     * @deprecated will be removed in a future version, use EmptyComponent instead
+     */
+    emptymessage:string,
+    /**
+     * Rendered when the list is empty
+     * @notice displays a simple message if a string is passed
+     */
+    EmptyComponent:string|(({parent:HTMLElement})=>HTMLElement),
      /**
       * Function to execute on each data item
       * 
