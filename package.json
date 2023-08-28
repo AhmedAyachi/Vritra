@@ -18,8 +18,5 @@
   "bugs": {
     "url": "https://github.com/AhmedAyachi/Corella/issues"
   },
-  "homepage": "https://github.com/AhmedAyachi/Corella#readme",
-  "publishConfig": {
-    "access": "restricted"
-  }
+  "homepage": "https://github.com/AhmedAyachi/Corella#readme"
 }
