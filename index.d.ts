@@ -1,4 +1,4 @@
-declare module "cherries";
+declare module "corella";
 
 
 export {default as View,ViewProps,View as ViewInterface} from "./src/View/View";

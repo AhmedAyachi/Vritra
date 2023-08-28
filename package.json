@@ -1,5 +1,5 @@
 {
-  "name": "cherries",
+  "name": "corella",
   "version": "1.0.0",
   "description": "",
   "main": "src/index.js",
@@ -7,7 +7,7 @@
   "scripts": {},
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/AhmedAyachi/Cherries.git"
+    "url": "git+https://github.com/AhmedAyachi/Corella.git"
   },
   "keywords": [
     "vanilla"
@@ -15,7 +15,7 @@
   "author": "Ahmed Ayachi",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/AhmedAyachi/Cherries/issues"
+    "url": "https://github.com/AhmedAyachi/Corella/issues"
   },
-  "homepage": "https://github.com/AhmedAyachi/Cherries#readme"
+  "homepage": "https://github.com/AhmedAyachi/Corella#readme"
 }
