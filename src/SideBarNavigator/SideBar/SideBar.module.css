@@ -47,7 +47,7 @@
 .lightexplorer::-webkit-scrollbar-thumb:active{
     background-color:rgba(255,255,255,0.2);
 }
-.bartoggler{
+.togglebtn{
     position:absolute;
     width:5em;
     bottom:2em;
@@ -58,14 +58,14 @@
 }
 
 @media(any-hover){
-    .bartoggler:hover{
+    .togglebtn:hover{
         opacity:1;
         cursor:pointer;
     }
 }
 
 @media(hover:none){
-    .bartoggler:active{
+    .togglebtn:active{
         opacity:1;
     }
 }
@@ -77,7 +77,7 @@
         top:0;
         z-index:5;
     }
-    .bartoggler{
+    .togglebtn{
         width:6.5em;
     }
 }

@@ -1,4 +1,4 @@
-import {useId,CherryView,ActionSetView} from "../index";
+import {useId,NativeView,ActionSetView} from "../index";
 import css from "./AccordionView.module.css";
 import ContentView from "./ContentView/ContentView";
 import icon from "./IndicatorIcon";
@@ -6,7 +6,7 @@ import icon from "./IndicatorIcon";
 
 export default function AccordionView(props){
     const {parent,renderHeader,indicator=icon,renderContent,actions,color="black",memorize=true,separate,onOpen,onClose}=props;
-    const accordionview=CherryView({
+    const accordionview=NativeView({
         parent,id:props.id,at:props.at,
         className:`${css.accordionview} ${props.className||""}`,
         style:`opacity:${props.locked?0.5:1};${props.style||""}`,

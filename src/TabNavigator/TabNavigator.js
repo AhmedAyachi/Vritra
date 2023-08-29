@@ -1,11 +1,11 @@
-import {useId,CherryView,View,FlatList} from "../index";
+import {useId,NativeView,View,FlatList} from "../index";
 import css from "./TabNavigator.module.css";
 import TabView from "./TabView/TabView";
 
 
 export default function TabNavigator(props){
     const {parent,tabs,memorize=true,tabTextColor="#cecece",tintColor="#1e90ff",onNavigate}=props;
-    const tabnavigator=CherryView({
+    const tabnavigator=NativeView({
         parent,id:props.id,at:props.at,style:props.style,
         className:`${css.tabnavigator} ${props.className||""}`,
     }),state={
@@ -14,7 +14,7 @@ export default function TabNavigator(props){
     };
 
     tabnavigator.innateHTML=`
-        <div class="${css.container} ${props.containerClassName||""}"></div>
+        <div class="${css.container} ${props.containerClassName||""}" ref="container"></div>
     `;
     const headerlist=FlatList({
         parent:tabnavigator,
@@ -59,7 +59,7 @@ export default function TabNavigator(props){
     });
     
     tabnavigator.getIndicator=()=>barview;
-    tabnavigator.getContentContainer=()=>tabnavigator.querySelector(`.${css.container}`);
+    tabnavigator.getContentContainer=()=>tabnavigator.container;
     tabnavigator.getActiveId=()=>state.activeTab?.id;
 
     return tabnavigator;

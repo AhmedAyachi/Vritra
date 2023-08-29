@@ -3,7 +3,7 @@ declare module "corella";
 
 export {default as View,ViewProps,View as ViewInterface} from "./src/View/View";
 export {default as Fragment} from "./src/Fragment/Fragment";
-export {default as CherryView} from "./src/CherryView/CherryView";
+export {default as NativeView} from "./src/NativeView/NativeView";
 export {default as SideBarNavigator,SideBarNavigatorProps} from "./src/SideBarNavigator/SideBarNavigator";
 export {default as DrawerNavigator} from "./src/DrawerNavigator/DrawerNavigator";
 export {default as TabNavigator} from "./src/TabNavigator/TabNavigator";
@@ -14,7 +14,7 @@ export {default as AccordionView} from "./src/AccordionView/AccordionView";
 export {default as Palette} from "./src/Palette/Palette";
 export {default as FlatList} from "./src/FlatList/FlatList";
 export {default as DraggableView,} from "./src/DraggableView/DraggableView";
-export {default as CherryMap} from "./src/CherryMap/CherryMap";
+export {default as FooMap} from "./src/FooMap/FooMap";
 export {HashRouter} from "./src/HashRouter/HashRouter";
 export {useZoomGesture,usePinchGesture,useSwipeGesture,usePressGesture} from "./src/Gestures";
 export {default as withSequence} from "./src/withSequence/withSequence";

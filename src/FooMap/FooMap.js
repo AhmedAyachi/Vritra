@@ -1,6 +1,6 @@
 
 
-export default class CherryMap extends Map {
+export default class FooMap extends Map {
     constructor(params){
         super(params);
     }

@@ -3,7 +3,7 @@ import css from "./index.module.css";
 
 export {default as View} from "./View/View";
 export {default as Fragment} from "./Fragment/Fragment";
-export {default as CherryView} from "./CherryView/CherryView";
+export {default as NativeView} from "./NativeView/NativeView";
 export {default as SideBarNavigator} from "./SideBarNavigator/SideBarNavigator";
 export {default as DrawerNavigator} from "./DrawerNavigator/DrawerNavigator";
 export {default as TabNavigator} from "./TabNavigator/TabNavigator";
@@ -14,7 +14,7 @@ export {default as AccordionView} from "./AccordionView/AccordionView";
 export {default as Palette} from "./Palette/Palette";
 export {default as FlatList} from "./FlatList/FlatList";
 export {default as DraggableView} from "./DraggableView/DraggableView";
-export {default as CherryMap} from "./CherryMap/CherryMap";
+export {default as FooMap} from "./FooMap/FooMap";
 export {HashRouter} from "./HashRouter/HashRouter";
 export {useZoomGesture,usePinchGesture,useSwipeGesture,usePressGesture} from "./Gestures";
 export {default as withSequence} from "./withSequence/withSequence";

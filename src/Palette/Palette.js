@@ -1,4 +1,4 @@
-import {useId,CherryView} from "../index";
+import {useId,NativeView} from "../index";
 import css from "./Palette.module.css";
 import BubblesView from "./BubblesView/BubblesView";
 import icon0 from "./Icon_0";
@@ -6,7 +6,7 @@ import icon0 from "./Icon_0";
 
 export default function Palette(props){
     const {parent,id=useId("palette"),icon=icon0,color="black",colors=statics.colors,onShowColors,onChange}=props;
-    const palette=CherryView({
+    const palette=NativeView({
         parent,id,
         style:props.style,
         at:props.at,

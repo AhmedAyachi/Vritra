@@ -1,7 +1,7 @@
-.cherryview{
+.nativeview{
     font-size:1vw; 
 }
-.cherryview *{
+.nativeview *{
     margin:0;
     padding:0;
     outline:none transparent !important;
@@ -10,13 +10,13 @@
     -webkit-user-select:none;
     -ms-user-select:none;
 }
-.cherryview input:read-write,.cherryview textarea:read-write,.cherryview div[contenteditable]{
+.nativeview input:read-write,.nativeview textarea:read-write,.nativeview div[contenteditable]{
     user-select:text;
     -moz-user-select:text;
     -webkit-user-select:text;
     -ms-user-select:text;
 }
-.cherryview button,.cherryview .button{
+.nativeview button,.nativeview .button{
     font-size:1em;
     border:none;
     transition:200ms;
@@ -24,20 +24,20 @@
 
 
 @media(min-width:15cm){
-    .cherryview{
+    .nativeview{
         font-size:0.33vw;
     }
 }
 
 @media(hover:none){
-    .cherryview button:active,.cherryview .button:active{
+    .nativeview button:active,.nativeview .button:active{
         filter:brightness(0.65);
         opacity:0.85;
     }
 }
 
 @media(any-hover){
-    .cherryview button:hover,.cherryview .button:hover{
+    .nativeview button:hover,.nativeview .button:hover{
         filter:brightness(0.65);
         opacity:0.85;
     }

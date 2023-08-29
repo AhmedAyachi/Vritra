@@ -1,10 +1,10 @@
-import {useId,CherryView,capitalize,isTouchDevice} from "../index";
+import {useId,NativeView,capitalize,isTouchDevice} from "../index";
 import css from "./DraggableView.module.css";
 
 
 export default function DraggableView(props){
     const {parent,ref=useId("draggableview"),id=ref,position,boundary,horizontalDrag=true,verticalDrag=true}=props;
-    const draggableview=CherryView({
+    const draggableview=NativeView({
         parent,id,
         at:props.at,
         tag:props.tag,

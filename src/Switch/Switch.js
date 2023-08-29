@@ -1,10 +1,10 @@
-import {useId,CherryView,sanitize} from "../index";
+import {useId,NativeView,sanitize} from "../index";
 import css from "./Switch.module.css";
 
 
 export default function Switch(props){
     const {parent,id=useId("switch"),thumbColor=statics.thumbColor,trackColor=statics.trackColor,readonly,onChange}=props;
-    const switchEl=CherryView({
+    const switchEl=NativeView({
         parent,id,
         style:props.style,
         at:props.at,

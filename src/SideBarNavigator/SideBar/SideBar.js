@@ -16,7 +16,7 @@ export default function SideBar(props){
     };
 
     sidebar.innateHTML=`
-        <img class="${css.bartoggler}" src="${icon0(tintColor)}"/>
+        <img class="${css.togglebtn}" ref="togglebtn" src="${icon0(tintColor)}"/>
     `;
 
     const firstentry=entries[0];
@@ -30,8 +30,8 @@ export default function SideBar(props){
         lazy:false,
     });
 
-    const bartoggler=sidebar.querySelector(`.${css.bartoggler}`);
-    bartoggler.onclick=()=>{sidebar.toggle()};
+    const {togglebtn}=sidebar;
+    togglebtn.onclick=()=>{sidebar.toggle()};
     
     sidebar.toggle=(shown=!state.shown)=>{
         state.shown=shown;
@@ -42,7 +42,7 @@ export default function SideBar(props){
             minWidth:shown?null:0,
             width:shown?`${state.width}px`:0,
         });
-        Object.assign(bartoggler.style,{
+        Object.assign(togglebtn.style,{
             right:shown?null:"-6em",
             transform:`rotateZ(${shown?0:180}deg)`,
         });

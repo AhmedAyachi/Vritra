@@ -1,4 +1,4 @@
-import {useId,CherryView} from "../index";
+import {useId,NativeView} from "../index";
 import css from "./DrawerNavigator.module.css";
 import DrawerView from "./DrawerView/DrawerView";
 import icon0 from "./Icon_0";
@@ -6,7 +6,7 @@ import icon0 from "./Icon_0";
 
 export default function DrawerNavigator(props){
     const {parent,id=useId("drawernavigator"),routes,initialId,renderHeader}=props;
-    const drawernavigator=CherryView({
+    const drawernavigator=NativeView({
         parent,id,
         style:props.style,
         at:props.at,

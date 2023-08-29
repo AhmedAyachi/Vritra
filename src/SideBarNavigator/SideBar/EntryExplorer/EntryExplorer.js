@@ -18,12 +18,12 @@ export default function EntryExplorer(props){
 
     entryexplorer.beforeEndHTML=`
         ${lazy?"":`
-            <div class="${css.container}"></div>
+            <div class="${css.container}" ref="container"></div>
         `}
     `;
 
     if(!lazy){
-        const container=entryexplorer.querySelector(`.${css.container}`);
+        const {container}=entryexplorer;
         entries.forEach(entry=>{
             EntryView({...props,parent:container,entry});
         });

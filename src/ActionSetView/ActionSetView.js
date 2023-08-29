@@ -1,10 +1,10 @@
-import {useId,map,CherryView} from "../index";
+import {useId,map,NativeView} from "../index";
 import css from "./ActionSetView.module.css";
 
 
 export default function ActionSetView(props){
     const {parent,id=useId("actionsetview"),actions,color="black"}=props;
-    const actionsetview=CherryView({
+    const actionsetview=NativeView({
         parent,id,
         at:props.at,
         style:props.style,
