@@ -208,12 +208,12 @@ export const map=(array=[],treatment)=>{
     if(Array.isArray(array)){
         const maped=[...array];
         for(let i=0;i<maped.length;i++){
-           str+=treatment(maped[i],i,array); 
+            str+=treatment(maped[i],i,array)||"";
         }
     }
     else if(typeof(array)==="number"){
         for(let i=0;i<array;i++){
-            str+=treatment(i); 
+            str+=treatment(i)||""; 
         }
     }
     return str;
