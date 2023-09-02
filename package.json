@@ -1,22 +1,19 @@
 {
   "name": "corella",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "A zero-dependency vanillajs-based UI library for hybrid-web apps",
   "main": "src/index.js",
   "types": "index.d.ts",
-  "scripts": {},
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/AhmedAyachi/Corella.git"
+    "url": "https://github.com/AhmedAyachi/Corella.git"
   },
   "keywords": [
-    "corella","cordova",
+    "corella",
+    "cordova",
     "phonegap"
   ],
   "author": "Ahmed Ayachi",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/AhmedAyachi/Corella/issues"
-  },
+  "license": "MIT",
   "homepage": "https://github.com/AhmedAyachi/Corella#readme"
 }
