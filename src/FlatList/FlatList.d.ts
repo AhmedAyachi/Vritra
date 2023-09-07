@@ -56,8 +56,9 @@ type FlatListProps<Type>=ExtendableViewProps<"div">&{
      */
     emptymessage:string,
     /**
-     * Rendered when the list is empty
+     * Rendered when the flatlist is empty.
      * @notice displays a simple message if a string is passed
+     * @default "no data"
      */
     EmptyComponent:string|(({parent:HTMLElement})=>HTMLElement),
      /**

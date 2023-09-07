@@ -30,13 +30,10 @@ type View<Tag>=(Tag extends keyof HTMLElementTagNameMap?HTMLElementTagNameMap[Ta
     /**
      * Sets safely the HTML or XML markup contained within the element.
      * 
-     * Removes script/style elements.
-     * 
-     * Removes any element that has at least one attribute starting with "on".
-     * 
-     * Removes any element whose style attribute containes "javascript:"
-     * 
-     * Removes any element whose href attribute does not start with ["http:","https:","data:","m-files:","file:","ftp:","mailto:","pw:"]
+     * Removes script/style elements, 
+     * any element that has at least one attribute starting with "on", 
+     * whose style attribute containes "javascript:", 
+     * whose href attribute does not start with ["http:","https:","data:","m-files:","file:","ftp:","mailto:","pw:"].
      * @notice Safer version of innerHTML
      */
     innateHTML:string,

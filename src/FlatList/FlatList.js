@@ -4,7 +4,7 @@ import EmptyIndicator from "./EmptyIndicator/EmptyIndicator";
 
 
 export default function FlatList(props){
-    const {parent,EmptyComponent,renderItem,horizontal,backwards,pagingEnabled,scrollEnabled=true,threshold=0.5,transition="ease 300ms",onFilled,onReachEnd,onRemoveItem,onAddItems,onSwipe}=props;
+    const {parent,EmptyComponent=props.emptymessage,renderItem,horizontal,backwards,pagingEnabled,scrollEnabled=true,threshold=0.5,transition="ease 300ms",onFilled,onReachEnd,onRemoveItem,onAddItems,onSwipe}=props;
     const flatlist=NativeView({
         parent,at:props.at,
         props:props.id,
@@ -247,7 +247,7 @@ export default function FlatList(props){
         else{
             state.emptinessEl=EmptyIndicator({
                 parent:container,
-                message:EmptyComponent||props.emptymessage,
+                message:EmptyComponent,
             });
         }
     }

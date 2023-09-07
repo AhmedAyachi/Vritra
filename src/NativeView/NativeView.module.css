@@ -16,8 +16,7 @@
     -webkit-user-select:text;
     -ms-user-select:text;
 }
-.nativeview button,.nativeview .button{
-    font-size:1em;
+.nativeview *:is(button,.button,.clickable){
     border:none;
     transition:200ms;
 }
@@ -30,14 +29,14 @@
 }
 
 @media(hover:none){
-    .nativeview button:active,.nativeview .button:active{
+    .nativeview *:is(button,.button,.clickable):active{
         filter:brightness(0.65);
         opacity:0.85;
     }
 }
 
 @media(any-hover){
-    .nativeview button:hover,.nativeview .button:hover{
+    .nativeview *:is(button,.button,.clickable):hover{
         filter:brightness(0.65);
         opacity:0.85;
     }
