@@ -3,10 +3,15 @@
 export default function usePressGesture(options:{
     element:HTMLElement,
     /**
-     * To target long presses
+     * For how long in milliseconds the element should kept pressed to trigger the gesture
      * @default 0
      */
     threshold:number,
+    /**
+     * Pressing timestamp in milliseconds
+     * @default 0
+     */
+    timestamp:number,
     onStart(event:PressEvent):void,
     onPressing(event:PressEvent):void,
     onEnd(event:PressEvent):void,
