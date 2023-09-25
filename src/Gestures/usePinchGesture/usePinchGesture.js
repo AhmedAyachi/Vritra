@@ -1,4 +1,4 @@
-import {getBaryCenter} from "./index";
+import {getBaryCenter} from "../index";
 
 
 export default function usePinchGesture(options){

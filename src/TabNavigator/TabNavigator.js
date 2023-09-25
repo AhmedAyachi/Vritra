@@ -4,13 +4,12 @@ import TabView from "./TabView/TabView";
 
 
 export default function TabNavigator(props){
-    const {parent,tabs,memorize=true,tabTextColor="#cecece",tintColor="#1e90ff",onNavigate}=props;
+    const {parent,tabs,memorize=true,activeTabId,tabTextColor="#cecece",tintColor="#1e90ff",onNavigate}=props;
     const tabnavigator=NativeView({
         parent,id:props.id,at:props.at,style:props.style,
         className:`${css.tabnavigator} ${props.className||""}`,
     }),state={
         activeTab:null,
-        //defaultId:(tabs.find(({active})=>active)||tabs[0]).id,
     };
 
     tabnavigator.innateHTML=`
@@ -48,8 +47,9 @@ export default function TabNavigator(props){
             });
         },
         onFilled:()=>{
-            const {element}=tabs[0];
-            element.click();
+            const tab=activeTabId?tabs.find(({id})=>id===activeTabId):tabs[0];
+            headerlist.scrollToIndex(tabs.indexOf(tab),false);
+            tab.element?.click();
         },
     });
     const barview=View({

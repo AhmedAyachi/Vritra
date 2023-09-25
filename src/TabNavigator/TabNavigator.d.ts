@@ -12,6 +12,7 @@ export default function TabNavigator(props:ViewProps<"div">&{
      * @default true
      */
     memorize?:boolean,
+    activeTabId:string,
     /**
      * @default "#1e90ff"
      */

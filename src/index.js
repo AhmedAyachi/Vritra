@@ -160,18 +160,18 @@ export const getTimeDuration=(start,end)=>{
 }
 
 export const getMonths=(isLeapYear=false)=>[
-    {name:"january",length:31},
-    {name:"february",length:isLeapYear?29:28},
-    {name:"march",length:31},
-    {name:"april",length:30},
-    {name:"may",length:31},
-    {name:"june",length:30},
-    {name:"july",length:31},
-    {name:"august",length:31},
-    {name:"september",length:30},
-    {name:"october",length:31},
-    {name:"november",length:30},
-    {name:"december",length:31},
+    {name:"january",daycount:31},
+    {name:"february",daycount:isLeapYear?29:28},
+    {name:"march",daycount:31},
+    {name:"april",daycount:30},
+    {name:"may",daycount:31},
+    {name:"june",daycount:30},
+    {name:"july",daycount:31},
+    {name:"august",daycount:31},
+    {name:"september",daycount:30},
+    {name:"october",daycount:31},
+    {name:"november",daycount:30},
+    {name:"december",daycount:31},
 ];
 
 export const isLeapYear=(year=new Date(Date.now()).getFullYear())=>!Boolean((year-1752)%4);

@@ -1,9 +1,9 @@
 
 
 export {default as usePressGesture} from "./usePressGesture/usePressGesture";
-export {default as useZoomGesture} from "./useZoomGesture";
-export {default as usePinchGesture} from "./usePinchGesture";
-export {default as useSwipeGesture} from "./useSwipeGesture";
+export {default as useZoomGesture} from "./useZoomGesture/useZoomGesture";
+export {default as usePinchGesture} from "./usePinchGesture/usePinchGesture";
+export {default as useSwipeGesture} from "./useSwipeGesture/useSwipeGesture";
 
 export const getBaryCenter=(touches)=>{
     const touchcount=touches.length;

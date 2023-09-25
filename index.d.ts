@@ -112,12 +112,12 @@ export function getTimeDuration(start:String,end:String):Number;
 /**
  * returns an array of objects representing the months of the year
  * @param isLeapYear
- * if true, february length value would be 29 else 28
+ * if true, february daycount value would be 29 else 28
  * @default false
  * @property name 
  * @property length : number of days
  */
-export function getMonths(isLeapYear=false):{name:String,length:Number}[];
+export function getMonths(isLeapYear=false):{name:String,daycount:Number}[];
 
 /**
  * @param year year to check, default to current year
