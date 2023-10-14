@@ -1,5 +1,5 @@
 import {ExtendableViewProps,View} from "../View/View";
-import {CherryIcon} from "../ActionSetView/ActionSetView";
+import {NativeIcon} from "../ActionSetView/ActionSetView";
 
 
 export default function Palette(props:ExtendableViewProps<"div">&{
@@ -7,7 +7,7 @@ export default function Palette(props:ExtendableViewProps<"div">&{
      * Picker icon
      * @default palette icon
      */
-    icon:CherryIcon,
+    icon:NativeIcon,
     /**
      * default icon color
      * @default "black"

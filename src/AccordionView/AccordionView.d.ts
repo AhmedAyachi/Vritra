@@ -1,5 +1,5 @@
 import {View,ExtendableViewProps} from "../View/View";
-import {ActionSetAction,CherryIcon} from "../ActionSetView/ActionSetView";
+import {ActionSetAction,NativeIcon} from "../ActionSetView/ActionSetView";
 
 
 /**
@@ -21,16 +21,14 @@ export default function AccordionView(props:ExtendableViewProps<"div">&{
      * @notice when separate is true, specify a paddingTop value to get the desired behavior 
      */
     containerClassName?:string,
-    /**
-     * For custom header generation
-     * @param container custom header container
-     */
-    renderHeader(container:HTMLElement):HTMLElement,
-    /**
-     * 
-     * @param container content container
-     */
-    renderContent(container:HTMLElement):HTMLElement,
+    renderHeader(props:{
+        /** custom header container */
+        parent:HTMLElement,
+    }):HTMLElement,
+    renderContent(props:{
+        /** content container */
+        parent:HTMLElement,
+    }):HTMLElement,
     /**
      * If true, renderContent is called once, using the returned HTMLElement for next renders.
      * @default true
@@ -39,7 +37,7 @@ export default function AccordionView(props:ExtendableViewProps<"div">&{
     /**
      * Default header indicator icon as url/base64 string or function
      */
-    indicator?:CherryIcon,
+    indicator?:NativeIcon,
     /**
      * Specifies if the content view will be connected to the header or not to 
      * remove header bottom border radius when open

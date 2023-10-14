@@ -17,22 +17,24 @@ export default function DrawerNavigator(props){
     };
 
     drawernavigator.innateHTML=`
-        <header 
-            class="${css.header} ${props.headerClassName||""}" 
-            ${renderHeader?"":`style="padding:4em"`}
-        >
-            ${renderHeader?"":`
+        ${renderHeader?"":`
+            <header 
+                ref="header"
+                class="${css.header} ${props.headerClassName||""}" 
+                style="padding:4em"
+            >
                 <img class="${css.showbtn}" src="${icon0()}"/>
                 <h3 class="${css.title}"></h3>
-            `}
-        </header>
-        <div class="${css.container} ${props.containerClassName||""}"></div>
+            </header>
+        `}
+        <div ref="container" class="${css.container} ${props.containerClassName||""}"></div>
     `;
     routes?.forEach(route=>{
         if(!route.title){route.title=route.id};
     });
     
-    if(!renderHeader){
+    let {header}=drawernavigator;
+    if(header){
         const showbtn=drawernavigator.querySelector(`.${css.showbtn}`);
         showbtn.onclick=()=>{drawernavigator.showDrawer()};
     }
@@ -56,12 +58,15 @@ export default function DrawerNavigator(props){
             const {id,memorize=true,element,scrollTop=0,scrollLeft=0}=route;
             const blocking=id===state.activeId;
             state.activeId=id;
-            const container=drawernavigator.querySelector(`.${css.container}`);
+            const {container}=drawernavigator;
             container.innerHTML="";
             if(renderHeader){
-                const header=drawernavigator.querySelector(`.${css.header}`);
-                header.innerHTML="";
-                renderHeader&&renderHeader({parent:header,route:{...route}});
+                header&&header.remove();
+                header=drawernavigator.insertAdjacentElement("afterbegin",renderHeader({
+                    parent:drawernavigator,
+                    defaultIcon:icon0,
+                    route:{...route},
+                }));
             }
             else{
                 const titleEl=drawernavigator.querySelector(`.${css.title}`);

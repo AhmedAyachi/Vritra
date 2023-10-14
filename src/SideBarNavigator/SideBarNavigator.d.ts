@@ -1,5 +1,5 @@
 import {ExtendableViewProps,View} from "../View/View";
-import {CherryIcon} from "../ActionSetView/ActionSetView";
+import {NativeIcon} from "../ActionSetView/ActionSetView";
 
 
 export default function SideBarNavigator(props:SideBarNavigatorProps):SideBarNavigator;
@@ -58,7 +58,7 @@ type SideBarNavigatorEntry={
      * If no name is supplied, the id is used as a name
      */
     name?:string,
-    icon?:CherryIcon,
+    icon?:NativeIcon,
     /**
      * If entries are supplied, the entry is a folder, else an endpoint.
      */
@@ -68,7 +68,9 @@ type SideBarNavigatorEntry={
      * @param container Content container
      * @returns The content element
      */
-    renderContent(container:HTMLElement):HTMLElement,
+    renderContent(props:{
+        parent:HTMLElement,
+    }):HTMLElement,
     /**
      * If true, the content element returned by renderContent is used
      * @default true

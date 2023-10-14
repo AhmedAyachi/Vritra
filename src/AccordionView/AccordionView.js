@@ -33,7 +33,7 @@ export default function AccordionView(props){
         </div>
     `;
     const {headerEl}=accordionview;
-    if(renderHeader){renderHeader(headerEl)}
+    if(renderHeader){renderHeader({parent:headerEl})}
     else if(actions){
         const actionsEl=accordionview.querySelector(`.${css.actions}`);
         const actionsetview=ActionSetView({
@@ -74,7 +74,7 @@ export default function AccordionView(props){
                 contentview.appendChild(state.contentEl);
             }
             else{
-                state.contentEl=renderContent&&renderContent(contentview);
+                state.contentEl=renderContent&&renderContent({parent:contentview});
             }
             onOpen&&onOpen(contentview);
         }

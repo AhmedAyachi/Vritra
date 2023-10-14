@@ -1,4 +1,4 @@
-declare module "corella";
+declare module "wurm";
 
 
 export {default as View,ViewProps,View as ViewInterface} from "./src/View/View";

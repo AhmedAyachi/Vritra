@@ -31,7 +31,7 @@ export type ActionSetAction={
     /**
      * Action icon as url, base64 string or function
      */
-    icon:CherryIcon,
+    icon:NativeIcon,
     /**
      * Action icon size
      * @unit em
@@ -75,10 +75,10 @@ interface ActionSetActionElement extends HTMLDivElement {
      * @notice you can just edit the img element src yourself, but this method will make sure that your code
      * keeps behaving the same way independently of package versions.
      */
-    setIcon(icon:CherryIcon,save?:boolean):void,
+    setIcon(icon:NativeIcon,save?:boolean):void,
 }
 
-type CherryIcon=string|((
+type NativeIcon=string|((
     color?:string,
     /**
      * @default 2

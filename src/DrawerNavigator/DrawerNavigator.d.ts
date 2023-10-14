@@ -1,3 +1,4 @@
+import { NativeIcon } from "../ActionSetView/ActionSetView";
 import {ExtendableViewProps,View} from "../View/View";
 
 
@@ -26,7 +27,11 @@ export default function DrawerNavigator(props:ExtendableViewProps<"div">&{
      * For custom header generation
      * @param container custom header container
      */
-    renderHeader(props:{parent:HTMLElement,route:DrawerNavigatorRoute}):HTMLElement,
+    renderHeader(props:{
+        parent:HTMLElement,
+        defaultIcon:(color?:string)=>string,
+        route:DrawerNavigatorRoute,
+    }):HTMLElement,
 }):DrawerNavigator;
 
 interface DrawerNavigator extends View<"div"> {

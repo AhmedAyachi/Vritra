@@ -68,7 +68,7 @@ const renderEntry=(entry,container)=>{
         container.appendChild(content);
     }
     else{
-        entry.content=entry.renderContent?.(container);
+        entry.content=entry.renderContent?.({parent:container});
     }
 }
 
