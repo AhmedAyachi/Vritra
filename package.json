@@ -1,19 +1,19 @@
 {
-  "name": "wurm",
+  "name": "vritra",
   "version": "0.0.1",
   "description": "A zero-dependency vanillajs-based UI library for hybrid-web apps",
   "main": "src/index.js",
   "types": "index.d.ts",
   "repository": {
     "type": "git",
-    "url": "https://github.com/AhmedAyachi/Wurm.git"
+    "url": "https://github.com/AhmedAyachi/Vritra.git"
   },
   "keywords": [
-    "Wurm",
+    "Vritra",
     "cordova",
     "phonegap"
   ],
   "author": "Ahmed Ayachi",
   "license": "MIT",
-  "homepage": "https://github.com/AhmedAyachi/Wurm#readme"
+  "homepage": "https://github.com/AhmedAyachi/Vritra#readme"
 }

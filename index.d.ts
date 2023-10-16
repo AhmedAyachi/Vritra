@@ -1,4 +1,4 @@
-declare module "wurm";
+declare module "vritra";
 
 
 export {default as View,ViewProps,View as ViewInterface} from "./src/View/View";
