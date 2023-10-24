@@ -30,7 +30,13 @@ export default function DrawerNavigator(props:ExtendableViewProps<"div">&{
     renderHeader(props:{
         parent:HTMLElement,
         defaultIcon:(color?:string)=>string,
-        route:DrawerNavigatorRoute,
+        route:DrawerNavigatorRoute&{
+            /**
+             * renders the route
+             * @notice to force rerendering the route
+             */
+            render():HTMLElement,
+        },
     }):HTMLElement,
 }):DrawerNavigator;
 

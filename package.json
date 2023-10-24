@@ -1,6 +1,6 @@
 {
   "name": "vritra",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A zero-dependency vanillajs-based UI library for hybrid-web apps",
   "main": "src/index.js",
   "types": "index.d.ts",

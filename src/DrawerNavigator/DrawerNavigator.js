@@ -65,7 +65,12 @@ export default function DrawerNavigator(props){
                 header=drawernavigator.insertAdjacentElement("afterbegin",renderHeader({
                     parent:drawernavigator,
                     defaultIcon:icon0,
-                    route:{...route},
+                    route:{...route,
+                        render:()=>{
+                            container.innerHTML="";
+                            return instantiateRoute(route,container);
+                        },
+                    },
                 }));
             }
             else{
@@ -96,5 +101,6 @@ const instantiateRoute=(route,parent)=>{
         if(memorize){
             route.element=instance;
         }
+        return instance;
     }
 }

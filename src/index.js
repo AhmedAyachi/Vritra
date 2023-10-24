@@ -277,6 +277,7 @@ export const fadeIn=(element,display=200,duration,callback)=>{
             callback&&callback();
         },duration);
     }
+    return element;
 }
 
 export const fadeOut=(element,duration=200,callback)=>{
@@ -293,15 +294,7 @@ export const fadeOut=(element,duration=200,callback)=>{
             callback&&callback();
         },duration);
     }
-}
-
-export const toggle=(element,{display="block",duration=200},callback)=>{
-    if(getComputedStyle(element).display==="none"){
-        fadeIn(element,display,duration,callback);
-    }
-    else{
-        display=fadeOut(element,duration,callback);
-    }
+    return element;
 }
 
 export function randomColor(colors){

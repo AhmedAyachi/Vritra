@@ -23,6 +23,7 @@ export default function TabNavigator(props){
         horizontal:true,
         data:tabs,
         threshold:0,
+        EmptyComponent:"",
         renderItem:({parent,item:tab})=>{
             if(tab.memorize===undefined){tab.memorize=memorize};
             return TabView({

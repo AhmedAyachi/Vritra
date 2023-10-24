@@ -168,33 +168,20 @@ export function sanitize(str:string,escape?:boolean,whitelist?:string):String;
  * @param display element display value when visible, default: element's display value when fadeIn called
  * @param duration fade duration in ms, default: 200
  * @param callback 
+ * @returns the element
  */
-export function fadeIn(element:HTMLElement,display:String,duration:Number,callback:()=>void):void;
-export function fadeIn(element:HTMLElement,duration:Number,callback:()=>void):void;
-export function fadeIn(element:HTMLElement,callback:()=>void):void;
+export function fadeIn(element:HTMLElement,display:String,duration:Number,callback:()=>void):HTMLElement;
+export function fadeIn(element:HTMLElement,duration:Number,callback:()=>void):HTMLElement;
+export function fadeIn(element:HTMLElement,callback:()=>void):HTMLElement;
 /**
  * 
  * @param element 
  * @param duration fade duration in ms, default: 200 
  * @param callback 
+ * @returns the element
  */
-export function fadeOut(element:HTMLElement,duration:Number,callback:()=>void):void;
-export function fadeOut(element:HTMLElement,callback:()=>void):void;
-/**
- * alternates between fadeIn and fadeOut
- * @param element target HTMLElement
- * @param props 
- * display: element display (flex,block,...), default: block
- * duration: fade duration in ms, default: 200
- * @param callback 
- * @deprecated
- */
-export function toggle(
-    element:HTMLElement,
-    props:{display:String,duration:Number},
-    callback:()=>void,
-):void;
-export function toggle(element:HTMLElement,callback:()=>void):void;
+export function fadeOut(element:HTMLElement,duration:Number,callback:()=>void):HTMLElement;
+export function fadeOut(element:HTMLElement,callback:()=>void):HTMLElement;
 
 /**
  * 

@@ -6,7 +6,17 @@ import {View,ExtendableViewProps} from "../View/View";
  * @notice CSS variables : spacing
  */
 export default function ActionSetView(props:ExtendableViewProps<"div">&{
-    actions:ActionSetAction[],
+    /**
+     * overwrites a definition properties if found.
+     * @notice
+     * If an action is of type string, that string needs to be one of the definitions id.
+     *
+     * If an action is an object, it needs to have at least either an id or a ref value that matches one of the definitions ids.
+     *
+     * If an action id matches a definition id, no need for providing a ref value bacause that id is used as a ref.
+     */
+    actions:(ActionSetAction|string)[],
+    definitions?:ActionSetDefinition[]
     /**
      * Function-icon color param value
      */
@@ -18,7 +28,14 @@ interface ActionSetView extends View<"div"> {
 
 }
 
-export type ActionSetAction={
+interface ActionSetAction extends ActionSetDefinition {
+    /**
+     * an id of a defined action
+     */
+    ref:string,
+}
+
+interface ActionSetDefinition {
     /**
      * Action id. Required
      */
@@ -27,7 +44,7 @@ export type ActionSetAction={
      * Used to add custom action component 
      * @returns action HTMLElement
      */
-    component:(props:ActionSetAction&{parent:ActionSetView})=>HTMLElement,
+    component:(props:ActionSetDefinition&{parent:ActionSetView})=>HTMLElement,
     /**
      * Action icon as url, base64 string or function
      */
@@ -46,8 +63,8 @@ export type ActionSetAction={
      * Called when the action HTMLElement is ready to click on
      * @param action the action object
      */
-    onReady(action:ActionSetAction&{
-        element:ActionSetActionElement,
+    onReady(action:ActionSetDefinition&{
+        element:ActionSetDefinitionElement,
         /**
          * The color prop value
          */
@@ -58,8 +75,8 @@ export type ActionSetAction={
      * Not triggered when action created with component prop
      * @param action the action object
      */
-    onTrigger(action:ActionSetAction&{
-        element:ActionSetActionElement,
+    onTrigger(action:ActionSetDefinition&{
+        element:ActionSetDefinitionElement,
         /**
          * The color prop value
          */
@@ -67,7 +84,7 @@ export type ActionSetAction={
     }):void,
 };
 
-interface ActionSetActionElement extends HTMLDivElement {
+interface ActionSetDefinitionElement extends HTMLDivElement {
     /**
      * Not available for custom actions
      * @param icon 
