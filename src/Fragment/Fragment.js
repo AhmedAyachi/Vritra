@@ -2,7 +2,7 @@ import {findItem} from "../index";
 import HtmlSanitizer from "../HtmlSanitizer";
 
 
-class CherryFragment extends DocumentFragment {
+class VritraFragment extends DocumentFragment {
     #parent;#at;
     #nodes=[];
 
@@ -118,7 +118,7 @@ class CherryFragment extends DocumentFragment {
         if(node instanceof Node){
             const nodes=this.#getNodes(),parent=this.#parent||this;
             nodes.push(node);
-            parent.insertBefore(node,lastNode.nextSibling);
+            parent.insertBefore(node,this.lastNode?.nextSibling);
             return node;
         }
         else{
@@ -232,4 +232,5 @@ class CherryFragment extends DocumentFragment {
         return nodes;
     }
 }
-export default function Fragment(props){return new CherryFragment(props)};
+
+export default function Fragment(props){return new VritraFragment(props)};
