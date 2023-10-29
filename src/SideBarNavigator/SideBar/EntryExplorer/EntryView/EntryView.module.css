@@ -1,5 +1,21 @@
 .entryview{
     max-width:100%;
+    display:block;
+}
+.entryview[folder]{
+    margin:1.5em 0;
+}
+.entryview[folder]+.entryview[folder]{
+    margin-top:3em;
+}
+.entryview[folder]>.header{
+    font-weight:bold;
+}
+.entryview:not([folder])>.header{
+    width:fit-content;
+    padding:1.5em var(--entryspacing);
+    margin:0 calc(-1 * var(--entryspacing));
+    border-radius:1.125em;
 }
 .header{
     position:relative;
@@ -9,15 +25,6 @@
     align-items:center;
     flex-wrap:nowrap;
     transition:var(--transition);
-}
-.header[folder]{
-    font-weight:bold;
-}
-.header:not([folder]){
-    width:fit-content;
-    padding:1.5em var(--entryspacing);
-    margin:0 calc(-1 * var(--entryspacing));
-    border-radius:1.125em;
 }
 .explorer{
     margin-top:1em;

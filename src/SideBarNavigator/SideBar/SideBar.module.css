@@ -10,6 +10,7 @@
     background-color:aliceblue;
     transform-origin:0;
     transition:var(--transition);
+    will-change:width;
     --entryspacing:3em;
 }
 .entryexplorer{
@@ -21,7 +22,9 @@
 .entryexplorer>div[class^=container]>*{
     margin-left:calc(5em + var(--entryspacing));
     margin-right:5em;
-    margin-top:5em !important;
+}
+.entryexplorer>div[class^=container]>*:first-child{
+    margin-top:3em !important;
 }
 .entryexplorer::-webkit-scrollbar{
     display:block;

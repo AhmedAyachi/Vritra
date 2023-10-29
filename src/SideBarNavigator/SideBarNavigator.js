@@ -103,7 +103,7 @@ const findEntry=(entryId,entries)=>{
     if(!target){
         const subentries=entries.flatMap(entry=>{
             const {entries}=entry;
-            entries?.forEach(subentry=>{
+            Array.isArray(entries)&&entries.forEach(subentry=>{
                 subentry.parentId=entry.id;
             });
             return entries;

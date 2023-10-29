@@ -9,13 +9,13 @@ export default function EntryView(props){
     const entryview=entry.element=View({parent,id,className:css.entryview}),state={
         explorer:null,
         highlighted:false,
-        isfolder:Boolean(entry.entries),
+        isfolder:Array.isArray(entry.entries),
         rendered:false,
         expandCallback:null,
     },{isfolder}=state,{icon}=entry;
 
     entryview.innateHTML=`
-        <div class="${css.header}" style="color:${isfolder?folderColor:endpointColor};" ${isfolder?"folder":""}>
+        <div class="${css.header}" style="color:${isfolder?folderColor:endpointColor};">
             ${isfolder?`
                 <img class="${css.indicator}" src="${icon0(folderColor)}"/>
             `:""}
@@ -85,6 +85,7 @@ export default function EntryView(props){
     }
     isfolder&&entry.expanded&&entryview.toggle(true);
 
-    entryview.style.marginTop=isfolder?"1.5em":null;
+    //entryview.style.marginTop=isfolder?"1.5em":null;
+    isfolder&&entryview.setAttribute("folder","");
     return entryview;
 }

@@ -2,6 +2,7 @@
 
 /**
  * Runs the provided animations in a sequence
+ * @returns the element
  */
 export default function withSequence(
     element:HTMLElement,
@@ -23,7 +24,7 @@ export default function withSequence(
         easing:Easing,
     }[],
     callback:()=>void,
-):void;
+):HTMLElement;
 
 type withSequenceAnimationStyle=Omit<
     CSSStyleDeclaration,

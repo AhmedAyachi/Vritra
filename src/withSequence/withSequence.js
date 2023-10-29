@@ -43,4 +43,5 @@ export default function withSequence(element,animations,callback){
         }
     }
     requestAnimationFrame(animator);
+    return element;
 }

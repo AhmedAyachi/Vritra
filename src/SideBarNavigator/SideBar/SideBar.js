@@ -33,23 +33,26 @@ export default function SideBar(props){
     const {togglebtn}=sidebar;
     togglebtn.onclick=()=>{sidebar.toggle()};
     
-    sidebar.toggle=(shown=!state.shown)=>{
-        state.shown=shown;
+    sidebar.toggle=(shown=!state.shown)=>{if(shown!==state.shown){
+        state.shown=Boolean(shown);
         if(!shown){
             state.width=sidebar.offsetWidth;
+            sidebar.style.width=`${state.width}px`;
         }
-        Object.assign(sidebar.style,{
-            minWidth:shown?null:0,
-            width:shown?`${state.width}px`:0,
-        });
-        Object.assign(togglebtn.style,{
-            right:shown?null:"-6em",
-            transform:`rotateZ(${shown?0:180}deg)`,
-        });
-        shown&&setTimeout(()=>{
-            sidebar.style.width=null;
-        },200);
-    }
+        setTimeout(()=>{
+            Object.assign(sidebar.style,{
+                minWidth:shown?null:0,
+                width:shown?`${state.width}px`:0,
+            });
+            Object.assign(togglebtn.style,{
+                right:shown?null:"-6em",
+                transform:`rotateZ(${shown?0:180}deg)`,
+            });
+            shown&&setTimeout(()=>{
+                sidebar.style.width=null;
+            },200);
+        },10);
+    }}
 
     return sidebar;
 }
