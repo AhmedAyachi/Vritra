@@ -25,18 +25,13 @@ export function HashRouter(options:{
          * @#categry#:things#:name
          */
         hash:string,
+        /**
+         * Hash param matches, will rerender anyway if any of the params value changes.
+         */
         memorize:boolean,
         restrictor:(unlock:(unlocked:boolean)=>void,target:HTMLElement)=>void,
-        onLoaded(context:HashRouteContext&{target:HTMLElement}):void,
-        component(props:HashRouteContext&{parent:HTMLElement}):HTMLElement,
+        component(props:HashRouteComponentProps):HashRouteElement,
     }],
-    /**
-     * If true, the HashRouter is accessible in the global scope via window.HashRouter
-     * 
-     * If you want to create multiple HashRouters for multiple targets, only one should be global
-     * @default true
-     */
-    globalize:boolean,
 }):HashRouter;
  
 interface HashRouter {
@@ -63,9 +58,14 @@ interface HashRouter {
     refresh():void,
 }
 
-type HashRouteContext={
+interface HashRouteElement extends HTMLElement {
+    onShow():void,
+}
+
+interface HashRouteComponentProps {
+    parent:HTMLElement,
     data?:Object,
-    params?:Object,
+    params:Object,
     location:{
         hash:string,
         url:string,

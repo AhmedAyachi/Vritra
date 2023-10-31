@@ -1,6 +1,6 @@
 {
   "name": "vritra",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "A zero-dependency vanillajs-based UI library for hybrid-web apps",
   "main": "src/index.js",
   "types": "index.d.ts",
@@ -13,7 +13,7 @@
     "cordova",
     "phonegap"
   ],
+  "homepage": "https://ahmedayachi.github.io/VritraDocs/",
   "author": "Ahmed Ayachi",
-  "license": "MIT",
-  "homepage": "https://github.com/AhmedAyachi/Vritra#readme"
+  "license": "MIT"
 }

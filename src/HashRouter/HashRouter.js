@@ -1,6 +1,6 @@
 
 
-export function HashRouter({target,routes,globalize=true}){
+export function HashRouter({target,routes}){
     const {history,location}=window;
     const state={
         data:null,
@@ -41,9 +41,6 @@ export function HashRouter({target,routes,globalize=true}){
             }
         },
     };
-    if(globalize){
-        window.HashRouter=hashrouter;
-    }
 
     function setRoute(){
         let {route}=state;
@@ -61,9 +58,7 @@ export function HashRouter({target,routes,globalize=true}){
                 if(typeof(route.restrictor)==="function"){
                     route.restrictor(resolve,target);
                 }
-                else{
-                    resolve(true);
-                }  
+                else{resolve(true)};
             }).
             then(unlocked=>{
                 if(unlocked){
@@ -71,9 +66,7 @@ export function HashRouter({target,routes,globalize=true}){
                     route.data=state.data;
                     renderRoute(route,target);
                 }
-                else{
-                    history.back();
-                }
+                else{history.back()}
             }).
             finally(()=>{
                 state.data=null;
@@ -89,21 +82,20 @@ export function HashRouter({target,routes,globalize=true}){
 }
 
 const renderRoute=(route,target)=>{
-    const context=getContext(route);
     target.innerHTML="";
     const {memorize}=route;
     let {element}=route;
-    if(memorize&&(element instanceof HTMLElement)){
+    if(memorize&&element instanceof HTMLElement){
         const {scroll}=route;
         target.appendChild(element);
         element.scrollTo(scroll);
     }
     else if(typeof(route.component)==="function"){
+        const context=getContext(route);
         route.name=route.component.name;
         element=route.element=route.component({...context,parent:target});
     }
-    route.onLoaded?.(context);
-    element.onLoaded?.(context);
+    element.onShow?.();
     window.scrollTo(0,0);
 }
 
@@ -115,7 +107,7 @@ const getContext=({params,data})=>{
         hash="#"+hash;
     }
     const context={
-        params,
+        params:params||{},
         location:{
             hash,
             url:`${location.origin}/${hash}`,
@@ -131,13 +123,20 @@ const getRoute=(routes)=>{
     const hashs=getHashs(location.hash);
     const route=findBestRoute(hashs,routes);
     if(route){
-        const params=route.params={};
+        const oldParams=route.params;
+        const params={};
         route.hashs.forEach((hash,i)=>{
             if(hash.startsWith(":")){
                 const varname=hash.substring(1);
                 params[varname]=hashs[i];
             }
         });
+        if(Object.keys(params).length){
+            route.params=params;
+            if(route.memorize&&(!areSameParams(route.params,oldParams))){
+                delete route.element;
+            }
+        };
         if(!route.scroll){
             route.scroll={top:0,left:0};
         }
@@ -145,11 +144,29 @@ const getRoute=(routes)=>{
     return route;
 }
 
+const areSameParams=(params0,params1)=>{
+    let same=params0===params1;
+    if(params0&&params1){
+        const values0=Object.values(params0),values1=Object.values(params1);
+        same=values0.length===values1.length;
+        if(same){
+            let i=0;
+            const {length}=values0;
+            while(same&&(i<length)){
+                const value0=values0[i];
+                if(!values1.some(value1=>value0===value1)){same=false};
+                i++;
+            }
+        }
+    }
+    return same;
+}
+
 const findBestRoute=(hashs,routes)=>{
-    const hashcount=hashs.length;
     const fullhash=location.hash;
     let i=0,routecount=routes.length,exactfound;
-    let bestroute,bestscore=-1;
+    let bestroute;
+    let bestscore={exact:-1,param:-1};
     while((!exactfound)&&(i<routecount)){
         const route=routes[i],{hash}=route;
         let routehashs=route.hashs;
@@ -161,19 +178,17 @@ const findBestRoute=(hashs,routes)=>{
             bestroute=route;
         }
         else{
-            if(routehashs.length===hashcount){
-                let score=0;
-                const isProbable=routehashs.every((hash,i)=>{
-                    const match=hash===hashs[i];
-                    if(match){
-                        score++;
-                    }
-                    return match||hash.startsWith(":");
-                });
-                if(isProbable&&(score>bestscore)){
-                    bestscore=score;
-                    bestroute=route;
-                }
+            const score={exact:0,param:0};
+            routehashs.forEach((hash,i)=>{
+                const exact=hash===hashs[i];
+                const asparam=hash.startsWith(":");
+                if(exact){score.exact++};
+                if(asparam){score.param++};
+            });
+            const scoreexact=score.exact,bestscoreexact=bestscore.exact;
+            if((scoreexact>bestscoreexact)||((scoreexact===bestscoreexact)&&(score.param>bestscore.param))){
+                bestscore=score;
+                bestroute=route;
             }
             i++;
         }
