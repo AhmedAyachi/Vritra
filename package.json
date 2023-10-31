@@ -1,19 +1,19 @@
 {
   "name": "vritra",
-  "version": "0.0.5",
+  "version": "1.0.0",
   "description": "A zero-dependency vanillajs-based UI library for hybrid-web apps",
   "main": "src/index.js",
   "types": "index.d.ts",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/AhmedAyachi/Vritra.git"
-  },
   "keywords": [
     "Vritra",
     "cordova",
     "phonegap"
   ],
-  "homepage": "https://ahmedayachi.github.io/VritraDocs/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AhmedAyachi/Vritra.git"
+  },
+  "homepage": "https://vritrajs.github.io/",
   "author": "Ahmed Ayachi",
   "license": "MIT"
 }
