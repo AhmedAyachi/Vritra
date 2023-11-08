@@ -8,4 +8,9 @@
 
 Vritra is specifically designed for hybrid-web apps but as it's a standalone JavaScript library, you can feel free to use it anywhere you want.
 
+## Installation
+You can install the package using npm through:
+
+    npm install --save vritra
+
 [Learn more](https://vritrajs.github.io/)
