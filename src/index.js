@@ -62,34 +62,52 @@ export const hexToDecimal=(hexcode)=>{
 export const interpolate=(invalue,inrange,outrange,extrapolationType="extend")=>{
     const {length}=inrange;
     if((length>1)&&outrange.length===length){
-        let inmin,inmax;
-        let outmin,outmax;
+        let inpred,insuc;
+        let outpred,outsuc;
         if(length===2){
-            [inmin,inmax]=inrange;
-            [outmin,outmax]=outrange;
+            [inpred,insuc]=inrange;
+            [outpred,outsuc]=outrange;
         }
         else{
             let {index,value}=findItem(inrange,(item)=>item<invalue,true)||{value:inrange[0],index:0};
             if(index>=(length-1)){
                 index=length-2;
-                value=inrange[length-2];
+                value=inrange[index]; 
             }
-            inmin=value;
-            inmax=inrange[index+1];
-            outmin=outrange[index];
-            outmax=outrange[index+1];
+            inpred=value;
+            insuc=inrange[index+1];
+            outpred=outrange[index];
+            outsuc=outrange[index+1];
         }
-        let outvalue=outmin+((invalue-inmin)/(inmax-inmin))*(outmax-outmin);
+        let outvalue=outpred+((invalue-inpred)/(insuc-inpred))*(outsuc-outpred);
         if(extrapolationType!=="extend"){
             const clamp=extrapolationType==="clamp";
+            const outmax=Math.max(...outrange);
             if(outvalue>outmax){outvalue=clamp?outmax:invalue}
-            else if(outvalue<outmin){outvalue=clamp?outmin:invalue};
+            else{
+                const outmin=Math.min(...outrange);
+                if(outvalue<outmin){outvalue=clamp?outmin:invalue}
+            };
         }
         return outvalue;
     }
     else{
         throw "inrange and outrange must be of same length >=2";
     }
+}
+
+export const getArrayMax=(array=[],start=0,end=array.length)=>{
+    let maxv=array[start];
+    let maxi=start;
+    start++;
+    for(let i=start;i<end;i++){
+        const max=Math.max(maxv,array[i]);
+        if(maxv!==max){
+            maxv=max;
+            maxi=i;
+        }
+    }
+    return {value:maxv,index:maxi};
 }
 
 export const getAdjacentDate=(str,...args)=>{
@@ -353,20 +371,6 @@ export const isEmail=(str)=>{
         (str.match(/@/g)||[]).length===1&&at_index>5 &&
         str.slice(at_index+1,at_index+5).match(/^[a-z]+$/)
     )
-}
-
-export const getArrayMax=(array=[],start=0,end=array.length)=>{
-    let maxv=array[start];
-    let maxi=start;
-    start++;
-    for(let i=start;i<end;i++){
-        const max=Math.max(maxv,array[i]);
-        if(maxv!==max){
-            maxv=max;
-            maxi=i;
-        }
-    }
-    return {value:maxv,index:maxi};
 }
 
 export const removeItem=(array,predicate)=>{

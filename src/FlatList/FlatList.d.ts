@@ -1,5 +1,5 @@
 import {View,ExtendableViewProps} from "../View/View";
-import {SwipeEvent} from "../Gestures/useSwipeGesture";
+import {SwipeEvent} from "../Gestures/useSwipeGesture/useSwipeGesture";
 
 
 export default function FlatList<Type>(props:FlatListProps<Type>):FlatList<Type>;

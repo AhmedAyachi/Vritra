@@ -40,9 +40,8 @@ export function hexToDecimal(hexcode:string):Number;
  * @param outrange 
  * An array of numbers that contains points that indicate the range of the output value. 
  * It should have the exact same number of points as the input range.
- * Values should be increasing
  * @param extrapolationType >
- * - extend : approximates the value even outside of the range
+ * - extend : approximates the value even outside the range
  * - clamp : clamps the value to the edge of the output range
  * - identity : returns the value that is being interpolated
  * @default "extend"
@@ -208,6 +207,12 @@ export function replaceAt(index:Number,replaceValue:String,targetString:String):
 export function capitalize(str:String,count=0):String;
 
 export function isEmail(str:String):Boolean;
+/**
+ * @deprecated Will be removed in the next release
+ * @param array 
+ * @param start 
+ * @param end 
+ */
 export function getArrayMax<Type>(array:Type[],start:Number,end:Number):{
     value:Type,
     index:Number,
