@@ -23,7 +23,7 @@ export default function Palette(props:ExtendableViewProps<"div">&{
 }):Palette;
 
 
-interface Palette extends View<"div"> {
+type Palette=View<"div">&{
     /**
      * 
      * Sets the palette color, closes the picker if already open

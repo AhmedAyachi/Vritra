@@ -4,9 +4,6 @@ export default function View<Tag extends keyof HTMLElementTagNameMap|undefined=u
 
 type ViewProps<Tag>={
     parent?:HTMLElement,
-    /**
-     * @default useId("view")
-     */
     id?:String,
     className?:String,
     style?:String|CSSStyleDeclaration,
@@ -25,8 +22,9 @@ type ViewProps<Tag>={
      */
     at?:"start"|"end";
 };
+type View<Tag>=VritraElement&(Tag extends keyof HTMLElementTagNameMap?HTMLElementTagNameMap[Tag]:HTMLDivElement)&{[ref:string]:RefElement};
 
-type View<Tag>=(Tag extends keyof HTMLElementTagNameMap?HTMLElementTagNameMap[Tag]:HTMLDivElement)&{
+interface VritraElement {
     /**
      * Sets safely the HTML or XML markup contained within the element.
      * 
@@ -36,20 +34,20 @@ type View<Tag>=(Tag extends keyof HTMLElementTagNameMap?HTMLElementTagNameMap[Ta
      * whose href attribute does not start with ["http:","https:","data:","m-files:","file:","ftp:","mailto:","pw:"].
      * @notice Safer version of innerHTML
      */
-    innateHTML:string,
+    innateHTML:string;
     /**
      * Inserts safely the HTML or XML markup at the end of the element.
      */
-    beforeEndHTML:string,
+    beforeEndHTML:string;
     /**
      * Inserts safely the HTML or XML markup at the beginning of the element.
      */
-    afterBeginHTML:string,
+    afterBeginHTML:string;
     /**
      * Replaces the view by another node and returns the substitute
      * @param substitute 
      */
-    substitute<Type>(substitute:Type):Type,
+    substitute<Type>(substitute:Type):Type;
     /**
      * Inserts the view before or after an element
      * @param element Element before/after which the view is inserted
@@ -57,21 +55,19 @@ type View<Tag>=(Tag extends keyof HTMLElementTagNameMap?HTMLElementTagNameMap[Ta
      * @default false
      * @returns The current view
      */
-    adjacentTo(element:Element,before?:boolean):View<Tag>,
+    adjacentTo(element:Element,before?:boolean):this;
     /**
      * @param element Element before which the view is inserted 
      * @returns The current view
      * @deprecated
      */
-    addBefore(element:Element):View<Tag>,
+    addBefore(element:Element):this;
     /**
      * @param element Element after which the view is inserted 
      * @returns The current view
      * @deprecated
      */
-    addAfter(element:Element):View<Tag>,
-}&{
-    [ref:string]:RefElement,
+    addAfter(element:Element):this;
 }
 
 /**
@@ -82,4 +78,4 @@ interface RefElement extends HTMLElement {
 
 }
 
-type ExtendableViewProps<Tag>=Omit<ViewProps<Tag>,"tag">
+type ExtendableViewProps<Tag>=Omit<ViewProps<Tag>,"tag">;

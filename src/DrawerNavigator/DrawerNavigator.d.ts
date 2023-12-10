@@ -1,4 +1,3 @@
-import { NativeIcon } from "../ActionSetView/ActionSetView";
 import {ExtendableViewProps,View} from "../View/View";
 
 
@@ -40,7 +39,7 @@ export default function DrawerNavigator(props:ExtendableViewProps<"div">&{
     }):HTMLElement,
 }):DrawerNavigator;
 
-interface DrawerNavigator extends View<"div"> {
+type DrawerNavigator=View<"div">&{
     /**
      * Shows the drawer view
      */

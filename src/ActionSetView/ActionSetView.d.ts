@@ -24,7 +24,7 @@ export default function ActionSetView(props:ExtendableViewProps<"div">&{
 }):ActionSetView;
 
 
-interface ActionSetView extends View<"div"> {
+type ActionSetView=View<"div">&{
 
 }
 
@@ -82,7 +82,7 @@ interface ActionSetDefinition {
          */
         color:string,
     }):void,
-};
+}
 
 interface ActionSetDefinitionElement extends HTMLDivElement {
     /**

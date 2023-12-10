@@ -68,7 +68,7 @@ export default function AccordionView(props:ExtendableViewProps<"div">&{
     onClose():void,
 }):AccordionView;
 
-interface AccordionView extends View<"div"> {
+type AccordionView=View<"div">&{
     /**
      * Locks and unlocks the accordionview
      * @param locked default to false

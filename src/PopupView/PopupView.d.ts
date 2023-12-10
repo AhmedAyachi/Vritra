@@ -29,7 +29,7 @@ export default function PopupView(props:ExtendableViewProps<"div">&{
 }):PopupView;
 
 
-interface PopupView extends View<"div"> {
+type PopupView=View<"div">&{
     /**
      * Cleans up the added event listeners
      */

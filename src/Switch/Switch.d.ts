@@ -12,7 +12,7 @@ export default function Switch(props:ExtendableViewProps<"div">&{
     onChange(active:Boolean):void,
 }):Switch;
 
-interface Switch extends View<"div"> {
+type Switch=View<"div">&{
     /**
      * Sets the switch status. Toggling behavior by default.
      * 

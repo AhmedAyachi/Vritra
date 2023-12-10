@@ -24,7 +24,7 @@ export default function TabNavigator(props:ViewProps<"div">&{
     onNavigate?(context:TabNavigatorContext):void,
 }):TabNavigator;
 
-interface TabNavigator extends View<"div"> {
+type TabNavigator=View<"div">&{
     
 }
 

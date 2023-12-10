@@ -31,7 +31,7 @@ interface SideBarNavigatorProps extends ExtendableViewProps<"div"> {
     ):void,
 }
 
-interface SideBarNavigator extends View<"div"> {
+type SideBarNavigator=View<"div">&{
     /**
      * navigates to the entry with such id if exists
      * 

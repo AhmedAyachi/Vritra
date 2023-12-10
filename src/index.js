@@ -96,20 +96,6 @@ export const interpolate=(invalue,inrange,outrange,extrapolationType="extend")=>
     }
 }
 
-export const getArrayMax=(array=[],start=0,end=array.length)=>{
-    let maxv=array[start];
-    let maxi=start;
-    start++;
-    for(let i=start;i<end;i++){
-        const max=Math.max(maxv,array[i]);
-        if(maxv!==max){
-            maxv=max;
-            maxi=i;
-        }
-    }
-    return {value:maxv,index:maxi};
-}
-
 export const getAdjacentDate=(str,...args)=>{
     const format=args.find(arg=>typeof(arg)==="string")||"dmy";
     const offset=args.find(arg=>typeof(arg)==="number")||1;

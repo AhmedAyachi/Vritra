@@ -102,7 +102,7 @@ type FlatListProps<Type>=ExtendableViewProps<"div">&{
 
 type PopupProps<Type>=Omit<FlatListProps<Type>,"at"|"containerClassName"|"popupClassName"|"data">
 
-interface FlatList<Type> extends View<"div"> {
+type FlatList<Type>=View<"div">&{
     /**
      * Scrolls to a specific content pixel offset in the list
      * @param offset 

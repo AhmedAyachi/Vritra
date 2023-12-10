@@ -169,9 +169,9 @@ export function sanitize(str:string,escape?:boolean,whitelist?:string):String;
  * @param callback 
  * @returns the element
  */
-export function fadeIn(element:HTMLElement,display:String,duration:Number,callback:()=>void):HTMLElement;
-export function fadeIn(element:HTMLElement,duration:Number,callback:()=>void):HTMLElement;
-export function fadeIn(element:HTMLElement,callback:()=>void):HTMLElement;
+export function fadeIn<Type extends HTMLElement>(element:Type,display:String,duration:Number,callback:()=>void):Type;
+export function fadeIn<Type extends HTMLElement>(element:Type,duration:Number,callback:()=>void):Type;
+export function fadeIn<Type extends HTMLElement>(element:Type,callback:()=>void):Type;
 /**
  * 
  * @param element 
@@ -179,8 +179,8 @@ export function fadeIn(element:HTMLElement,callback:()=>void):HTMLElement;
  * @param callback 
  * @returns the element
  */
-export function fadeOut(element:HTMLElement,duration:Number,callback:()=>void):HTMLElement;
-export function fadeOut(element:HTMLElement,callback:()=>void):HTMLElement;
+export function fadeOut<Type extends HTMLElement>(element:Type,duration:Number,callback:()=>void):Type;
+export function fadeOut<Type extends HTMLElement>(element:Type,callback:()=>void):Type;
 
 /**
  * 
@@ -207,16 +207,7 @@ export function replaceAt(index:Number,replaceValue:String,targetString:String):
 export function capitalize(str:String,count=0):String;
 
 export function isEmail(str:String):Boolean;
-/**
- * @deprecated Will be removed in the next release
- * @param array 
- * @param start 
- * @param end 
- */
-export function getArrayMax<Type>(array:Type[],start:Number,end:Number):{
-    value:Type,
-    index:Number,
-};
+
 export function removeItem<Type>(array:Type[],predicate:(item:Type,index:Number,array:Type[])=>boolean):Type;
 export function removeItem<Type>(array:Type[],item:Type):Type;
 /**

@@ -30,7 +30,7 @@ export default function SideBarNavigator(props){
             const container=sidebarnavigator.querySelector(`:scope>.${css.container}`);
             const entry=entryId&&getEntry(entryId,entries);
             if(entry){
-                current&&(!current.entries)&&current.element.toggle(false);
+                current&&(!current.entries)&&current.element?.toggle(false);
                 state.current=entry;
                 const {path=[entry]}=entry;
                 let i=path.length;
