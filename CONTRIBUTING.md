@@ -43,6 +43,20 @@ To start contributing to the project, follow these steps:
 	```npm start``` 
 11. Start editing your local vritra package and testing your code
 
+## Branching Philosophy
+```mermaid
+graph RL
+	C((contribute))-->B((beta))
+	P(PRs)-->C
+	D((dev))-->B
+	C-->D
+	B-->M((master))
+	B-->C
+```
+- master : a release branch.
+- beta : a pre-release branch that make sure that the code merged from ***dev*** and ***contribute*** is coherent and stable enough.
+- dev : development branch.
+- contribute : PRs branch that makes sure that all PRs are coherent with each other and with the latest code.
 
 ## Notes
 - PRs without an issue or with no issue reference in the title will be rejected.
@@ -50,11 +64,15 @@ To start contributing to the project, follow these steps:
 - PRs with code that require dependencies will be rejected (for the moment).
 - Make sure to pull the latest version of the upstearm/master branch before you submit a PR.
     ```
+    /* add remote */
+    git remote add upstream https://github.com/AhmedAyachi/Vritra
+    
+    /* Update your master */
 	git checkout master
 	git pull upstream master
 	```
 - Make sure you code works as expected before before submitting a PR.
 
->A lot of things to consider and it's easy to miss some steps so if your PR was rejected because there was no issue associated with it, simply create the issue and submit a new PR. 
+>A lot of things to consider and it's easy to miss some steps so if it was your first time and your PR was rejected because there was no issue associated with it, simply create the issue and submit a new PR. 
 
 ### Thanks for your intention to contribute.
