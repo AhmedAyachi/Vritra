@@ -54,7 +54,7 @@ graph RL
 	B-->C
 ```
 - master : a release branch.
-- beta : a pre-release branch that make sure that the code merged from ***dev*** and ***contribute*** is coherent and stable enough.
+- beta : a pre-release branch that makes sure that the code merged from ***dev*** and ***contribute*** is coherent and stable enough.
 - dev : development branch.
 - contribute : PRs branch that makes sure that all PRs are coherent with each other and with the latest code.
 
