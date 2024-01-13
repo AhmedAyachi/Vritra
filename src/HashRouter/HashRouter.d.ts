@@ -27,10 +27,11 @@ export function HashRouter(options:{
         hash:string,
         /**
          * Hash param matches, will rerender anyway if any of the params value changes.
+         * @default false
          */
         memorize:boolean,
         restrictor:(unlock:(unlocked:boolean)=>void,target:HTMLElement)=>void,
-        component(props:HashRouteComponentProps):HashRouteElement,
+        component(props:HashRouteComponentProps):HashRouteElement|Promise<HashRouteElement>,
     }],
 }):HashRouter;
  

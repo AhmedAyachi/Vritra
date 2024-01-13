@@ -81,7 +81,7 @@ export function HashRouter({target,routes}){
     return hashrouter;
 }
 
-const renderRoute=(route,target)=>{
+const renderRoute=async (route,target)=>{
     target.innerHTML="";
     const {memorize}=route;
     let {element}=route;
@@ -93,9 +93,13 @@ const renderRoute=(route,target)=>{
     else if(typeof(route.component)==="function"){
         const context=getContext(route);
         route.name=route.component.name;
-        element=route.element=route.component({...context,parent:target});
+        element=route.component({...context,parent:target});
+        if(element instanceof Promise){
+            element=await element;
+        }
+        route.element=element;
     }
-    element.onShow?.();
+    element&&element.onShow?.();
     window.scrollTo(0,0);
 }
 

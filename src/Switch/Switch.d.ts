@@ -3,8 +3,8 @@ import {ExtendableViewProps,View} from "../View/View";
 
 export default function Switch(props:ExtendableViewProps<"div">&{
     active?:boolean,
-    thumbColor?:String|SwitchColor,
-    trackColor?:String|SwitchColor,
+    thumbColor?:string|SwitchColor,
+    trackColor?:string|SwitchColor,
     /**
      * @default false
      */
