@@ -80,7 +80,7 @@ export function getAdjacentDate(date:String,offset=1):String;
 export function isTouchDevice():Boolean;
 
 /**
- * returns a random item for an array 
+ * returns a random item from an array 
  * @param array
  */
 export function randomItem<Type>(array:Type[]):Type;
@@ -137,12 +137,9 @@ export function getDays(start?:"monday"|"tuesday"|"wednesday"|"thursday"|"friday
  * @default prefix "" separator "_"
  */
 export function useId(prefix="",separator="_"):String;
-/**
- * @deprecated
- * use useId instead
- */
-export function useRef(prefix:String):String;
+
 export function groupBy<Type>(array:Type[],filter:(item:Type,index:Number,array:Type[])=>any):{predicate:any,items:Type[]}[];
+
 export function map<Type>(array:Type[],callback:(item:Type,index:Number,array:Type[])=>String):String;
 export function map(iteration:Number,callback:(index:Number)=>String):String;
 

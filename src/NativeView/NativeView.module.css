@@ -16,7 +16,7 @@
     -webkit-user-select:text;
     -ms-user-select:text;
 }
-.nativeview *:is(button,.button,.clickable){
+.nativeview *:is(button,[class~=button],[class~=clickable]){
     border:none;
     transition:200ms;
 }
@@ -29,16 +29,17 @@
 }
 
 @media(hover:none){
-    .nativeview *:is(button,.button,.clickable):active{
-        filter:brightness(0.65);
+    .nativeview *:is(button,[class~=button],[class~=clickable]):active{
         opacity:0.85;
+        filter:brightness(0.65);
     }
 }
 
 @media(any-hover){
-    .nativeview *:is(button,.button,.clickable):hover{
-        filter:brightness(0.65);
+    .nativeview *:is(button,[class~=button],[class~=clickable]):hover{
         opacity:0.85;
+        cursor:pointer;
+        filter:brightness(0.65);
     }
 }
 
