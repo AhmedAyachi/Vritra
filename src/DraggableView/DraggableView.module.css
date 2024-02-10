@@ -1,3 +1,4 @@
 .draggableview{
     font-size:1em;
+    will-change:translate;
 }

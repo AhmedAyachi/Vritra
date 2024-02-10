@@ -5,8 +5,7 @@ import css from "./RoutePicker.module.css";
 export default function RoutePicker(props){
     const {parent,id=useId("routepicker"),routes,activeId,tintColor,onChange}=props;
     const routepicker=View({
-        parent,id,
-        tag:"nav",
+        parent,id,tag:"nav",
         style:styles.routepicker(),
         className:`${css.routepicker} ${props.className||""}`,
     });
@@ -21,21 +20,23 @@ export default function RoutePicker(props){
         `)}
     `;
 
-    const entryEls=routepicker.querySelectorAll(`.${css.entry}`);
-    entryEls.forEach(entryEl=>{
-        const {id}=entryEl,route=routes.find(route=>route.id===id);
-        entryEl.onclick=()=>{
-            if(id!==activeId){
-                const activeroute=routes.find(({id})=>activeId===id),{element}=activeroute;
-                if(element instanceof HTMLElement){
-                    activeroute.scrollTop=element.scrollTop;
-                    activeroute.scrollLeft=element.scrollLeft;
+    setTimeout(()=>{
+        const entryEls=routepicker.querySelectorAll(`.${css.entry}`);
+        entryEls.forEach(entryEl=>{
+            const {id}=entryEl,route=routes.find(route=>route.id===id);
+            entryEl.onclick=()=>{
+                if(id!==activeId){
+                    const activeroute=routes.find(({id})=>activeId===id),{element}=activeroute;
+                    if(element instanceof HTMLElement){
+                        activeroute.scrollTop=element.scrollTop;
+                        activeroute.scrollLeft=element.scrollLeft;
+                    }
+                    onChange&&onChange(route);
                 }
-                onChange&&onChange(route);
-            }
-            parent.unmount();
-        };
-    });
+                parent.unmount();
+            };
+        });
+    },statics.duration+50);
 
     const activeEntry=routepicker.querySelector(`#${activeId}.${css.entry}`);
     activeEntry.scrollIntoView({behavior:"instant",block:"center"});

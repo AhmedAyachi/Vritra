@@ -17,6 +17,12 @@ export default function DrawerView(props){
     });
     const background=drawerview.querySelector(`.${css.background}`);
 
+    fadeIn(background,RoutePicker.statics.duration,()=>{
+        background.onclick=()=>{
+            drawerview.unmount();
+        }
+    });
+
     drawerview.unmount=()=>{
         routepicker.unmount();
         fadeOut(background,RoutePicker.statics.duration+100,()=>{
@@ -24,11 +30,6 @@ export default function DrawerView(props){
             onHide&&onHide();
         });
     }
-
-    fadeIn(background,RoutePicker.statics.duration,()=>{
-        background.onclick=()=>{
-            drawerview.unmount();
-        }
-    });
+    
     return drawerview;
 }
