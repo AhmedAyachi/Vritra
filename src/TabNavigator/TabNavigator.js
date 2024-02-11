@@ -1,4 +1,4 @@
-import {useId,NativeView,View,FlatList} from "../index";
+import {withSequence,NativeView,View} from "../index";
 import css from "./TabNavigator.module.css";
 import TabView from "./TabView/TabView";
 
@@ -10,58 +10,98 @@ export default function TabNavigator(props){
         className:`${css.tabnavigator} ${props.className||""}`,
     }),state={
         activeTab:null,
+        navigating:false,
+        context:{},
     };
 
     tabnavigator.innateHTML=`
-        <div class="${css.container} ${props.containerClassName||""}" ref="container"></div>
+        <div ref="headerEl" class="${css.header} ${props.headerClassName||""}"></div>
+        <div ref="container" class="${css.container} ${props.containerClassName||""}"></div>
     `;
-    const headerlist=FlatList({
-        parent:tabnavigator,
-        at:"start",
-        className:`${css.header} ${props.headerClassName||""}`,
-        containerClassName:css.tabcontainer,
-        horizontal:true,
-        data:tabs,
-        threshold:0,
-        EmptyComponent:"",
-        renderItem:({parent,item:tab})=>{
-            if(tab.memorize===undefined){tab.memorize=memorize};
-            return TabView({
-                parent,tab,tabTextColor,tintColor,
-                onClick:()=>{
-                    const {activeTab}=state;
-                    headerlist.appendChild(barview);
-                    const {scrollLeft}=parent;
-                    if(activeTab){
-                        const activeEl=activeTab.element;
-                        const iconEl=activeEl.querySelector(":scope>img");
-                        if(iconEl){
-                            const {icon}=activeTab;
-                            iconEl.src=typeof(icon)==="function"?icon(tabTextColor,2):icon;
-                        };
-                        activeEl.style.color=tabTextColor;
-                        barview.style.transform=`translateX(${activeEl.offsetLeft-scrollLeft}px)`;
-                    }
-                    state.activeTab=tab;
-                    onNavigate&&onNavigate(tab.context);
-                },
-            });
-        },
-        onFilled:()=>{
-            const tab=activeTabId?tabs.find(({id})=>id===activeTabId):tabs[0];
-            headerlist.scrollToIndex(tabs.indexOf(tab),false);
-            tab.element?.click();
-        },
+
+    const {headerEl}=tabnavigator;
+    const indicator=View({
+        className:css.indicator,
+        style:{backgroundColor:tintColor},
     });
-    const barview=View({
-        id:useId("bar"),
-        className:css.bar,
-        style:`background-color:${tintColor}`,
+    tabs.forEach(tab=>{
+        if(tab.memorize===undefined){
+            tab.memorize=memorize;
+        };
+        TabView({
+            parent:headerEl,tab,
+            textColor:tabTextColor,
+        });
     });
     
-    tabnavigator.getIndicator=()=>barview;
-    tabnavigator.getContentContainer=()=>tabnavigator.container;
-    tabnavigator.getActiveId=()=>state.activeTab?.id;
-
+    tabnavigator.navigate=(tabId,triggerOnNavigate=true)=>{if(!state.navigating){
+        state.navigating=true;
+        const tab=tabs.find(tab=>tab.id===tabId);
+        if(tab){
+            //reset
+            indicator.style.width=null;
+            const {activeTab}=state;
+            headerEl.appendChild(indicator);
+            if(activeTab){
+                const activeEl=activeTab.element;
+                indicator.style.transform=`translateX(${activeEl.offsetLeft}px)`;
+                const iconEl=activeEl.querySelector(":scope>img");
+                if(iconEl){
+                    const {icon}=activeTab;
+                    iconEl.src=typeof(icon)==="function"?icon(tabTextColor,2):icon;
+                };
+                activeEl.style.color=tabTextColor;
+            }
+            //set new active tab
+            state.activeTab=tab;
+            //move indicator to tab 
+            const tabview=tab.element;
+            withSequence(indicator,[{
+                toStyle:{
+                    width:`${tabview.offsetWidth}px`,
+                    transform:`translateX(${tabview.offsetLeft}px)`,
+                },
+                duration:200,
+                easing:"ease",
+            }],()=>{
+                tabview.appendChild(indicator);
+                indicator.style.transform=null;
+                indicator.style.width="100%";
+                state.navigating=false;
+            });
+            const {container}=tabnavigator,{contentEl}=tab;
+            container.innerHTML=""; 
+            if(contentEl){container.appendChild(contentEl)}
+            else{
+                const {context}=state,{renderContent}=tab;
+                const contentEl=renderContent&&renderContent({parent:container,context});
+                if(tab.memorize&&(contentEl instanceof HTMLElement)){
+                    tab.contentEl=contentEl;
+                }
+                else{
+                    state.context.contentEl=contentEl;
+                }
+            }
+            setContext(state.context,tab);
+            tabview.setColor(tintColor);
+            tabview.scrollIntoView({
+                behavior:"smooth",
+                inline:"center",
+            })
+            triggerOnNavigate&&onNavigate&&onNavigate(state.context);
+        }
+    }};
+   
+    tabnavigator.navigate(tabs.find(tab=>tab.id===activeTabId)?.id||tabs[0].id);
     return tabnavigator;
 }
+
+const setContext=(context,tab)=>{
+    const {contentEl}=tab;
+    if(contentEl instanceof HTMLElement){
+        context.contentEl=contentEl;
+    }
+    context.id=tab.id;
+    context.label=tab.label;
+    context.tabEl=tab.element;
+};

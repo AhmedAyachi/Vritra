@@ -9,8 +9,10 @@
 .header{
     position:relative;
     max-width:100%;
+    display:flex;
+    justify-content:flex-start;
+    align-items:center;
     white-space:nowrap;
-    background-color:white;
     overflow:auto hidden;
 }
 .container{
@@ -18,12 +20,7 @@
     flex:1;
     overflow:hidden auto;
 }
-.tabcontainer{
-    display:flex !important;
-    justify-content:flex-start;
-    align-items:center;
-}
-.bar{
+.indicator{
     position:absolute;
     height:0.8em;
     left:0;

@@ -26,8 +26,8 @@ interface SideBarNavigatorProps extends ExtendableViewProps<"div"> {
      */
     sideBarScrollTheme:"light"|"dark",
     onNavigate(
-        current:{id:String,name:String},
-        previous:{id:String,name:String}|null,
+        current:{id:string,name:string},
+        previous:{id:string,name:string}|null,
     ):void,
 }
 
@@ -40,8 +40,8 @@ type SideBarNavigator=View<"div">&{
      * @param triggerOnNavigate default true
      * @returns true if the navigation was successful, false otherwise
      */
-    navigate(entryId:string,triggerOnNavigate?:boolean):Boolean,
-    getCurrentEntry():{id:String,name:String}|null,
+    navigate(entryId:string,triggerOnNavigate?:boolean):boolean,
+    getCurrentEntry():{id:string,name:string}|null,
     /**
      * 
      * @param shown default: toggling behavior

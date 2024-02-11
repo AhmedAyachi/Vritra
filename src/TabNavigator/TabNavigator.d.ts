@@ -25,7 +25,12 @@ export default function TabNavigator(props:ViewProps<"div">&{
 }):TabNavigator;
 
 type TabNavigator=View<"div">&{
-    
+    /**
+     * 
+     * @param tabId
+     * @param triggerOnNavigate default: true
+     */
+    navigate(tabId:string,triggerOnNavigate:boolean):void;
 }
 
 type TabNavigatorContext={
@@ -37,13 +42,13 @@ type TabNavigatorContext={
 
 type TabNavigatorTab={
     id:string,
-    label:string,
-    icon:NativeIcon,
+    label?:string,
+    icon?:NativeIcon,
     /**
      * Applied to this tab only.
      * @notice Overwrites the parent prop, same as the parent prop value if undefined
      */
-    memorize:boolean,
+    memorize?:boolean,
     renderContent(props:{
         /**
          * Tab content container
