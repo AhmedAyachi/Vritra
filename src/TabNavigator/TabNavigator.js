@@ -84,10 +84,10 @@ export default function TabNavigator(props){
             }
             setContext(state.context,tab);
             tabview.setColor(tintColor);
-            tabview.scrollIntoView({
+            (headerEl.scrollWidth>headerEl.clientWidth)&&headerEl.scrollTo({
                 behavior:"smooth",
-                inline:"center",
-            })
+                left:tabview.offsetLeft+tabview.clientWidth/2-headerEl.clientWidth/2,
+            });
             triggerOnNavigate&&onNavigate&&onNavigate(state.context);
         }
     }};
