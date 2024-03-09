@@ -1,13 +1,12 @@
-import {useId,NativeView,capitalize,isTouchDevice} from "../index";
+import {NativeView,capitalize,isTouchDevice} from "../index";
 import css from "./DraggableView.module.css";
 
 
 export default function DraggableView(props){
-    const {parent,ref=useId("draggableview"),id=ref,position,boundary,horizontalDrag=true,verticalDrag=true}=props;
+    const {parent,position,boundary,horizontalDrag=true,verticalDrag=true}=props;
     const draggableview=NativeView({
-        parent,id,
-        at:props.at,
-        tag:props.tag,
+        parent,at:props.at,
+        id:props.id,tag:props.tag,
         style:props.style,
         className:`${css.draggableview} ${props.className||""}`,
     }),state={
@@ -42,23 +41,20 @@ export default function DraggableView(props){
             let start=0,frameId;
             function onPointerMove(event){
                 frameId=requestAnimationFrame(timestamp=>{
-                    const elapsed=timestamp-start;
-                    if(elapsed>16){
-                        start=timestamp;
-                        const {clientX:cx,clientY:cy}=(isTouchDevice?event.changedTouches[0]:event);
-                        let x,y;
-                        if(horizontalDrag){
-                            x=cx-state.dragDX;
-                            if((typeof(xmin)==="number")&&(x<xmin)){x=xmin}
-                            else if((typeof(xmax)==="number")&&(x>xmax)){x=xmax}
-                        }
-                        if(verticalDrag){
-                            y=cy-state.dragDY;
-                            if((typeof(ymin)==="number")&&(y<ymin)){y=ymin}
-                            else if((typeof(ymax)==="number")&&(y>ymax)){y=ymax}
-                        }
-                        draggableview.setPosition({x,y,asratio:false});
+                    start=timestamp;
+                    const {clientX:cx,clientY:cy}=(isTouchDevice?event.changedTouches[0]:event);
+                    let x,y;
+                    if(horizontalDrag){
+                        x=cx-state.dragDX;
+                        if((typeof(xmin)==="number")&&(x<xmin)){x=xmin}
+                        else if((typeof(xmax)==="number")&&(x>xmax)){x=xmax}
                     }
+                    if(verticalDrag){
+                        y=cy-state.dragDY;
+                        if((typeof(ymin)==="number")&&(y<ymin)){y=ymin}
+                        else if((typeof(ymax)==="number")&&(y>ymax)){y=ymax}
+                    }
+                    draggableview.setPosition({x,y,asratio:false});
                 });
             }
             const onPointerMoveEvent=isTouchDevice?"touchmove":"mousemove";
