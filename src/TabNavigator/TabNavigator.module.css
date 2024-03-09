@@ -13,6 +13,7 @@
     justify-content:flex-start;
     align-items:center;
     white-space:nowrap;
+    flex-shrink:0;
     overflow:auto hidden;
 }
 .container{

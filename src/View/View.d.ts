@@ -46,6 +46,7 @@ interface VritraElement {
     /**
      * Replaces the view by another node and returns the substitute
      * @param substitute 
+     * @notice only use it when the view is no longer required and it's not gonna be cached for later use
      */
     substitute<Type>(substitute:Type):Type;
     /**

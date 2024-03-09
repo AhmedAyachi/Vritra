@@ -70,12 +70,13 @@ type FlatListProps<Type>=ExtendableViewProps<"div">&{
     renderItem(props:{
         parent:HTMLDivElement,
         item:Type,
-        index:Number,
+        index:number,
         data:Type[],
     }):HTMLElement,
     /**
      * Used with pagingEnabled true.
      * @param params 
+     * @notice only called when an actual swipe gesture is detected
      */
     onSwipe(event:FlatListSwipeEvent):void,
     /**
@@ -90,9 +91,13 @@ type FlatListProps<Type>=ExtendableViewProps<"div">&{
     onRemoveItem(data:ItemData<Type>):void,
     /**
      * Called once the list element is filled
-     * @param data 
+     * @param data about the item that filled the list
      */
-    onFilled(data:ItemData<Type>&{index:Number}):void,
+    onFilled(data:ItemData<Type>&{index:number}):void,
+    /**
+     * called when the item in focus has changed
+     */
+    onInFocusItemChange(data:ItemData<Type>&{index:number}):void,
     /**
      * Triggered when the last data item is reached
      * @param context 
@@ -131,7 +136,7 @@ type FlatList<Type>=View<"div">&{
      * @param withElement if true removes the html element associated with the item. Default: true.
      * @returns the removed data {item,element}
      */
-    removeItem(predicate:(item:Type,index:Number,data:Type[])=>Boolean,withElement:boolean):ItemData<Type>,
+    removeItem(predicate:(item:Type,index:number,data:Type[])=>Boolean,withElement:boolean):ItemData<Type>,
     /**
      * Removes item if found
      * @param item item to remove
@@ -158,7 +163,7 @@ type FlatList<Type>=View<"div">&{
      * onReachEnd and onRemoveItem props are not passed to the popup faltlist.
      * If items is not an array, The method removes the popup flatlist.
      */
-    showItems<Type>(predicate:(item:Type,index:Number,data:Type[])=>Boolean,props?:PopupProps<Type>):FlatList<Type>|null,
+    showItems<Type>(predicate:(item:Type,index:number)=>Boolean,props?:PopupProps<Type>):FlatList<Type>|null,
 }
 
 type ItemData<Type>={
@@ -174,6 +179,9 @@ type ItemData<Type>={
 }
 
 type FlatListSwipeEvent=SwipeEvent&{
-    readonly index:Number,
+    /**
+     * In focus item index
+     */
+    readonly index:number,
     readonly container:HTMLDivElement,
 }

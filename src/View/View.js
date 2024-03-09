@@ -26,6 +26,7 @@ export default function View(props){
         }},
         substitute:{value:(element)=>{
             view.replaceWith(element);
+            view.innerHTML="";
             return element;
         }},
         adjacentTo:{value:(element,before)=>{
