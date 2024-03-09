@@ -26,16 +26,6 @@ type FlatListProps<Type>=ExtendableViewProps<"div">&{
      */
     backwards:boolean,
     /**
-     * Item element should have a specified height/width value (depending on the horizontal prop value)
-     * for the paging to function properly
-     */
-    pagingEnabled:boolean,
-    /**
-     * When false, the flatlist cannot be scrolled via touch interaction
-     * @default true
-     */
-    scrollEnabled:boolean,
-    /**
      * A number in range 0..1.
      * The visiblity fraction of an element in order to create the next one.
      * @example 
@@ -43,6 +33,26 @@ type FlatListProps<Type>=ExtendableViewProps<"div">&{
      * @default 0.5
      */
     threshold:number,
+    /**
+     * Item element should have a specified height/width value (depending on the horizontal prop value)
+     * for the paging to function properly
+     */
+    pagingEnabled:boolean,
+    /**
+     * @default false
+     */
+    smoothPaging:boolean,
+    /**
+     * When false, the flatlist cannot be scrolled via touch interaction
+     * @default true
+     */
+    scrollEnabled:boolean,
+    /**
+     * specifies the required visibility threshold in pixels for scrolling to an item
+     * @notice used when smoothPaging is enabled
+     * @default 100
+     */
+    offsetThreshold:number,
     /**
      * Used with pagingEnabled true.
      * Specifies the transition animation from one element to the next

@@ -1,10 +1,10 @@
-import {NativeView,removeItem,FooMap,useSwipeGesture,findItem} from "../index";
+import {NativeView,removeItem,FooMap,useSwipeGesture,findItem,DraggableView} from "../index";
 import css from "./FlatList.module.css";
 import EmptyIndicator from "./EmptyIndicator/EmptyIndicator";
 
 
 export default function FlatList(props){
-    const {parent,EmptyComponent=props.emptymessage,renderItem,horizontal,backwards,pagingEnabled,scrollEnabled=true,threshold=0.5,transition="ease 300ms",onReachEnd,onRemoveItem,onAddItems,onSwipe}=props;
+    const {parent,horizontal,backwards,smoothPaging,pagingEnabled,scrollEnabled=true,threshold=0.5,transition="ease 300ms",renderItem,onReachEnd,onRemoveItem,onAddItems,onSwipe}=props;
     const flatlist=NativeView({
         parent,at:props.at,
         props:props.id,
@@ -23,17 +23,60 @@ export default function FlatList(props){
         offsetSide:"offset"+(horizontal?"Left":"Top"),
         filled:false,
         emptinessEl:null,
+        dragTime:null,
+        transitionDuration:200,
     },{data,offsetSide}=state;
 
     flatlist.innateHTML=`
-        <div 
-            ref="container"
-            class="${css.container} ${props.containerClassName||""}" 
-            ${backwards?"backwards"+(horizontal?"Horizontal":"Vertical"):""}
-            style="${styles.container({pagingEnabled,transition,horizontal})}"
-        ></div>
+        ${scrollEnabled&&pagingEnabled&&smoothPaging?"":`
+            <div 
+                ref="container"
+                class="${css.container} ${props.containerClassName||""}" 
+                style="${styles.container({pagingEnabled,transition,horizontal})}"
+            ></div>
+        `}
     `;
-    const {container}=flatlist;
+    const container=flatlist.container||DraggableView({
+        parent:flatlist,
+        className:`${css.container} ${props.containerClassName||""}`,
+        style:styles.container({pagingEnabled,transition,horizontal,smoothPaging}),
+        verticalDrag:!horizontal,
+        horizontalDrag:horizontal,
+        onDrag:()=>{
+            state.dragTime=performance.now();
+        },
+        onDrop:({x,y,dx,dy})=>{
+            const dtime=performance.now()-state.dragTime;
+            if(dx){
+                const forward=horizontal?(dx<0):(dy<0);
+                const velocity=100*Math.abs(dx)/dtime;
+                if((dtime<100)||(velocity>150)){
+                    state.transitionDuration=2.5*velocity;
+                    setTimeout(()=>{flatlist.scrollToIndex(state.infocusIndex+(forward?1:-1))},10);
+                }
+                else{
+                    const scrollLength=horizontal?-x:-y;
+                    if(scrollLength<0){
+                        setTimeout(()=>{flatlist.scrollToOffset(0)},10);
+                    }
+                    else{
+                        const {offsetThreshold=100}=props;
+                        const item=findItem(state.itemsmap.values(),(element,i)=>{
+                            const offset=element[offsetSide];
+                            return forward?(scrollLength>(offset+offsetThreshold-flatlist.clientWidth)):
+                            (offset+element.clientWidth>=(scrollLength+offsetThreshold));
+                        },forward)||{index:0};
+                        item&&setTimeout(()=>{
+                            state.transitionDuration=Math.max(velocity,200);
+                            flatlist.scrollToIndex(item.index);
+                        },10);
+                    }
+                }
+            }
+        },
+    });
+    const attribute=backwards?"backwards"+(horizontal?"Horizontal":"Vertical"):"";
+    attribute&&container.setAttribute(attribute,"");
     (!data.length)&&showEmptinessElement();
 
     const observer=new IntersectionObserver(([entry])=>{
@@ -81,7 +124,7 @@ export default function FlatList(props){
     if(pagingEnabled){
         //container.style.overflow="visible";
         flatlist.style.overflow="hidden";
-        scrollEnabled&&useSwipeGesture({
+        (scrollEnabled&&!smoothPaging)&&useSwipeGesture({
             element:flatlist,
             onSwipe:(event)=>{if((horizontal&&(event.axis==="horizontal"))||((!horizontal)&&(event.axis==="vertical"))){
                 const {infocusIndex}=state;
@@ -191,14 +234,27 @@ export default function FlatList(props){
         if(pagingEnabled){
             if(scrollEnabled){
                 const item=findItem(state.itemsmap.values(),(element)=>offset>=(element[offsetSide]-state.firstOffset),true);
-                if(item){state.infocusIndex=item.index}
+                if(item){
+                    state.infocusIndex=item.index;
+                }
             }
             if(!smooth){
                 container.style.transition="none";
                 setTimeout(()=>{container.style.transition=transition},0);
             }
             const axis=horizontal?"X":"Y";
-            container.style.transform=`${backwards?`scale${axis}(-1) `:""}translate${axis}(-${offset>0?offset:0}px)`;
+            if(scrollEnabled&&smoothPaging){
+                container.style.transform=backwards?`scale${axis}(-1) `:"";
+                container.setPosition({
+                    x:horizontal?-offset:0,
+                    y:horizontal?0:-offset,
+                    duration:state.transitionDuration,
+                    easing:"ease-out",
+                });
+            }
+            else{
+                container.style.transform=`${backwards?`scale${axis}(-1) `:""}translate${axis}(-${offset}px)`;
+            }
         }
         else{
             container.scrollTo({
@@ -213,7 +269,6 @@ export default function FlatList(props){
         const lastIndex=data.length-1;
         if(i>lastIndex){i=lastIndex} else if(i<0){i=0}
         const infocusChanged=i!==state.infocusIndex;
-        state.infocusIndex=i;
         let element;
         const {index}=state;
         if(i>index){
@@ -228,6 +283,7 @@ export default function FlatList(props){
         }
         const offset=element[offsetSide]-state.firstOffset;
         flatlist.scrollToOffset(offset,smooth);
+        state.infocusIndex=i;
         infocusChanged&&onInFocusItemChange&&onInFocusItemChange({index:i,element,item:data[i]});
     };
 
@@ -247,6 +303,7 @@ export default function FlatList(props){
         state.itemEl=element;
     }
     function showEmptinessElement(){
+        const {EmptyComponent=props.emptymessage}=props;
         if(typeof(EmptyComponent)==="function"){
             state.emptinessEl=EmptyComponent({parent:container});
         }
@@ -262,12 +319,14 @@ export default function FlatList(props){
 }
 
 const styles={
-    container:({transition,horizontal,pagingEnabled})=>`
+    container:({transition,horizontal,pagingEnabled,smoothPaging})=>`
         height:${horizontal?"fit-content":"auto"};
         white-space:${horizontal?"nowrap":"normal"};
         ${pagingEnabled?`
             overflow:visible;
-            transition:${transition};
+            ${smoothPaging?"":`
+                transition:${transition};
+            `}
         `:`
             overflow-x:${horizontal?"auto":"visible"};
             overflow-y:${horizontal?"visible":"auto"};
