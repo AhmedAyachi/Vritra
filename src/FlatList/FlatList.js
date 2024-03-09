@@ -12,8 +12,8 @@ export default function FlatList(props){
         className:`${css.flatlist} ${props.className||""}`,
     }),state={
         data:Array.isArray(props.data)?[...props.data]:[],
-        index:null,//last created element index
-        itemEl:null,//last created element (observed)
+        index:-1,//observed element index
+        itemEl:null,//observed element
         infocusIndex:null,//for paging, the index of the element in focus
         itemsmap:new FooMap(),// [item,element] map
         endreached:!props.data?.length,
@@ -39,9 +39,8 @@ export default function FlatList(props){
     const observer=new IntersectionObserver(([entry])=>{
         const {isIntersecting}=entry;
         if(isIntersecting){
-            const index=state.index+1;
-            if(index<data.length){
-                createElement({item:data[index],index});
+            if(state.index<(data.length-1)){
+                createNextElement();
             }
             else if(!state.endreached){
                 state.endreached=true;
@@ -72,7 +71,7 @@ export default function FlatList(props){
     
     if(renderItem&&data.length){
         state.infocusIndex=0;
-        createElement({item:data[0],index:0});
+        createNextElement();
         state.firstOffset=state.itemEl[offsetSide];
     }
     else{
@@ -92,7 +91,7 @@ export default function FlatList(props){
                 const backward=(direction==="right")||(direction==="bottom");
                 if(backwards?backward:forward){
                     const {itemsmap}=state;
-                    const lastIndex=itemsmap.length-1;
+                    const lastIndex=itemsmap.size-1;
                     index=infocusIndex<lastIndex?infocusIndex+1:lastIndex;
                 }
                 else{
@@ -121,7 +120,7 @@ export default function FlatList(props){
         if(state.endreached){
             if(length){
                 state.endreached=false;
-                createElement({item:items[0],index:state.index+1});
+                createNextElement();
                 //state.firstOffset=state.itemEl[offsetSide];
             }
             else{
@@ -183,8 +182,7 @@ export default function FlatList(props){
         let reachedOffset=lastEl[offsetSide];
         const lastIndex=data.length-1;
         while((offset>=reachedOffset)&&(state.index<lastIndex)){
-            const i=state.index+1;
-            createElement({item:data[i],index:i},false);
+            createNextElement(false);
             lastEl=state.itemEl;
             reachedOffset=lastEl[offsetSide];
         }
@@ -221,7 +219,7 @@ export default function FlatList(props){
         if(i>index){
             observer.unobserve(state.itemEl);
             for(let j=index+1;j<=i;j++){
-                createElement({item:data[j],index:j},i===j);
+                createNextElement(i===j);
             }
             element=state.itemEl;
         }
@@ -230,17 +228,17 @@ export default function FlatList(props){
         }
         const offset=element[offsetSide]-state.firstOffset;
         flatlist.scrollToOffset(offset,smooth);
-        infocusChanged&&onInFocusItemChange&&onInFocusItemChange({item:data[i],index:i,element});
+        infocusChanged&&onInFocusItemChange&&onInFocusItemChange({index:i,element,item:data[i]});
     };
 
-    function createElement(params,observe=true){
-        const {item,index}=params;
+    function createNextElement(observe=true){
+        state.index++;
+        const {index}=state,item=data[index];
         const element=renderItem({
             parent:container,item,
             data:props.data,index,
         });
         state.itemsmap.set(item,element);
-        state.index=index;
         if(observe){
             const {itemEl}=state;
             itemEl&&observer.unobserve(itemEl);
