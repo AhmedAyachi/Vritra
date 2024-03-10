@@ -1,6 +1,7 @@
 import {NativeView,removeItem,FooMap,useSwipeGesture,findItem,DraggableView} from "../index";
 import css from "./FlatList.module.css";
 import EmptyIndicator from "./EmptyIndicator/EmptyIndicator";
+import SmoothPagingContainer from "./SmoothPagingContainer/SmoothPagingContainer";
 
 
 export default function FlatList(props){
@@ -23,7 +24,6 @@ export default function FlatList(props){
         offsetSide:"offset"+(horizontal?"Left":"Top"),
         filled:false,
         emptinessEl:null,
-        dragTime:null,
         transitionDuration:200,
     },{data,offsetSide}=state;
 
@@ -36,49 +36,16 @@ export default function FlatList(props){
             ></div>
         `}
     `;
-    const container=flatlist.container||DraggableView({
-        parent:flatlist,
-        className:`${css.container} ${props.containerClassName||""}`,
+    const container=flatlist.container||SmoothPagingContainer({
+        parent:flatlist,className:`${css.container} ${props.containerClassName||""}`,
         style:styles.container({pagingEnabled,transition,horizontal,smoothPaging}),
-        verticalDrag:!horizontal,
-        horizontalDrag:horizontal,
-        onDrag:()=>{
-            state.dragTime=performance.now();
-        },
-        onDrop:({x,y,dx,dy})=>{
-            const dtime=performance.now()-state.dragTime;
-            if(dx){
-                const forward=horizontal?(dx<0):(dy<0);
-                const velocity=100*Math.abs(dx)/dtime;
-                if((dtime<100)||(velocity>150)){
-                    state.transitionDuration=2.5*velocity;
-                    setTimeout(()=>{flatlist.scrollToIndex(state.infocusIndex+(forward?1:-1))},10);
-                }
-                else{
-                    const scrollLength=horizontal?-x:-y;
-                    if(scrollLength<0){
-                        setTimeout(()=>{flatlist.scrollToOffset(0)},10);
-                    }
-                    else{
-                        const {offsetThreshold=100}=props;
-                        const item=findItem(state.itemsmap.values(),(element,i)=>{
-                            const offset=element[offsetSide];
-                            return forward?(scrollLength>(offset+offsetThreshold-flatlist.clientWidth)):
-                            (offset+element.clientWidth>=(scrollLength+offsetThreshold));
-                        },forward)||{index:0};
-                        item&&setTimeout(()=>{
-                            state.transitionDuration=Math.max(velocity,200);
-                            flatlist.scrollToIndex(item.index);
-                        },10);
-                    }
-                }
-            }
-        },
+        data:state,horizontal,
+        offsetThreshold:props.offsetThreshold,
     });
     const attribute=backwards?"backwards"+(horizontal?"Horizontal":"Vertical"):"";
     attribute&&container.setAttribute(attribute,"");
-    (!data.length)&&showEmptinessElement();
 
+    (!data.length)&&showEmptinessElement();
     const observer=new IntersectionObserver(([entry])=>{
         const {isIntersecting}=entry;
         if(isIntersecting){

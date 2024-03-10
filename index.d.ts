@@ -26,9 +26,9 @@ export {default as withSequence} from "./src/withSequence/withSequence";
  * @param asarray if true the color rgba representation is returned an an array of decimals [r,g,b,a]
  * @default false
  */
-export function hexColorToRGBA(hexcolor:string,asarray:boolean):String|Number[];
+export function hexColorToRGBA(hexcolor:string,asarray:boolean):string|number[];
 
-export function hexToDecimal(hexcode:string):Number;
+export function hexToDecimal(hexcode:string):number;
 
 /**
  * 
@@ -51,7 +51,7 @@ export function interpolate(
     inrange:number[],
     outrange:number[],
     extrapolationType:"extend"|"clamp"|"identity",
-):Number;
+):number;
 
 /**
  * @param date supported delimiters: "/" "-" " " ","
@@ -71,13 +71,13 @@ export function interpolate(
  * @default 1
  * @returns a date with the chosen format
  */
-export function getAdjacentDate(date:String,format:"dmy"|"mdy"|"ymd",offset=1):String;
-export function getAdjacentDate(date:String,offset=1):String;
+export function getAdjacentDate(date:string,format:"dmy"|"mdy"|"ymd",offset=1):string;
+export function getAdjacentDate(date:string,offset=1):string;
 
 /**
  * Returns true if device supports touch gestures
  */
-export function isTouchDevice():Boolean;
+export function isTouchDevice():boolean;
 
 /**
  * returns a random item from an array 
@@ -89,7 +89,7 @@ export function randomItem<Type>(array:Type[]):Type;
  * Uses JSON.parse method to parse json parameter but returns null in case of an error
  * @param json json string to parse
  */
-export function parseJSON(json:String):any|null;
+export function parseJSON(json:string):any|null;
 
 /**
  * Extratcts ImageData from Blob
@@ -106,7 +106,7 @@ export function useBlobImageData(blob:Blob,callback:(imageData:ImageData)=>void)
  * h:m::
  * h::
  */
-export function getTimeDuration(start:String,end:String):Number;
+export function getTimeDuration(start:string,end:string):number;
 
 /**
  * returns an array of objects representing the months of the year
@@ -116,19 +116,19 @@ export function getTimeDuration(start:String,end:String):Number;
  * @property name 
  * @property length : number of days
  */
-export function getMonths(isLeapYear=false):{name:String,daycount:Number}[];
+export function getMonths(isLeapYear=false):{name:string,daycount:number}[];
 
 /**
  * @param year year to check, default to current year
  */
-export function isLeapYear(year?:Number):Boolean;
+export function isLeapYear(year?:number):boolean;
 
 /**
  * returns an array containing the 7 days of the week with start as first day
  * @param start first day of the week
  * @default "monday"
  */
-export function getDays(start?:"monday"|"tuesday"|"wednesday"|"thursday"|"friday"|"saturday"|"sunday"):String[];
+export function getDays(start?:"monday"|"tuesday"|"wednesday"|"thursday"|"friday"|"saturday"|"sunday"):string[];
 /**
  * Returns a random string
  * @param prefix 
@@ -136,27 +136,27 @@ export function getDays(start?:"monday"|"tuesday"|"wednesday"|"thursday"|"friday
  * @param separator A string separating the prefix and the random part
  * @default prefix "" separator "_"
  */
-export function useId(prefix="",separator="_"):String;
+export function useId(prefix="",separator="_"):string;
 
-export function groupBy<Type>(array:Type[],filter:(item:Type,index:Number,array:Type[])=>any):{predicate:any,items:Type[]}[];
+export function groupBy<Type>(array:Type[],filter:(item:Type,index:number,array:Type[])=>any):{predicate:any,items:Type[]}[];
 
-export function map<Type>(array:Type[],callback:(item:Type,index:Number,array:Type[])=>String):String;
-export function map(iteration:Number,callback:(index:Number)=>String):String;
+export function map<Type>(array:Type[],callback:(item:Type,index:number,array:Type[])=>string):string;
+export function map(iteration:number,callback:(index:number)=>string):string;
 
 /**
- * @param str String to sanitize
+ * @param str string to sanitize
  * @param whitelist Characters to keep in addition to letters, numbers and spaces
  * @returns string that only contains numbers, letters and spaces along with the whitelisted characters
  * @notice If the string starts with "-" or "+" followed by a number and there are no whitelisted characters
  * then only numbers are kept along with "-"/"+"
  */
-export function sanitize(str:string,whitelist?:string):String;
+export function sanitize(str:string,whitelist?:string):string;
 /**
  * @param escape if true, certain characters will be replaced by a hexadecimal escape sequence 
  * @param whitelist characters to skip escaping, skips spaces by default
  * @default " "
  */
-export function sanitize(str:string,escape?:boolean,whitelist?:string):String;
+export function sanitize(str:string,escape?:boolean,whitelist?:string):string;
 
 /**
  * 
@@ -166,8 +166,8 @@ export function sanitize(str:string,escape?:boolean,whitelist?:string):String;
  * @param callback 
  * @returns the element
  */
-export function fadeIn<Type extends HTMLElement>(element:Type,display:String,duration:Number,callback:()=>void):Type;
-export function fadeIn<Type extends HTMLElement>(element:Type,duration:Number,callback:()=>void):Type;
+export function fadeIn<Type extends HTMLElement>(element:Type,display:string,duration:number,callback:()=>void):Type;
+export function fadeIn<Type extends HTMLElement>(element:Type,duration:number,callback:()=>void):Type;
 export function fadeIn<Type extends HTMLElement>(element:Type,callback:()=>void):Type;
 /**
  * 
@@ -176,7 +176,7 @@ export function fadeIn<Type extends HTMLElement>(element:Type,callback:()=>void)
  * @param callback 
  * @returns the element
  */
-export function fadeOut<Type extends HTMLElement>(element:Type,duration:Number,callback:()=>void):Type;
+export function fadeOut<Type extends HTMLElement>(element:Type,duration:number,callback:()=>void):Type;
 export function fadeOut<Type extends HTMLElement>(element:Type,callback:()=>void):Type;
 
 /**
@@ -187,9 +187,9 @@ export function fadeOut<Type extends HTMLElement>(element:Type,callback:()=>void
  * hsl(*,100%,50%) color in rgb format 
  * or a color from the andFrom array if specified
  */
-export function randomColor(andFrom?:String[]):String;
-export function createCode(length:Number):String;
-export function replaceAt(index:Number,replaceValue:String,targetString:String):String;
+export function randomColor(andFrom?:string[]):string;
+export function createCode(length:number):string;
+export function replaceAt(index:number,replaceValue:string,targetstring:string):string;
 
 /**
  * 
@@ -201,11 +201,11 @@ export function replaceAt(index:Number,replaceValue:String,targetString:String):
  * 2 => first two words
  * @default 0 => all
  */
-export function capitalize(str:String,count=0):String;
+export function capitalize(str:string,count=0):string;
 
-export function isEmail(str:String):Boolean;
+export function isEmail(str:string):boolean;
 
-export function removeItem<Type>(array:Type[],predicate:(item:Type,index:Number,array:Type[])=>boolean):Type;
+export function removeItem<Type>(array:Type[],predicate:(item:Type,index:number,array:Type[])=>boolean):Type;
 export function removeItem<Type>(array:Type[],item:Type):Type;
 /**
  * 
@@ -218,11 +218,11 @@ export function removeItem<Type>(array:Type[],item:Type):Type;
 */
 export function findItem<Type>(
     array:Type[],
-    predicate:(item:Type,index:Number,array:Type[])=>boolean,
+    predicate:(item:Type,index:number,array:Type[])=>boolean,
     descending:boolean,
-):{value:Type,index:Number};
-export function replaceAll(target:String,searchValue:String,replaceValue:String):String;
-export function factorial(n:Number):Number;
+):{value:Type,index:number};
+export function replaceAll(target:string,searchValue:string,replaceValue:string):string;
+export function factorial(n:number):number;
 /**
  * Extracts all characters between the two limiters specified.
  * Limiters are not included 
@@ -233,4 +233,4 @@ export function factorial(n:Number):Number;
  * @Note
  * Pass empty string as parameter to include first or last character
 */
-export function getCharsInBetween(startChar:String,endChar:String,from:String):String;
+export function getCharsInBetween(startChar:string,endChar:string,from:string):string;
