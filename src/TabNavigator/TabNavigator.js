@@ -39,11 +39,11 @@ export default function TabNavigator(props){
         const tab=tabs.find(tab=>tab.id===tabId);
         if(tab){
             //reset
-            indicator.style.width=null;
             const {activeTab}=state;
             headerEl.appendChild(indicator);
             if(activeTab){
                 const activeEl=activeTab.element;
+                indicator.style.width=`${activeEl.offsetWidth}px`;
                 indicator.style.transform=`translateX(${activeEl.offsetLeft}px)`;
                 const iconEl=activeEl.querySelector(":scope>img");
                 if(iconEl){
