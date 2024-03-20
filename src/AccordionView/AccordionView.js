@@ -1,6 +1,7 @@
-import {useId,NativeView,ActionSetView} from "../index";
+import {NativeView,ActionSetView} from "../index";
 import css from "./AccordionView.module.css";
 import ContentView from "./ContentView/ContentView";
+import {VritraFragment} from "../Fragment/Fragment";
 import icon from "./IndicatorIcon";
 
 
@@ -70,8 +71,14 @@ export default function AccordionView(props){
         }
         if(expanded){
             const contentview=state.contentview=ContentView({parent:accordionview,className:props.containerClassName});
-            if(memorize&&state.contentEl){
-                contentview.appendChild(state.contentEl);
+            const {contentEl}=state;
+            if(memorize&&contentEl){
+                if(contentEl instanceof VritraFragment){
+                    contentEl.appendTo(contentview);
+                }
+                else{
+                    contentview.appendChild(contentEl);
+                }
             }
             else{
                 state.contentEl=renderContent&&renderContent({parent:contentview});

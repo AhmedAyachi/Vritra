@@ -2,7 +2,7 @@ import {findItem} from "../index";
 import HtmlSanitizer from "../HtmlSanitizer";
 
 
-class VritraFragment extends DocumentFragment {
+export class VritraFragment extends DocumentFragment {
     #parent;#at;
     #nodes=[];
 
@@ -129,9 +129,9 @@ class VritraFragment extends DocumentFragment {
     prependTo(element){
         if(element instanceof HTMLElement){
             if(element!==this.#parent){
-                this.#parent=element;
                 const nodes=this.#getNodes();
                 element.prepend(...nodes);
+                this.#parent=element;
             }
         }
         else{
@@ -142,11 +142,11 @@ class VritraFragment extends DocumentFragment {
     appendTo(element){
         if(element instanceof HTMLElement){
             if(element!==this.#parent){
-                this.#parent=element;
                 const nodes=this.#getNodes();
                 for(const node of nodes){
                     element.appendChild(node);
                 }
+                this.#parent=element;
             }
         }
         else{
