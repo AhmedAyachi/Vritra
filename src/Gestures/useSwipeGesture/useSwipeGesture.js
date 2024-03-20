@@ -23,7 +23,7 @@ export default function useSwipeGesture(options){
             element.removeEventListener("touchcancel",onTouchEnd);
             element.removeEventListener("touchend",onTouchEnd);
         }
-    });
+    },{passive:true});
 
     const onTouchEnd=(event)=>{
         const {changedTouches,touches}=event,touchcount=changedTouches.length+touches.length;
