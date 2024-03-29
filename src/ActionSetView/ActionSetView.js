@@ -1,13 +1,11 @@
-import {useId,map,NativeView} from "../index";
+import {map,NativeView} from "../index";
 import css from "./ActionSetView.module.css";
 
 
 export default function ActionSetView(props){
-    const {parent,id=useId("actionsetview"),color="black"}=props;
+    const {parent,tintColor=props.color||"black"}=props;
     const actionsetview=NativeView({
-        parent,id,
-        at:props.at,
-        style:props.style,
+        parent,id:props.id,at:props.at,style:props.style,
         className:`${css.actionsetview} ${props.className||""}`,
     }),state={
         actions:getActions(props.actions,props.definitions),
@@ -19,7 +17,7 @@ export default function ActionSetView(props){
             return `
                 <div ref="${id}" class="button ${css.action}">
                     <img 
-                        src="${typeof(icon)==="function"?action.icon(color,2):(icon||"")}" alt="${alt||""}"
+                        src="${typeof(icon)==="function"?action.icon(tintColor,2):(icon||"")}" alt="${alt||""}"
                         ${size?`style="width:${size}em"`:""}
                     />
                 </div>
@@ -52,14 +50,14 @@ export default function ActionSetView(props){
                 actionEl.setIcon=(icon,save)=>{
                     if(save){action.icon=icon};
                     const img=actionEl.querySelector(":scope>img");
-                    img.src=typeof(icon)==="function"?icon(color):icon;
+                    img.src=typeof(icon)==="function"?icon(tintColor):icon;
                 }
             }
             catch{
                 throw new Error(actionId?`invalid action with id: ${actionId}`:"action with no id");
             }
         }
-        action.color=color;
+        action.color=tintColor;
         action.element=actionEl;
         action.onReady?.(action);
     });

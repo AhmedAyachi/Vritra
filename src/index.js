@@ -181,8 +181,8 @@ export const getMonths=(isLeapYear=false)=>[
 export const isLeapYear=(year=new Date(Date.now()).getFullYear())=>!Boolean((year-1752)%4);
 
 const defaultdays=["monday","tuesday","wednesday","thursday","friday","saturday","sunday"];
-export const getDays=(start="monday")=>{
-    const days=[],index=Math.max(0,defaultdays.indexOf(start));
+export const getDays=(first="monday")=>{
+    const days=[],index=Math.max(0,defaultdays.indexOf(first));
     for(let i=index;i<7;i++){
         days.push(defaultdays[i]);
     }
@@ -222,8 +222,8 @@ export const map=(array=[],treatment)=>{
     }
     return str;
 }
-export const useId=(prefix="",separator="_")=>`${prefix}${prefix?separator:""}${Math.random().toString(36).slice(2)}${Math.random().toString(36).slice(2)}`;
-export const useRef=useId;
+export const randomId=(prefix="",separator="_")=>`${prefix}${prefix?separator:""}${Math.random().toString(36).slice(2)}${Math.random().toString(36).slice(2)}`;
+export const useId=randomId;
 
 //export const specialchars="+=}°)]@ç^_\\`-|(['{\"#~&²£$¤*µ%ù§!/:.;?,<>";
 export const sanitize=(str="",param0,param1)=>{
@@ -261,14 +261,16 @@ export const sanitize=(str="",param0,param1)=>{
     return sanitized;
 }
 
-export const fadeIn=(element,display=200,duration,callback)=>{
+export const fadeIn=(element,display,duration=200,callback)=>{
     if(element instanceof HTMLElement){
-        if(typeof(display)==="number"){
+        clearTimeout(element.fadeTimeout);
+        const displayType=typeof(display);
+        if(displayType==="number"){
             callback=duration;
             duration=display;
             display=undefined;
         }
-        else if(typeof(display)==="function"){
+        else if(displayType==="function"){
             callback=display;
             duration=200;
             display=undefined;
@@ -276,8 +278,9 @@ export const fadeIn=(element,display=200,duration,callback)=>{
         const {style}=element;
         style.display=display||getComputedStyle(element).display||null;
         style.animation=`${css.fadeIn} ${duration}ms 1 linear forwards`;
-        setTimeout(()=>{
+        element.fadeTimeout=setTimeout(()=>{
             style.animation=null;
+            delete element.fadeTimeout;
             callback&&callback();
         },duration);
     }
@@ -286,15 +289,17 @@ export const fadeIn=(element,display=200,duration,callback)=>{
 
 export const fadeOut=(element,duration=200,callback)=>{
     if(element instanceof HTMLElement){
+        clearTimeout(element.fadeTimeout);
         if(typeof(duration)==="function"){
             callback=duration;
             duration=200;
         }
         const {style}=element;
         style.animation=`${css.fadeOut} ${duration}ms 1 linear forwards`;
-        setTimeout(()=>{
+        element.fadeTimeout=setTimeout(()=>{
             style.display="none";
             style.animation=null;
+            delete element.fadeTimeout;
             callback&&callback();
         },duration);
     }

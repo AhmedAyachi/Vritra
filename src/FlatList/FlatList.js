@@ -24,8 +24,10 @@ export default function FlatList(props){
         offsetSide:"offset"+(horizontal?"Left":"Top"),
         filled:false,
         emptinessEl:null,
+        step:Math.max(1,props.step)||1,
         transitionDuration:200,
-    },{data,offsetSide}=state;
+        scrollLength:0,
+    },{data,offsetSide,step}=state;
 
     flatlist.innateHTML=`
         ${scrollEnabled&&pagingEnabled&&smoothPaging?"":`
@@ -50,7 +52,10 @@ export default function FlatList(props){
         const {isIntersecting}=entry;
         if(isIntersecting){
             if(state.index<(data.length-1)){
-                createNextElement();
+                const max=Math.min(step,data.length-state.index-1);
+                for(let i=1;i<=max;i++){
+                    createNextElement(i===step);
+                }
             }
             else if(!state.endreached){
                 state.endreached=true;
@@ -266,8 +271,8 @@ export default function FlatList(props){
             const {itemEl}=state;
             itemEl&&observer.unobserve(itemEl);
             observer.observe(element);
+            state.itemEl=element;
         }
-        state.itemEl=element;
     }
     function showEmptinessElement(){
         const {EmptyComponent=props.emptymessage}=props;

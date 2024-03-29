@@ -5,8 +5,8 @@ import {SwipeEvent} from "../Gestures/useSwipeGesture/useSwipeGesture";
 export default function FlatList<Type>(props:FlatListProps<Type>):FlatList<Type>;
 
 type FlatListProps<Type>=ExtendableViewProps<"div">&{
-    containerClassName:string,
-    popupClassName:string,
+    containerClassName?:string,
+    popupClassName?:string,
     /**
      * Flatlist data array
      * 
@@ -18,59 +18,64 @@ type FlatListProps<Type>=ExtendableViewProps<"div">&{
     /**
      * @notice Do not forget to set the item element display to inline 
      */
-    horizontal:boolean,
+    horizontal?:boolean,
     /**
      * Make Flatlist scrollable from bottom/right to top/left.
      * 
      * Specify a flatlist height value if elements get shown at once.
      */
-    backwards:boolean,
+    backwards?:boolean,
     /**
-     * A number in range 0..1.
-     * The visiblity fraction of an element in order to create the next one.
+     * The visiblity fraction of an element in order to render the next one.
+     * A number in range 0..1
      * @example 
-     * 0.5 => When half of the element is visible, the next one is created.
+     * 0.5 => When half of the element is visible, the next one is rendered.
      * @default 0.5
      */
-    threshold:number,
+    threshold?:number,
+    /**
+     * specifies how many items are rendered
+     * @default 1
+     */
+    step?:number,
     /**
      * Item element should have a specified height/width value (depending on the horizontal prop value)
      * for the paging to function properly
      */
-    pagingEnabled:boolean,
+    pagingEnabled?:boolean,
     /**
      * @default false
      */
-    smoothPaging:boolean,
-    /**
-     * When false, the flatlist cannot be scrolled via touch interaction
-     * @default true
-     */
-    scrollEnabled:boolean,
+    smoothPaging?:boolean,
     /**
      * specifies the required visibility threshold in pixels for scrolling to an item
      * @notice used when smoothPaging is enabled
      * @default 100
      */
-    offsetThreshold:number,
+    offsetThreshold?:number,
+    /**
+     * When false, the flatlist cannot be scrolled via touch interaction
+     * @default true
+     */
+    scrollEnabled?:boolean,
     /**
      * Used with pagingEnabled true.
      * Specifies the transition animation from one element to the next
      * @default "ease 300ms"
      */
-    transition:string,
+    transition?:string,
     /**
      * Message to show when the flatlist is empty.
      * @default "no data"
      * @deprecated will be removed in a future version, use EmptyComponent instead
      */
-    emptymessage:string,
+    emptymessage?:string,
     /**
      * Rendered when the flatlist is empty.
      * @notice displays a simple message if a string is passed
      * @default "no data"
      */
-    EmptyComponent:string|(({parent:HTMLElement})=>HTMLElement),
+    EmptyComponent?:string|(({parent:HTMLElement})=>HTMLElement),
      /**
       * Function to execute on each data item
       * 
@@ -149,14 +154,14 @@ type FlatList<Type>=View<"div">&{
      * @param withElement if true removes the html element associated with the item. Default: true.
      * @returns the removed data {item,element}
      */
-    removeItem(predicate:(item:Type,index:number,data:Type[])=>Boolean,withElement:boolean):ItemData<Type>,
+    removeItem(predicate:(item:Type,index?:number,data?:Type[])=>boolean,withElement?:boolean):ItemData<Type>,
     /**
      * Removes item if found
      * @param item item to remove
      * @param withElement if true removes the html element associated with the item. Default: true
      * @returns the removed data {item,element}
      */
-    removeItem(item:any,withElement:boolean):ItemData<Type>,
+    removeItem(item:any,withElement?:boolean):ItemData<Type>,
     /**
      * Creates a flatlist on top of the original flatlist as a popup using the same props
      * @param items data to show

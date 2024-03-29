@@ -16,9 +16,14 @@ export default function ActionSetView(props:ExtendableViewProps<"div">&{
      * If an action id matches a definition id, no need for providing a ref value bacause that id is used as a ref.
      */
     actions:(ActionSetAction|string)[],
-    definitions?:ActionSetDefinition[]
+    definitions?:ActionSetDefinition[],
     /**
      * Function-icon color param value
+     * @default "black"
+     */
+    tintColor?:string,
+    /**
+     * @deprecated renamed to tintColor
      */
     color?:string,
 }):ActionSetView;

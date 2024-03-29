@@ -14,36 +14,40 @@ export default function SmoothPagingContainer(props){
         onDrag:()=>{
             state.dragTime=performance.now();
         },
-        onDrop:({x,y,dx,dy})=>{
+        onDrop:({x,y,dx,dy})=>{setTimeout(()=>{
             const dtime=performance.now()-state.dragTime;
-            if(horizontal?dx:dy){
+            const {offsetThreshold=100}=props;
+            const distance=Math.abs(horizontal?dx:dy);
+            if(distance>=offsetThreshold){
                 const forward=horizontal?(dx<0):(dy<0);
-                const velocity=100*Math.abs(horizontal?dx:dy)/dtime;
-                const clientLength="client"+(horizontal?"Width":"Height");
+                const velocity=100*distance/dtime;
                 if((dtime<100)&&(velocity>150)){
                     data.transitionDuration=2.5*velocity;
-                    setTimeout(()=>{parent.scrollToIndex(data.infocusIndex+(forward?1:-1))},10);
+                    parent.scrollToIndex(data.infocusIndex+(forward?1:-1));
                 }
                 else{
                     const scrollLength=horizontal?-x:-y;
                     if(scrollLength<0){
-                        setTimeout(()=>{parent.scrollToOffset(0)},10);
+                        parent.scrollToOffset(0);
                     }
                     else{
-                        const {offsetThreshold=100}=props;
-                        const item=findItem(itemsmap.values(),(element,i)=>{
+                        const clientLength="client"+(horizontal?"Width":"Height");
+                        const item=findItem(itemsmap.values(),(element)=>{
                             const offset=element[data.offsetSide];
-                            return forward?(scrollLength>(offset+offsetThreshold-parent[clientLength])):
-                            (offset+element[clientLength]>=(scrollLength+offsetThreshold));
+                            return forward?(scrollLength>(offset-parent[clientLength])):
+                            (offset+element[clientLength]>=(scrollLength));
                         },forward)||{index:0};
-                        item&&setTimeout(()=>{
+                        if(item){
                             data.transitionDuration=Math.max(velocity,200);
                             parent.scrollToIndex(item.index);
-                        },10);
+                        }
                     }
                 }
             }
-        },
+            else{
+                parent.scrollToIndex(data.infocusIndex);
+            }
+        },10)},
     });
 
     smoothpagingcontainer.beforeEndHTML=`
