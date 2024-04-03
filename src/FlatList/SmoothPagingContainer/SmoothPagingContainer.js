@@ -1,5 +1,5 @@
 import {DraggableView,findItem} from "../../index";
-import css from "./SmoothPagingContainer.module.css";
+//import css from "./SmoothPagingContainer.module.css";
 
 
 export default function SmoothPagingContainer(props){

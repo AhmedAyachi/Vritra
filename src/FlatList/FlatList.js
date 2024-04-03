@@ -5,7 +5,7 @@ import SmoothPagingContainer from "./SmoothPagingContainer/SmoothPagingContainer
 
 
 export default function FlatList(props){
-    const {parent,horizontal,backwards,smoothPaging,pagingEnabled,scrollEnabled=true,threshold=0.5,transition="ease 300ms",renderItem,onReachEnd,onRemoveItem,onAddItems,onSwipe}=props;
+    const {parent,horizontal,backwards,smoothPaging,pagingEnabled,offsetThreshold=100,scrollEnabled=true,threshold=0.5,transition="ease 300ms",renderItem,onReachEnd,onRemoveItem,onAddItems,onSwipe}=props;
     const flatlist=NativeView({
         parent,at:props.at,
         props:props.id,
@@ -20,13 +20,13 @@ export default function FlatList(props){
         endreached:!props.data?.length,
         firstOffset:null,//for paging lists: firstEl offset
         popuplist:null,
-        isolatedcount:0,//elements with removed items count,
         offsetSide:"offset"+(horizontal?"Left":"Top"),
         filled:false,
         emptinessEl:null,
         step:Math.max(1,props.step)||1,
         transitionDuration:200,
         scrollLength:0,
+        triggerOnScrollEnd:true,
     },{data,offsetSide,step}=state;
 
     flatlist.innateHTML=`
@@ -42,10 +42,44 @@ export default function FlatList(props){
         parent:flatlist,className:`${css.container} ${props.containerClassName||""}`,
         style:styles.container({pagingEnabled,transition,horizontal,smoothPaging}),
         data:state,horizontal,
-        offsetThreshold:props.offsetThreshold,
+        offsetThreshold,
     });
     const attribute=backwards?"backwards"+(horizontal?"Horizontal":"Vertical"):"";
     attribute&&container.setAttribute(attribute,"");
+
+    if(props.snapToItems){
+        container.onscrollend=(event)=>{
+            console.log("onscrollend called",state.triggerOnScrollEnd);
+            const scrollLength=horizontal?container.scrollLeft:container.scrollTop;
+            if(state.triggerOnScrollEnd){
+                const dscroll=scrollLength-state.scrollLength;
+                /* console.log("scrollLength",scrollLength);
+                console.log("state.scrollLength",state.scrollLength);
+                console.log("dscroll",dscroll);
+                console.log("offsetThreshold",offsetThreshold); */
+                if(Math.abs(dscroll)>=offsetThreshold){
+                    
+                    const forward=dscroll>0;
+                    const clientLength="client"+(horizontal?"Width":"Height");
+                    const item=findItem(state.itemsmap.values(),(element)=>{
+                        const offset=element[offsetSide];
+                        return forward?(scrollLength>(offset-parent[clientLength])):
+                        (offset+element[clientLength]>=(scrollLength));
+                    },forward)||{index:0};
+                    if(item){
+                        flatlist.scrollToIndex(item.index,{triggerOnScrollEnd:false});
+                    }
+                }
+                else{
+                    flatlist.scrollToIndex(state.infocusIndex,{triggerOnScrollEnd:false});
+                }
+            }
+            else{
+                state.scrollLength=scrollLength;
+                state.triggerOnScrollEnd=true;
+            }
+        }
+    }
 
     (!data.length)&&showEmptinessElement();
     const observer=new IntersectionObserver(([entry])=>{
@@ -54,7 +88,7 @@ export default function FlatList(props){
             if(state.index<(data.length-1)){
                 const max=Math.min(step,data.length-state.index-1);
                 for(let i=1;i<=max;i++){
-                    createNextElement(i===step);
+                    createNextElement(i===1);
                 }
             }
             else if(!state.endreached){
@@ -154,12 +188,9 @@ export default function FlatList(props){
                 const {element}=removed;
                 (element instanceof Element)&&element.remove();
             }
-            else{
-                state.isolatedcount++;
-            }
             itemsmap.delete(item);
             state.index--;
-            if((!data.length)&&(!state.isolatedcount)){
+            if((!data.length)&&(!container.childNodes.length)){
                 container.style.display="none";
                 showEmptinessElement();
             }
@@ -191,72 +222,82 @@ export default function FlatList(props){
         return state.popuplist;
     }
 
-    flatlist.scrollToOffset=(offset,smooth=true)=>{
-        if(offset<0){offset=0};
-        let lastEl=state.itemEl;
-        let reachedOffset=lastEl[offsetSide];
-        const lastIndex=data.length-1;
-        while((offset>=reachedOffset)&&(state.index<lastIndex)){
-            createNextElement(false);
-            lastEl=state.itemEl;
-            reachedOffset=lastEl[offsetSide];
-        }
-        observer.observe(lastEl);
-        if(offset>=reachedOffset){offset=reachedOffset};
-        if(pagingEnabled){
-            if(scrollEnabled){
-                const item=findItem(state.itemsmap.values(),(element)=>offset>=(element[offsetSide]-state.firstOffset),true);
-                if(item){
-                    state.infocusIndex=item.index;
+    flatlist.scrollToOffset=(offset,options={})=>{
+        if(typeof(options)==="boolean") return flatlist.scrollToOffset(offset,{smooth:options});
+        else{
+            const {smooth=true,triggerOnScrollEnd=true}=options;
+            state.triggerOnScrollEnd=triggerOnScrollEnd;
+            if(offset<0){offset=0};
+            let lastEl=state.itemEl;
+            let reachedOffset=lastEl[offsetSide];
+            const lastIndex=data.length-1;
+            while((offset>=reachedOffset)&&(state.index<lastIndex)){
+                createNextElement(false);
+                lastEl=state.itemEl;
+                reachedOffset=lastEl[offsetSide];
+            }
+            observer.observe(lastEl);
+            if(offset>=reachedOffset){offset=reachedOffset};
+            if(pagingEnabled){
+                if(scrollEnabled){
+                    const item=findItem(state.itemsmap.values(),(element)=>offset>=(element[offsetSide]-state.firstOffset),true);
+                    if(item){
+                        state.infocusIndex=item.index;
+                    }
+                }
+                if(!smooth){
+                    container.style.transition="none";
+                    setTimeout(()=>{container.style.transition=transition},40);
+                }
+                const axis=horizontal?"X":"Y";
+                if(scrollEnabled&&smoothPaging){
+                    container.style.transform=backwards?`scale${axis}(-1) `:"";
+                    container.setPosition({
+                        x:horizontal?-offset:0,
+                        y:horizontal?0:-offset,
+                        duration:state.transitionDuration,
+                        easing:"ease-out",
+                    });
+                }
+                else{
+                    container.style.transform=`${backwards?`scale${axis}(-1) `:""}translate${axis}(-${offset}px)`;
                 }
             }
-            if(!smooth){
-                container.style.transition="none";
-                setTimeout(()=>{container.style.transition=transition},0);
-            }
-            const axis=horizontal?"X":"Y";
-            if(scrollEnabled&&smoothPaging){
-                container.style.transform=backwards?`scale${axis}(-1) `:"";
-                container.setPosition({
-                    x:horizontal?-offset:0,
-                    y:horizontal?0:-offset,
-                    duration:state.transitionDuration,
-                    easing:"ease-out",
+            else{
+                container.scrollTo({
+                    [horizontal?"left":"top"]:offset,
+                    behavior:smooth?"smooth":"auto",
                 });
             }
-            else{
-                container.style.transform=`${backwards?`scale${axis}(-1) `:""}translate${axis}(-${offset}px)`;
-            }
-        }
-        else{
-            container.scrollTo({
-                [horizontal?"left":"top"]:offset,
-                behavior:smooth?"smooth":"auto",
-            });
         }
     }
     
-    flatlist.scrollToIndex=(i,smooth=true)=>{
-        const {onInFocusItemChange}=props;
-        const lastIndex=data.length-1;
-        if(i>lastIndex){i=lastIndex} else if(i<0){i=0}
-        const infocusChanged=i!==state.infocusIndex;
-        let element;
-        const {index}=state;
-        if(i>index){
-            observer.unobserve(state.itemEl);
-            for(let j=index+1;j<=i;j++){
-                createNextElement(i===j);
-            }
-            element=state.itemEl;
-        }
+    flatlist.scrollToIndex=(i,options={})=>{
+        if(typeof(options)==="boolean") return flatlist.scrollToIndex(i,{smooth:options});
         else{
-            element=state.itemsmap.at(i,true);
+            const {smooth=true}=options;
+            options.smooth=smooth;
+            const {onInFocusItemChange}=props;
+            const lastIndex=data.length-1;
+            if(i>lastIndex){i=lastIndex} else if(i<0){i=0}
+            const infocusChanged=i!==state.infocusIndex;
+            let element;
+            const {index}=state;
+            if(i>index){
+                observer.unobserve(state.itemEl);
+                for(let j=index+1;j<=i;j++){
+                    createNextElement(i===j);
+                }
+                element=state.itemEl;
+            }
+            else{
+                element=state.itemsmap.at(i,true);
+            }
+            const offset=element[offsetSide]-state.firstOffset;
+            flatlist.scrollToOffset(offset,options);
+            state.infocusIndex=i;
+            infocusChanged&&onInFocusItemChange&&onInFocusItemChange({index:i,element,item:data[i]});
         }
-        const offset=element[offsetSide]-state.firstOffset;
-        flatlist.scrollToOffset(offset,smooth);
-        state.infocusIndex=i;
-        infocusChanged&&onInFocusItemChange&&onInFocusItemChange({index:i,element,item:data[i]});
     };
 
     function createNextElement(observe=true){
