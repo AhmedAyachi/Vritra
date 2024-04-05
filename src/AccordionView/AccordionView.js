@@ -6,7 +6,7 @@ import icon from "./IndicatorIcon";
 
 
 export default function AccordionView(props){
-    const {parent,renderHeader,indicator=icon,renderContent,actions,color="black",memorize=true,separate,onOpen,onClose}=props;
+    const {parent,renderHeader,indicator=icon,renderContent,actions,tintColor=props.color||"black",memorize=true,separate,onOpen,onClose}=props;
     const accordionview=NativeView({
         parent,id:props.id,at:props.at,
         className:`${css.accordionview} ${props.className||""}`,
@@ -26,9 +26,9 @@ export default function AccordionView(props){
             class="${css.header} ${renderHeader?"":css.defaultheader} ${props.headerClassName||""}"
         >
             ${renderHeader?"":`
-                <h3 class="${css.title}" style="color:${color};">${props.title||""}</h3>
+                <h3 class="${css.title}" style="color:${tintColor};">${props.title||""}</h3>
                 <div class="${css.actions}">
-                    <img class="${css.indicator}" src="${typeof(indicator)==="function"?indicator(color,2):indicator}" alt=""/>
+                    <img class="${css.indicator}" src="${typeof(indicator)==="function"?indicator(tintColor,2):indicator}" alt=""/>
                 </div>
             `}
         </div>
@@ -40,7 +40,7 @@ export default function AccordionView(props){
         const actionsetview=ActionSetView({
             parent:actionsEl,
             className:css.actionset,
-            actions,color,
+            actions,color:tintColor,
         });
         actionsetview.scrollLeft=actionsetview.scrollWidth;
     }

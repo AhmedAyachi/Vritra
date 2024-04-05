@@ -21,11 +21,11 @@ export default function AccordionView(props:ExtendableViewProps<"div">&{
      * @notice when separate is true, specify a paddingTop value to get the desired behavior 
      */
     containerClassName?:string,
-    renderHeader(props:{
+    renderHeader?(props:{
         /** custom header container */
         parent:HTMLElement,
     }):HTMLElement,
-    renderContent(props:{
+    renderContent?(props:{
         /** content container */
         parent:HTMLElement,
     }):HTMLElement,
@@ -56,16 +56,21 @@ export default function AccordionView(props:ExtendableViewProps<"div">&{
     /**
      * title, indicator and actions color of the default header
      */
+    tintColor?:string,
+    /**
+     * title, indicator and actions color of the default header
+     * @deprecated use tintColor instead
+     */
     color?:string,
     /**
      * Called when Accordion is opened
      * @param container content view container
      */
-    onOpen(container:HTMLElement):void,
+    onOpen?(container:HTMLElement):void,
     /**
      * Called when Accordion is closed
      */
-    onClose():void,
+    onClose?():void,
 }):AccordionView;
 
 type AccordionView=View<"div">&{

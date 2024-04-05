@@ -24,7 +24,6 @@ export default function FlatList(props){
         filled:false,
         emptinessEl:null,
         step:Math.max(1,props.step)||1,
-        transitionDuration:200,
         scrollLength:0,
         triggerOnScrollEnd:true,
     },{data,offsetSide,step}=state;
@@ -255,8 +254,8 @@ export default function FlatList(props){
                     container.setPosition({
                         x:horizontal?-offset:0,
                         y:horizontal?0:-offset,
-                        duration:state.transitionDuration,
                         easing:"ease-out",
+                        duration:options.duration||200,
                     });
                 }
                 else{
@@ -275,8 +274,6 @@ export default function FlatList(props){
     flatlist.scrollToIndex=(i,options={})=>{
         if(typeof(options)==="boolean") return flatlist.scrollToIndex(i,{smooth:options});
         else{
-            const {smooth=true}=options;
-            options.smooth=smooth;
             const {onInFocusItemChange}=props;
             const lastIndex=data.length-1;
             if(i>lastIndex){i=lastIndex} else if(i<0){i=0}

@@ -14,18 +14,17 @@ export default function SmoothPagingContainer(props){
         onDrag:()=>{
             state.dragTime=performance.now();
         },
-        onDrop:({x,y,dx,dy})=>{setTimeout(()=>{
+        onDrop:({x,y,dx,dy})=>{
             const dtime=performance.now()-state.dragTime;
-            const {offsetThreshold=100}=props;
             const distance=Math.abs(horizontal?dx:dy);
-            if(distance>=offsetThreshold){
-                const forward=horizontal?(dx<0):(dy<0);
-                const velocity=100*distance/dtime;
-                if((dtime<100)&&(velocity>150)){
-                    data.transitionDuration=2.5*velocity;
-                    parent.scrollToIndex(data.infocusIndex+(forward?1:-1));
-                }
-                else{
+            const forward=horizontal?(dx<0):(dy<0);
+            const velocity=100*distance/dtime;
+            if((dtime<100)&&(velocity>40)){
+                parent.scrollToIndex(data.infocusIndex+(forward?1:-1),{duration:Math.max(2.5*velocity,200)});
+            }
+            else{
+                const {offsetThreshold=50}=props;
+                if(distance>=offsetThreshold){
                     const scrollLength=horizontal?-x:-y;
                     if(scrollLength<0){
                         parent.scrollToOffset(0);
@@ -37,17 +36,14 @@ export default function SmoothPagingContainer(props){
                             return forward?(scrollLength>(offset-parent[clientLength])):
                             (offset+element[clientLength]>=(scrollLength));
                         },forward)||{index:0};
-                        if(item){
-                            data.transitionDuration=Math.max(velocity,200);
-                            parent.scrollToIndex(item.index);
-                        }
+                        parent.scrollToIndex(item.index,{duration:Math.max(velocity,200)});
                     }
                 }
+                else{
+                    parent.scrollToIndex(data.infocusIndex);
+                }
             }
-            else{
-                parent.scrollToIndex(data.infocusIndex);
-            }
-        },10)},
+        },
     });
 
     smoothpagingcontainer.beforeEndHTML=`
