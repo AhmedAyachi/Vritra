@@ -5,7 +5,7 @@ import SmoothPagingContainer from "./SmoothPagingContainer/SmoothPagingContainer
 
 
 export default function FlatList(props){
-    const {parent,horizontal,backwards,smoothPaging,pagingEnabled,offsetThreshold=100,scrollEnabled=true,threshold=0.5,transition="ease 300ms",renderItem,onReachEnd,onRemoveItem,onAddItems,onSwipe}=props;
+    const {parent,horizontal,backwards,smoothPaging,pagingEnabled,scrollEnabled=true,threshold=0.5,transition="ease 300ms",renderItem,onReachEnd,onRemoveItem,onAddItems,onSwipe}=props;
     const flatlist=NativeView({
         parent,at:props.at,
         props:props.id,
@@ -26,7 +26,8 @@ export default function FlatList(props){
         step:Math.max(1,props.step)||1,
         scrollLength:0,
         triggerOnScrollEnd:true,
-    },{data,offsetSide,step}=state;
+        offsetThreshold:props.offsetThreshold||(flatlist["client"+(horizontal?"Width":"Height")]/3),
+    },{data,offsetSide,step,offsetThreshold}=state;
 
     flatlist.innateHTML=`
         ${scrollEnabled&&pagingEnabled&&smoothPaging?"":`
@@ -46,31 +47,40 @@ export default function FlatList(props){
     const attribute=backwards?"backwards"+(horizontal?"Horizontal":"Vertical"):"";
     attribute&&container.setAttribute(attribute,"");
 
-    if(props.snapToItems){
+    if(props.snapToItems&&(!pagingEnabled)){
         container.onscrollend=(event)=>{
-            console.log("onscrollend called",state.triggerOnScrollEnd);
             const scrollLength=horizontal?container.scrollLeft:container.scrollTop;
             if(state.triggerOnScrollEnd){
                 const dscroll=scrollLength-state.scrollLength;
-                /* console.log("scrollLength",scrollLength);
-                console.log("state.scrollLength",state.scrollLength);
-                console.log("dscroll",dscroll);
-                console.log("offsetThreshold",offsetThreshold); */
+                const clientLengthKey="client"+(horizontal?"Width":"Height");
                 if(Math.abs(dscroll)>=offsetThreshold){
-                    
-                    const forward=dscroll>0;
-                    const clientLength="client"+(horizontal?"Width":"Height");
-                    const item=findItem(state.itemsmap.values(),(element)=>{
-                        const offset=element[offsetSide];
-                        return forward?(scrollLength>(offset-parent[clientLength])):
-                        (offset+element[clientLength]>=(scrollLength));
-                    },forward)||{index:0};
-                    if(item){
-                        flatlist.scrollToIndex(item.index,{triggerOnScrollEnd:false});
+                    const item=findItem(state.itemsmap.values(),(element)=>element[offsetSide]>scrollLength)||{
+                        index:0,
+                        value:state.itemsmap.at(0,true),
+                    };
+                    if(item.index>0){
+                        const element=item.value;
+                        if(dscroll>0){
+                            if(element[offsetSide]>(scrollLength+container[clientLengthKey]-offsetThreshold)){
+                                item.index--;
+                            }
+                        }
+                        else{
+                            const prevElement=state.itemsmap.at(item.index-1,true);
+                            const sideOffset=prevElement[offsetSide]+prevElement[clientLengthKey];
+                            if(Math.abs(scrollLength-sideOffset)>=offsetThreshold){
+                                item.index--;
+                            }
+                        }
                     }
+                    flatlist.scrollToIndex(item.index,{triggerOnScrollEnd:false});
                 }
                 else{
                     flatlist.scrollToIndex(state.infocusIndex,{triggerOnScrollEnd:false});
+                }
+                if((scrollLength<=0)||((scrollLength+container[clientLengthKey])>=container.scrollWidth)){
+                    state.scrollLength=scrollLength;
+                    state.triggerOnScrollEnd=true;
                 }
             }
             else{
@@ -313,16 +323,18 @@ export default function FlatList(props){
         }
     }
     function showEmptinessElement(){
-        const {EmptyComponent=props.emptymessage}=props;
-        if(typeof(EmptyComponent)==="function"){
+        const {EmptyComponent}=props;
+        const type=typeof(EmptyComponent);
+        if(type==="function"){
             state.emptinessEl=EmptyComponent({parent:container});
         }
-        else{
+        else if(type==="string"){
             state.emptinessEl=EmptyIndicator({
                 parent:container,
                 message:EmptyComponent,
             });
         }
+        else throw new Error("EmptyComponent prop should be either a string or a function");
     }
 
     return flatlist;

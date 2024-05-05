@@ -20,7 +20,7 @@ export default function SmoothPagingContainer(props){
             const forward=horizontal?(dx<0):(dy<0);
             const velocity=100*distance/dtime;
             if((dtime<100)&&(velocity>40)){
-                parent.scrollToIndex(data.infocusIndex+(forward?1:-1),{duration:Math.max(2.5*velocity,200)});
+                parent.scrollToIndex(data.infocusIndex+(forward?1:-1),{duration:2.5*velocity});
             }
             else{
                 const {offsetThreshold=50}=props;
@@ -36,7 +36,7 @@ export default function SmoothPagingContainer(props){
                             return forward?(scrollLength>(offset-parent[clientLength])):
                             (offset+element[clientLength]>=(scrollLength));
                         },forward)||{index:0};
-                        parent.scrollToIndex(item.index,{duration:Math.max(velocity,200)});
+                        parent.scrollToIndex(item.index,{duration:Math.max(2.5*velocity,200)});
                     }
                 }
                 else{

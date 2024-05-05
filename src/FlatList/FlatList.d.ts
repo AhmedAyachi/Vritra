@@ -41,10 +41,12 @@ type FlatListProps<Type>=ExtendableViewProps<"div">&{
     /**
      * Item element should have a specified height/width value (depending on the horizontal prop value)
      * for the paging to function properly
+     * @notice automatically sets snapToItems to true
      */
     pagingEnabled?:boolean,
     /**
      * @default false
+     * @notice may not work properly on browser device emulators
      */
     smoothPaging?:boolean,
     /**
@@ -65,11 +67,10 @@ type FlatListProps<Type>=ExtendableViewProps<"div">&{
      */
     transition?:string,
     /**
-     * Message to show when the flatlist is empty.
-     * @default "no data"
-     * @deprecated will be removed in a future version, use EmptyComponent instead
+     * When true, causes the flatlist to scroll to the nearest item element.
+     * @default false 
      */
-    emptymessage?:string,
+    snapToItems?:boolean,
     /**
      * Rendered when the flatlist is empty.
      * @notice displays a simple message if a string is passed

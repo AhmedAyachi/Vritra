@@ -2,7 +2,7 @@ import {View,ViewProps} from "../View/View";
 
 
 export default function DraggableView<Tag extends keyof HTMLElementTagNameMap|undefined=undefined>(props:ViewProps<Tag>&{
-    position:DraggableViewPositionSetter,
+    position?:DraggableViewPositionSetter,
     /**
      * Sets the DraggableView boundaries
      * 

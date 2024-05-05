@@ -38,33 +38,30 @@ export default function DraggableView(props){
             state.dragDY=cy-coords.y;
             const {onDrag}=state;
             onDrag&&onDrag(structuredClone(coords),draggableview);
-            let start=0,frameId;
-            function onPointerMove(event){
-                frameId=requestAnimationFrame(timestamp=>{
-                    start=timestamp;
-                    const {clientX:cx,clientY:cy}=(isTouchDevice?event.changedTouches[0]:event);
-                    let x,y;
-                    if(horizontalDrag){
-                        x=cx-state.dragDX;
-                        if((typeof(xmin)==="number")&&(x<xmin)){x=xmin}
-                        else if((typeof(xmax)==="number")&&(x>xmax)){x=xmax}
-                    }
-                    if(verticalDrag){
-                        y=cy-state.dragDY;
-                        if((typeof(ymin)==="number")&&(y<ymin)){y=ymin}
-                        else if((typeof(ymax)==="number")&&(y>ymax)){y=ymax}
-                    }
-                    draggableview.setPosition({x,y,asratio:false});
-                });
-            }
-            const onPointerMoveEvent=isTouchDevice?"touchmove":"mousemove";
-            window.addEventListener(onPointerMoveEvent,onPointerMove);
-            window.addEventListener(isTouchDevice?"touchend":"mouseup",()=>{
-                cancelAnimationFrame(frameId);//To prevent the requestAnimationFrame callback from setting the view's position after dropping
-                const {onDrop}=state;
-                onDrop&&onDrop(structuredClone(coords),draggableview);
-                window.removeEventListener(onPointerMoveEvent,onPointerMove);
-            },{once:true});
+        });
+        let start=0,frameId;
+        draggableview.addEventListener(isTouchDevice?"touchmove":"mousemove",(event)=>{
+            frameId=requestAnimationFrame(timestamp=>{
+                start=timestamp;
+                const {clientX:cx,clientY:cy}=(isTouchDevice?event.changedTouches[0]:event);
+                let x,y;
+                if(horizontalDrag){
+                    x=cx-state.dragDX;
+                    if((typeof(xmin)==="number")&&(x<xmin)){x=xmin}
+                    else if((typeof(xmax)==="number")&&(x>xmax)){x=xmax}
+                }
+                if(verticalDrag){
+                    y=cy-state.dragDY;
+                    if((typeof(ymin)==="number")&&(y<ymin)){y=ymin}
+                    else if((typeof(ymax)==="number")&&(y>ymax)){y=ymax}
+                }
+                draggableview.setPosition({x,y,asratio:false});
+            });
+        });
+        draggableview.addEventListener(isTouchDevice?"touchend":"mouseup",()=>{
+            cancelAnimationFrame(frameId);//To prevent the requestAnimationFrame callback from setting the view's position after dropping
+            const {onDrop}=state;
+            onDrop&&onDrop(structuredClone(coords),draggableview);
         });
     }
 
@@ -123,4 +120,3 @@ export default function DraggableView(props){
 }
 
 const eventtypes=["drag","move","drop"];
-
