@@ -34,7 +34,8 @@ type FlatListProps<Type>=ExtendableViewProps<"div">&{
      */
     threshold?:number,
     /**
-     * specifies how many items are rendered
+     * specifies how many items should be rendered 
+     * once the user has reached the last rendered item
      * @default 1
      */
     step?:number,

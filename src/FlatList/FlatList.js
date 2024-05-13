@@ -323,7 +323,7 @@ export default function FlatList(props){
         }
     }
     function showEmptinessElement(){
-        const {EmptyComponent}=props;
+        const {EmptyComponent="no data"}=props;
         const type=typeof(EmptyComponent);
         if(type==="function"){
             state.emptinessEl=EmptyComponent({parent:container});
@@ -344,6 +344,7 @@ const styles={
     container:({transition,horizontal,pagingEnabled,smoothPaging})=>`
         height:${horizontal?"fit-content":"auto"};
         white-space:${horizontal?"nowrap":"normal"};
+        overscroll-behavior-${horizontal?"y":"x"}:none;
         ${pagingEnabled?`
             overflow:visible;
             ${smoothPaging?"":`

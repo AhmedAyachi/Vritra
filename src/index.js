@@ -261,20 +261,18 @@ export const sanitize=(str="",param0,param1)=>{
     return sanitized;
 }
 
-export const fadeIn=(element,display,duration=200,callback)=>{
+export const fadeIn=(element,...params)=>{
     if(element instanceof HTMLElement){
         clearTimeout(element.fadeTimeout);
-        const displayType=typeof(display);
-        if(displayType==="number"){
-            callback=duration;
-            duration=display;
-            display=undefined;
-        }
-        else if(displayType==="function"){
-            callback=display;
-            duration=200;
-            display=undefined;
-        }
+        let display,duration=200,callback;
+        params.forEach(param=>{
+            switch(typeof(param)){
+                case "string": display=param;break;
+                case "number": duration=param;break;
+                case "function": callback=param;break;
+                default:break;
+            }
+        });
         const {style}=element;
         style.display=display||getComputedStyle(element).display||null;
         style.animation=`${css.fadeIn} ${duration}ms 1 linear forwards`;
