@@ -1,33 +1,29 @@
-import {useId,View,fadeIn,fadeOut} from "../../index";
+import {View,fadeIn,fadeOut} from "../../index";
 import css from "./ContentView.module.css";
 
 
 export default function ContentView(props){
-    const {parent,id=useId("contentview")}=props;
-    const contentview=View({parent,id,className:`${css.contentview} ${props.className||""}`}),state={
-        siblingStyle:null,
-        marginTop:null,
+    const {parent}=props;
+    const contentview=View({parent,className:`${css.contentview} ${props.className||""}`}),state={
+        nextElStyle:null,
         nextEl:getNextElement(parent),
     },{nextEl}=state;
 
     contentview.innateHTML=`
     `;
 
-    nextEl&&setTimeout(()=>{
-        state.siblingStyle={};
+    clearTimeout(parent.showTimeout);
+    parent.showTimeout=nextEl&&setTimeout(()=>{
+        state.nextElStyle={};
         const {style}=nextEl;
         ["marginTop","transition"].forEach(key=>{
-            state.siblingStyle[key]=style[key];
+            state.nextElStyle[key]=style[key];
         });
-        state.marginTop=`calc(
-            ${(100*contentview.clientHeight/window.innerWidth)}vw +
-            ${getComputedStyle(parent).getPropertyValue("margin-bottom")||"0px"} +
-            ${getComputedStyle(nextEl).getPropertyValue("margin-top")||"0px"}
-        )`;
         Object.assign(style,{
-            marginTop:state.marginTop,
+            marginTop:getSpacing(),
             transition:`${statics.transition}ms`,
         });
+        delete parent.showTimeout;
     },0);
     
     fadeIn(contentview,statics.transition,()=>{
@@ -37,11 +33,11 @@ export default function ContentView(props){
             transition:"none",
         });
         if(nextEl){
-            const {siblingStyle}=state;
-            nextEl.style.marginTop=siblingStyle.marginTop;
+            const {nextElStyle}=state;
+            nextEl.style.marginTop=nextElStyle.marginTop;
             nextEl.style.transition="none";//overwrite nextEl already-set transition
             setTimeout(()=>{
-                nextEl.style.transition=siblingStyle.transition;
+                nextEl.style.transition=nextElStyle.transition;
             },40);
         }
     });
@@ -49,22 +45,31 @@ export default function ContentView(props){
     contentview.unmount=()=>{
         Object.assign(contentview.style,{position:null,transform:null});
         if(nextEl){
+            clearTimeout(parent.hideTimeout);
             const {style}=nextEl;
             style.transition="none";
-            style.marginTop=state.marginTop;
-            state.marginTop=null;
-            setTimeout(()=>{
-                const {siblingStyle}=state;
+            style.marginTop=getSpacing();
+            parent.hideTimeout=setTimeout(()=>{
+                const {nextElStyle}=state;
                 style.transition=`${statics.transition}ms`;
-                style.marginTop=siblingStyle.marginTop;
-                setTimeout(()=>{
-                    style.transition=siblingStyle.transition;
+                style.marginTop=nextElStyle.marginTop;
+                parent.hideTimeout=setTimeout(()=>{
+                    style.transition=nextElStyle.transition;
+                    delete parent.hideTimeout;
                 },statics.transition);
             },0);
         }
         fadeOut(contentview,statics.transition,()=>{
             contentview.remove();
         });
+    }
+
+    function getSpacing(){
+        return `calc(
+            ${(100*contentview.clientHeight/window.innerWidth)}vw +
+            ${getComputedStyle(parent).getPropertyValue("margin-bottom")||"0px"} +
+            ${getComputedStyle(nextEl).getPropertyValue("margin-top")||"0px"}
+        )`
     }
 
     return contentview;

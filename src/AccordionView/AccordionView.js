@@ -70,7 +70,10 @@ export default function AccordionView(props){
             indicator.style.transform=`rotateZ(${expanded?-180:0}deg)`;
         }
         if(expanded){
-            const contentview=state.contentview=ContentView({parent:accordionview,className:props.containerClassName});
+            const contentview=state.contentview=ContentView({
+                parent:accordionview,
+                className:props.containerClassName,
+            });
             const {contentEl}=state;
             if(memorize&&contentEl){
                 if(contentEl instanceof VritraFragment){
