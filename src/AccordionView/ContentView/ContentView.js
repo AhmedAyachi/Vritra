@@ -3,7 +3,7 @@ import css from "./ContentView.module.css";
 
 
 export default function ContentView(props){
-    const {parent}=props;
+    const {parent,onShow}=props;
     const contentview=View({parent,className:`${css.contentview} ${props.className||""}`}),state={
         nextElStyle:null,
         nextEl:getNextElement(parent),
@@ -36,15 +36,17 @@ export default function ContentView(props){
             const {nextElStyle}=state;
             nextEl.style.marginTop=nextElStyle.marginTop;
             nextEl.style.transition="none";//overwrite nextEl already-set transition
-            setTimeout(()=>{
+            parent.showTimeout=setTimeout(()=>{
                 nextEl.style.transition=nextElStyle.transition;
             },40);
         }
+        onShow&&onShow();
     });
 
-    contentview.unmount=()=>{
+    contentview.unmount=(callback)=>{
         Object.assign(contentview.style,{position:null,transform:null});
         if(nextEl){
+            clearTimeout(parent.showTimeout);
             clearTimeout(parent.hideTimeout);
             const {style}=nextEl;
             style.transition="none";
@@ -58,9 +60,11 @@ export default function ContentView(props){
                     delete parent.hideTimeout;
                 },statics.transition);
             },0);
+            delete parent.showTimeout;
         }
         fadeOut(contentview,statics.transition,()=>{
             contentview.remove();
+            callback&&callback();
         });
     }
 

@@ -13,6 +13,7 @@ export default function AccordionView(props){
         style:`opacity:${props.locked?0.5:1};${props.style||""}`,
     }),state={
         expanded:false,
+        interactive:true,
         locked:Boolean(props.locked),
         contentEl:null,
         contentview:null,
@@ -54,7 +55,8 @@ export default function AccordionView(props){
         state.locked=Boolean(value);
         accordionview.style.opacity=state.locked?0.5:1;
     }
-    accordionview.toggle=(expanded=!state.expanded)=>{
+    accordionview.toggle=(expanded=!state.expanded)=>{if(state.interactive){
+        state.interactive=false;
         state.expanded=expanded;
         if(!separate){
             const {style}=headerEl,{borderBottomLeftRadius,borderBottomRightRadius}=state;
@@ -73,6 +75,9 @@ export default function AccordionView(props){
             const contentview=state.contentview=ContentView({
                 parent:accordionview,
                 className:props.containerClassName,
+                onShow:()=>{
+                    state.interactive=true;
+                },
             });
             const {contentEl}=state;
             if(memorize&&contentEl){
@@ -90,12 +95,13 @@ export default function AccordionView(props){
         }
         else{
             const {contentview}=state;
-            contentview&&contentview.unmount();
+            contentview&&contentview.unmount(()=>{
+                state.interactive=true;
+            });
             state.contentview=null;
             onClose&&onClose();
         }
-    };
-
-
+    }};
+    
     return accordionview;
 }
