@@ -98,7 +98,8 @@ export const interpolate=(invalue,inrange,outrange,extrapolationType="extend")=>
 
 export const getAdjacentDate=(str,...args)=>{
     const format=args.find(arg=>typeof(arg)==="string")||"dmy";
-    const offset=args.find(arg=>typeof(arg)==="number")||1;
+    let offset=args.find(arg=>typeof(arg)==="number");
+    if(offset===undefined){offset=1};
     if(format!=="ymd"){
         const parts=str.split(/-| |\/|,/g).slice(0,3);
         switch(format){
