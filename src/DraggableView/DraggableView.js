@@ -29,21 +29,23 @@ export default function DraggableView(props){
 
     if(verticalDrag||horizontalDrag){
         const {isTouchDevice}=state,{xmin,xmax,ymin,ymax}=boundary||{};
+        let dragging=false;
         draggableview.addEventListener(isTouchDevice?"touchstart":"mousedown",(event)=>{
-            const {clientX:cx,clientY:cy}=(isTouchDevice?event.changedTouches[0]:event);
+            const {clientX:cx,clientY:cy}=isTouchDevice?event.changedTouches[0]:event;
             Object.assign(coords,{dx:0,dy:0});
             state.dragX=cx;
             state.dragY=cy;
             state.dragDX=cx-coords.x;
             state.dragDY=cy-coords.y;
+            dragging=true;
             const {onDrag}=state;
             onDrag&&onDrag(structuredClone(coords),draggableview);
         });
         let start=0,frameId;
-        draggableview.addEventListener(isTouchDevice?"touchmove":"mousemove",(event)=>{
+        window.addEventListener(isTouchDevice?"touchmove":"mousemove",(event)=>{if(dragging){
             frameId=requestAnimationFrame(timestamp=>{
                 start=timestamp;
-                const {clientX:cx,clientY:cy}=(isTouchDevice?event.changedTouches[0]:event);
+                const {clientX:cx,clientY:cy}=isTouchDevice?event.changedTouches[0]:event;
                 let x,y;
                 if(horizontalDrag){
                     x=cx-state.dragDX;
@@ -57,8 +59,9 @@ export default function DraggableView(props){
                 }
                 draggableview.setPosition({x,y,asratio:false});
             });
-        });
+        }});
         draggableview.addEventListener(isTouchDevice?"touchend":"mouseup",()=>{
+            dragging=false;
             cancelAnimationFrame(frameId);//To prevent the requestAnimationFrame callback from setting the view's position after dropping
             const {onDrop}=state;
             onDrop&&onDrop(structuredClone(coords),draggableview);

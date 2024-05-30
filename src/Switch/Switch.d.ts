@@ -8,7 +8,7 @@ export default function Switch(props:ExtendableViewProps<"div">&{
     /**
      * @default false
      */
-    readonly:boolean,
+    readonly?:boolean,
     onChange(active:Boolean):void,
 }):Switch;
 
