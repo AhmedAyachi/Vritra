@@ -60,7 +60,7 @@ export default function DraggableView(props){
                 draggableview.setPosition({x,y,asratio:false});
             });
         }});
-        draggableview.addEventListener(isTouchDevice?"touchend":"mouseup",()=>{
+        window.addEventListener(isTouchDevice?"touchend":"mouseup",()=>{
             dragging=false;
             cancelAnimationFrame(frameId);//To prevent the requestAnimationFrame callback from setting the view's position after dropping
             const {onDrop}=state;
