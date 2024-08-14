@@ -212,7 +212,7 @@ export default function FlatList(props){
         const {popuplist}=state;
         popuplist&&popuplist.remove();
         flatlist.style.overflow=null;
-        const items=(typeof(predicate)==="function")?data.filter((item,i)=>{predicate(item,i)}):predicate;
+        const items=(typeof(predicate)==="function")?data.filter((item,i)=>predicate(item,i)):predicate;
         if(Array.isArray(items)){
             state.popuplist=FlatList({
                 ...props,
