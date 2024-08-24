@@ -30,7 +30,9 @@ export default function View(props){
             return element;
         }},
         adjacentTo:{value:(element,before)=>{
-            element[before?"before":"after"](view);
+            if(element instanceof Element){
+                element[before?"before":"after"](view);
+            }
             return view;
         }},
         addBefore:{value:(element)=>{

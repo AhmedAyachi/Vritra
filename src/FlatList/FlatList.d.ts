@@ -81,7 +81,7 @@ type FlatListProps<Type>=ExtendableViewProps<"div">&{
      /**
       * Function to execute on each data item
       * 
-      * Must return a HTMLElement
+      * Must return an HTMLElement
       * @param props component props
       */
     renderItem(props:{
@@ -136,21 +136,6 @@ type FlatList<Type>=View<"div">&{
      */
     scrollToOffset(offset:number,smooth?:boolean):void,
     /**
-     * Scrolls to a specific content pixel offset in the list
-     * @param offset 
-     * @param smooth default: true
-     */
-    scrollToOffset(offset:number,options?:{
-        /**
-         * @default true
-         */
-        smooth?:boolean,
-        /**
-         * @default true
-         */
-        triggerOnScrollEnd?:boolean,
-    }):void,
-    /**
      * Returns the flatlist items container element 
      */
     readonly container:HTMLDivElement,
@@ -160,19 +145,6 @@ type FlatList<Type>=View<"div">&{
      * @param smooth default: true
      */
     scrollToIndex(index:number,smooth?:boolean):void,
-    /**
-     * Scrolls to item at index
-     */
-    scrollToIndex(index:number,options?:{
-        /**
-         * @default true
-         */
-        smooth?:boolean,
-        /**
-         * @default true
-         */
-        triggerOnScrollEnd?:boolean,
-    }):void,
     /**
      * Appends more data items to the data array
      * @param items 

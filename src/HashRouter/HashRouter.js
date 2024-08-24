@@ -4,7 +4,7 @@ export function HashRouter({target,routes}){
     const {history,location}=window;
     const state={
         data:null,
-        route:null,//{...,params,data} to store last data and params values
+        route:null,//{...,params,data,element} to store last data and params values
     };
  
     setRoute();
@@ -36,8 +36,11 @@ export function HashRouter({target,routes}){
             if(route){
                 const {memorize}=route;
                 route.memorize=false;
-                renderRoute(route,target);
-                if(memorize){route.memorize=true};
+                renderRoute(route,target).then(()=>{
+                    if(memorize){
+                        route.memorize=true;
+                    };
+                });
             }
         },
     };
@@ -64,7 +67,7 @@ export function HashRouter({target,routes}){
                 if(unlocked){
                     state.route=route;
                     route.data=state.data;
-                    renderRoute(route,target);
+                    return renderRoute(route,target);
                 }
                 else{history.back()}
             }).

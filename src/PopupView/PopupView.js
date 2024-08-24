@@ -32,8 +32,8 @@ export default function PopupView(props){
         (!keepinDOM)&&popupview.cleanupEventListeners();
         fadeOut(popupview,keepinDOM?undefined:()=>{
             popupview.remove();
+            onUnmount&&onUnmount();
         });
-        onUnmount&&onUnmount();
     }
     fadeIn(popupview,200);
     target&&setTimeout(()=>{Object.assign(popupview.style,getPosition(popupview,target,parent))},0);
