@@ -1,5 +1,5 @@
 import {View,ExtendableViewProps} from "../View/View";
-import {ActionSetAction,NativeIcon} from "../ActionSetView/ActionSetView";
+import {ActionSetAction,VritraIcon} from "../ActionSetView/ActionSetView";
 
 
 /**
@@ -37,7 +37,7 @@ export default function AccordionView(props:ExtendableViewProps<"div">&{
     /**
      * Default header indicator icon as url/base64 string or function
      */
-    indicator?:NativeIcon,
+    indicator?:VritraIcon,
     /**
      * Specifies if the content view will be connected to the header or not to 
      * remove header bottom border radius when open

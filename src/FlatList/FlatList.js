@@ -41,19 +41,19 @@ export default function FlatList(props){
     const container=flatlist.container||SmoothPagingContainer({
         parent:flatlist,className:`${css.container} ${props.containerClassName||""}`,
         style:styles.container({pagingEnabled,transition,horizontal,smoothPaging}),
-        data:state,horizontal,
-        offsetThreshold,
+        data:state,
+        horizontal,offsetThreshold,
     });
     const attribute=backwards?"backwards"+(horizontal?"Horizontal":"Vertical"):"";
     attribute&&container.setAttribute(attribute,"");
 
     if(props.snapToItems&&(!pagingEnabled)){
-        addScrollEndListener(container,(event)=>{
-            console.log("triggerOnScrollEnd",state.triggerOnScrollEnd);
+        addScrollEndListener(container,()=>{
             const scrollLength=horizontal?container.scrollLeft:container.scrollTop;
             if(state.triggerOnScrollEnd){
                 const dscroll=scrollLength-state.scrollLength;
-                const clientLengthKey="client"+(horizontal?"Width":"Height");
+                const lengthSuffix=horizontal?"Width":"Height";
+                const clientLengthKey="client"+lengthSuffix;
                 let itemIndex;
                 if(Math.abs(dscroll)>=offsetThreshold){
                     const item=findItem(state.itemsmap.values(),(element)=>element[offsetSide]>=scrollLength)||{
@@ -81,7 +81,7 @@ export default function FlatList(props){
                     itemIndex=state.infocusIndex;
                 }
                 flatlist.scrollToIndex(itemIndex);
-                if((scrollLength<=0)||((container.scrollWidth-(scrollLength+container[clientLengthKey]))<=2)){
+                if((scrollLength<=0)||((container["scroll"+lengthSuffix]-(scrollLength+container[clientLengthKey]))<=2)){
                     state.scrollLength=scrollLength;
                     state.triggerOnScrollEnd=true;
                 }
@@ -182,7 +182,9 @@ export default function FlatList(props){
             if(length){
                 state.endreached=false;
                 createNextElement();
-                //state.firstOffset=state.itemEl[offsetSide];
+                if(data.length===length){
+                    state.firstOffset=state.itemEl[offsetSide];
+                }
             }
             else{
                 onReachEnd&&onReachEnd({container,data:props.data});
@@ -236,17 +238,21 @@ export default function FlatList(props){
 
     flatlist.scrollToOffset=(offset,smooth=true)=>{
         state.triggerOnScrollEnd=false;
-        if(offset<0){offset=0};
-        let lastEl=state.itemEl;
-        let reachedOffset=lastEl[offsetSide];
-        const lastIndex=data.length-1;
-        while((offset>=reachedOffset)&&(state.index<lastIndex)){
-            createNextElement(false);
-            lastEl=state.itemEl;
-            reachedOffset=lastEl[offsetSide];
+        if(offset<=0){
+            offset=0;
         }
-        observer.observe(lastEl);
-        if(offset>=reachedOffset){offset=reachedOffset};
+        else if(data.length>0){
+            let lastEl=state.itemEl;
+            let reachedOffset=lastEl[offsetSide];
+            const lastIndex=data.length-1;
+            while((offset>=reachedOffset)&&(state.index<lastIndex)){
+                createNextElement(false);
+                lastEl=state.itemEl;
+                reachedOffset=lastEl[offsetSide];
+            }
+            observer.observe(lastEl);
+            if(offset>=reachedOffset){offset=reachedOffset};
+        }
         if(pagingEnabled){
             if(scrollEnabled){
                 const item=findItem(state.itemsmap.values(),(element)=>offset>=(element[offsetSide]-state.firstOffset),true);
@@ -265,7 +271,7 @@ export default function FlatList(props){
                     x:horizontal?-offset:0,
                     y:horizontal?0:-offset,
                     easing:"ease-out",
-                    duration:options.duration||200,
+                    duration:200,
                 });
             }
             else{
@@ -277,15 +283,13 @@ export default function FlatList(props){
                 [horizontal?"left":"top"]:offset,
                 behavior:smooth?"smooth":"auto",
             });
-            //state.triggerOnScrollEnd=true;
         }
     }
     
     flatlist.scrollToIndex=(i,smooth=true)=>{
         const {onInFocusItemChange}=props;
         const lastIndex=data.length-1;
-        if(i>lastIndex){i=lastIndex} else if(i<0){i=0}
-        const infocusChanged=i!==state.infocusIndex;
+        if(i>lastIndex){i=lastIndex} else if(i<0){i=0};
         let element;
         const {index}=state;
         if(i>index){
@@ -298,10 +302,16 @@ export default function FlatList(props){
         else{
             element=state.itemsmap.at(i,true);
         }
-        const offset=element[offsetSide]-state.firstOffset;
-        flatlist.scrollToOffset(offset,smooth);
-        state.infocusIndex=i;
-        infocusChanged&&onInFocusItemChange&&onInFocusItemChange({index:i,element,item:data[i]});
+        if(element){
+            const offset=element[offsetSide]-state.firstOffset;
+            const infocusChanged=i!==state.infocusIndex;
+            flatlist.scrollToOffset(offset,smooth);
+            state.infocusIndex=i;
+            infocusChanged&&onInFocusItemChange&&onInFocusItemChange({index:i,element,item:data[i]});
+        }
+        else{
+            flatlist.scrollToOffset(0,smooth);
+        }
     };
 
     function createNextElement(observe=true){

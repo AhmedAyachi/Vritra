@@ -1,5 +1,5 @@
 import {ViewProps,View} from "../View/View";
-import {NativeIcon} from "../ActionSetView/ActionSetView";
+import {VritraIcon} from "../ActionSetView/ActionSetView";
 
 
 export default function TabNavigator(props:ViewProps<"div">&{
@@ -43,7 +43,7 @@ type TabNavigatorContext={
 type TabNavigatorTab={
     id:string,
     label?:string,
-    icon?:NativeIcon,
+    icon?:VritraIcon,
     /**
      * Applied to this tab only.
      * @notice Overwrites the parent prop, same as the parent prop value if undefined

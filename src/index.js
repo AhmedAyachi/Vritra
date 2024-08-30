@@ -177,7 +177,10 @@ export const getMonths=(isLeapYear=false)=>[
     {name:"october",daycount:31},
     {name:"november",daycount:30},
     {name:"december",daycount:31},
-];
+].map((item,i)=>({
+    ...item,
+    ordinal:i+1,
+}));
 
 export const isLeapYear=(year=new Date(Date.now()).getFullYear())=>!Boolean((year-1752)%4);
 

@@ -7,6 +7,7 @@ export default function usePressGesture(options){
     if(element instanceof HTMLElement){
         const touchable=isTouchDevice();
         const startEvent=touchable?"touchstart":"mousedown";
+        const moveEvent=touchable?"touchmove":"mousemove";
         const endEvent=touchable?"touchend":"mouseup";
         const onTriggerGesture=(event)=>{
             let pressing=true,triggered=false;
@@ -18,8 +19,7 @@ export default function usePressGesture(options){
                 else{event.force=1}
                 if(!triggered){
                     event.cancel=(triggerOnEnd=true)=>{
-                        pressing=false;
-                        triggered=false;
+                        cancelGesture();
                         triggerOnEnd&&onEnd&&onEnd(event);
                     }
                     event.remove=()=>{
@@ -33,6 +33,7 @@ export default function usePressGesture(options){
                 if(start===undefined){start=time};
                 elapsed=time-start;
                 if(triggered){
+                    element.removeEventListener(moveEvent,cancelGesture);
                     if(onPressing&&pressing){
                         toPressEvent(event);
                         if(timestamp>0){
@@ -53,12 +54,20 @@ export default function usePressGesture(options){
                 }
                 pressing&&requestAnimationFrame(onPressGesture);
             });
-            element.addEventListener(endEvent,(event)=>{
+            const cancelGesture=()=>{
+                triggered=false;
+                element.removeEventListener(moveEvent,cancelGesture);
+                element.removeEventListener(endEvent,onPressEnd);
+                onPressEnd();
+            }
+            const onPressEnd=(event)=>{
                 pressing=false;
                 if(triggered){
                     onEnd&&onEnd(toPressEvent(event));
                 }
-            },{once:true});
+            }
+            element.addEventListener(moveEvent,cancelGesture,{once:true});
+            element.addEventListener(endEvent,onPressEnd,{once:true});
         }
         element.addEventListener(startEvent,onTriggerGesture);
     }

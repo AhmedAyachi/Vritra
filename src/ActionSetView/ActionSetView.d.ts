@@ -53,7 +53,7 @@ interface ActionSetDefinition {
     /**
      * Action icon as url, base64 string or function
      */
-    icon:NativeIcon,
+    icon:VritraIcon,
     /**
      * Action icon size
      * @unit em
@@ -97,10 +97,10 @@ interface ActionSetDefinitionElement extends HTMLDivElement {
      * @notice you can just edit the img element src yourself, but this method will make sure that your code
      * keeps behaving the same way independently of package versions.
      */
-    setIcon(icon:NativeIcon,save?:boolean):void,
+    setIcon(icon:VritraIcon,save?:boolean):void,
 }
 
-type NativeIcon=string|((
+type VritraIcon=string|((
     color?:string,
     /**
      * @default 2

@@ -1,5 +1,5 @@
 import {ExtendableViewProps,View} from "../View/View";
-import {NativeIcon} from "../ActionSetView/ActionSetView";
+import {VritraIcon} from "../ActionSetView/ActionSetView";
 
 
 export default function SideBarNavigator(props:SideBarNavigatorProps):SideBarNavigator;
@@ -58,7 +58,7 @@ type SideBarNavigatorEntry={
      * If no name is supplied, the id is used as a name
      */
     name?:string,
-    icon?:NativeIcon,
+    icon?:VritraIcon,
     /**
      * If entries are supplied, the entry is a folder, else an endpoint.
      */

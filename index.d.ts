@@ -116,7 +116,11 @@ export function getTimeDuration(start:string,end:string):number;
  * @property name 
  * @property length : number of days
  */
-export function getMonths(isLeapYear=false):{name:string,daycount:number}[];
+export function getMonths(isLeapYear=false):{
+    name:string,
+    ordinal:number,
+    daycount:number,
+}[];
 
 /**
  * @param year year to check, default to current year
