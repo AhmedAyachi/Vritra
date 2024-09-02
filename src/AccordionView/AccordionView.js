@@ -12,7 +12,7 @@ export default function AccordionView(props){
         className:`${css.accordionview} ${props.className||""}`,
         style:`opacity:${props.locked?0.5:1};${props.style||""}`,
     }),state={
-        expanded:false,
+        expanded:Boolean(props.expanded),
         interactive:true,
         locked:Boolean(props.locked),
         contentEl:null,
@@ -103,5 +103,6 @@ export default function AccordionView(props){
         }
     }};
     
+    state.expanded&&setTimeout(()=>{accordionview.toggle(true)},0);
     return accordionview;
 }

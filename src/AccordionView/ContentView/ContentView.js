@@ -73,7 +73,7 @@ export default function ContentView(props){
             ${(100*contentview.clientHeight/window.innerWidth)}vw +
             ${getComputedStyle(parent).getPropertyValue("margin-bottom")||"0px"} +
             ${getComputedStyle(nextEl).getPropertyValue("margin-top")||"0px"}
-        )`
+        )`;
     }
 
     return contentview;
