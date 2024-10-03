@@ -12,7 +12,7 @@ export default function AccordionView(props){
         className:`${css.accordionview} ${props.className||""}`,
         style:`opacity:${props.locked?0.5:1};${props.style||""}`,
     }),state={
-        expanded:Boolean(props.expanded),
+        open:Boolean(props.open),
         interactive:true,
         locked:Boolean(props.locked),
         contentEl:null,
@@ -51,27 +51,27 @@ export default function AccordionView(props){
     }
 
     accordionview.setLocked=(value)=>{
-        (value&&state.expanded)&&accordionview.toggle(false);
+        (value&&state.open)&&accordionview.toggle(false);
         state.locked=Boolean(value);
         accordionview.style.opacity=state.locked?0.5:1;
     }
-    accordionview.toggle=(expanded=!state.expanded)=>{if(state.interactive){
+    accordionview.toggle=(open=!state.open)=>{if(state.interactive){
         state.interactive=false;
-        state.expanded=expanded;
+        state.open=open;
         if(!separate){
             const {style}=headerEl,{borderBottomLeftRadius,borderBottomRightRadius}=state;
-            if(expanded){
+            if(open){
                 state.borderBottomLeftRadius=style.borderBottomLeftRadius;
                 state.borderBottomRightRadius=style.borderBottomRightRadius;
             }
-            style.borderBottomLeftRadius=expanded?0:borderBottomLeftRadius;
-            style.borderBottomRightRadius=expanded?0:borderBottomRightRadius;
+            style.borderBottomLeftRadius=open?0:borderBottomLeftRadius;
+            style.borderBottomRightRadius=open?0:borderBottomRightRadius;
         }
         const indicator=accordionview.querySelector(`.${css.indicator}`);
         if(indicator){
-            indicator.style.transform=`rotateZ(${expanded?-180:0}deg)`;
+            indicator.style.transform=`rotateZ(${open?-180:0}deg)`;
         }
-        if(expanded){
+        if(open){
             const contentview=state.contentview=ContentView({
                 parent:accordionview,
                 className:props.containerClassName,
@@ -103,6 +103,6 @@ export default function AccordionView(props){
         }
     }};
     
-    state.expanded&&setTimeout(()=>{accordionview.toggle(true)},0);
+    state.open&&setTimeout(()=>{accordionview.toggle(true)},0);
     return accordionview;
 }

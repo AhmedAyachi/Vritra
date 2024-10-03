@@ -4,9 +4,9 @@ export default function View<Tag extends keyof HTMLElementTagNameMap|undefined=u
 
 type ViewProps<Tag>={
     parent?:HTMLElement,
-    id?:String,
-    className?:String,
-    style?:String|CSSStyleDeclaration,
+    id?:string,
+    className?:string,
+    style?:string|CSSStyleDeclaration,
     /**
      * @default "div"
      */

@@ -1,11 +1,11 @@
-import {NativeView,removeItem,FooMap,useSwipeGesture,findItem,DraggableView} from "../index";
+import {NativeView,removeItem,FooMap,useSwipeGesture,findItem} from "../index";
 import css from "./FlatList.module.css";
 import EmptyIndicator from "./EmptyIndicator/EmptyIndicator";
 import SmoothPagingContainer from "./SmoothPagingContainer/SmoothPagingContainer";
 
 
 export default function FlatList(props){
-    const {parent,horizontal,backwards,smoothPaging,pagingEnabled,scrollEnabled=true,threshold=0.5,transition="ease 300ms",renderItem,onReachEnd,onRemoveItem,onAddItems,onSwipe}=props;
+    const {parent,horizontal,backwards,smoothPaging,pagingEnabled,scrollEnabled=true,threshold=0.5,transition="ease 300ms",pagingTransition=transition,renderItem,onReachEnd,onRemoveItem,onAddItems,onSwipe}=props;
     const flatlist=NativeView({
         parent,at:props.at,
         props:props.id,
@@ -34,16 +34,21 @@ export default function FlatList(props){
             <div 
                 ref="container"
                 class="${css.container} ${props.containerClassName||""}" 
-                style="${styles.container({pagingEnabled,transition,horizontal})}"
+                style="${styles.container({pagingEnabled,pagingTransition,horizontal})}"
             ></div>
         `}
     `;
-    const container=flatlist.container||SmoothPagingContainer({
-        parent:flatlist,className:`${css.container} ${props.containerClassName||""}`,
-        style:styles.container({pagingEnabled,transition,horizontal,smoothPaging}),
+    const container=flatlist.container=flatlist.container||SmoothPagingContainer({
+        parent:flatlist,
+        className:`${css.container} ${props.containerClassName||""}`,
         data:state,
-        horizontal,offsetThreshold,
+        offsetThreshold,
+        horizontal,backwards,
     });
+    container.setAttribute("style",styles.container({
+        pagingEnabled,horizontal,
+        pagingTransition,smoothPaging,
+    }));
     const attribute=backwards?"backwards"+(horizontal?"Horizontal":"Vertical"):"";
     attribute&&container.setAttribute(attribute,"");
 
@@ -190,7 +195,7 @@ export default function FlatList(props){
                 onReachEnd&&onReachEnd({container,data:props.data});
             }
         }
-        onAddItems&&onAddItems(items);
+        onAddItems&&onAddItems(items);//hidden
     }}
 
     flatlist.removeItem=(predicate,withElement=true)=>{
@@ -262,16 +267,19 @@ export default function FlatList(props){
             }
             if(!smooth){
                 container.style.transition="none";
-                setTimeout(()=>{container.style.transition=transition},40);
+                setTimeout(()=>{container.style.transition=pagingTransition},40);
             }
             const axis=horizontal?"X":"Y";
             if(scrollEnabled&&smoothPaging){
-                container.style.transform=backwards?`scale${axis}(-1) `:"";
+                const coef=backwards?1:-1;
+                if(backwards){
+                    container.style.transform=`scale${axis}(-1)`;
+                }
                 container.setPosition({
-                    x:horizontal?-offset:0,
-                    y:horizontal?0:-offset,
-                    easing:"ease-out",
-                    duration:200,
+                    x:(horizontal?offset:0)*coef,
+                    y:(horizontal?0:offset)*coef,
+                    easing:smooth?.easing||"ease-in-out",
+                    duration:smooth?.duration||(smooth?300:0),
                 });
             }
             else{
@@ -306,8 +314,10 @@ export default function FlatList(props){
             const offset=element[offsetSide]-state.firstOffset;
             const infocusChanged=i!==state.infocusIndex;
             flatlist.scrollToOffset(offset,smooth);
-            state.infocusIndex=i;
-            infocusChanged&&onInFocusItemChange&&onInFocusItemChange({index:i,element,item:data[i]});
+            if(infocusChanged){
+                state.infocusIndex=i;
+                onInFocusItemChange&&onInFocusItemChange({index:i,element,item:data[i]});
+            }
         }
         else{
             flatlist.scrollToOffset(0,smooth);
@@ -348,14 +358,14 @@ export default function FlatList(props){
 }
 
 const styles={
-    container:({transition,horizontal,pagingEnabled,smoothPaging})=>`
-        height:${horizontal?"fit-content":"auto"};
+    container:({pagingTransition,horizontal,pagingEnabled,smoothPaging})=>`
+        height:${horizontal?"-webkit-fill-available":"auto"};
         white-space:${horizontal?"nowrap":"normal"};
         overscroll-behavior-${horizontal?"y":"x"}:none;
         ${pagingEnabled?`
             overflow:visible;
             ${smoothPaging?"":`
-                transition:${transition};
+                transition:${pagingTransition};
             `}
         `:`
             overflow-x:${horizontal?"auto":"visible"};

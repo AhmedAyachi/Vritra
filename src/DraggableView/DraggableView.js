@@ -1,4 +1,4 @@
-import {NativeView,capitalize,isTouchDevice} from "../index";
+import {NativeView,capitalize,isTouchDevice,touchable} from "../index";
 import css from "./DraggableView.module.css";
 
 
@@ -19,7 +19,7 @@ export default function DraggableView(props){
         onDrag:props.onDrag,
         onMove:props.onMove,
         onDrop:props.onDrop,
-        isTouchDevice:isTouchDevice(),
+        touchable:isTouchDevice(),
         animTimeout:null,
         initialTransition:null,
     },{coords}=state;
@@ -28,10 +28,10 @@ export default function DraggableView(props){
     `;
 
     if(verticalDrag||horizontalDrag){
-        const {isTouchDevice}=state,{xmin,xmax,ymin,ymax}=boundary||{};
+        const {touchable}=state,{xmin,xmax,ymin,ymax}=boundary||{};
         let dragging=false;
-        draggableview.addEventListener(isTouchDevice?"touchstart":"mousedown",(event)=>{
-            const {clientX:cx,clientY:cy}=isTouchDevice?event.changedTouches[0]:event;
+        draggableview.addEventListener(touchable?"touchstart":"mousedown",(event)=>{
+            const {clientX:cx,clientY:cy}=touchable?event.changedTouches[0]:event;
             Object.assign(coords,{dx:0,dy:0});
             state.dragX=cx;
             state.dragY=cy;
@@ -40,31 +40,34 @@ export default function DraggableView(props){
             dragging=true;
             const {onDrag}=state;
             onDrag&&onDrag(structuredClone(coords),draggableview);
-        });
-        let start=0,frameId;
-        window.addEventListener(isTouchDevice?"touchmove":"mousemove",(event)=>{if(dragging){
-            frameId=requestAnimationFrame(timestamp=>{
-                start=timestamp;
-                const {clientX:cx,clientY:cy}=isTouchDevice?event.changedTouches[0]:event;
-                let x,y;
-                if(horizontalDrag){
-                    x=cx-state.dragDX;
-                    if((typeof(xmin)==="number")&&(x<xmin)){x=xmin}
-                    else if((typeof(xmax)==="number")&&(x>xmax)){x=xmax}
-                }
-                if(verticalDrag){
-                    y=cy-state.dragDY;
-                    if((typeof(ymin)==="number")&&(y<ymin)){y=ymin}
-                    else if((typeof(ymax)==="number")&&(y>ymax)){y=ymax}
-                }
-                draggableview.setPosition({x,y,asratio:false});
-            });
-        }});
-        window.addEventListener(isTouchDevice?"touchend":"mouseup",()=>{
-            dragging=false;
-            cancelAnimationFrame(frameId);//To prevent the requestAnimationFrame callback from setting the view's position after dropping
-            const {onDrop}=state;
-            onDrop&&onDrop(structuredClone(coords),draggableview);
+            let start=0,frameId;
+            function onTouchMove(event){if(dragging){
+                frameId=requestAnimationFrame(timestamp=>{
+                    start=timestamp;
+                    const {clientX:cx,clientY:cy}=touchable?event.changedTouches[0]:event;
+                    let x,y;
+                    if(horizontalDrag){
+                        x=cx-state.dragDX;
+                        if((typeof(xmin)==="number")&&(x<xmin)){x=xmin}
+                        else if((typeof(xmax)==="number")&&(x>xmax)){x=xmax}
+                    }
+                    if(verticalDrag){
+                        y=cy-state.dragDY;
+                        if((typeof(ymin)==="number")&&(y<ymin)){y=ymin}
+                        else if((typeof(ymax)==="number")&&(y>ymax)){y=ymax}
+                    }
+                    draggableview.setPosition({x,y,asratio:false});
+                });
+            }}
+            const moveEvent=touchable?"touchmove":"mousemove";
+            window.addEventListener(moveEvent,onTouchMove);
+            window.addEventListener(touchable?"touchend":"mouseup",()=>{
+                window.removeEventListener(moveEvent,onTouchMove);
+                dragging=false;
+                cancelAnimationFrame(frameId);//To prevent the requestAnimationFrame callback from setting the view's position after dropping
+                const {onDrop}=state;
+                onDrop&&onDrop(structuredClone(coords),draggableview);
+            },{once:true});
         });
     }
 

@@ -85,8 +85,14 @@ const statics={
 
 const getNextElement=(parent)=>{
     let element=parent;
-    while((element!==document.body)&&(!(element.nextSibling instanceof HTMLElement))){
+    while((element!==document.body)&&(!(element.nextSibling instanceof HTMLElement)||areHorizontallyAligned(element,element.nextSibling))){
         element=element.parentNode;
     }
     return element.nextSibling;
+}
+
+const areHorizontallyAligned=(elem1,elem2)=>{
+    const elem1Rect=elem1.getBoundingClientRect();
+    const elem2Rect=elem2.getBoundingClientRect();
+    return (elem1Rect.top===elem2Rect.top)&&(elem1Rect.bottom===elem2Rect.bottom);
 }

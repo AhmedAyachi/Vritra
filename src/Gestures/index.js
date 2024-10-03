@@ -7,17 +7,17 @@ export {default as useSwipeGesture} from "./useSwipeGesture/useSwipeGesture";
 
 export const getBaryCenter=(touches)=>{
     const touchcount=touches.length;
-    let totalx=0,totaly=0;
+    let totalX=0,totalY=0;
     if(touchcount===1){
         const touch=touches[0];
-        totalx=touch.clientX;
-        totaly=touch.clientY;
+        totalX=touch.clientX;
+        totalY=touch.clientY;
     }
     else{
         for(let i=0;i<touchcount;i++){
-            totalx+=touches[i].clientX;
-            totaly+=touches[i].clientY;
+            totalX+=touches[i].clientX;
+            totalY+=touches[i].clientY;
         }
     }
-    return {x:totalx/touchcount,y:totaly/touchcount}
+    return {x:totalX/touchcount,y:totalY/touchcount};
 }

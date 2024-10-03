@@ -10,6 +10,7 @@ export default function usePressGesture(options){
         const moveEvent=touchable?"touchmove":"mousemove";
         const endEvent=touchable?"touchend":"mouseup";
         const onTriggerGesture=(event)=>{
+            event.stopPropagation();
             let pressing=true,triggered=false;
             let start,elapsed,stamptracker=0;
             const toPressEvent=(event)=>{
@@ -18,12 +19,12 @@ export default function usePressGesture(options){
                 if(changedTouches){event.force=changedTouches[0].force}
                 else{event.force=1}
                 if(!triggered){
-                    event.cancel=(triggerOnEnd=true)=>{
+                    event.cancelGesture=event.cancel=(triggerOnEnd=true)=>{
                         cancelGesture();
                         triggerOnEnd&&onEnd&&onEnd(event);
                     }
-                    event.remove=()=>{
-                        event.cancel();
+                    event.removeGesture=event.remove=()=>{
+                        event.cancelGesture();
                         element.removeEventListener(startEvent,onTriggerGesture);
                     }
                 }

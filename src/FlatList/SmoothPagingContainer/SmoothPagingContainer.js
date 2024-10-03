@@ -3,10 +3,11 @@ import {DraggableView,findItem} from "../../index";
 
 
 export default function SmoothPagingContainer(props){
-    const {parent,horizontal,data}=props,state={
+    const {parent,horizontal,backwards,data}=props,state={
         dragTime:null,
-    },{itemsmap}=data;
-    const smoothpagingcontainer=parent.container=DraggableView({
+        easing:"ease-out",
+    },{easing}=state,{itemsmap}=data;
+    const smoothpagingcontainer=DraggableView({
         parent,style:props.style,
         className:props.className,
         verticalDrag:!horizontal,
@@ -17,15 +18,18 @@ export default function SmoothPagingContainer(props){
         onDrop:({x,y,dx,dy})=>{
             const dtime=performance.now()-state.dragTime;
             const distance=Math.abs(horizontal?dx:dy);
-            const forward=horizontal?(dx<0):(dy<0);
+            const forward=backwards?(horizontal?(dx>0):(dy>0)):(horizontal?(dx<0):(dy<0));
             const velocity=100*distance/dtime;
             if((dtime<100)&&(velocity>40)){
-                parent.scrollToIndex(data.infocusIndex+(forward?1:-1),{duration:2.5*velocity});
+                parent.scrollToIndex(data.infocusIndex+(forward?1:-1),{
+                    easing,
+                    duration:Math.min(200,2.5*velocity),
+                });
             }
             else{
                 const {offsetThreshold=50}=props;
                 if(distance>=offsetThreshold){
-                    const scrollLength=horizontal?-x:-y;
+                    const scrollLength=(horizontal?x:y)*(backwards?1:-1);
                     if(scrollLength<0){
                         parent.scrollToOffset(0);
                     }
@@ -35,8 +39,11 @@ export default function SmoothPagingContainer(props){
                             const offset=element[data.offsetSide];
                             return forward?(scrollLength>(offset-parent[clientLength])):
                             (offset+element[clientLength]>=(scrollLength));
-                        },forward)||{index:0};
-                        parent.scrollToIndex(item.index,{duration:Math.max(2.5*velocity,200)});
+                        },forward);
+                        parent.scrollToIndex(item?.index||0,{
+                            easing,
+                            duration:Math.max(2*velocity,250),
+                        });
                     }
                 }
                 else{
@@ -46,7 +53,7 @@ export default function SmoothPagingContainer(props){
         },
     });
 
-    smoothpagingcontainer.beforeEndHTML=`
+    smoothpagingcontainer.innateHTML=`
     `;
 
     return smoothpagingcontainer;

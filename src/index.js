@@ -226,8 +226,7 @@ export const map=(array=[],treatment)=>{
     }
     return str;
 }
-export const randomId=(prefix="",separator="_")=>`${prefix}${prefix?separator:""}${Math.random().toString(36).slice(2)}${Math.random().toString(36).slice(2)}`;
-export const useId=randomId;
+export const useId=(prefix="",separator="_")=>`${prefix}${prefix?separator:""}${Math.random().toString(36).slice(2)}${Math.random().toString(36).slice(2)}`;
 
 //export const specialchars="+=}°)]@ç^_\\`-|(['{\"#~&²£$¤*µ%ù§!/:.;?,<>";
 export const sanitize=(str="",param0,param1)=>{
@@ -324,20 +323,15 @@ export function randomColor(colors){
     };
 }
 
-export function createCode(length){
-    let str="";
+export function randomId(prefix,length=15){
+    let str=typeof(prefix)==="string"?prefix:"";
     let charindex;
     for(let i=0;i<length;i++){
         switch(Math.floor(Math.random()*3)){
-            case 0:
-                charindex=65+Math.floor(Math.random()*26);
-                break;
-            case 1:
-                charindex=97+Math.floor(Math.random()*26);
-                break;
-            case 2:
-                charindex=48+Math.floor(Math.random()*9);
-                break;
+            case 0: charindex=65+Math.floor(Math.random()*26);break;
+            case 1: charindex=97+Math.floor(Math.random()*26);break;
+            case 2: charindex=48+Math.floor(Math.random()*9);break;
+            default:break;
         }
         str+=String.fromCharCode(charindex);
     }

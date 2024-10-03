@@ -41,7 +41,7 @@ export default function AccordionView(props:ExtendableViewProps<"div">&{
     /**
      * @default false
      */
-    expanded?:boolean,
+    open?:boolean,
     /**
      * Specifies if the content view will be connected to the header or not to 
      * remove header bottom border radius when open

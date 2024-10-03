@@ -137,10 +137,10 @@ export function getDays(first?:"monday"|"tuesday"|"wednesday"|"thursday"|"friday
  * Returns a random string
  * @param prefix 
  * A string prefixing the random part
- * @param separator A string separating the prefix and the random part
- * @default prefix "" separator "_"
+ * @param length random part length
+ * @default prefix "" length 15
  */
-export function randomId(prefix="",separator="_"):string;
+export function randomId(prefix="",length=15):string;
 /**
  * 
  * @deprecated renamed to randomId and will be removed in future version

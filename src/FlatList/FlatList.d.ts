@@ -22,7 +22,7 @@ type FlatListProps<Type>=ExtendableViewProps<"div">&{
     /**
      * Make Flatlist scrollable from bottom/right to top/left.
      * 
-     * Specify a flatlist height value if elements get shown at once.
+     * @notice Specify a flatlist height value if elements get shown at once.
      */
     backwards?:boolean,
     /**
@@ -65,6 +65,10 @@ type FlatListProps<Type>=ExtendableViewProps<"div">&{
      * Used with pagingEnabled true.
      * Specifies the transition animation from one element to the next
      * @default "ease 300ms"
+     */
+    pagingTransition?:string;
+    /**
+     * @deprecated use pagingTransition instead
      */
     transition?:string,
     /**
