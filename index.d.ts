@@ -26,7 +26,7 @@ export {default as withSequence} from "./src/withSequence/withSequence";
  * @param asarray if true the color rgba representation is returned an an array of decimals [r,g,b,a]
  * @default false
  */
-export function hexColorToRGBA(hexcolor:string,asarray:boolean):string|number[];
+export function hexColorToRGBA<AsArray extends boolean|undefined>(hexcolor:string,asArray:AsArray):AsArray extends true?number[]:string;
 
 export function hexToDecimal(hexcode:string):number;
 

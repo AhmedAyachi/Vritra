@@ -7,7 +7,7 @@ export default function TabNavigator(props){
     const {parent,tabs,memorize=true,activeTabId,tabTextColor="#cecece",tintColor="#1e90ff",onNavigate}=props;
     const tabnavigator=NativeView({
         parent,id:props.id,at:props.at,style:props.style,
-        className:`${css.tabnavigator} ${props.className||""}`,
+        className:[css.tabnavigator,props.className],
     }),state={
         activeTab:null,
         navigating:false,

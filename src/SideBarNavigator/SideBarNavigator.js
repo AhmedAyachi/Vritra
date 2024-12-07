@@ -7,7 +7,7 @@ export default function SideBarNavigator(props){
     const {parent,entries,tintColor="dodgerblue",folderColor="black",endpointColor="rgba(0,0,0,0.35)",onNavigate}=props;
     const sidebarnavigator=NativeView({
         parent,style:props.style,at:props.at,
-        className:`${css.sidebarnavigator} ${props.className||""}`,
+        className:[css.sidebarnavigator,props.className],
     }),state={
         current:null,
     };

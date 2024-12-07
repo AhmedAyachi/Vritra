@@ -10,7 +10,7 @@ export default function FlatList(props){
         parent,at:props.at,
         props:props.id,
         style:props.style,
-        className:`${css.flatlist} ${props.className||""}`,
+        className:[css.flatlist,props.className],
     }),state={
         data:Array.isArray(props.data)?[...props.data]:[],
         index:-1,//observed element index

@@ -7,7 +7,7 @@ import {ActionSetAction,VritraIcon} from "../ActionSetView/ActionSetView";
  * @param props AccordionView props
  * @notice AccordionView css variables : paddingHorizontal borderRadius
  */
-export default function AccordionView(props:ExtendableViewProps<"div">&{
+export default function AccordionView<ContentType>(props:ExtendableViewProps<"div">&{
     /**
      * Default header title
      */
@@ -25,10 +25,10 @@ export default function AccordionView(props:ExtendableViewProps<"div">&{
         /** custom header container */
         parent:HTMLElement,
     }):HTMLElement,
-    renderContent?(props:{
+    renderContent?:(props:{
         /** content container */
         parent:HTMLElement,
-    }):HTMLElement,
+    })=>ContentType,
     /**
      * If true, renderContent is called once, using the returned HTMLElement for next renders.
      * @default true
@@ -75,9 +75,9 @@ export default function AccordionView(props:ExtendableViewProps<"div">&{
      * Called when Accordion is closed
      */
     onClose?():void,
-}):AccordionView;
+}):AccordionView<ContentType>;
 
-type AccordionView=View<"div">&{
+type AccordionView<ContentType>=View<"div">&{
     /**
      * Locks and unlocks the accordionview
      * @param locked default to false
@@ -89,5 +89,9 @@ type AccordionView=View<"div">&{
      * @default true if closed, false if open
      */
     toggle(open?:boolean):void,
+    /**
+     * Gets the element returned by renderContent
+     */
+    readonly content:ContentType|null;
 }
 

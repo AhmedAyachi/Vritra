@@ -2,15 +2,26 @@
 
 export default function View<Tag extends keyof HTMLElementTagNameMap|undefined=undefined>(props:ViewProps<Tag>):Tag extends undefined?View<"div">:View<Tag>;
 
-type ViewProps<Tag>={
-    parent?:HTMLElement,
+type ViewProps<Tag>=VritraProps&{
     id?:string,
-    className?:string,
-    style?:string|CSSStyleDeclaration,
+    className?:ViewClassName,
+    style?:ViewStyle,
     /**
      * @default "div"
      */
     tag?:Tag,
+};
+type View<Tag>=VritraElement&
+    (Tag extends keyof HTMLElementTagNameMap?HTMLElementTagNameMap[Tag]:HTMLDivElement)&
+    {[ref:string]:RefElement}&
+    RefElement
+;
+
+type ViewClassName=string|ViewClassName[];
+type ViewStyle=string|CSSStyleDeclaration|ViewStyle[];
+
+interface VritraProps {
+    parent?:HTMLElement,
     /**
      * Sets the element initial location.
      * 
@@ -21,8 +32,7 @@ type ViewProps<Tag>={
      * @notice For between-elements insertion, use adjacentTo method
      */
     at?:"start"|"end";
-};
-type View<Tag>=VritraElement&(Tag extends keyof HTMLElementTagNameMap?HTMLElementTagNameMap[Tag]:HTMLDivElement)&{[ref:string]:RefElement};
+}
 
 interface VritraElement {
     /**
@@ -44,9 +54,9 @@ interface VritraElement {
      */
     afterBeginHTML:string;
     /**
-     * Replaces the view by another node and returns the substitute
+     * Replaces the element by another node and returns the substitute
      * @param substitute 
-     * @notice only use it when the view is no longer required and it's not gonna be cached for later use
+     * @notice only use it when the element is no longer required and it's not gonna be cached for later use
      */
     substitute<Type>(substitute:Type):Type;
     /**
@@ -57,18 +67,6 @@ interface VritraElement {
      * @returns The current view
      */
     adjacentTo(element:Element,before?:boolean):this;
-    /**
-     * @param element Element before which the view is inserted 
-     * @returns The current view
-     * @deprecated
-     */
-    addBefore(element:Element):this;
-    /**
-     * @param element Element after which the view is inserted 
-     * @returns The current view
-     * @deprecated
-     */
-    addAfter(element:Element):this;
 }
 
 /**
@@ -76,7 +74,10 @@ interface VritraElement {
  * with such ref else undefined
  */ 
 interface RefElement extends HTMLElement {
-
+    /**
+     * Prevents successive fast clicks to be triggred twice
+     */
+    onClick:(event:PointerEvent)=>void;
 }
 
 type ExtendableViewProps<Tag>=Omit<ViewProps<Tag>,"tag">;

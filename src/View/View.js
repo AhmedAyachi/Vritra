@@ -1,15 +1,37 @@
-import HtmlSanitizer from "../HtmlSanitizer";
+import {VritraFragment} from "../Fragment/Fragment";
+import HtmlSanitizer,{decorateNode} from "../HtmlSanitizer";
 
 
 export default function View(props){
     const {parent,id,tag,className,at,style}=props;
     const view=document.createElement(tag||"div");
     if(id){view.id=id};
-    if(className){view.className=className};
+    if(className){
+        if(Array.isArray(className)){
+            view.className=className.flat(Infinity).filter(Boolean).join(" ");
+        }
+        else{
+            view.className=className;
+        }
+    };
     if(style){
-        typeof(style)==="string"?view.setAttribute("style",style):Object.assign(view.style,style);
+        if(Array.isArray(style)){
+            const styles=style.flat(Infinity);
+            for(const styleItem of styles){
+                if(styleItem) setViewStyle(view,styleItem);
+            }
+        }
+        else setViewStyle(view,style);
     }
-    parent&&((at==="start")?parent.insertAdjacentElement("afterbegin",view):parent.appendChild(view));
+    if(parent){
+        const atStart=at==="start";
+        if(parent instanceof VritraFragment){
+            if(atStart) parent.prepend(view);
+            else parent.append(view);
+        }
+        else if(atStart) parent.insertAdjacentElement("afterbegin",view);
+        else parent.appendChild(view);
+    }
 
     Object.defineProperties(view,{
         innateHTML:{set:(html)=>{
@@ -35,15 +57,16 @@ export default function View(props){
             }
             return view;
         }},
-        addBefore:{value:(element)=>{
-            element.before(view);
-            return view;
-        }},
-        addAfter:{value:(element)=>{
-            element.after(view);
-            return view;
-        }},
     });
+    
+    return decorateNode(view);
+}
 
-    return view;
+const setViewStyle=(view,style)=>{
+    if(typeof(style)==="string"){
+        view.style.cssText+=style;
+    }
+    else{
+        Object.assign(view.style,style);
+    }
 }

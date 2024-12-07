@@ -1,33 +1,13 @@
-import {ViewProps} from "../View/View";
+import {VritraProps,VritraElement} from "../View/View";
 
-/**
- * Experimental
- * @param props 
- */
+
 export default function Fragment(props:FragmentProps):Fragment;
 
-interface FragmentProps extends Pick<ViewProps<"div">,"parent"|"at"> {
+interface FragmentProps extends VritraProps {
     
 }
 
-interface Fragment extends DocumentFragment {
-    /**
-     * Same as View.innateHTML
-     */
-    innateHTML:string,
-    /**
-     * Inserts safely the HTML or XML markup after the last node.
-     */
-    beforeEndHTML:string,
-    /**
-     * Inserts safely the HTML or XML markup before the first node.
-     */
-    afterBeginHTML:string,
-    /**
-     * Replaces all the fragment nodes by another node and returns the substitute
-     * @param substitute 
-     */
-    substitute<Type>(substitute:Type):Type,
+interface Fragment extends Omit<DocumentFragment&VritraElement,"childNodes"|"children"|"adjacentTo"> {
     /**
      * Inserts the fragment childNodes before or after an element
      * @param element Element before/after which the nodes are inserted
@@ -35,7 +15,7 @@ interface Fragment extends DocumentFragment {
      * @default false
      * @returns The current fragment
      */
-    adjacentTo(element:Element,before?:boolean):Fragment,
+    adjacentTo(element:Element,before?:boolean):this,
     /**
      * Inserts nodes before the first child of the fragment
      * @param nodes 
@@ -79,4 +59,7 @@ interface Fragment extends DocumentFragment {
      * Returns the fragment's parent node else null
      */
     readonly parentNode:ParentNode;
+
+    readonly nextElementSibling:Element;
+    readonly previousElementSibling:Element;
 }

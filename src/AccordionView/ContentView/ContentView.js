@@ -4,7 +4,7 @@ import css from "./ContentView.module.css";
 
 export default function ContentView(props){
     const {parent,onShow}=props;
-    const contentview=View({parent,className:`${css.contentview} ${props.className||""}`}),state={
+    const contentview=View({parent,className:[css.contentview,props.className]}),state={
         nextElStyle:null,
         nextEl:getNextElement(parent),
     },{nextEl}=state;

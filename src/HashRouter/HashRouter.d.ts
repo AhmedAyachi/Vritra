@@ -13,7 +13,7 @@ export function HashRouter(options:{
      * Element to insert the route component element in
      */
     target:HTMLElement,
-    routes:[{
+    routes:{
         /**
          * Route hash
          * @example "#one"
@@ -29,10 +29,10 @@ export function HashRouter(options:{
          * Hash param matches, will rerender anyway if any of the params value changes.
          * @default false
          */
-        memorize:boolean,
-        restrictor:(unlock:(unlocked:boolean)=>void,target:HTMLElement)=>void,
+        memorize?:boolean,
+        restrictor?:(unlock:(unlocked:boolean)=>void,target:HTMLElement)=>void,
         component(props:HashRouteComponentProps):HashRouteElement|Promise<HashRouteElement>,
-    }],
+    }[],
 }):HashRouter;
  
 interface HashRouter {
@@ -65,8 +65,8 @@ interface HashRouteElement extends HTMLElement {
 
 interface HashRouteComponentProps {
     parent:HTMLElement,
-    data?:Object,
-    params:Object,
+    data?:object,
+    params:object,
     location:{
         hash:string,
         url:string,

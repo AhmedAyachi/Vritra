@@ -6,7 +6,7 @@ export default function ActionSetView(props){
     const {parent,tintColor=props.color||"black"}=props;
     const actionsetview=NativeView({
         parent,id:props.id,at:props.at,style:props.style,
-        className:`${css.actionsetview} ${props.className||""}`,
+        className:[css.actionsetview,props.className],
     }),state={
         actions:getActions(props.actions,props.definitions),
     },{actions}=state;
@@ -15,17 +15,17 @@ export default function ActionSetView(props){
         ${map(actions.filter(action=>action.icon),(action)=>{
             const {id,icon,size,alt}=action;
             return `
-                <div ref="${id}" class="button ${css.action}">
+                <div ref="${id}" class="clickable ${css.action}">
                     <img 
                         src="${typeof(icon)==="function"?action.icon(tintColor,2):(icon||"")}" alt="${alt||""}"
-                        ${size?`style="width:${size}em"`:""}
+                        ${size?`style="${styles.icon(size)}"`:""}
                     />
                 </div>
             `
         })}
     `;
     actions.forEach((action,i)=>{
-        const {component}=action;
+        const {component,onReady}=action;
         let actionEl;
         if(component){
             actionEl=component({...action,parent:actionsetview});
@@ -40,7 +40,7 @@ export default function ActionSetView(props){
             }
         }
         else{
-            const actionId=action.id;
+            const actionId=action.id||action.ref;
             try{
                 actionEl=actionsetview[actionId];
                 actionEl.onclick=(event)=>{
@@ -54,20 +54,28 @@ export default function ActionSetView(props){
                 }
             }
             catch{
-                throw new Error(actionId?`invalid action with id: ${actionId}`:"action with no id");
+                throw new Error(actionId?`invalid action with id: "${actionId}"`:"action with no id");
             }
         }
         action.color=tintColor;
         action.element=actionEl;
-        action.onReady?.(action);
+        onReady&&onReady(action);
     });
 
     return actionsetview;
 }
 
+const styles={
+    icon:(size)=>`
+        width:${size}em;
+        min-width:${size}em;
+        height:${size}em;
+    `,
+}
+
 const getActions=(actions,definitions)=>Array.isArray(definitions)?actions?.map(action=>{
     const isref=typeof(action)==="string";
-    const actionId=(isref?action:(action.ref||action.id)).trim();
+    const actionId=(isref?action:(action.ref||action.id));
     const definition=definitions.find(({id})=>actionId===id);
     return {...definition,...(!isref)&&action};
 }):actions;

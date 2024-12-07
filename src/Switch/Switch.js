@@ -8,7 +8,7 @@ export default function Switch(props){
         parent,id,
         style:props.style,
         at:props.at,
-        className:`${css.switch} ${props.className}`,
+        className:[css.switch,props.className],
     }),state={
         active:!Boolean(props.active),
         editable:!readonly,

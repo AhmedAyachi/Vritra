@@ -8,7 +8,7 @@ export default function DraggableView(props){
         parent,at:props.at,
         id:props.id,tag:props.tag,
         style:props.style,
-        className:`${css.draggableview} ${props.className||""}`,
+        className:[css.draggableview,props.className],
     }),state={
         coords:{
             x:0,y:0,//relative to parent

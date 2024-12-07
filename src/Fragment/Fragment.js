@@ -77,24 +77,26 @@ export class VritraFragment extends DocumentFragment {
     }
 
     prepend(...newNodes){
-        const firstNode=this.firstChild;
+        const firstNode=this.firstChild||this.previousSibling?.nextSibling;
         this.#nodes.unshift(...newNodes);
         const parent=this.#parent;
         for(const node of newNodes){
-            if(parent){this.insertBefore(node,firstNode)}
-            else{super.insertBefore(node,firstNode)};
+            if(parent){
+                if(firstNode) this.insertBefore(node,firstNode);
+                else parent.prepend(node);
+            }
+            else super.insertBefore(node,firstNode);
         }
     }
 
     append(...newNodes){
-        const lastNode=this.lastChild;
+        const lastNode=this.lastChild?.nextSibling||this.nextSibling;
         this.#nodes.push(...newNodes);
         const {length}=newNodes,parent=this.#parent;
         for(let i=0;i<length;i++){
             const node=newNodes[i];
-            const prevNode=i?newNodes[i-1]:lastNode;
-            if(parent){parent.insertBefore(node,prevNode?.nextSibling)}
-            else{super.insertBefore(node,prevNode?.nextSibling)};
+            if(parent){parent.insertBefore(node,lastNode)}
+            else{super.insertBefore(node,lastNode)};
         }   
     }
 
@@ -207,14 +209,40 @@ export class VritraFragment extends DocumentFragment {
         return parent instanceof Element?parent:parent?.parentElement;
     }
 
+    get previousSibling(){
+        const firstChild=this.firstChild;
+        if(firstChild) return firstChild.previousSibling;
+        else{
+            if(this.#at==="start") return null;
+            else return this.#parent.lastChild.previousSibling;
+        }
+    }
+
+    get previousElementSibling(){
+        const firstChild=this.firstChild;
+        if(firstChild) return firstChild.previousElementSibling;
+        else{
+            if(this.#at==="start") return this.#parent.firstElementChild;
+            else return this.#parent.lastChild.previousElementSibling;
+        }
+    }
+
     get nextSibling(){
         const lastChild=this.lastChild;
-        return lastChild?.nextSibling||null;
+        if(lastChild) return lastChild.nextSibling;
+        else{
+            if(this.#at==="start") return this.#parent.firstChild;
+            else return this.#parent.lastChild?.nextSibling;
+        }
     }
 
     get nextElementSibling(){
         const lastChild=this.lastChild;
-        return lastChild?.nextElementSibling||null;
+        if(lastChild) return lastChild.nextElementSibling;
+        else{
+            if(this.#at==="start") return this.#parent.firstElementChild;
+            else return this.#parent.lastElementChild?.nextElementSibling;
+        }
     }
 
     #getNodes(){

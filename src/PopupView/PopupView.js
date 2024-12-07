@@ -1,14 +1,14 @@
-import {useId,NativeView,fadeIn,fadeOut} from "../index";
+import {randomId,NativeView,fadeIn,fadeOut} from "../index";
 import css from "./PopupView.module.css";
 
 
 export default function PopupView(props){
-    const {parent=document.documentElement,id=useId("popupview"),target,avoidable=true,keepinDOM,onRemove,onUnmount}=props;
+    const {parent=document.documentElement,id=randomId("popupview"),target,avoidable=true,keepinDOM,onRemove,onUnmount}=props;
     const popupview=NativeView({
         parent,id,
         style:props.style,
         at:props.at,
-        className:`${css.popupview} ${props.className||""}`,
+        className:[css.popupview,props.className],
     });
 
     popupview.innateHTML=`

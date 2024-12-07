@@ -1,25 +1,19 @@
 .actionsetview{
     width:fit-content;
     height:fit-content;
-    white-space:nowrap;
-    --spacing:5em;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:nowrap;
+    column-gap:5em;
+    overflow:auto hidden;
 }
 .action{
     position:relative;
-    display:inline-block;
-    vertical-align:middle;
-    margin-left:var(--spacing);
-}
-.action:first-of-type{
-    margin-left:0;
 }
 .action>img{
+    min-width:6.4em;
     width:6.4em;
-}
-.alertbadge{
-    position:absolute;
-    top:0;
-    right:0;
-    border:1px solid var(--mainColor);
-    transform:translate(31.25%,-31.25%);
+    height:6.4em;
+    object-fit:cover;
 }

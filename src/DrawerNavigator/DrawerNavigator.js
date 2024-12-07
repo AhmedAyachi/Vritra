@@ -1,16 +1,16 @@
-import {useId,NativeView} from "../index";
+import {NativeView} from "../index";
 import css from "./DrawerNavigator.module.css";
 import DrawerView from "./DrawerView/DrawerView";
 import icon0 from "./Icon_0";
 
 
 export default function DrawerNavigator(props){
-    const {parent,id=useId("drawernavigator"),routes,initialId,renderHeader}=props;
+    const {parent,routes,initialId,renderHeader}=props;
     const drawernavigator=NativeView({
-        parent,id,
+        parent,id:props.id,
         style:props.style,
         at:props.at,
-        className:`${css.drawernavigator} ${props.className}`,
+        className:[css.drawernavigator,props.className],
     }),state={
         activeId:initialId&&routes.some(({id})=>initialId===id)?initialId:routes[0].id,
         drawerview:null,

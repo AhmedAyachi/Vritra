@@ -14,7 +14,7 @@ export default new (function(){
 
 	const domparser=new DOMParser();
 
-	this.sanitizeHtml=(input,cherryEl)=>{
+	this.sanitizeHtml=(input,vritraEl)=>{
 		input=input.trim();
 		if((input=="")||(input==="<br>")) return null;
 		if(input.includes("<body")){input=`<body>${input}</body>`};
@@ -57,7 +57,9 @@ export default new (function(){
 							i++;
 						}
 						if(newNode){
-							if(ref&&cherryEl){cherryEl[ref]=newNode};
+							if(ref&&vritraEl){
+								vritraEl[ref]=decorateNode(newNode);
+							};
 							setNode(tagName,newNode);
 							if(isText){
 								newNode.innerText=node.innerHTML?.trim();
@@ -81,6 +83,7 @@ export default new (function(){
 
 		return getSanitizedClone(body);
 	}
+
 	const startsWithAny=(str,searchStrs)=>{
 		const {length}=searchStrs;
 		let does=false,i=0;
@@ -149,3 +152,23 @@ export default new (function(){
 
 	const hasJavascriptScheme=(str)=>Boolean(str.includes(":")&&str.match(/javascript:/im));
 });
+
+export const decorateNode=(node)=>{
+	let onClickHandler;
+	Object.defineProperties(node,{
+		onClick:{set:(handler)=>{
+			node.removeEventListener&&node.removeEventListener("click",onClickHandler);
+			if((typeof(handler)==="function")&&node.addEventListener){
+				!function addHandler(){
+					onClickHandler=(event)=>{
+						clearTimeout(node.clickTimeout);
+						handler(event);
+						node.clickTimeout=setTimeout(addHandler,300);
+					}
+					node.addEventListener("click",onClickHandler,{once:true});
+				}();
+			}
+		}},
+	});
+	return node;
+}

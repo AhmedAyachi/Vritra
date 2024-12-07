@@ -10,7 +10,7 @@ export default function Palette(props){
         parent,id,
         style:props.style,
         at:props.at,
-        className:`${css.palette} ${props.className}`,
+        className:[css.palette,props.className],
     }),state={
         bubblesview:null,
     };

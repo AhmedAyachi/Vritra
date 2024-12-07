@@ -309,7 +309,11 @@ export const fadeOut=(element,duration=200,callback)=>{
 
 export function randomColor(colors){
     const fromColors=Array.isArray(colors)&&colors.length&&(Math.random()>0.5);
-    if(fromColors) return randomItem(colors)
+    if(fromColors){
+        const color=randomItem(colors);
+        if(color.startsWith("#")) return hexColorToRGBA(color);
+        else return color;
+    }
     else{
         const coef=Math.round(Math.random()*360);
         const r=coef%((Math.floor(coef/60)||1)*60);

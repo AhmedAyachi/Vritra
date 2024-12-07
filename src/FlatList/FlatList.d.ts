@@ -4,7 +4,7 @@ import {SwipeEvent} from "../Gestures/useSwipeGesture/useSwipeGesture";
 
 export default function FlatList<Type>(props:FlatListProps<Type>):FlatList<Type>;
 
-type FlatListProps<Type>=ExtendableViewProps<"div">&{
+interface FlatListProps<Type> extends ExtendableViewProps<"div"> {
     containerClassName?:string,
     popupClassName?:string,
     /**

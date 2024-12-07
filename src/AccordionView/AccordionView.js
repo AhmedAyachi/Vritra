@@ -9,10 +9,10 @@ export default function AccordionView(props){
     const {parent,renderHeader,indicator=icon,renderContent,actions,tintColor=props.color||"black",memorize=true,separate,onOpen,onClose}=props;
     const accordionview=NativeView({
         parent,id:props.id,at:props.at,
-        className:`${css.accordionview} ${props.className||""}`,
+        className:[css.accordionview,props.className],
         style:`opacity:${props.locked?0.5:1};${props.style||""}`,
     }),state={
-        open:Boolean(props.open),
+        open:false,
         interactive:true,
         locked:Boolean(props.locked),
         contentEl:null,
@@ -55,54 +55,60 @@ export default function AccordionView(props){
         state.locked=Boolean(value);
         accordionview.style.opacity=state.locked?0.5:1;
     }
-    accordionview.toggle=(open=!state.open)=>{if(state.interactive){
-        state.interactive=false;
-        state.open=open;
-        if(!separate){
-            const {style}=headerEl,{borderBottomLeftRadius,borderBottomRightRadius}=state;
-            if(open){
-                state.borderBottomLeftRadius=style.borderBottomLeftRadius;
-                state.borderBottomRightRadius=style.borderBottomRightRadius;
+    accordionview.toggle=(open=!state.open)=>{
+        open=Boolean(open);
+        if(state.interactive&&(open!==state.open)){
+            state.interactive=false;
+            state.open=open;
+            if(!separate){
+                const {style}=headerEl,{borderBottomLeftRadius,borderBottomRightRadius}=state;
+                if(open){
+                    state.borderBottomLeftRadius=style.borderBottomLeftRadius;
+                    state.borderBottomRightRadius=style.borderBottomRightRadius;
+                }
+                style.borderBottomLeftRadius=open?0:borderBottomLeftRadius;
+                style.borderBottomRightRadius=open?0:borderBottomRightRadius;
             }
-            style.borderBottomLeftRadius=open?0:borderBottomLeftRadius;
-            style.borderBottomRightRadius=open?0:borderBottomRightRadius;
-        }
-        const indicator=accordionview.querySelector(`.${css.indicator}`);
-        if(indicator){
-            indicator.style.transform=`rotateZ(${open?-180:0}deg)`;
-        }
-        if(open){
-            const contentview=state.contentview=ContentView({
-                parent:accordionview,
-                className:props.containerClassName,
-                onShow:()=>{
-                    state.interactive=true;
-                },
-            });
-            const {contentEl}=state;
-            if(memorize&&contentEl){
-                if(contentEl instanceof VritraFragment){
-                    contentEl.appendTo(contentview);
+            const indicator=accordionview.querySelector(`.${css.indicator}`);
+            if(indicator){
+                indicator.style.transform=`rotateZ(${open?-180:0}deg)`;
+            }
+            if(open){
+                const contentview=state.contentview=ContentView({
+                    parent:accordionview,
+                    className:props.containerClassName,
+                    onShow:()=>{
+                        state.interactive=true;
+                    },
+                });
+                const {contentEl}=state;
+                if(memorize&&contentEl){
+                    if(contentEl instanceof VritraFragment){
+                        contentEl.appendTo(contentview);
+                    }
+                    else{
+                        contentview.appendChild(contentEl);
+                    }
                 }
                 else{
-                    contentview.appendChild(contentEl);
+                    state.contentEl=renderContent&&renderContent({parent:contentview});
                 }
+                onOpen&&onOpen(contentview);
             }
             else{
-                state.contentEl=renderContent&&renderContent({parent:contentview});
+                const {contentview}=state;
+                contentview&&contentview.unmount(()=>{
+                    state.interactive=true;
+                });
+                state.contentview=null;
+                onClose&&onClose();
             }
-            onOpen&&onOpen(contentview);
         }
-        else{
-            const {contentview}=state;
-            contentview&&contentview.unmount(()=>{
-                state.interactive=true;
-            });
-            state.contentview=null;
-            onClose&&onClose();
-        }
-    }};
+    };
     
-    state.open&&setTimeout(()=>{accordionview.toggle(true)},0);
+    Object.defineProperties(accordionview,{
+        content:{get:()=>state.contentEl},
+    });
+    props.open&&setTimeout(()=>{accordionview.toggle(true)},0);
     return accordionview;
 }
