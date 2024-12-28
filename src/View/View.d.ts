@@ -13,12 +13,16 @@ type ViewProps<Tag>=VritraProps&{
 };
 type View<Tag>=VritraElement&
     (Tag extends keyof HTMLElementTagNameMap?HTMLElementTagNameMap[Tag]:HTMLDivElement)&
-    {[ref:string]:RefElement}&
-    RefElement
+    {[ref:string]:RefElement}&{
+        /**
+         * Prevents successive fast clicks to be triggred twice
+         */
+        onClick:(event:PointerEvent)=>void;
+    }
 ;
-
-type ViewClassName=string|ViewClassName[];
-type ViewStyle=string|CSSStyleDeclaration|ViewStyle[];
+type Falsy=false|null|undefined|0|"";
+type ViewClassName=string|Falsy|ViewClassName[];
+type ViewStyle=string|CSSStyleDeclaration|Falsy|ViewStyle[];
 
 interface VritraProps {
     parent?:HTMLElement,
@@ -70,7 +74,7 @@ interface VritraElement {
 }
 
 /**
- * If such ref is defined, the property points to the HTML element
+ * If the ref is defined, the property points to the HTML element
  * with such ref else undefined
  */ 
 interface RefElement extends HTMLElement {
@@ -78,6 +82,8 @@ interface RefElement extends HTMLElement {
      * Prevents successive fast clicks to be triggred twice
      */
     onClick:(event:PointerEvent)=>void;
+    /** Overrides the remove method and deletes the reference to the element */
+    remove():void;
 }
 
 type ExtendableViewProps<Tag>=Omit<ViewProps<Tag>,"tag">;

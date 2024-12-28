@@ -20,9 +20,13 @@ export default function PopupView(props:ExtendableViewProps<"div">&{
      */
     avoidable?:boolean,
     /**
-     * popup default position relative to target
+     * @deprecated renamed to offset
      */
-    position?:{x:number,y:number},
+    position?:{x?:number,y?:number},
+    /**
+     * popup offset relative to target
+     */
+    offset?:{x?:number,y?:number},
     /**
      * If true, unmounting will not cleanup the event listeners nor remove the popupview from DOM
      * @default false
@@ -43,8 +47,7 @@ type PopupView=View<"div">&{
      */
     cleanupEventListeners():void,
     /**
-     * Cleans up the event listeners and removes the popupview from DOM
-     * @deprecated you can use the remove method directly
+     * Cleans up the event listeners and removes the popupview from DOM with a fade-out animation
      */
     unmount():void,
 }

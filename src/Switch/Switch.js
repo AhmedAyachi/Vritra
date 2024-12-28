@@ -1,13 +1,12 @@
-import {useId,NativeView,sanitize} from "../index";
+import {NativeView,sanitize} from "../index";
 import css from "./Switch.module.css";
 
 
 export default function Switch(props){
-    const {parent,id=useId("switch"),thumbColor=statics.thumbColor,trackColor=statics.trackColor,readonly,onChange}=props;
+    const {parent,thumbColor,trackColor,readonly,onChange}=props;
     const switchEl=NativeView({
-        parent,id,
-        style:props.style,
-        at:props.at,
+        parent,at:props.at,
+        id:props.id,style:props.style,
         className:[css.switch,props.className],
     }),state={
         active:!Boolean(props.active),
@@ -24,8 +23,8 @@ export default function Switch(props){
         state.active=active;
         const thumb=switchEl.querySelector(`.${css.thumb}`);
         thumb.style.transform=`translateX(${active?100:0}%)`;
-        thumb.style.backgroundColor=getColor(thumbColor,active),
-        switchEl.style.backgroundColor=getColor(trackColor,active);
+        thumb.style.backgroundColor=getColor(thumbColor,active)||statics.thumbColor,
+        switchEl.style.backgroundColor=getColor(trackColor,active)||statics.trackColor[active];
         editable&&onChange&&onChange(active);
     }
     switchEl.toggle();

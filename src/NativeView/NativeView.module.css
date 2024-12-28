@@ -16,8 +16,10 @@
     -webkit-user-select:text;
     -ms-user-select:text;
 }
-.nativeview *:is(button,[class~=button],[class~=clickable]){
+.nativeview button{
     border:none;
+}
+.nativeview *:is(button,[class~=button],[class~=clickable],img[role=button]){
     transition:200ms;
 }
 
@@ -29,14 +31,14 @@
 }
 
 @media(hover:none){
-    .nativeview *:is(button,[class~=button],[class~=clickable]):active{
+    .nativeview *:is(button,[class~=button],[class~=clickable],img[role=button]):active{
         opacity:0.85;
         filter:brightness(0.65);
     }
 }
 
 @media(any-hover){
-    .nativeview *:is(button,[class~=button],[class~=clickable]):hover{
+    .nativeview *:is(button,[class~=button],[class~=clickable],img[role=button]):hover{
         opacity:0.85;
         cursor:pointer;
         filter:brightness(0.65);

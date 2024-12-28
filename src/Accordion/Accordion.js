@@ -1,27 +1,28 @@
 import {NativeView,ActionSetView} from "../index";
-import css from "./AccordionView.module.css";
+import css from "./Accordion.module.css";
 import ContentView from "./ContentView/ContentView";
 import {VritraFragment} from "../Fragment/Fragment";
 import icon from "./IndicatorIcon";
 
 
-export default function AccordionView(props){
+export default function Accordion(props){
     const {parent,renderHeader,indicator=icon,renderContent,actions,tintColor=props.color||"black",memorize=true,separate,onOpen,onClose}=props;
-    const accordionview=NativeView({
+    const accordion=NativeView({
         parent,id:props.id,at:props.at,
-        className:[css.accordionview,props.className],
+        className:[css.accordion,props.className],
         style:`opacity:${props.locked?0.5:1};${props.style||""}`,
     }),state={
         open:false,
         interactive:true,
         locked:Boolean(props.locked),
+        headerEl:null,
         contentEl:null,
         contentview:null,
-        borderBottomLeftRadius:undefined,
-        borderBottomRightRadius:undefined,
+        borderBottomLeftRadius:null,
+        borderBottomRightRadius:null,
     };
 
-    accordionview.innateHTML=`
+    accordion.innateHTML=`
         <div 
             ref="headerEl"
             class="${css.header} ${renderHeader?"":css.defaultheader} ${props.headerClassName||""}"
@@ -34,10 +35,10 @@ export default function AccordionView(props){
             `}
         </div>
     `;
-    const {headerEl}=accordionview;
-    if(renderHeader){renderHeader({parent:headerEl})}
+    const {headerEl}=accordion;
+    if(renderHeader){state.headerEl=renderHeader({parent:headerEl})}
     else if(actions){
-        const actionsEl=accordionview.querySelector(`.${css.actions}`);
+        const actionsEl=accordion.querySelector(`.${css.actions}`);
         const actionsetview=ActionSetView({
             parent:actionsEl,
             className:css.actionset,
@@ -47,15 +48,15 @@ export default function AccordionView(props){
     }
 
     headerEl.onclick=()=>{
-        if(!state.locked){accordionview.toggle()};
+        if(!state.locked){accordion.toggle()};
     }
 
-    accordionview.setLocked=(value)=>{
-        (value&&state.open)&&accordionview.toggle(false);
+    accordion.setLocked=(value)=>{
+        (value&&state.open)&&accordion.toggle(false);
         state.locked=Boolean(value);
-        accordionview.style.opacity=state.locked?0.5:1;
+        accordion.style.opacity=state.locked?0.5:1;
     }
-    accordionview.toggle=(open=!state.open)=>{
+    accordion.toggle=(open=!state.open)=>{
         open=Boolean(open);
         if(state.interactive&&(open!==state.open)){
             state.interactive=false;
@@ -69,13 +70,13 @@ export default function AccordionView(props){
                 style.borderBottomLeftRadius=open?0:borderBottomLeftRadius;
                 style.borderBottomRightRadius=open?0:borderBottomRightRadius;
             }
-            const indicator=accordionview.querySelector(`.${css.indicator}`);
+            const indicator=accordion.querySelector(`.${css.indicator}`);
             if(indicator){
                 indicator.style.transform=`rotateZ(${open?-180:0}deg)`;
             }
             if(open){
                 const contentview=state.contentview=ContentView({
-                    parent:accordionview,
+                    parent:accordion,
                     className:props.containerClassName,
                     onShow:()=>{
                         state.interactive=true;
@@ -106,9 +107,12 @@ export default function AccordionView(props){
         }
     };
     
-    Object.defineProperties(accordionview,{
+    Object.defineProperties(accordion,{
+        header:{get:()=>state.headerEl},
         content:{get:()=>state.contentEl},
     });
-    props.open&&setTimeout(()=>{accordionview.toggle(true)},0);
-    return accordionview;
+    props.open&&setTimeout(()=>{accordion.toggle(true)},0);
+    return accordion;
 }
+
+export const AccordionView=Accordion;

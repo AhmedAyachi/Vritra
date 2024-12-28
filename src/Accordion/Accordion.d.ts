@@ -3,11 +3,21 @@ import {ActionSetAction,VritraIcon} from "../ActionSetView/ActionSetView";
 
 
 /**
- * 
- * @param props AccordionView props
- * @notice AccordionView css variables : paddingHorizontal borderRadius
+ * @deprecated renamed to Accordion
  */
-export default function AccordionView<ContentType>(props:ExtendableViewProps<"div">&{
+export function AccordionView<HeaderRenderer extends RendererType,ContentRenderer extends RendererType>(props:AccordionProps<HeaderRenderer,ContentRenderer>):Accordion<ExtractRendererType<HeaderRenderer>,ExtractRendererType<ContentRenderer>>;
+
+type RendererType=(props:{parent:HTMLElement})=>any;
+type ExtractRendererType<T>=T extends (props:{parent:HTMLElement})=>infer R?R:null;
+
+/**
+ * 
+ * @param props Accordion props
+ * @notice Accordion css variables : paddingHorizontal borderRadius
+ */
+export default function Accordion<HeaderRenderer extends RendererType,ContentRenderer extends RendererType>(props:AccordionProps<HeaderRenderer,ContentRenderer>):Accordion<ExtractRendererType<HeaderRenderer>,ExtractRendererType<ContentRenderer>>;
+
+type AccordionProps<HeaderRenderer,ContentRenderer>=ExtendableViewProps<"div">&{
     /**
      * Default header title
      */
@@ -21,14 +31,8 @@ export default function AccordionView<ContentType>(props:ExtendableViewProps<"di
      * @notice when separate is true, specify a paddingTop value to get the desired behavior 
      */
     containerClassName?:string,
-    renderHeader?(props:{
-        /** custom header container */
-        parent:HTMLElement,
-    }):HTMLElement,
-    renderContent?:(props:{
-        /** content container */
-        parent:HTMLElement,
-    })=>ContentType,
+    renderHeader?:HeaderRenderer,
+    renderContent?:ContentRenderer,
     /**
      * If true, renderContent is called once, using the returned HTMLElement for next renders.
      * @default true
@@ -75,20 +79,26 @@ export default function AccordionView<ContentType>(props:ExtendableViewProps<"di
      * Called when Accordion is closed
      */
     onClose?():void,
-}):AccordionView<ContentType>;
+}
 
-type AccordionView<ContentType>=View<"div">&{
+//type ContentType=ReturnType<AccordionProps["renderContent"]>;
+
+type Accordion<HeaderRenderer,ContentType>=View<"div">&{
     /**
-     * Locks and unlocks the accordionview
+     * Locks and unlocks the accordion
      * @param locked default to false
      */
     setLocked(locked:boolean):void,
     /**
-     * Opens and closes the accordionview
+     * Opens and closes the accordion
      * @param open 
      * @default true if closed, false if open
      */
     toggle(open?:boolean):void,
+    /**
+     * Gets the element returned by renderHeader
+     */
+    readonly header:HeaderRenderer|null;
     /**
      * Gets the element returned by renderContent
      */

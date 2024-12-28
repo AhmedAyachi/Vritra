@@ -27,8 +27,8 @@ export default function SmoothPagingContainer(props){
                 });
             }
             else{
-                const {offsetThreshold=50}=props;
-                if(distance>=offsetThreshold){
+                const {snapOffsetThreshold}=props;
+                if(distance>=snapOffsetThreshold){
                     const scrollLength=(horizontal?x:y)*(backwards?1:-1);
                     if(scrollLength<0){
                         parent.scrollToOffset(0);

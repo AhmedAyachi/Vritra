@@ -33,45 +33,46 @@ export default function PopupView(props){
     popupview.remove=(()=>{
         const remove=popupview.remove.bind(popupview);
         return ()=>{
-            (!keepinDOM)&&popupview.cleanupEventListeners();
-            fadeOut(popupview,keepinDOM?undefined:()=>{
-                remove();
-                onRemove?onRemove():onUnmount&&onUnmount();
-            });
+            remove();
+            onRemove?onRemove():onUnmount&&onUnmount();
         }
     })();
-    popupview.unmount=popupview.remove;
+    popupview.unmount=()=>{
+        (!keepinDOM)&&popupview.cleanupEventListeners();
+        fadeOut(popupview,keepinDOM?undefined:()=>{
+            popupview.remove(); 
+        });
+    };
     
     target&&setTimeout(()=>{
-        Object.assign(popupview.style,getPosition(popupview,target,parent,props.position));
+        Object.assign(popupview.style,getPosition(popupview,target,parent,props.offset||props.position));
     },0);
     return fadeIn(popupview,200);
 }
 
 const statics={
-    offset:5,
     avoidEvents:["touchstart","mousedown"],
 }
 
-const getPosition=(popupview,target,container,defaultPosition)=>{
-    if(defaultPosition&&typeof(defaultPosition)==="object"){
-        if(typeof(defaultPosition.x)!=="number") defaultPosition.x=0;
-        if(typeof(defaultPosition.y)!=="number") defaultPosition.y=0;
+const getPosition=(popupview,target,container,defaultOffset)=>{
+    if(defaultOffset&&typeof(defaultOffset)==="object"){
+        if(typeof(defaultOffset.x)!=="number") defaultOffset.x=0;
+        if(typeof(defaultOffset.y)!=="number") defaultOffset.y=0;
     }
     else{
-        defaultPosition={x:0,y:0};
+        defaultOffset={x:0,y:0};
     }
     const {left,top}=target.getBoundingClientRect();
     const {left:containerLeft,top:containerTop}=container.getBoundingClientRect();
     const targetLeft=left-containerLeft;
     const targetTop=top-containerTop;
     const {clientWidth:width,clientHeight:height}=popupview,position={};
-    const spacingRight=container.clientWidth-targetLeft-defaultPosition.x+statics.offset;
+    const spacingRight=container.clientWidth-targetLeft-defaultOffset.x;
     if(width<spacingRight){
-        position.left=targetLeft+defaultPosition.x-statics.offset;
+        position.left=targetLeft+defaultOffset.x;
     }
     else{
-        const right=spacingRight-statics.offset,offsetLeft=right+width;
+        const right=spacingRight,offsetLeft=right+width;
         if(offsetLeft>=container.clientWidth){
             position.bottom=offsetLeft-container.clientWidth;
         }
@@ -79,12 +80,12 @@ const getPosition=(popupview,target,container,defaultPosition)=>{
             position.right=right;
         }
     }
-    const spacingBottom=container.clientHeight-targetTop-defaultPosition.y+statics.offset;
+    const spacingBottom=container.clientHeight-targetTop-defaultOffset.y;
     if(height<spacingBottom){
-        position.top=targetTop+defaultPosition.y-statics.offset;
+        position.top=targetTop+defaultOffset.y;
     }
     else{
-        const bottom=spacingBottom-statics.offset,offsetTop=bottom+height;
+        const bottom=spacingBottom,offsetTop=bottom+height;
         if(offsetTop>=container.clientHeight){
             position.bottom=offsetTop-container.clientHeight;
         }

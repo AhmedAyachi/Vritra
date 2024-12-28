@@ -53,7 +53,11 @@ interface FlatListProps<Type> extends ExtendableViewProps<"div"> {
     /**
      * specifies the required visibility threshold in pixels for scrolling to an item
      * @notice used when smoothPaging is enabled
-     * @default 100
+     * @default the third of the flatlist width/height 
+     */
+    snapOffsetThreshold?:number,
+    /**
+     * @deprecated use snapOffsetThreshold instead
      */
     offsetThreshold?:number,
     /**
@@ -102,12 +106,12 @@ interface FlatListProps<Type> extends ExtendableViewProps<"div"> {
      */
     onSwipe(event:FlatListSwipeEvent):void,
     /**
-     * Triggered each time addItems method called;
+     * Triggered on each addItems method call;
      * @param items added items array
      */
     onAddItems(items:Type[]):void,
      /**
-      * Triggered each time removeItem method called;
+      * Triggered on each removeItem method call;
       * @param data
       */
     onRemoveItem(data:ItemData<Type>):void,
@@ -159,16 +163,16 @@ type FlatList<Type>=View<"div">&{
      * until it finds one where predicate returns true. If such item is found, it's removed.
      * @param predicate function used to find the item.
      * @param withElement if true removes the html element associated with the item. Default: true.
-     * @returns the removed data {item,element}
+     * @returns the removed data {item,element} if exists else null
      */
     removeItem(predicate:(item:Type,index?:number,data?:Type[])=>boolean,withElement?:boolean):ItemData<Type>,
     /**
      * Removes item if found
      * @param item item to remove
      * @param withElement if true removes the html element associated with the item. Default: true
-     * @returns the removed data {item,element}
+     * @returns the removed data {item,element} if exists else null
      */
-    removeItem(item:any,withElement?:boolean):ItemData<Type>,
+    removeItem(item:any,withElement?:boolean):ItemData<Type>|null,
     /**
      * Creates a flatlist on top of the original flatlist as a popup using the same props
      * @param items data to show

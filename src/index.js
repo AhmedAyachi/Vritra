@@ -10,7 +10,8 @@ export {default as TabNavigator} from "./TabNavigator/TabNavigator";
 export {default as Switch} from "./Switch/Switch";
 export {default as PopupView} from "./PopupView/PopupView";
 export {default as ActionSetView} from "./ActionSetView/ActionSetView";
-export {default as AccordionView} from "./AccordionView/AccordionView";
+export {default as Accordion} from "./Accordion/Accordion";
+export {default as AccordionView} from "./Accordion/Accordion";
 export {default as Palette} from "./Palette/Palette";
 export {default as FlatList} from "./FlatList/FlatList";
 export {default as DraggableView} from "./DraggableView/DraggableView";
@@ -342,7 +343,7 @@ export function randomId(prefix,length=15){
     return str;
 }
 
-export const replaceAt=(index=0,replaceValue="",targetString="")=>targetString.substr(0,index-1)+replaceValue+targetString.substr(index+1,targetString.length);
+export const replaceAt=(index=0,replaceValue="",targetString="")=>targetString.substring(0,index-1)+replaceValue+targetString.substring(index+1,targetString.length);
 
 export const capitalize=(str="",count=0)=>str.split(" ").map((word,i)=>{
     const capitalized=(!count)||(i<count);

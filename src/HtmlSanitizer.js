@@ -58,7 +58,12 @@ export default new (function(){
 						}
 						if(newNode){
 							if(ref&&vritraEl){
-								vritraEl[ref]=decorateNode(newNode);
+								const node=vritraEl[ref]=decorateNode(newNode,ref);
+								const remove=node.remove.bind(node);
+								node.remove=()=>{
+									delete vritraEl[ref];
+									remove();
+								}
 							};
 							setNode(tagName,newNode);
 							if(isText){

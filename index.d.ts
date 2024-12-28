@@ -10,7 +10,7 @@ export {default as TabNavigator} from "./src/TabNavigator/TabNavigator";
 export {default as Switch} from "./src/Switch/Switch";
 export {default as PopupView} from "./src/PopupView/PopupView";
 export {default as ActionSetView} from "./src/ActionSetView/ActionSetView";
-export {default as AccordionView} from "./src/AccordionView/AccordionView";
+export {default as Accordion,AccordionView} from "./src/Accordion/Accordion";
 export {default as Palette} from "./src/Palette/Palette";
 export {default as FlatList} from "./src/FlatList/FlatList";
 export {default as DraggableView,} from "./src/DraggableView/DraggableView";

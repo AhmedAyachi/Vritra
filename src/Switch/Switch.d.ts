@@ -24,11 +24,11 @@ type Switch=View<"div">&{
 
 type SwitchColor={
     /**
-     * Color when active
-     */
-    true:string,
-    /**
      * Color when not active
      */
-    false:string,
+    false?:string,
+    /**
+     * Color when active
+     */
+    true?:string,
 };
