@@ -60,8 +60,9 @@ export default function TabNavigator(props){
                 toStyle:{
                     width:`${tabview.offsetWidth}px`,
                     transform:`translateX(${tabview.offsetLeft}px)`,
+                    backgroundColor:tab.tintColor||tintColor,
                 },
-                duration:200,
+                duration:300,
                 easing:"ease",
             }],()=>{
                 tabview.appendChild(indicator);
@@ -83,7 +84,7 @@ export default function TabNavigator(props){
                 }
             }
             setContext(state.context,tab);
-            tabview.setColor(tintColor);
+            tabview.setColor(tab.tintColor||tintColor);
             (headerEl.scrollWidth>headerEl.clientWidth)&&headerEl.scrollTo({
                 behavior:"smooth",
                 left:tabview.offsetLeft+tabview.clientWidth/2-headerEl.clientWidth/2,

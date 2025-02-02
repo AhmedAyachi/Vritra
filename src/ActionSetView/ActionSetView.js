@@ -47,8 +47,8 @@ export default function ActionSetView(props){
                     event.stopPropagation();
                     action.onTrigger?.(action);
                 }
-                actionEl.setIcon=(icon,save)=>{
-                    if(save){action.icon=icon};
+                actionEl.setIcon=(icon=action.icon,save)=>{
+                    if(save) action.icon=icon;
                     const img=actionEl.querySelector(":scope>img");
                     img.src=typeof(icon)==="function"?icon(tintColor):icon;
                 }

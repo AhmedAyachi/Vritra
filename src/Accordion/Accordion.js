@@ -102,7 +102,7 @@ export default function Accordion(props){
                     state.interactive=true;
                 });
                 state.contentview=null;
-                onClose&&onClose();
+                onClose&&onClose(contentview);
             }
         }
     };

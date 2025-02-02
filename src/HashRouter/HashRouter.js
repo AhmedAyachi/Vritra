@@ -48,11 +48,16 @@ export function HashRouter({target,routes}){
     function setRoute(){
         let {route}=state;
         if(route){
-            const {memorize,element}=route;
-            if(memorize&&(element instanceof HTMLElement)){
-                const {scroll}=route;
-                scroll.top=element.scrollTop;
-                scroll.left=element.scrollLeft;
+            const {element}=route;
+            if(element instanceof HTMLElement){
+                const {onHide}=element;
+                if(route.memorize){
+                    const {scroll}=route;
+                    scroll.top=element.scrollTop;
+                    scroll.left=element.scrollLeft;
+                }
+                element.remove();
+                onHide&&onHide();
             }
         }
         route=getRoute(routes);
@@ -61,7 +66,7 @@ export function HashRouter({target,routes}){
                 if(typeof(route.restrictor)==="function"){
                     route.restrictor(resolve,target);
                 }
-                else{resolve(true)};
+                else resolve(true);
             }).
             then(unlocked=>{
                 if(unlocked){
@@ -69,7 +74,7 @@ export function HashRouter({target,routes}){
                     route.data=state.data;
                     return renderRoute(route,target);
                 }
-                else{history.back()}
+                else history.back();
             }).
             finally(()=>{
                 state.data=null;

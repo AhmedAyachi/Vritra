@@ -174,6 +174,10 @@ type FlatList<Type>=View<"div">&{
      */
     removeItem(item:any,withElement?:boolean):ItemData<Type>|null,
     /**
+     * Clears all the flatlist items
+     */
+    clear():void;
+    /**
      * Creates a flatlist on top of the original flatlist as a popup using the same props
      * @param items data to show
      * @param props Popup Flatlist props

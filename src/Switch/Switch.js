@@ -17,7 +17,12 @@ export default function Switch(props){
         <div class="${css.thumb}"></div>
     `;
 
-    switchEl.onclick=editable&&(()=>{switchEl.toggle()});
+    if(editable){
+        switchEl.onclick=()=>{
+            switchEl.toggle();
+            onChange&&onChange(state.active);
+        };
+    }
 
     switchEl.toggle=(active=!state.active)=>{
         state.active=active;
@@ -25,7 +30,6 @@ export default function Switch(props){
         thumb.style.transform=`translateX(${active?100:0}%)`;
         thumb.style.backgroundColor=getColor(thumbColor,active)||statics.thumbColor,
         switchEl.style.backgroundColor=getColor(trackColor,active)||statics.trackColor[active];
-        editable&&onChange&&onChange(active);
     }
     switchEl.toggle();
 

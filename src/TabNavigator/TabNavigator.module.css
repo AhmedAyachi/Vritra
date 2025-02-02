@@ -5,6 +5,7 @@
     flex-direction:column;
     justify-content:flex-start;
     align-items:stretch;
+    --tabSpacing:2em;
 }
 .header{
     position:relative;
@@ -12,6 +13,8 @@
     display:flex;
     justify-content:flex-start;
     align-items:center;
+    padding:0 var(--tabSpacing) !important;
+    column-gap:var(--tabSpacing);
     white-space:nowrap;
     flex-shrink:0;
     overflow:auto hidden;

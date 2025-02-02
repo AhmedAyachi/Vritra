@@ -128,9 +128,7 @@ export const isTouchDevice=()=>((("ontouchstart" in window)||(navigator.maxTouch
 
 export const parseJSON=(json)=>{
     let data=null;
-    try{
-        data=JSON.parse(json);
-    }
+    try{ data=json&&JSON.parse(json) }
     catch{}
     return data;
 }

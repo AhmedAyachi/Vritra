@@ -61,6 +61,7 @@ interface HashRouter {
 
 interface HashRouteElement extends HTMLElement {
     onShow():void,
+    onHide():void,
 }
 
 interface HashRouteComponentProps {

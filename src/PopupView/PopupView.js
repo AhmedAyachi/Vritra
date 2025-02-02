@@ -3,7 +3,7 @@ import css from "./PopupView.module.css";
 
 
 export default function PopupView(props){
-    const {parent=document.documentElement,id=randomId("popupview"),target,avoidable=true,keepinDOM,onRemove,onUnmount}=props;
+    const {parent=document.documentElement,id=randomId("popupview"),target,avoidable=true,onRemove,onUnmount}=props;
     const popupview=NativeView({
         parent,id,
         style:props.style,
@@ -38,10 +38,8 @@ export default function PopupView(props){
         }
     })();
     popupview.unmount=()=>{
-        (!keepinDOM)&&popupview.cleanupEventListeners();
-        fadeOut(popupview,keepinDOM?undefined:()=>{
-            popupview.remove(); 
-        });
+        popupview.cleanupEventListeners();
+        fadeOut(popupview,()=>{popupview.remove()});
     };
     
     target&&setTimeout(()=>{

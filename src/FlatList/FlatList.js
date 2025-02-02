@@ -188,7 +188,9 @@ export default function FlatList(props){
                 state.endreached=false;
                 createNextElement();
                 if(data.length===length){
-                    state.firstOffset=state.observedEl[offsetSide];
+                    setTimeout(()=>{
+                        state.firstOffset=state.observedEl[offsetSide];
+                    },0);
                 }
             }
             else{
@@ -207,12 +209,11 @@ export default function FlatList(props){
                 const removed={item,element};
                 if(withElement){
                     const {element}=removed;
-                    (element instanceof Element)&&element.remove();
+                    if(element instanceof Element) element.remove();
                 }
                 itemsmap.delete(item);
                 state.index--;
                 if((!data.length)&&(!container.childNodes.length)){
-                    container.style.display="none";
                     showEmptinessElement();
                 }
                 onRemoveItem&&onRemoveItem(removed);
@@ -221,6 +222,27 @@ export default function FlatList(props){
         }
         else return null;
     }
+
+    flatlist.clear=()=>{if(data.length){
+        const {observedEl,itemsmap}=state;
+        state.index=-1;
+        state.endreached=true;
+        state.infocusIndex=null;
+        if(observedEl instanceof Element){
+            state.observedEl=null;
+            observer.unobserve(observedEl);
+        }
+        data.forEach(item=>{
+            const element=itemsmap.get(item);
+            itemsmap.delete(itemsmap);
+            removeItem(item,data);
+            element?.remove();
+            onRemoveItem&&onRemoveItem({item,element});
+        });
+        itemsmap.clear();
+        data.splice(0,data.length);
+        showEmptinessElement();
+    }}
 
     flatlist.showItems=(predicate,popupProps)=>{
         const {popuplist}=state;

@@ -13,12 +13,8 @@ type ViewProps<Tag>=VritraProps&{
 };
 type View<Tag>=VritraElement&
     (Tag extends keyof HTMLElementTagNameMap?HTMLElementTagNameMap[Tag]:HTMLDivElement)&
-    {[ref:string]:RefElement}&{
-        /**
-         * Prevents successive fast clicks to be triggred twice
-         */
-        onClick:(event:PointerEvent)=>void;
-    }
+    {[ref:string]:RefElement}&
+    Pick<RefElement,"onClick">
 ;
 type Falsy=false|null|undefined|0|"";
 type ViewClassName=string|Falsy|ViewClassName[];
@@ -77,9 +73,9 @@ interface VritraElement {
  * If the ref is defined, the property points to the HTML element
  * with such ref else undefined
  */ 
-interface RefElement extends HTMLElement {
+type RefElement=HTMLElementTagNameMap[keyof HTMLElementTagNameMap]&{
     /**
-     * Prevents successive fast clicks to be triggred twice
+     * Prevents successive fast clicks to be all triggered
      */
     onClick:(event:PointerEvent)=>void;
     /** Overrides the remove method and deletes the reference to the element */

@@ -30,6 +30,7 @@ export default function PopupView(props:ExtendableViewProps<"div">&{
     /**
      * If true, unmounting will not cleanup the event listeners nor remove the popupview from DOM
      * @default false
+     * @deprecated no effect
      */
     keepinDOM?:boolean,
     onRemove():void;

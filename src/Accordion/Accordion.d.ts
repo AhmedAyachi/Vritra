@@ -77,8 +77,9 @@ type AccordionProps<HeaderRenderer,ContentRenderer>=ExtendableViewProps<"div">&{
     onOpen?(container:HTMLElement):void,
     /**
      * Called when Accordion is closed
+     * @param container content view container
      */
-    onClose?():void,
+    onClose?(container:HTMLElement):void,
 }
 
 //type ContentType=ReturnType<AccordionProps["renderContent"]>;

@@ -44,6 +44,7 @@ type TabNavigatorTab={
     id:string,
     label?:string,
     icon?:VritraIcon,
+    tintColor?:string,
     /**
      * Applied to this tab only.
      * @notice Overwrites the parent prop, same as the parent prop value if undefined

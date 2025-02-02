@@ -92,10 +92,14 @@ interface ActionSetDefinition {
 interface ActionSetDefinitionElement extends HTMLDivElement {
     /**
      * Not available for custom actions
-     * @param icon 
-     * @param save if true, sets the action.icon property, default false
+     * @param icon default to action.icon
      * @notice you can just edit the img element src yourself, but this method will make sure that your code
      * keeps behaving the same way independently of package versions.
+     */
+    setIcon(icon?:VritraIcon):void,
+    /**
+     * @param save if true, sets the action.icon property, default false
+     * @deprecated to change the default action icon just re-set action.icon
      */
     setIcon(icon:VritraIcon,save?:boolean):void,
 }

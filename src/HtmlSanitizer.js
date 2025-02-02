@@ -5,7 +5,7 @@ export default new (function(){
 	const attributeBlackList={"as":true}
 	const schemaWhiteList=["http:","https:","data:","m-files:","file:","ftp:","mailto:","pw:"]; //which "protocols" are allowed in "href", "src" etc
 	const uriAttributes={"href":true,"action":true};
-	const svgSpecialAttributes={
+	const svgSpecificAttributes={
 		"viewbox":"viewBox",
 		"preserveaspectratio":"preserveAspectRatio",
 		"color":"stroke",
@@ -51,7 +51,7 @@ export default new (function(){
 									else if(uriAttributes[name]){
 										if(value.includes(":")&&(!startsWithAny(value,schemaWhiteList))){newNode=null;continue};
 									}
-									newNode.setAttribute((isSvg&&svgSpecialAttributes[name])||name,value);
+									newNode.setAttribute((isSvg&&svgSpecificAttributes[name])||name,value);
 								}
 							}
 							i++;
@@ -142,7 +142,7 @@ export default new (function(){
 								const attribute=attributes[i];
 								let {name}=attribute;
 								if(!node.hasAttribute(name)){
-									node.setAttribute(svgSpecialAttributes[name]||name,attribute.value);
+									node.setAttribute(svgSpecificAttributes[name]||name,attribute.value);
 								}
 							}
 							node.innerHTML=svg.innerHTML;
