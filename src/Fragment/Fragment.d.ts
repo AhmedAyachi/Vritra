@@ -20,12 +20,17 @@ interface Fragment extends Omit<DocumentFragment&VritraElement,"childNodes"|"chi
      * Inserts nodes before the first child of the fragment
      * @param nodes 
      */
-    prepend(...nodes:Node[]):void,
+    prepend(...nodes:Node[]):void;
     /**
      * Inserts nodes after the last child of the fragment
      * @param nodes 
      */
-    append(...nodes:Node[]):void,
+    append(...nodes:Node[]):void;
+    /**
+     * Inserts nodes at index
+     * @param nodes 
+     */
+    insertAt(index:number,...nodes:Node[]):void;
     /**
      * Inserts a node after the last child of the fragment
      * @param node 
@@ -47,6 +52,10 @@ interface Fragment extends Omit<DocumentFragment&VritraElement,"childNodes"|"chi
      * Removes All fragment nodes from DOM
      */
     remove():void,
+    /**
+     * Returns all element descendants of node that match the selector.
+     */
+    querySelectorAll(selector:string):Element[];
     /**
      * Returns the children
      */

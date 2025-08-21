@@ -10,7 +10,7 @@ export default function Accordion(props){
     const accordion=NativeView({
         parent,id:props.id,at:props.at,
         className:[css.accordion,props.className],
-        style:`opacity:${props.locked?0.5:1};${props.style||""}`,
+        style:[{opacity:props.locked?0.5:1},props.style],
     }),state={
         open:false,
         interactive:true,

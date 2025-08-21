@@ -24,14 +24,13 @@ interface VritraProps {
     parent?:HTMLElement,
     /**
      * Sets the element initial location.
-     * 
-     * start : at the beginning of the parent
-     * 
-     * end : at the end of the parent
-     * @default "end"
+     * @example 
+     * "end" //at the end of the parent
+     * "start" //at the beginning of the parent
+     * number //to specifiy the index 
      * @notice For between-elements insertion, use adjacentTo method
      */
-    at?:"start"|"end";
+    at?:"start"|"end"|number;
 }
 
 interface VritraElement {
@@ -67,6 +66,11 @@ interface VritraElement {
      * @returns The current view
      */
     adjacentTo(element:Element,before?:boolean):this;
+    /**
+     * Returns a list of the first element-descendants of node that match every single selector.
+     * @param selectors 
+     */
+    queryAllSelectors(...selectors:string):Element[];
 }
 
 /**

@@ -6,15 +6,17 @@ export default function PopupView(props){
     const {parent=document.documentElement,id=randomId("popupview"),target,avoidable=true,onRemove,onUnmount}=props;
     const popupview=NativeView({
         parent,id,
-        style:props.style,
         at:props.at,
+        style:props.style,
         className:[css.popupview,props.className],
-    });
+    }),state={
+        isStaticParent:getComputedStyle(parent).getPropertyValue("position")==="static",
+    },{isStaticParent}=state;
 
     popupview.innateHTML=`
     `;
 
-    parent.style.position="relative";
+    if(isStaticParent) parent.style.position="relative";
     function onTouchScreen(event){
         const {target}=event;
         if(!target.closest(`#${id}`)){
@@ -33,12 +35,13 @@ export default function PopupView(props){
     popupview.remove=(()=>{
         const remove=popupview.remove.bind(popupview);
         return ()=>{
+            popupview.cleanupEventListeners();
+            if(isStaticParent) parent.style.position=null;
             remove();
             onRemove?onRemove():onUnmount&&onUnmount();
         }
     })();
     popupview.unmount=()=>{
-        popupview.cleanupEventListeners();
         fadeOut(popupview,()=>{popupview.remove()});
     };
     

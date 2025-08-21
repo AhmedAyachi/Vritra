@@ -24,13 +24,22 @@ export default function View(props){
         else setViewStyle(view,style);
     }
     if(parent){
-        const atStart=at==="start";
+        const atStart=(at==="start")||(at<=0);
         if(parent instanceof VritraFragment){
             if(atStart) parent.prepend(view);
+            else if(typeof(at)==="number"){
+                parent.insertAt(at,view);
+            }
             else parent.append(view);
         }
-        else if(atStart) parent.insertAdjacentElement("afterbegin",view);
-        else parent.appendChild(view);
+        else{
+            if(atStart) parent.insertAdjacentElement("afterbegin",view);
+            else if(typeof(at)==="number"){
+                const child=parent.children[at];
+                parent.insertBefore(view,child);
+            }
+            else parent.appendChild(view);
+        }
     }
 
     Object.defineProperties(view,{
@@ -56,6 +65,9 @@ export default function View(props){
                 element[before?"before":"after"](view);
             }
             return view;
+        }},
+        queryAllSelectors:{value:(...selectors)=>{
+            return selectors.flatMap(it=>view.querySelector(it));
         }},
     });
     

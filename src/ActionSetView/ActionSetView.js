@@ -17,8 +17,9 @@ export default function ActionSetView(props){
             return `
                 <div ref="${id}" class="clickable ${css.action}">
                     <img 
-                        src="${typeof(icon)==="function"?action.icon(tintColor,2):(icon||"")}" alt="${alt||""}"
-                        ${size?`style="${styles.icon(size)}"`:""}
+                        alt="${alt||id||""}"
+                        ${size?`style="${styles.icon(size)}"`:""} 
+                        src="${typeof(icon)==="function"?action.icon(tintColor,2):(icon||"")}"
                     />
                 </div>
             `

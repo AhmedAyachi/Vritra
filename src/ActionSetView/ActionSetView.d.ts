@@ -44,31 +44,31 @@ interface ActionSetDefinition {
     /**
      * Action id. Required
      */
-    id:string,
+    id?:string,
     /**
      * Used to add custom action component 
      * @returns action HTMLElement
      */
-    component:(props:ActionSetDefinition&{parent:ActionSetView})=>HTMLElement,
+    component?:(props:ActionSetDefinition&{parent:ActionSetView})=>HTMLElement,
     /**
      * Action icon as url, base64 string or function
      */
-    icon:VritraIcon,
+    icon?:VritraIcon,
     /**
      * Action icon size
      * @unit em
      * @default 6.4
      */
-    size:number,
+    size?:number,
     /**
      * Action image element alt attribute value
      */
-    alt:string,
+    alt?:string,
     /**
      * Called when the action HTMLElement is ready to click on
      * @param action the action object
      */
-    onReady(action:ActionSetDefinition&{
+    onReady?(action:ActionSetDefinition&{
         element:ActionSetDefinitionElement,
         /**
          * The color prop value
@@ -80,7 +80,7 @@ interface ActionSetDefinition {
      * Not triggered when action created with component prop
      * @param action the action object
      */
-    onTrigger(action:ActionSetDefinition&{
+    onTrigger?(action:ActionSetDefinition&{
         element:ActionSetDefinitionElement,
         /**
          * The color prop value

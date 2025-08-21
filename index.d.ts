@@ -114,7 +114,6 @@ export function getTimeDuration(start:string,end:string):number;
  * if true, february daycount value would be 29 else 28
  * @default false
  * @property name 
- * @property length : number of days
  */
 export function getMonths(isLeapYear=false):{
     name:string,
