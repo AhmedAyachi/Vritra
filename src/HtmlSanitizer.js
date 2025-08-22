@@ -2,9 +2,10 @@
 
 export default new (function(){
 	const tagBlackList={"script":true,"SCRIPT":true,"STYLE":true,"OBJECT":true};
-	const attributeBlackList={"as":true}
+	const attributeBlackList={"as":true};
 	const schemaWhiteList=["http:","https:","data:","m-files:","file:","ftp:","mailto:","pw:"]; //which "protocols" are allowed in "href", "src" etc
 	const uriAttributes={"href":true,"action":true};
+	const excludedTextContents=["false","undefined","null","0","NaN"];
 	const svgSpecificAttributes={
 		"viewbox":"viewBox",
 		"preserveaspectratio":"preserveAspectRatio",
@@ -17,7 +18,7 @@ export default new (function(){
 	this.sanitizeHtml=(input,vritraEl)=>{
 		input=input.trim();
 		if((input=="")||(input==="<br>")) return null;
-		if(input.includes("<body")){input=`<body>${input}</body>`};
+		if(input.includes("<body")) input=`<body>${input}</body>`;
 
 		const doc=domparser.parseFromString(input,"text/html");
 		const {body}=doc;
@@ -25,8 +26,11 @@ export default new (function(){
 		if(typeof(doc.createElement)!=="function"){doc.createElement.remove()};
 		function getSanitizedClone(node){
 			let newNode;
-			if(node.nodeType==Node.TEXT_NODE){
-				newNode=node.cloneNode(true);
+			if(node.nodeType===Node.TEXT_NODE){
+				const textContent=node.textContent.trim();
+				if(textContent&&!excludedTextContents.some(it=>it.includes(textContent))){
+					newNode=node.cloneNode(false);
+				}
 			} 
 			else{
 				let {tagName}=node;
