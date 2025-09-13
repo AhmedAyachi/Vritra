@@ -1,11 +1,11 @@
 
 
 export default new (function(){
-	const tagBlackList={"script":true,"SCRIPT":true,"STYLE":true,"OBJECT":true};
+	const tagBlackList=new Set(["script","SCRIPT","STYLE","OBJECT"]);
 	const attributeBlackList={"as":true};
 	const schemaWhiteList=["http:","https:","data:","m-files:","file:","ftp:","mailto:","pw:"]; //which "protocols" are allowed in "href", "src" etc
 	const uriAttributes={"href":true,"action":true};
-	const excludedTextContents=["false","undefined","null","0","NaN"];
+	const excludedTextContents=new Set(["false","undefined","null","0","NaN"]);
 	const svgSpecificAttributes={
 		"viewbox":"viewBox",
 		"preserveaspectratio":"preserveAspectRatio",
@@ -27,14 +27,18 @@ export default new (function(){
 		function getSanitizedClone(node){
 			let newNode;
 			if(node.nodeType===Node.TEXT_NODE){
-				const textContent=node.textContent.trim();
-				if(textContent&&!excludedTextContents.some(it=>it.includes(textContent))){
-					newNode=node.cloneNode(false);
+				let {textContent}=node;
+				if(textContent.includes("\n")){
+					textContent=textContent.trim();
+					if(!excludedTextContents.has(textContent)){
+						newNode=node.cloneNode(false);
+					}
 				}
+				else newNode=node.cloneNode(false);
 			} 
 			else{
 				let {tagName}=node;
-				if((node.nodeType===Node.ELEMENT_NODE)&&((!tagBlackList[tagName]))){
+				if((node.nodeType===Node.ELEMENT_NODE)&&((!tagBlackList.has(tagName)))){
 					const {attributes}=node,isText=tagName==="TEXT";
 					tagName=getDecentTag(tagName,attributes);
 					if(tagName){
@@ -116,7 +120,7 @@ export default new (function(){
 				const {as}=attributes;
 				tagName=(as&&as.value?.toUpperCase())||"p";
 				return getDecentTag(tagName,attributes);
-			default: return (!tagBlackList[tagName])&&tagName;
+			default: return (!tagBlackList.has(tagName))&&tagName;
 		}
 	}
 

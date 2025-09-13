@@ -134,6 +134,16 @@ export default function FlatList(props){
             }
         }
     },{root:flatlist,threshold});
+
+    //In case the flatlist was inserted into the DOM using appendChild, 
+    //and the observer is not triggered, this forces that by unobserve/observe.
+    if(flatlist.isConnected) setTimeout(()=>{
+        const {observedEl}=state;
+        if(observedEl instanceof Element){
+            observer.unobserve(observedEl);
+            observer.observe(observedEl);
+        }
+    },15);
     
     if(renderItem&&data.length){
         state.infocusIndex=0;
@@ -197,7 +207,7 @@ export default function FlatList(props){
                 onReachEnd&&onReachEnd({container,data:props.data});
             }
         }
-        onAddItems&&onAddItems(items);//hidden
+        onAddItems&&onAddItems(items);
     }}
 
     flatlist.removeItem=(predicate,withElement=true)=>{
