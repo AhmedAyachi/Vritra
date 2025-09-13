@@ -37,6 +37,18 @@ export default function DrawerNavigator(props:ExtendableViewProps<"div">&{
             render():HTMLElement,
         },
     }):HTMLElement,
+    /**
+     * Renders a custom element at the top of the drawer.
+     */
+    renderDrawerHeader(props:{
+        parent:HTMLElement,
+    }):HTMLElement;
+    /**
+     * Renders a custom element at the bottom of the drawer.
+     */
+    renderDrawerFooter(props:{
+        parent:HTMLElement,
+    }):HTMLElement;
 }):DrawerNavigator;
 
 type DrawerNavigator=View<"div">&{

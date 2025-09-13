@@ -1,6 +1,6 @@
 import {NativeView} from "../index";
 import css from "./DrawerNavigator.module.css";
-import DrawerView from "./DrawerView/DrawerView";
+import OverlayView from "./OverlayView/OverlayView";
 import icon0 from "./Icon_0";
 
 
@@ -12,8 +12,9 @@ export default function DrawerNavigator(props){
         at:props.at,
         className:[css.drawernavigator,props.className],
     }),state={
+        overlayview:null,
+        drawerScrollTop:null,
         activeId:initialId&&routes.some(({id})=>initialId===id)?initialId:routes[0].id,
-        drawerview:null,
     };
 
     drawernavigator.innateHTML=`
@@ -40,16 +41,22 @@ export default function DrawerNavigator(props){
     }
 
     drawernavigator.showDrawer=()=>{
-        const {drawerview}=state;
-        drawerview&&drawerview.unmount();
-        state.drawerview=DrawerView({
+        const {overlayview}=state;
+        overlayview&&overlayview.unmount();
+        state.overlayview=OverlayView({
             parent:drawernavigator,
             routes:routes,
             activeId:state.activeId,
             drawerClassName:props.drawerClassName,
             tintColor:props.tintColor||"#1e90ff",
+            renderHeader:props.renderDrawerHeader,
+            renderFooter:props.renderDrawerFooter,
+            drawerScrollTop:state.drawerScrollTop,
             onChange:(route)=>{drawernavigator.navigate(route.id)},
-            onHide:()=>{state.drawerview=null},
+            onHide:()=>{
+                state.drawerScrollTop=state.overlayview.getDrawerContainerScrollTop();
+                state.overlayview=null;
+            },
         });
     }
     drawernavigator.navigate=(id)=>{

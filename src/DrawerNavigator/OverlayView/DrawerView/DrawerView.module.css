@@ -1,13 +1,21 @@
-.routepicker{
+.drawerview{
     position:relative;
     width:80%;
     max-width:80em;
     height:100%;
+    display:flex;
+    flex-direction:column;
+    justify-content:flex-start;
+    align-items:stretch;
     background-color:white;
-    overflow:hidden auto;
     z-index:2;
 }
-.routepicker::-webkit-scrollbar{
+.container{
+    max-width:100%;
+    flex:1 1 0;
+    overflow:hidden auto;
+}
+.container::-webkit-scrollbar{
     display:none;
 }
 .entry{
