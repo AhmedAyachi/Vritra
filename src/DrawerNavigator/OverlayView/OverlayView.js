@@ -5,12 +5,10 @@ import DrawerView from "./DrawerView/DrawerView";
 
 export default function OverlayView(props){
     const {parent,drawerScrollTop,onHide}=props;
-    const overlayview=View({parent,className:css.overlayview}),state={
-        drawerScrollTop:0,
-    };
+    const overlayview=View({parent,className:css.overlayview});
 
     overlayview.innateHTML=`
-        <div class="${css.background}"></div>
+        <div ref="background" class="${css.background}"></div>
     `;
     const drawerview=DrawerView({
         ...props,
@@ -18,24 +16,23 @@ export default function OverlayView(props){
         className:props.drawerClassName,
         scrollTop:drawerScrollTop,
     });
-    const background=overlayview.querySelector(`.${css.background}`);
+    const {background}=overlayview;
+    background.onclick=()=>{
+        if(!drawerview.style.animation) overlayview.hide();
+    }
 
-    fadeIn(background,DrawerView.statics.duration,()=>{
-        background.onclick=()=>{
-            overlayview.unmount();
-        }
-    });
-
-    overlayview.unmount=()=>{
-        state.drawerScrollTop=drawerview.getContainerScrollTop();
-        drawerview.unmount();
+    overlayview.show=(routeId)=>{
+        overlayview.hidden=false;
+        drawerview.show(routeId);
+        fadeIn(background,"block",DrawerView.statics.duration);
+    }
+    overlayview.hide=()=>{
+        drawerview.hide();
         fadeOut(background,DrawerView.statics.duration+100,()=>{
-            overlayview.remove();
+            overlayview.hidden=true;
             onHide&&onHide(drawerview);
         });
     }
 
-    overlayview.getDrawerContainerScrollTop=()=>state.drawerScrollTop;
-    
     return overlayview;
 }

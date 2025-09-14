@@ -3,20 +3,20 @@ import css from "./DrawerView.module.css";
 
 
 export default function DrawerView(props){
-    const {parent,routes,activeId,scrollTop,tintColor,renderHeader,renderFooter,onChange}=props;
+    const {parent,routes,tintColor,renderHeader,renderFooter,onChange}=props;
     const drawerview=View({
         parent,tag:"nav",
-        style:styles.drawerview(),
         className:[css.drawerview,props.className],
-    });
+    }),state={
+        activeEl:null,
+    };
 
     drawerview.innateHTML=`
         <div ref="container" class="${css.container}">
             ${map(routes,({id,title})=>`
                 <text
-                    id="${id}" 
+                    data-id="${id}"
                     class="${css.entry}" 
-                    ${id===activeId?`style="${styles.entry(tintColor)}"`:""}
                 >${title||id||""}</text>
             `)}
         </div>
@@ -30,46 +30,48 @@ export default function DrawerView(props){
     if(typeof(renderFooter)==="function"){
         renderFooter({parent:drawerview});
     }
-    const {container}=drawerview;
-    if(scrollTop===null){
-        const activeEntry=drawerview.querySelector(`#${activeId}.${css.entry}`);
-        container.scrollTop=activeEntry.offsetTop/2;
-    }
-    else container.scrollTop=scrollTop;
 
-    setTimeout(()=>{
-        const entryEls=drawerview.querySelectorAll(`.${css.entry}`);
-        entryEls.forEach(entryEl=>{
-            const {id}=entryEl,route=routes.find(route=>route.id===id);
-            entryEl.onclick=()=>{
-                if(id!==activeId){
-                    const activeroute=routes.find(({id})=>activeId===id),{element}=activeroute;
-                    if(element instanceof HTMLElement){
-                        activeroute.scrollTop=element.scrollTop;
-                        activeroute.scrollLeft=element.scrollLeft;
-                    }
-                    onChange&&onChange(route);
-                }
-                parent.unmount();
-            };
+    
+    const entryEls=[...drawerview.querySelectorAll(`.${css.entry}`)];
+    entryEls.forEach(entryEl=>{
+        const {id}=entryEl.dataset,route=routes.find(route=>route.id===id);
+        Object.defineProperty(entryEl,"routeId",{
+            value:route.id,
         });
-    },statics.duration+50);
+        entryEl.onclick=()=>{if(!drawerview.style.animation){
+            const {activeEl}=state;
+            if(entryEl!==activeEl){
+                if(activeEl) activeEl.style.cssText=null;
+                state.activeEl=entryEl;
+                entryEl.style.cssText=styles.entry(tintColor);
+                onChange&&onChange(route);
+            }
+            parent.hide();
+        }};
+    });
     
     drawerview.onclick=(event)=>{
         event.stopPropagation();
     }
 
-    drawerview.unmount=()=>{
+    drawerview.show=(routeId)=>{
         setTimeout(()=>{
-            drawerview.remove();
+            drawerview.style.animation=null;
         },statics.duration);
+        const entryEl=entryEls.find(it=>it.routeId===routeId);
+        const {activeEl}=state;
+        if(entryEl&&(entryEl!==activeEl)){
+            if(activeEl) activeEl.style.cssText=null;
+            state.activeEl=entryEl;
+            drawerview.container.scrollTop=entryEl.offsetTop/2;
+            entryEl.style.cssText=styles.entry(tintColor);
+        }
+        drawerview.setAttribute("style",styles.drawerview());
+    }
+    drawerview.hide=()=>{
         drawerview.setAttribute("style",styles.drawerview(true));
     }
 
-    setTimeout(()=>{drawerview.style.animation=null},statics.duration);
-
-    drawerview.getContainerScrollTop=()=>container.scrollTop;
-    
     return drawerview;
 }
 

@@ -13,7 +13,6 @@ export default function DrawerNavigator(props){
         className:[css.drawernavigator,props.className],
     }),state={
         overlayview:null,
-        drawerScrollTop:null,
         activeId:initialId&&routes.some(({id})=>initialId===id)?initialId:routes[0].id,
     };
 
@@ -40,24 +39,18 @@ export default function DrawerNavigator(props){
         showbtn.onclick=()=>{drawernavigator.showDrawer()};
     }
 
+
     drawernavigator.showDrawer=()=>{
-        const {overlayview}=state;
-        overlayview&&overlayview.unmount();
-        state.overlayview=OverlayView({
+        if(!state.overlayview) state.overlayview=OverlayView({
             parent:drawernavigator,
             routes:routes,
-            activeId:state.activeId,
             drawerClassName:props.drawerClassName,
             tintColor:props.tintColor||"#1e90ff",
             renderHeader:props.renderDrawerHeader,
             renderFooter:props.renderDrawerFooter,
-            drawerScrollTop:state.drawerScrollTop,
             onChange:(route)=>{drawernavigator.navigate(route.id)},
-            onHide:()=>{
-                state.drawerScrollTop=state.overlayview.getDrawerContainerScrollTop();
-                state.overlayview=null;
-            },
         });
+        state.overlayview.show(state.activeId);
     }
     drawernavigator.navigate=(id)=>{
         const route=routes.find(route=>route.id===id);
@@ -90,13 +83,12 @@ export default function DrawerNavigator(props){
                 element.scrollTop=scrollTop
                 element.scrollLeft=scrollLeft;
             }
-            else{
-                blocking?instantiateRoute(route,container):setTimeout(()=>{instantiateRoute(route,container)},20);
-            }
+            else if(blocking) instantiateRoute(route,container);
+            else setTimeout(()=>{instantiateRoute(route,container)},20);
         }
     }
-    drawernavigator.navigate(state.activeId);
 
+    drawernavigator.navigate(state.activeId);
     return drawernavigator;
 }
 
