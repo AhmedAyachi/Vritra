@@ -175,37 +175,50 @@ const areSameParams=(params0,params1)=>{
 }
 
 const findBestRoute=(hashs,routes)=>{
-    const fullhash=location.hash;
-    let i=0,routecount=routes.length,exactfound;
-    let bestroute;
-    let bestscore={exact:-1,param:-1};
-    while((!exactfound)&&(i<routecount)){
+    const routeCount=routes.length;
+    let i=0,exactfound;
+    let bestRoute,bestRouteScore={exact:0,param:0};
+    while((!exactfound)&&(i<routeCount)){
         const route=routes[i],{hash}=route;
-        let routehashs=route.hashs;
-        if(!routehashs){
-            routehashs=route.hashs=getHashs(hash);
-        }
-        if(fullhash===hash){
+        let routeHashs=route.hashs;
+        if(!routeHashs) routeHashs=route.hashs=getHashs(hash);
+        if(location.hash===hash){
             exactfound=true;
-            bestroute=route;
+            bestRoute=route;
         }
         else{
-            const score={exact:0,param:0};
-            routehashs.forEach((hash,i)=>{
-                const exact=hash===hashs[i];
-                const asparam=hash.startsWith(":");
-                if(exact){score.exact++};
-                if(asparam){score.param++};
-            });
-            const scoreexact=score.exact,bestscoreexact=bestscore.exact;
-            if((scoreexact>bestscoreexact)||((scoreexact===bestscoreexact)&&(score.param>bestscore.param))){
-                bestscore=score;
-                bestroute=route;
+            const routeHashCount=routeHashs.length;
+            if(routeHashCount===hashs.length){
+                let rejected=false;
+                const score={exact:0,param:0};
+                for(let j=0;j<routeHashCount;j++){
+                    const routeHash=routeHashs[j];
+                    const asparam=routeHash.startsWith(":");
+                    if(asparam){
+                        if(hashs[j]) score.param++;
+                    }
+                    else{
+                        const exact=routeHash===hashs[j];
+                        if(exact) score.exact++;
+                        else{
+                            j=routeHashCount;
+                            rejected=true;
+                            continue;
+                        }
+                    };
+                }
+                if(!rejected){
+                    const exactScore=score.exact,bestExactScore=bestRouteScore.exact;
+                    if((exactScore>bestExactScore)||((exactScore===bestExactScore)&&(score.param>bestRouteScore.param))){
+                        bestRouteScore=score;
+                        bestRoute=route;
+                    }
+                }
             }
             i++;
         }
     }
-    return bestroute;
+    return bestRoute;
 }
 
 const getHashs=(hash)=>{
