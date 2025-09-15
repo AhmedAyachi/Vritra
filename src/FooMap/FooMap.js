@@ -2,8 +2,35 @@ import {removeItem} from "../index";
 
 
 export default class FooMap extends Map {
-    constructor(params){
-        super(params);
+
+    #onChange
+    constructor(param,options){
+        super();
+        if(Array.isArray(param)){
+            for(const pair of param){
+                if(Array.isArray(pair)) super.set(pair[0],pair[1]);
+                else throw new Error(`Iterator value ${pair} is not an entry object`);
+            }
+        }
+        else if(param) throw new new Error("param 1 must be an array of key,value pairs");
+        const {onChange}=options||{};
+        if(typeof(onChange)==="function") this.#onChange=onChange.bind(this);
+        else this.#onChange=null;
+    }
+
+    set(key,value){
+        super.set(key,value);
+        this.#onChange?.();
+    }
+
+    delete(key){
+        super.delete(key);
+        this.#onChange?.();
+    }
+
+    clear(){
+        super.clear();
+        this.#onChange?.();
     }
 
     at(index,isValue=false){
@@ -59,28 +86,18 @@ export default class FooMap extends Map {
     valueIterableIterator(){
         return super.values();
     }
-    valuesAsIterableIterator(){//deprecated
-        return super.values();
-    }
 
     keyIterableIterator(){
-        return super.keys();
-    }
-    keysAsIterableIterator(){//deprecated
         return super.keys();
     }
 
     entryIterableIterator(){
         return super.entries();
     }
-    entriesAsIterableIterator(){//deprecated
-        return super.entries();
-    }
 
     get length(){
         return super.size;
     }
-
 }
 
 class FooIterator {
@@ -92,22 +109,19 @@ class FooIterator {
     
     next(){
         this.#index++;
-        if(this.#index<this.#items.length){
-            this.#current=this.#items[this.#index];
-            return this.#current;
+        const lastIndex=this.#items.length-1;
+        this.#current=this.#items[this.#index];
+        return {
+            done:this.#index>=lastIndex,
+            value:this.current,
         }
-        else throw new Error("no such item");
     }
 
-    current(){
-        return this.#current;
-    }
+    get current(){ return this.#current; };
 
-    currentIndex(){
-        return this.#index;
-    }
+    get currentIndex(){ return this.#index; }
 
-    hasNext(){
+    get hasNext(){
         const {length}=this.#items;
         return (length>0)&&(this.#index<(length-1));
     }

@@ -2,7 +2,9 @@
 
 export default class FooMap<Key,Value> extends Map {
 
-    constructor(entries:Array<[Key,Value]>);
+    constructor(entries?:Array<[Key,Value]>,options?:{
+        onChange?:function(this:FooMap<Key,Value>):void;
+    });
     /**
      * 
      * @param index used to target pair at index
@@ -16,7 +18,7 @@ export default class FooMap<Key,Value> extends Map {
     indexOf<isValue extends boolean=false>(
         item:isValue extends true?Value:Key,
         isValue?:isValue,
-    ):Number;
+    ):number;
     /**
      * Returns a frozen array of keys
      */
@@ -30,11 +32,6 @@ export default class FooMap<Key,Value> extends Map {
      */
     keyIterableIterator():IterableIterator<Key>;
     /**
-     * @deprecated will be removed in a future version.
-     * use keyIterableIterator instead.
-     */
-    keysAsIterableIterator():IterableIterator<Key>;
-    /**
      * Returns a frozen array of values
      */
     values():Array<Value>;
@@ -47,11 +44,6 @@ export default class FooMap<Key,Value> extends Map {
      */
     valueIterableIterator():IterableIterator<Value>;
     /**
-     * @deprecated will be removed in a future version.
-     * use valueIterableIterator instead.
-     */
-    valuesAsIterableIterator():IterableIterator<Value>;
-    /**
      * Returns a frozen array of frozen key, value pairs for every entry in the map
      */
     entries():Array<[Key,Value]>;
@@ -59,34 +51,30 @@ export default class FooMap<Key,Value> extends Map {
      * Returns an iterable of key, value pairs for every entry in the map
      */
     entryIterableIterator():IterableIterator<[Key,Value]>;
-    /**
-     * @deprecated will be removed in a future version.
-     * use entryIterableIterator instead.
-     */
-    entriesAsIterableIterator():IterableIterator<[Key,Value]>;
 
-    readonly length:Number;
+    /**
+     * @deprecated use size instead
+     */
+    readonly length:number;
 }
 
 interface FooIterator<Type> {
-
+    next():{
+        done:boolean,
+        value:Type,
+    };
     /**
-     * @returns the next item in the list
-     * @throws if called when no item left
+     * the item returned by the last next call.
      */
-    next():Type;
+    readonly current:Type|null;
     /**
-     * @returns the item returned by the last next call.
+     * the index of the current item
      */
-    current():Type|null;
+    readonly currentIndex:number;
     /**
-     * @returns the index of the current item
+     * true if the iterator has more items
      */
-    currentIndex():Number;
-    /**
-     * @returns true if the iterator has more items
-     */
-    hasNext():Boolean;
+    readonly hasNext:boolean;
     /**
      * @returns the removed item returned by the previous next call.
      * @throws if no item to remove 
