@@ -3,7 +3,7 @@
 export default new (function(){
 	const tagBlackList=new Set(["script","SCRIPT","STYLE","OBJECT"]);
 	const attributeBlackList={"as":true};
-	const schemaWhiteList=["http:","https:","data:","m-files:","file:","ftp:","mailto:","pw:"]; //which "protocols" are allowed in "href", "src" etc
+	const schemaWhiteList=["http:","https:","data:","m-files:","file:","ftp:","mailto:","tel:","pw:"]; //which "protocols" are allowed in "href", "src" etc
 	const uriAttributes={"href":true,"action":true};
 	const excludedTextContents=new Set(["false","undefined","null","0","NaN"]);
 	const svgSpecificAttributes={
@@ -101,7 +101,7 @@ export default new (function(){
 		const {length}=searchStrs;
 		let does=false,i=0;
 		while((!does)&&(i<length)){
-			if(str.includes(searchStrs[i])){does=true};
+			if(str.includes(searchStrs[i])) does=true;
 			i++;
 		}
 		return does;

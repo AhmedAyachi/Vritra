@@ -1,6 +1,7 @@
 
 
-export function HashRouter({target,routes}){
+export function HashRouter(options){
+    const {target,routes,fallbackRoute}=options;
     const {history,location}=window;
     const state={
         data:null,
@@ -11,23 +12,23 @@ export function HashRouter({target,routes}){
     window.addEventListener("hashchange",setRoute);
 
     const hashrouter={
-        push:(hash,data)=>{
-            if(typeof(hash)==="string"){
+        push:(path,data)=>{
+            if(typeof(path)==="string"){
                 state.data=data;
-                location.hash=getDecentHash(hash);
+                location.hash=getDecentHash(path);
             }
         },
-        append:(hash,data)=>{
-            if(typeof(hash)==="string"){
+        append:(path,data)=>{
+            if(typeof(path)==="string"){
                 state.data=data;
-                location.hash+=getDecentHash(hash);
+                location.hash+=getDecentHash(path);
             }
         },
-        replace:(hash,data)=>{
-            if(typeof(hash)==="string"){
+        replace:(path,data)=>{
+            if(typeof(path)==="string"){
                 const oldhash=location.hash;
                 state.data=data;
-                history.replaceState(null,null,`${location.origin}/${getDecentHash(hash)}`);
+                history.replaceState(null,null,`${location.origin}/#${getDecentHash(path)}`);
                 (location.hash!==oldhash)&&setRoute();
             }
         },
@@ -60,23 +61,21 @@ export function HashRouter({target,routes}){
                 onHide&&onHide();
             }
         }
-        route=getRoute(routes);
+        route=getRoute(routes,fallbackRoute);
         if(route){
             new Promise(resolve=>{
                 if(typeof(route.restrictor)==="function"){
                     route.restrictor(resolve,target);
                 }
                 else resolve(true);
-            }).
-            then(unlocked=>{
+            }).then(unlocked=>{
                 if(unlocked){
                     state.route=route;
                     route.data=state.data;
                     return renderRoute(route,target);
                 }
                 else history.back();
-            }).
-            finally(()=>{
+            }).finally(()=>{
                 state.data=null;
             });
         }
@@ -111,51 +110,57 @@ const renderRoute=async (route,target)=>{
     window.scrollTo(0,0);
 }
 
-const getDecentHash=(hash)=>hash.startsWith("#")?hash:("#"+hash);
+const getDecentHash=(path)=>path.startsWith("/")?path:("/"+path);
 
 const getContext=({params,data})=>{
-    let {hash}=location;
-    if(hash&&!hash.startsWith("#")){
-        hash="#"+hash;
-    }
+    let path=location.hash;
+    const startsWithHash=path.startsWith("#");
     const context={
         params:params||{},
         location:{
-            hash,
-            url:`${location.origin}/${hash}`,
+            path:startsWithHash?path.substring(1):path,
+            url:`${location.origin}/${startsWithHash?path:"#"+path}`,
         },
     };
     if(data){
         context.data=data;
     }
+    
     return context;
 }
 
-const getRoute=(routes)=>{
-    const hashs=getHashs(location.hash);
-    const route=findBestRoute(hashs,routes);
+const getRoute=(routes,fallbackRoute)=>{
+    const paths=getHashs(location.hash);
+    let route=findBestRoute(paths,routes);
     if(route){
-        const oldParams=route.params;
-        const params={};
-        route.hashs.forEach((hash,i)=>{
-            if(hash.startsWith(":")){
-                const varname=hash.substring(1);
-                params[varname]=hashs[i];
+        const oldParams=route.params,params=route.params=getURLParams();
+        route.paths?.forEach((path,i)=>{
+            if(path.startsWith(":")){
+                const varname=path.substring(1);
+                params[varname]=paths[i];
             }
         });
-        if(Object.keys(params).length){
-            route.params=params;
-            if(route.memorize&&(!areSameParams(route.params,oldParams))){
-                delete route.element;
-            }
-        };
-        if(!route.scroll){
-            route.scroll={top:0,left:0};
+        if(route.memorize&&(!areSameParams(params,oldParams))){
+            delete route.element;
         }
+    }
+    else route=fallbackRoute;
+    if(route&&!route.scroll){
+        route.scroll={top:0,left:0};
     }
     return route;
 }
-
+const getURLParams=(initials)=>{
+    const params=initials||{},path=location.hash;
+    const index=path.indexOf("?");
+    if(index>=0){
+        const searchParams=new URLSearchParams(path.substring(index));
+        for(const [key,value] of searchParams){
+            if(value) params[key]=value;
+        }
+    }
+    return params;
+}
 const areSameParams=(params0,params1)=>{
     let same=params0===params1;
     if(params0&&params1){
@@ -174,34 +179,32 @@ const areSameParams=(params0,params1)=>{
     return same;
 }
 
-const findBestRoute=(hashs,routes)=>{
-    const routeCount=routes.length;
-    let i=0,exactfound;
-    let bestRoute,bestRouteScore={exact:0,param:0};
-    while((!exactfound)&&(i<routeCount)){
-        const route=routes[i],{hash}=route;
-        let routeHashs=route.hashs;
-        if(!routeHashs) routeHashs=route.hashs=getHashs(hash);
-        if(location.hash===hash){
-            exactfound=true;
-            bestRoute=route;
-        }
-        else{
-            const routeHashCount=routeHashs.length;
-            if(routeHashCount===hashs.length){
+const findBestRoute=(paths,routes)=>{
+    const pathCount=paths.length;
+    if(pathCount<1) return routes.find(it=>!it.path);
+    else{
+        let bestRoute,i=0,found;
+        let bestRouteScore={exact:0,param:0};
+        const routeCount=routes.length;
+        while((!found)&&(i<routeCount)){
+            const route=routes[i],path=route.path;
+            let routePaths=route.paths;
+            if(!routePaths) routePaths=route.paths=getHashs(path);
+            const routePathCount=routePaths.length;
+            if(routePathCount===pathCount){
                 let rejected=false;
                 const score={exact:0,param:0};
-                for(let j=0;j<routeHashCount;j++){
-                    const routeHash=routeHashs[j];
+                for(let j=0;j<routePathCount;j++){
+                    const routeHash=routePaths[j];
                     const asparam=routeHash.startsWith(":");
                     if(asparam){
-                        if(hashs[j]) score.param++;
+                        if(paths[j]) score.param++;
                     }
                     else{
-                        const exact=routeHash===hashs[j];
+                        const exact=routeHash===paths[j];
                         if(exact) score.exact++;
                         else{
-                            j=routeHashCount;
+                            j=routePathCount;
                             rejected=true;
                             continue;
                         }
@@ -217,14 +220,22 @@ const findBestRoute=(hashs,routes)=>{
             }
             i++;
         }
+        return bestRoute;
     }
-    return bestRoute;
 }
 
-const getHashs=(hash)=>{
-    const hashs=hash.split("#");
-    if((hashs.length>1)&&(!hashs[0])){
-        hashs.shift();
+const getHashs=(path)=>{
+    path=getLocationPath(path);
+    const paths=path.split("/").filter(Boolean);
+    if((paths.length>1)&&(!paths[0])){
+        paths.shift();
     }
-    return hashs;
+    return paths;
+}
+
+const getLocationPath=(path=location.hash)=>{
+    if(path.startsWith("#")) path=path.substring(1);
+    const index=path.indexOf("?");
+    if(index>=0) return path.substring(0,index);
+    else return path;
 }

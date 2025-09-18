@@ -15,44 +15,54 @@ export function HashRouter(options:{
     target:HTMLElement,
     routes:{
         /**
-         * Route hash
-         * @example "#one"
-         * @for hash params use "#:"
+         * Route path
+         * @example "/one"
+         * @for hash params use "/:"
          * @examples
-         * 1) #:something
-         * 2) #things#:name
-         * @for nested hash params, just add more params, like this :
-         * @#categry#:things#:name
+         * 1) /:something
+         * 2) /things/:name
+         * 
+         * for nested hash params, just add more params, like this :
+         * 
+         * /categry/:things/:name
+         */
+        path:string,
+        /**
+         * @deprecated use path instead
          */
         hash:string,
         /**
-         * Hash param matches, will rerender anyway if any of the params value changes.
+         * Will rerender anyway if any of the params value changes.
          * @default false
          */
         memorize?:boolean,
         restrictor?:(unlock:(unlocked:boolean)=>void,target:HTMLElement)=>void,
         component(props:HashRouteComponentProps):HashRouteElement|Promise<HashRouteElement>,
     }[],
+    fallbackRoute?:{
+        memorize?:boolean,
+        component(props:HashRouteComponentProps):HashRouteElement|Promise<HashRouteElement>,
+    },
 }):HashRouter;
  
 interface HashRouter {
     /**
      * Adds an entry to the browser's session history stack 
-     * @param hash 
+     * @param path 
      * @param data Data object to pass to the new route component
      */
-    push(hash:string,data:object):void,
+    push(path:string,data:object):void,
     /**
-     * Appends the hash to the end of the current hash
-     * @param hash Hash to append
+     * Appends the path to the end of the current path
+     * @param path Hash to append
      * @param data Data object to pass to the new route component
      */
-    append(hash:string,data:object):void,
+    append(path:string,data:object):void,
     /**
      * Replaces the current history entry
      * @param data Data object to pass to the new route component
      */
-    replace(hash:string,data:object):void,
+    replace(path:string,data:object):void,
     /**
      * Rerenders the current route even if memorize true is specified
      */
@@ -67,9 +77,9 @@ interface HashRouteElement extends HTMLElement {
 interface HashRouteComponentProps {
     parent:HTMLElement,
     data?:object,
-    params:object,
+    params:[string:string],
     location:{
-        hash:string,
+        path:string,
         url:string,
     },
 }
