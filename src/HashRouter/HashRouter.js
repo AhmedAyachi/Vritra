@@ -116,15 +116,13 @@ const getContext=({params,data})=>{
     let path=location.hash;
     const startsWithHash=path.startsWith("#");
     const context={
-        params:params||{},
         location:{
             path:startsWithHash?path.substring(1):path,
             url:`${location.origin}/${startsWithHash?path:"#"+path}`,
         },
     };
-    if(data){
-        context.data=data;
-    }
+    if(data) context.data=data;
+    if(params) context.params=params;
     
     return context;
 }
@@ -133,13 +131,16 @@ const getRoute=(routes,fallbackRoute)=>{
     const paths=getHashs(location.hash);
     let route=findBestRoute(paths,routes);
     if(route){
-        const oldParams=route.params,params=route.params=getURLParams();
+        const oldParams=route.params;
+        let params=getURLParams();
         route.paths?.forEach((path,i)=>{
             if(path.startsWith(":")){
+                if(!params) params={};
                 const varname=path.substring(1);
                 params[varname]=paths[i];
             }
         });
+        route.params=params;
         if(route.memorize&&(!areSameParams(params,oldParams))){
             delete route.element;
         }
@@ -150,16 +151,18 @@ const getRoute=(routes,fallbackRoute)=>{
     }
     return route;
 }
-const getURLParams=(initials)=>{
-    const params=initials||{},path=location.hash;
+const getURLParams=()=>{
+    const path=location.hash;
     const index=path.indexOf("?");
     if(index>=0){
+        const params={};
         const searchParams=new URLSearchParams(path.substring(index));
         for(const [key,value] of searchParams){
             if(value) params[key]=value;
         }
+        return params;
     }
-    return params;
+    else return null;
 }
 const areSameParams=(params0,params1)=>{
     let same=params0===params1;

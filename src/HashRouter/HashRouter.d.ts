@@ -77,7 +77,7 @@ interface HashRouteElement extends HTMLElement {
 interface HashRouteComponentProps {
     parent:HTMLElement,
     data?:object,
-    params:[string:string],
+    params?:[string:string],
     location:{
         path:string,
         url:string,
