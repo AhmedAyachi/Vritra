@@ -28,7 +28,7 @@ export function HashRouter(options:{
          */
         path:string,
         /**
-         * @deprecated use path instead
+         * @deprecated use path instead with "/" as a separator
          */
         hash:string,
         /**
