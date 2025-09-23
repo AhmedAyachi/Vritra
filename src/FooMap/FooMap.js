@@ -3,7 +3,7 @@ import {removeItem} from "../index";
 
 export default class FooMap extends Map {
 
-    #onChange
+    #onChange;
     constructor(param,options){
         super();
         if(Array.isArray(param)){
@@ -21,11 +21,13 @@ export default class FooMap extends Map {
     set(key,value){
         super.set(key,value);
         this.#onChange?.();
+        return this;
     }
 
     delete(key){
-        super.delete(key);
-        this.#onChange?.();
+        const deleted=super.delete(key);
+        if(deleted) this.#onChange?.();
+        return deleted;
     }
 
     clear(){
@@ -50,13 +52,11 @@ export default class FooMap extends Map {
     indexOf(item,isValue=false){
         let found=false;
         const iterator=isValue?this.valueIterator():this.keyIterator();
-        while((!found)&&iterator.hasNext()){
-            const next=iterator.next();
-            if(next===item){
-                found=true;
-            }
+        while((!found)&&iterator.hasNext){
+            const next=iterator.next().value;
+            if(next===item) found=true;
         }
-        return found?iterator.currentIndex():-1;
+        return found?iterator.currentIndex:-1;
     }
 
     keys(){
