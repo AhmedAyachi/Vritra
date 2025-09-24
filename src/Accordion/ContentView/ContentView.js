@@ -94,5 +94,9 @@ const getNextElement=(parent)=>{
 const areHorizontallyAligned=(elem1,elem2)=>{
     const elem1Rect=elem1.getBoundingClientRect();
     const elem2Rect=elem2.getBoundingClientRect();
-    return (elem1Rect.top===elem2Rect.top)&&(elem1Rect.bottom===elem2Rect.bottom);
+    return !(
+        elem2Rect.bottom>=elem1Rect.bottom &&
+        elem2Rect.left>=elem1Rect.left &&
+        elem2Rect.right<=elem1Rect.right
+    )
 }
