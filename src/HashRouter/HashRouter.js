@@ -12,26 +12,20 @@ export function HashRouter(options){
     window.addEventListener("hashchange",setRoute);
 
     const hashrouter={
-        push:(path,data)=>{
-            if(typeof(path)==="string"){
-                state.data=data;
-                location.hash=getDecentHash(path);
-            }
-        },
-        append:(path,data)=>{
-            if(typeof(path)==="string"){
-                state.data=data;
-                location.hash+=getDecentHash(path);
-            }
-        },
-        replace:(path,data)=>{
-            if(typeof(path)==="string"){
-                const oldhash=location.hash;
-                state.data=data;
-                history.replaceState(null,null,`${location.origin}/#${getDecentHash(path)}`);
-                (location.hash!==oldhash)&&setRoute();
-            }
-        },
+        push:(path,data)=>{if(typeof(path)==="string"){
+            state.data=data;
+            location.hash=getDecentPath(path);
+        }},
+        append:(path,data)=>{if(typeof(path)==="string"){
+            state.data=data;
+            location.hash+=getDecentPath(path);
+        }},
+        replace:(path,data)=>{if(typeof(path)==="string"){
+            const oldhash=location.hash;
+            state.data=data;
+            history.replaceState(null,null,"#"+getDecentPath(path));
+            (location.hash!==oldhash)&&setRoute();
+        }},
         refresh:()=>{
             const {route}=state;
             if(route){
@@ -110,7 +104,7 @@ const renderRoute=async (route,target)=>{
     window.scrollTo(0,0);
 }
 
-const getDecentHash=(path)=>path.startsWith("/")?path:("/"+path);
+const getDecentPath=(path)=>path.startsWith("/")?path:("/"+path);
 
 const getContext=({params,data})=>{
     let path=location.hash;
