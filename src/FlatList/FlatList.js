@@ -12,12 +12,12 @@ export default function FlatList(props){
         style:props.style,
         className:[css.flatlist,props.className],
     }),state={
-        data:Array.isArray(props.data)?[...props.data]:[],
+        data:(it=>Array.isArray(it)?[...it]:[])(props.data),
         index:-1,//last created element index
         observedEl:null,//observed element
         infocusIndex:null,//for paging, the index of the element in focus
         itemsmap:new FooMap(),// [item,element] map
-        endreached:!props.data?.length,
+        endReached:!props.data?.length,
         firstOffset:null,//for paging lists: firstEl offset
         popuplist:null,
         offsetSide:"offset"+(horizontal?"Left":"Top"),
@@ -108,8 +108,8 @@ export default function FlatList(props){
                     createNextElement(i===1);
                 }
             }
-            else if(!state.endreached){
-                state.endreached=true;
+            else if(!state.endReached){
+                state.endReached=true;
                 onReachEnd&&onReachEnd({container,data:props.data});
             }
         }
@@ -136,7 +136,7 @@ export default function FlatList(props){
     },{root:flatlist,threshold});
 
     //In case the flatlist was inserted into the DOM using appendChild, 
-    //and the observer is not triggered, this forces that by unobserve/observe.
+    //and the observer is not triggered, this forces observation by unobserve/observe.
     if(flatlist.isConnected) setTimeout(()=>{
         const {observedEl}=state;
         if(observedEl instanceof Element){
@@ -193,9 +193,9 @@ export default function FlatList(props){
             }
             data.push(...items);
         }
-        if(state.endreached){
+        if(state.endReached){
             if(length){
-                state.endreached=false;
+                state.endReached=false;
                 createNextElement();
                 if(data.length===length){
                     setTimeout(()=>{
@@ -236,7 +236,7 @@ export default function FlatList(props){
     flatlist.clear=()=>{if(data.length){
         const {observedEl,itemsmap}=state;
         state.index=-1;
-        state.endreached=true;
+        state.endReached=true;
         state.infocusIndex=null;
         if(observedEl instanceof Element){
             state.observedEl=null;

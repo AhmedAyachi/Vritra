@@ -40,7 +40,7 @@ interface VritraElement {
      * Removes script/style elements, 
      * any element that has at least one attribute starting with "on", 
      * whose style attribute containes "javascript:", 
-     * whose href attribute does not start with ["http:","https:","data:","m-files:","file:","ftp:","mailto:","pw:"].
+     * whose href attribute does not start with "http:","https:","data:","m-files:","file:","ftp:","mailto:","tel:","pw:".
      * @notice Safer version of innerHTML
      */
     innateHTML:string;
