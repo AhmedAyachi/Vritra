@@ -3,14 +3,25 @@ import usePinchGesture from "../usePinchGesture/usePinchGesture";
 
 export default function useZoomGesture(options){
     const {element,minScale=1,maxScale=10,onZoomStart,onZoom,onZoomEnd}=options;
-    element.style.transformOrigin="50% 50%"; 
-    let origin;
+    let origin,initialStyle;
 
     usePinchGesture({
         element,
+        minPointerCount:2,
         maxPointerCount:2,
         onStart:((event)=>{
+            const {style}=element;
+            initialStyle=Object.assign({},{
+                transition:style.transition,
+                transformOrigin:style.transformOrigin,
+                transitionDuration:style.transitionDuration,
+            });
             origin=getOrigin(element);
+            Object.assign(style,{
+                transition:null,
+                transformOrigin:"50% 50%",
+                transitionDuration:null,
+            });
             onZoomStart&&onZoomStart(Object.assign(event,{translateX:0,translateY:0}));
         }),
         onMove:(event)=>{
@@ -24,22 +35,24 @@ export default function useZoomGesture(options){
             }
         },
         onEnd:()=>{
-            const transition=element.style.transition,{style}=element;
-            style.transition=`${statics.transition}ms`;
+            const {style}=element;
+            style.transition=`${statics.transitionDuration}ms`;
             style.transform="scale(1) translate(0,0)";
             setTimeout(()=>{
-                style.transition=transition;
-            },statics.transition);
+                Object.assign(style,initialStyle);
+            },statics.transitionDuration);
             onZoomEnd&&onZoomEnd();
         },
     });
     screen.orientation.addEventListener("change",()=>{
-        setTimeout(()=>{origin=getOrigin(element)},statics.transition);
+        setTimeout(()=>{
+            origin=getOrigin(element);
+        },statics.transitionDuration);
     });
 }
 
 const statics={
-    transition:200,
+    transitionDuration:200,
 }
 
 const getOrigin=(element)=>{
