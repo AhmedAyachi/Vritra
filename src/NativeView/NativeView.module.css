@@ -6,15 +6,20 @@
     padding:0;
     outline:none transparent !important;
     user-select:none;
+    -ms-user-select:none;
     -moz-user-select:none;
     -webkit-user-select:none;
-    -ms-user-select:none;
 }
 .nativeview input:read-write,.nativeview textarea:read-write,.nativeview div[contenteditable]{
     user-select:text;
     -moz-user-select:text;
     -webkit-user-select:text;
     -ms-user-select:text;
+}
+.nativeview img{
+    user-drag:none;
+    -webkit-user-drag:none;
+    -webkit-touch-callout:none;
 }
 .nativeview button{
     border:none;
