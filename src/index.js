@@ -11,7 +11,6 @@ export {default as Switch} from "./Switch/Switch";
 export {default as PopupView} from "./PopupView/PopupView";
 export {default as ActionSetView} from "./ActionSetView/ActionSetView";
 export {default as Accordion} from "./Accordion/Accordion";
-export {default as AccordionView} from "./Accordion/Accordion";
 export {default as Palette} from "./Palette/Palette";
 export {default as FlatList} from "./FlatList/FlatList";
 export {default as DraggableView} from "./DraggableView/DraggableView";

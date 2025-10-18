@@ -19,15 +19,16 @@
     overflow:hidden auto !important;
     transition:var(--transition);
 }
-.entryexplorer>div[class^=container]>*{
+.entrycontainer>*{
     margin-left:calc(5em + var(--entryspacing));
     margin-right:5em;
 }
-.entryexplorer>div[class^=container]>*:first-child{
+.entrycontainer>*:first-child{
     margin-top:3em !important;
 }
 .entryexplorer::-webkit-scrollbar{
     display:block;
+    width:2em;
 }
 .entryexplorer::-webkit-scrollbar-thumb{
     transition:150ms;
@@ -52,24 +53,30 @@
 }
 .togglebtn{
     position:absolute;
-    width:5em;
+    font-size:1em;
     bottom:2em;
     right:2.5em;
     opacity:0.5;
+    background-color:transparent;
     transition:var(--transition);
     z-index:99;
+    &>img{
+        width:5em;
+    }
 }
 
 @media(any-hover){
     .togglebtn:hover{
         opacity:1;
         cursor:pointer;
+        filter:brightness(1) !important;
     }
 }
 
 @media(hover:none){
     .togglebtn:active{
         opacity:1;
+        filter:brightness(1) !important;
     }
 }
 

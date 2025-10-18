@@ -3,7 +3,8 @@
     display:block;
 }
 .entryview[folder]{
-    margin:1.5em 0;
+    margin-top:1.5em;
+    margin-bottom:1.5em;
 }
 .entryview[folder]+.entryview[folder]{
     margin-top:3em;

@@ -1,4 +1,4 @@
-import {useId,NativeView} from "../index";
+import {randomId,NativeView} from "../index";
 import css from "./SideBarNavigator.module.css";
 import SideBar from "./SideBar/SideBar";
 
@@ -6,7 +6,9 @@ import SideBar from "./SideBar/SideBar";
 export default function SideBarNavigator(props){
     const {parent,entries,tintColor="dodgerblue",folderColor="black",endpointColor="rgba(0,0,0,0.35)",onNavigate}=props;
     const sidebarnavigator=NativeView({
-        parent,style:props.style,at:props.at,
+        parent,at:props.at,
+        id:randomId("sidebarnavigator"),
+        style:props.style,
         className:[css.sidebarnavigator,props.className],
     }),state={
         current:null,

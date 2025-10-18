@@ -2,20 +2,21 @@ import {View,ExtendableViewProps} from "../View/View";
 import {ActionSetAction,VritraIcon} from "../ActionSetView/ActionSetView";
 
 
-/**
- * @deprecated renamed to Accordion
- */
-export function AccordionView<HeaderRenderer extends RendererType,ContentRenderer extends RendererType>(props:AccordionProps<HeaderRenderer,ContentRenderer>):Accordion<ExtractRendererType<HeaderRenderer>,ExtractRendererType<ContentRenderer>>;
-
-type RendererType=(props:{parent:HTMLElement})=>any;
-type ExtractRendererType<T>=T extends (props:{parent:HTMLElement})=>infer R?R:null;
+type RendererType=(props:{parent:HTMLElement})=>HTMLElement;
+type ReturnTypeOf<T>=T extends (props:{parent:HTMLElement})=>infer R?R:null;
 
 /**
  * 
  * @param props Accordion props
  * @notice Accordion css variables : paddingHorizontal borderRadius
  */
-export default function Accordion<HeaderRenderer extends RendererType,ContentRenderer extends RendererType>(props:AccordionProps<HeaderRenderer,ContentRenderer>):Accordion<ExtractRendererType<HeaderRenderer>,ExtractRendererType<ContentRenderer>>;
+export default function Accordion<
+    HeaderRenderer extends RendererType,
+    ContentRenderer extends RendererType,
+>(props:AccordionProps<HeaderRenderer,ContentRenderer>):Accordion<
+    ReturnTypeOf<HeaderRenderer>,
+    ReturnTypeOf<ContentRenderer>
+>;
 
 type AccordionProps<HeaderRenderer,ContentRenderer>=ExtendableViewProps<"div">&{
     /**

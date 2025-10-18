@@ -1,12 +1,12 @@
-import {useId,View} from "../../../../index";
+import {View} from "../../../../index";
 import css from "./EntryView.module.css";
 import EntryExplorer from "../EntryExplorer";
 import icon0 from "./Icon_0";
 
 
 export default function EntryView(props){
-    const {parent,id=useId("entryview"),entry,tintColor,folderColor,endpointColor}=props;
-    const entryview=entry.element=View({parent,id,className:css.entryview}),state={
+    const {parent,entry,tintColor,folderColor,endpointColor}=props;
+    const entryview=entry.element=View({parent,className:css.entryview}),state={
         explorer:null,
         highlighted:false,
         isfolder:Array.isArray(entry.entries),
@@ -33,7 +33,7 @@ export default function EntryView(props){
             entryview.toggle();
         }
         else if(!state.highlighted){
-            const sidebarnavigator=entryview.closest("div[class*= sidebarnavigator]");
+            const sidebarnavigator=entryview.closest("[id*=sidebarnavigator]");
             sidebarnavigator.navigate(entry.id);
         }
     };

@@ -28,10 +28,3 @@
     color:rgba(0,0,0,0.5);
     background-color:white;
 }
-
-
-@supports(-webkit-backdrop-filter:none){
-    .container{
-        container-type:size;
-    }
-}

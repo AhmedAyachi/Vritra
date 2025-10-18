@@ -1,13 +1,13 @@
-import {useId,View,FlatList} from "../../../index";
+import {View,FlatList} from "../../../index";
 import css from "./EntryExplorer.module.css";
 import EntryView from "./EntryView/EntryView";
 
 
 export default function EntryExplorer(props){
-    const {parent,id=useId("entryexplorer"),lazy,entries,onExpanded}=props;
+    const {parent,lazy,entries,onExpanded}=props;
     const entryexplorer=(lazy?FlatList:View)({
-        parent,id,
-        className:`${css.entryexplorer} ${props.className||""}`,
+        parent,
+        className:[css.entryexplorer,props.className],
         ...(lazy&&{
             containerClassName:css.container,
             data:entries,emptymessage:"",
@@ -18,7 +18,7 @@ export default function EntryExplorer(props){
 
     entryexplorer.beforeEndHTML=`
         ${lazy?"":`
-            <div class="${css.container}" ref="container"></div>
+            <div class="${css.container} ${props.containerClassName||""}" ref="container"></div>
         `}
     `;
 

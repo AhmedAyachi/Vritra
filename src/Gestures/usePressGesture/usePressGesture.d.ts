@@ -6,15 +6,15 @@ export default function usePressGesture(options:{
      * For how long in milliseconds the element should kept pressed to trigger the gesture
      * @default 0
      */
-    threshold:number,
+    threshold?:number,
     /**
      * Pressing timestamp in milliseconds
      * @default 0
      */
-    timestamp:number,
-    onStart(event:PressEvent):void,
-    onPressing(event:PressEvent):void,
-    onEnd(event:PressEvent):void,
+    timestamp?:number,
+    onStart?(event:PressEvent):void,
+    onPressing?(event:PressEvent):void,
+    onEnd?(event:PressEvent):void,
 }):void;
 
 

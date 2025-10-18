@@ -1,22 +1,23 @@
-import {useId,View} from "../../index";
+import {View} from "../../index";
 import css from "./SideBar.module.css";
 import EntryExplorer from "./EntryExplorer/EntryExplorer";
 import icon0 from "./Icon_0";
 
 
 export default function SideBar(props){
-    const {parent,id=useId("sidebar"),entries,tintColor,scrollTheme="dark"}=props;
+    const {parent,entries,tintColor,scrollTheme="dark"}=props;
     const sidebar=View({
-        parent,id,at:"start",
-        tag:"nav",
-        className:`${css.sidebar} ${props.className||""}`,
+        parent,at:0,tag:"nav",
+        className:[css.sidebar,props.className],
     }),state={
         shown:true,
         width:sidebar.clientWidth,
     };
 
     sidebar.innateHTML=`
-        <img class="${css.togglebtn}" ref="togglebtn" src="${icon0(tintColor)}"/>
+        <button class="${css.togglebtn}" ref="togglebtn">
+            <img  src="${icon0(tintColor)}"/>
+        </button>
     `;
 
     const firstentry=entries[0];
@@ -27,6 +28,7 @@ export default function SideBar(props){
         ...props,entries,
         parent:sidebar,
         className:`${css.entryexplorer} ${css[scrollTheme+"explorer"]||""}`,
+        containerClassName:css.entrycontainer,
         lazy:false,
     });
 
@@ -45,7 +47,7 @@ export default function SideBar(props){
                 width:shown?`${state.width}px`:0,
             });
             Object.assign(togglebtn.style,{
-                right:shown?null:"-6em",
+                right:shown?null:"-7em",
                 transform:`rotateZ(${shown?0:180}deg)`,
             });
             shown&&setTimeout(()=>{

@@ -18,7 +18,6 @@ export class VritraFragment extends DocumentFragment {
         else if(typeof(at)==="number"){
             this.#nextParentNode=parent?parent.children[at]:null;
         }
-        else this.#nextParentNode=parent?parent.lastChild:null;
     }
 
     set innateHTML(html){
@@ -150,13 +149,13 @@ export class VritraFragment extends DocumentFragment {
     }
 
     append(...newNodes){
-        const lastNode=this.lastChild?.nextSibling||this.nextSibling;
+        const nextNode=this.lastChild?.nextSibling||this.nextSibling;
         this.#nodes.push(...newNodes);
         const {length}=newNodes,parent=this.#parent;
         for(let i=0;i<length;i++){
             const node=newNodes[i];
-            if(parent) parent.insertBefore(node,lastNode);
-            else super.insertBefore(node,lastNode);
+            if(parent) parent.insertBefore(node,nextNode);
+            else super.insertBefore(node,nextNode);
         }   
     }
 
@@ -304,7 +303,7 @@ export class VritraFragment extends DocumentFragment {
         const nextParentNode=this.#nextParentNode;
         if(nextParentNode) return nextParentNode;
         else{
-            const lastChild=this.lastChild;
+            const {lastChild}=this;
             if(lastChild) return lastChild.nextSibling;
             else{
                 if(this.#at==="start") return this.#parent.firstChild;

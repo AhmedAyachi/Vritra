@@ -51,11 +51,6 @@ export default class FooMap<Key,Value> extends Map {
      * Returns an iterable of key, value pairs for every entry in the map
      */
     entryIterableIterator():IterableIterator<[Key,Value]>;
-
-    /**
-     * @deprecated use size instead
-     */
-    readonly length:number;
 }
 
 interface FooIterator<Type> {
