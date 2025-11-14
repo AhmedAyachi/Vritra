@@ -18,6 +18,7 @@ export {default as FooMap} from "./FooMap/FooMap";
 export {HashRouter} from "./HashRouter/HashRouter";
 export {useZoomGesture,usePinchGesture,useSwipeGesture,usePressGesture} from "./Gestures";
 export {default as withSequence} from "./withSequence/withSequence";
+export {default as sendRequest} from "./sendRequest/sendRequest";
 
 export const hexColorToRGBA=(hexcolor="",asarray)=>{
     if(hexcolor.startsWith("#")){

@@ -12,16 +12,22 @@ export default function ActionSetView(props){
     },{actions}=state;
 
     actionsetview.innateHTML=`
-        ${map(actions.filter(action=>action.icon),(action)=>{
-            const {id,icon,size,alt}=action;
+        ${map(actions.filter(action=>action.icon||action.label),(action)=>{
+            if(!action.color) action.color=tintColor;
+            const {id,icon,label,size=6.4,color,iconAlt=action.alt}=action;
             return `
-                <div ref="${id}" class="clickable ${css.action}">
-                    <img 
-                        alt="${alt||id||""}"
-                        ${size?`style="${styles.icon(size)}"`:""} 
-                        src="${typeof(icon)==="function"?action.icon(tintColor,2):(icon||"")}"
-                    />
-                </div>
+                <button 
+                    ref="${id}" class="${css.action}" 
+                    style="font-size:${Number(size/6.4)}em"
+                >
+                    ${icon?`<img 
+                        alt="${iconAlt||id||""}"
+                        src="${typeof(icon)==="function"?action.icon(color,2):(icon||"")}"
+                    />`:""}
+                    ${label?`
+                        <text as="label" style="color:${color}">${label}</text>
+                    `:""}
+                </button>
             `
         })}
     `;
@@ -39,39 +45,30 @@ export default function ActionSetView(props){
                 const pvaction=actions[i-1];
                 pvaction?.element?.insertAdjacentElement("afterend",actionEl);
             }
-        }
-        else{
+        } else {
             const actionId=action.id||action.ref;
-            try{
+            try {
+                const {style}=action;
                 actionEl=actionsetview[actionId];
+                if(style) Object.assign(actionEl.style,style);
                 actionEl.onclick=(event)=>{
                     event.stopPropagation();
                     action.onTrigger?.(action);
                 }
-                actionEl.setIcon=(icon=action.icon,save)=>{
+                const img=actionEl.querySelector(":scope>img");
+                if(img) actionEl.setIcon=(icon=action.icon,save)=>{
                     if(save) action.icon=icon;
-                    const img=actionEl.querySelector(":scope>img");
                     img.src=typeof(icon)==="function"?icon(tintColor):icon;
                 }
-            }
-            catch{
+            } catch {
                 throw new Error(actionId?`invalid action with id: "${actionId}"`:"action with no id");
             }
         }
-        action.color=tintColor;
         action.element=actionEl;
         onReady&&onReady(action);
     });
 
     return actionsetview;
-}
-
-const styles={
-    icon:(size)=>`
-        width:${size}em;
-        min-width:${size}em;
-        height:${size}em;
-    `,
 }
 
 const getActions=(actions,definitions)=>Array.isArray(definitions)?actions?.map(action=>{

@@ -18,13 +18,13 @@ export default function Accordion<
     ReturnTypeOf<ContentRenderer>
 >;
 
-type AccordionProps<HeaderRenderer,ContentRenderer>=ExtendableViewProps<"div">&{
+type AccordionProps<HeaderRenderer,ContentRenderer>=ExtendableViewProps<"section">&{
     /**
-     * Default header title
+     * Default header title.
      */
     title?:string,
     /**
-     * Header container className
+     * Header container className.
      */
     headerClassName?:string,
     /**
@@ -85,25 +85,34 @@ type AccordionProps<HeaderRenderer,ContentRenderer>=ExtendableViewProps<"div">&{
 
 //type ContentType=ReturnType<AccordionProps["renderContent"]>;
 
-type Accordion<HeaderRenderer,ContentType>=View<"div">&{
+type Accordion<HeaderRenderer,ContentType>=View<"section">&{
     /**
-     * Locks and unlocks the accordion
+     * Locks and unlocks the accordion.
      * @param locked default to false
+     * @deprecated use the isLocked setter
      */
     setLocked(locked:boolean):void,
+    /**
+     * Locks and unlocks the accordion.
+     * @default false
+     * @notice isLocked does not close the accordion as 
+     * the deprecated setLocked does.
+     */
+    isLocked:boolean,
     /**
      * Opens and closes the accordion
      * @param open 
      * @default true if closed, false if open
      */
     toggle(open?:boolean):void,
+    readonly isOpen:boolean,
     /**
      * Gets the element returned by renderHeader
      */
-    readonly header:HeaderRenderer|null;
+    readonly header:HeaderRenderer|null,
     /**
      * Gets the element returned by renderContent
      */
-    readonly content:ContentType|null;
+    readonly content:ContentType|null,
 }
 

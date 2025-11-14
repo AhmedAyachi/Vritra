@@ -46,8 +46,10 @@ interface ActionSetDefinition {
      */
     id?:string,
     /**
-     * Used to add custom action component 
+     * For a custom action component.
      * @returns action HTMLElement
+     * @notice none of the provided customization options 
+     * are applied to the element when this option is used.
      */
     component?:(props:ActionSetDefinition&{parent:ActionSetView})=>HTMLElement,
     /**
@@ -55,25 +57,40 @@ interface ActionSetDefinition {
      */
     icon?:VritraIcon,
     /**
-     * Action icon size
+     * Action label
+     */
+    label?:string,
+    /**
+     * Action image element alt attribute value
+     * @deprecated use iconAlt instead
+     */
+    alt?:string,
+    /**
+     * Action img element alt attribute value
+     * @default action id
+     */
+    iconAlt?:string,
+    /**
+     * Action size
      * @unit em
-     * @default 6.4
+     * @default 6.4 
      */
     size?:number,
     /**
-     * Action image element alt attribute value
+     * the icon function param value and label color.
+     * @default tintColor
      */
-    alt?:string,
+    color?:string,
+    /**
+     * for custom styling.
+     */
+    style?:CSSStyleDeclaration,
     /**
      * Called when the action HTMLElement is ready to click on
      * @param action the action object
      */
     onReady?(action:ActionSetDefinition&{
         element:ActionSetDefinitionElement,
-        /**
-         * The color prop value
-         */
-        color:string,
     }):void,
     /**
      * Called when the action HTMLElement clicked
@@ -82,10 +99,6 @@ interface ActionSetDefinition {
      */
     onTrigger?(action:ActionSetDefinition&{
         element:ActionSetDefinitionElement,
-        /**
-         * The color prop value
-         */
-        color:string,
     }):void,
 }
 
@@ -93,15 +106,10 @@ interface ActionSetDefinitionElement extends HTMLDivElement {
     /**
      * Not available for custom actions
      * @param icon default to action.icon
-     * @notice you can just edit the img element src yourself, but this method will make sure that your code
-     * keeps behaving the same way independently of package versions.
+     * @notice you can just edit the img element src yourself, but this method 
+     * will make sure that your code keeps behaving the same way independently of package versions.
      */
     setIcon(icon?:VritraIcon):void,
-    /**
-     * @param save if true, sets the action.icon property, default false
-     * @deprecated to change the default action icon just re-set action.icon
-     */
-    setIcon(icon:VritraIcon,save?:boolean):void,
 }
 
 type VritraIcon=string|((

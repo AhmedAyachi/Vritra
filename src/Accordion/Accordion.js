@@ -8,9 +8,10 @@ import icon from "./IndicatorIcon";
 export default function Accordion(props){
     const {parent,renderHeader,indicator=icon,renderContent,actions,tintColor=props.color||"black",memorize=true,separate,onOpen,onClose}=props;
     const accordion=NativeView({
-        parent,id:props.id,at:props.at,
+        parent,tag:"section",
+        id:props.id,at:props.at,
         className:[css.accordion,props.className],
-        style:[{opacity:props.locked?0.5:1},props.style],
+        style:[props.style,props.locked&&{opacity:0.5}],
     }),state={
         open:false,
         interactive:true,
@@ -30,13 +31,16 @@ export default function Accordion(props){
             ${renderHeader?"":`
                 <h3 class="${css.title}" style="color:${tintColor};">${props.title||""}</h3>
                 <div class="${css.actions}">
-                    <img class="${css.indicator}" src="${typeof(indicator)==="function"?indicator(tintColor,2):indicator}" alt=""/>
+                    <img 
+                        class="${css.indicator}" role="button" alt=""
+                        src="${typeof(indicator)==="function"?indicator(tintColor,2):indicator}"   
+                    />
                 </div>
             `}
         </div>
     `;
     const {headerEl}=accordion;
-    if(renderHeader){state.headerEl=renderHeader({parent:headerEl})}
+    if(renderHeader) state.headerEl=renderHeader({parent:headerEl});
     else if(actions){
         const actionsEl=accordion.querySelector(`.${css.actions}`);
         const actionsetview=ActionSetView({
@@ -48,13 +52,12 @@ export default function Accordion(props){
     }
 
     headerEl.onclick=()=>{
-        if(!state.locked){accordion.toggle()};
+        if(!state.locked) accordion.toggle();
     }
 
     accordion.setLocked=(value)=>{
-        (value&&state.open)&&accordion.toggle(false);
-        state.locked=Boolean(value);
-        accordion.style.opacity=state.locked?0.5:1;
+        if(value&&state.open) accordion.toggle(false);
+        accordion.isLocked=value;
     }
     accordion.toggle=(open=!state.open)=>{
         open=Boolean(open);
@@ -110,8 +113,17 @@ export default function Accordion(props){
     Object.defineProperties(accordion,{
         header:{get:()=>state.headerEl},
         content:{get:()=>state.contentEl},
+        isOpen:{get:()=>state.open},
+        isLocked:{
+            get:()=>state.locked,
+            set:(value)=>{
+                state.locked=Boolean(value);
+                headerEl.style.opacity=state.locked?0.5:null;
+            },
+        },
     });
-    props.open&&setTimeout(()=>{accordion.toggle(true)},0);
+
+    if(props.open) setTimeout(()=>{accordion.toggle(true)},0);
     return accordion;
 }
 

@@ -13,11 +13,13 @@ export {default as ActionSetView} from "./src/ActionSetView/ActionSetView";
 export {default as Accordion} from "./src/Accordion/Accordion";
 export {default as Palette} from "./src/Palette/Palette";
 export {default as FlatList} from "./src/FlatList/FlatList";
-export {default as DraggableView,} from "./src/DraggableView/DraggableView";
+export {default as DraggableView} from "./src/DraggableView/DraggableView";
 export {default as FooMap} from "./src/FooMap/FooMap";
 export {HashRouter} from "./src/HashRouter/HashRouter";
 export {useZoomGesture,usePinchGesture,useSwipeGesture,usePressGesture} from "./src/Gestures";
 export {default as withSequence} from "./src/withSequence/withSequence";
+export {default as sendRequest} from "./src/sendRequest/sendRequest";
+
 
 
 /**

@@ -36,7 +36,26 @@ export function HashRouter(options:{
          * @default false
          */
         memorize?:boolean,
-        restrictor?:(unlock:(unlocked:boolean)=>void,target:HTMLElement)=>void,
+        /**
+         * If defined, either unlock or redirect must be called.
+         * @param context 
+         * @returns 
+         */
+        restrictor?:(context:{
+            data?:object,
+            params?:[string:string],
+            target:HTMLElement,
+            /**
+             * Unlocks the route.
+             */
+            unlock():void,
+            /**
+             * 
+             * @param to default to ""
+             * @param data default to undefined
+             */
+            redirect(to?:string,data?:any):void;
+        })=>void,
         component(props:HashRouteComponentProps):HashRouteElement|Promise<HashRouteElement>,
     }[],
     fallbackRoute?:{
@@ -51,22 +70,30 @@ interface HashRouter {
      * @param path 
      * @param data Data object to pass to the new route component
      */
-    push(path:string,data:object):void,
+    push(path:string,data?:object):void,
     /**
      * Appends the path to the end of the current path
      * @param path Hash to append
      * @param data Data object to pass to the new route component
      */
-    append(path:string,data:object):void,
+    append(path:string,data?:object):void,
     /**
      * Replaces the current history entry
      * @param data Data object to pass to the new route component
      */
-    replace(path:string,data:object):void,
+    replace(path:string,data?:object):void,
     /**
      * Rerenders the current route even if memorize true is specified
      */
     refresh():void,
+    /**
+     * Causes the browser to move back one page in the session history.
+     */
+    back(data?:object):void,
+    /**
+     * Resets all routes.
+     */
+    reset():void,
 }
 
 interface HashRouteElement extends HTMLElement {
@@ -79,7 +106,25 @@ interface HashRouteComponentProps {
     data?:object,
     params?:[string:string],
     location:{
+        /**
+         * An URL pathname, beginning with a "/".
+         */
+        pathname:string,
+        /**
+         * The current url path, beginning with a "/".
+         */
         path:string,
+        /**
+         * The full url.
+         */
         url:string,
+        /**
+         * An URL fragment identifier, beginning with a "#".
+         */
+        hash:string,
+        /**
+         * A nURL search string, beginning with a "?"".
+         */
+        search:string,
     },
 }

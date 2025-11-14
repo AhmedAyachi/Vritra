@@ -1,43 +1,46 @@
-import {ExtendableViewProps,View} from "../View/View";
+import {ViewProps,View} from "../View/View";
 
 /**
- * A self-position-adjustment view
+ * A self-position-adjustment view.
  * @param props 
  */
-export default function PopupView(props:ExtendableViewProps<"div">&{
+export default function PopupView<Tag extends "div"|"menu"|"dialog"|undefined=undefined>(props:ViewProps<Tag>&{
     /**
-     * Near which the popupview is shown
+     * The element near which the PopupView is shown.
      */
     target?:HTMLElement,
     /**
-     * If target is specified, parent is the element relative to which the PopupView will adjust its position 
+     * If target is specified, parent is the element 
+     * relative to which the PopupView will adjust its position.
      * @default document.documentElement
      */
     parent?:HTMLElement,
     /**
-     * Unmounts the popupview on outside click
+     * Unmounts the PopupView on outside click.
      * @default true
      */
     avoidable?:boolean,
     /**
-     * @deprecated renamed to offset
-     */
-    position?:{x?:number,y?:number},
-    /**
-     * popup offset relative to target
+     * popup offset.
      */
     offset?:{x?:number,y?:number},
-    onRemove():void;
-}):PopupView;
+    onRemove?():void;
+}):Tag extends undefined?PopupView<"div">:PopupView<Tag>;
 
 
-type PopupView=View<"div">&{
+type PopupView<Tag>=View<Tag>&{
     /**
-     * Cleans up the added event listeners
+     * updates the PopupView position.
      */
-    cleanupEventListeners():void,
+    position():void;
     /**
-     * Cleans up the event listeners and removes the popupview from DOM with a fade-out animation
+     * Cleans up the event listeners and removes the PopupView 
+     * from DOM with a fade-out animation.
      */
     unmount():void,
+    /**
+     * Cleans up the added event listeners.
+     * @deprecated will be gone in future versions.
+     */
+    cleanupEventListeners():void,
 }

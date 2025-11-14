@@ -1,12 +1,13 @@
-import {randomId,NativeView,fadeIn,fadeOut} from "../index";
+import {NativeView,fadeIn,fadeOut, randomId} from "../index";
 import css from "./PopupView.module.css";
 
 
 export default function PopupView(props){
-    const {parent=document.documentElement,id=randomId("popupview"),target,avoidable=true,onRemove,onUnmount}=props;
+    const {parent=document.documentElement,target,avoidable=true,onRemove}=props;
     const popupview=NativeView({
-        parent,id,
-        at:props.at,
+        parent,at:props.at,
+        id:props.id||randomId("p"),
+        tag:props.tag,
         style:props.style,
         className:[css.popupview,props.className],
     }),state={
@@ -19,7 +20,7 @@ export default function PopupView(props){
     if(isStaticParent) parent.style.position="relative";
     function onTouchScreen(event){
         const {target}=event;
-        if(!target.closest(`#${id}`)){
+        if(!target.closest(`#${popupview.id}`)){
             popupview.unmount();
         }
     }
@@ -27,6 +28,10 @@ export default function PopupView(props){
         window.addEventListener(type,onTouchScreen);
     });
 
+    popupview.position=()=>{
+        const position=getPosition(popupview,target,parent,props.offset);
+        Object.assign(popupview.style,position);
+    }
     popupview.cleanupEventListeners=()=>{
         avoidable&&statics.avoidEvents.forEach(type=>{
             window.removeEventListener(type,onTouchScreen);
@@ -38,15 +43,17 @@ export default function PopupView(props){
             popupview.cleanupEventListeners();
             if(isStaticParent) parent.style.position=null;
             remove();
-            onRemove?onRemove():onUnmount&&onUnmount();
+            onRemove&&onRemove();
         }
     })();
     popupview.unmount=()=>{
-        fadeOut(popupview,()=>{popupview.remove()});
+        fadeOut(popupview,()=>{
+            popupview.remove();
+        });
     };
     
     target&&setTimeout(()=>{
-        Object.assign(popupview.style,getPosition(popupview,target,parent,props.offset||props.position));
+        popupview.position();
     },0);
     return fadeIn(popupview,200);
 }
@@ -60,26 +67,25 @@ const getPosition=(popupview,target,container,defaultOffset)=>{
         if(typeof(defaultOffset.x)!=="number") defaultOffset.x=0;
         if(typeof(defaultOffset.y)!=="number") defaultOffset.y=0;
     }
-    else{
-        defaultOffset={x:0,y:0};
-    }
+    else defaultOffset={x:0,y:0};
     const {left,top}=target.getBoundingClientRect();
     const {left:containerLeft,top:containerTop}=container.getBoundingClientRect();
-    const targetLeft=left-containerLeft;
-    const targetTop=top-containerTop;
-    const {clientWidth:width,clientHeight:height}=popupview,position={};
+    const targetTop=top-containerTop,targetLeft=left-containerLeft;
+
+    const {clientWidth:width,clientHeight:height}=popupview,position={
+        top:null,
+        left:null,
+        right:null,
+        bottom:null,
+    };
     const spacingRight=container.clientWidth-targetLeft-defaultOffset.x;
-    if(width<spacingRight){
-        position.left=targetLeft+defaultOffset.x;
-    }
+    if(width<spacingRight) position.left=targetLeft+defaultOffset.x;
     else{
-        const right=spacingRight,offsetLeft=right+width;
+        const offsetLeft=spacingRight+width;
         if(offsetLeft>=container.clientWidth){
             position.bottom=offsetLeft-container.clientWidth;
         }
-        else{
-            position.right=right;
-        }
+        else position.right=spacingRight;
     }
     const spacingBottom=container.clientHeight-targetTop-defaultOffset.y;
     if(height<spacingBottom){
@@ -95,7 +101,8 @@ const getPosition=(popupview,target,container,defaultOffset)=>{
         }        
     }
     for(const key in position){
-        position[key]=`${100*position[key]/window.innerWidth}vw`;
+        const value=position[key];
+        if(typeof(value)==="number") position[key]=`${100*value/window.innerWidth}vw`;
     }
     return position;
 }

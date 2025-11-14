@@ -1,5 +1,5 @@
 import {findItem} from "../index";
-import HtmlSanitizer from "../HtmlSanitizer";
+import {HtmlSanitizer} from "../VritraElement/VritraElement";
 
 
 export class VritraFragment extends DocumentFragment {

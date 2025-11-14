@@ -1,5 +1,5 @@
+import VritraElement,{HtmlSanitizer} from "../VritraElement/VritraElement";
 import {VritraFragment} from "../Fragment/Fragment";
-import HtmlSanitizer,{decorateNode} from "../HtmlSanitizer";
 
 
 export default function View(props){
@@ -71,7 +71,7 @@ export default function View(props){
         }},
     });
     
-    return decorateNode(view);
+    return VritraElement(view);
 }
 
 const setViewStyle=(view,style)=>{

@@ -38,6 +38,18 @@ export function HashRouter(options){
                 });
             }
         },
+        back:(data)=>{
+            state.data=data;
+            history.back();
+        },
+        reset:()=>{
+            routes.forEach(route=>{
+                delete route.data;
+                delete route.params;
+                delete route.element;
+                route.scroll={};
+            });
+        },
     };
 
     function setRoute(){
@@ -58,17 +70,26 @@ export function HashRouter(options){
         route=getRoute(routes,fallbackRoute);
         if(route){
             new Promise(resolve=>{
-                if(typeof(route.restrictor)==="function"){
-                    route.restrictor(resolve,target);
+                const {restrictor}=route;
+                if(typeof(restrictor)==="function"){
+                    restrictor({
+                        target,
+                        data:state.data,
+                        params:route.params,
+                        unlock:()=>{resolve(true)},
+                        redirect:(path,data)=>{
+                            resolve({path:String(path||""),data});
+                        },
+                    });
                 }
                 else resolve(true);
-            }).then(unlocked=>{
-                if(unlocked){
+            }).then(result=>{
+                if(result===true){
                     state.route=route;
                     route.data=state.data;
                     return renderRoute(route,target);
                 }
-                else history.back();
+                else hashrouter.replace(result.path,result.data);
             }).finally(()=>{
                 state.data=null;
             });
@@ -89,7 +110,7 @@ const renderRoute=async (route,target)=>{
     if(memorize&&element instanceof HTMLElement){
         const {scroll}=route;
         target.appendChild(element);
-        element.scrollTo(scroll);
+        if(scroll) element.scrollTo(scroll);
     }
     else if(typeof(route.component)==="function"){
         const context=getContext(route);
@@ -109,24 +130,28 @@ const getDecentPath=(path)=>path.startsWith("/")?path:("/"+path);
 const getContext=({params,data})=>{
     let path=location.hash;
     const startsWithHash=path.startsWith("#");
+    if(startsWithHash) path=path.substring(1);
+    const url=new URL(`${location.origin}/${path}`);
     const context={
         location:{
-            path:startsWithHash?path.substring(1):path,
-            url:`${location.origin}/${startsWithHash?path:"#"+path}`,
+            path,
+            pathname:url.pathname,
+            url:`${location.origin}/#${path}`,
+            hash:url.hash,
+            search:url.search,
         },
     };
     if(data) context.data=data;
     if(params) context.params=params;
-    
     return context;
 }
 
 const getRoute=(routes,fallbackRoute)=>{
-    const paths=getHashs(location.hash);
+    const paths=getPaths(location.hash);
     let route=findBestRoute(paths,routes);
     if(route){
         const oldParams=route.params;
-        let params=getURLParams();
+        let params=getSearchParams();
         route.paths?.forEach((path,i)=>{
             if(path.startsWith(":")){
                 if(!params) params={};
@@ -145,12 +170,16 @@ const getRoute=(routes,fallbackRoute)=>{
     }
     return route;
 }
-const getURLParams=()=>{
-    const path=location.hash;
-    const index=path.indexOf("?");
+const getSearchParams=()=>{
+    let path=location.hash;
+    if(path.startsWith("#")) path=path.substring(1);
+    let index=path.indexOf("?");
+    let markIndex=path.indexOf("#");
+    if((index>markIndex)&&(markIndex>=0)) index=-1;
     if(index>=0){
         const params={};
-        const searchParams=new URLSearchParams(path.substring(index));
+        if(markIndex<0) markIndex=path.length;
+        const searchParams=new URLSearchParams(path.substring(index,markIndex));
         for(const [key,value] of searchParams){
             if(value) params[key]=value;
         }
@@ -160,16 +189,19 @@ const getURLParams=()=>{
 }
 const areSameParams=(params0,params1)=>{
     let same=params0===params1;
-    if(params0&&params1){
-        const values0=Object.values(params0),values1=Object.values(params1);
-        same=values0.length===values1.length;
+    if(!same&&params0&&params1){
+        const keys0=Object.keys(params0),keys1=Object.keys(params1);
+        same=keys0.length===keys1.length;
         if(same){
             let i=0;
-            const {length}=values0;
+            const {length}=keys0;
             while(same&&(i<length)){
-                const value0=values0[i];
-                if(!values1.some(value1=>value0===value1)){same=false};
-                i++;
+                const key0=keys0[i];
+                if(keys1.some(key1=>key0===key1)){
+                    if(params0[key0]===params1[key0]) i++;
+                    else same=false;
+                }
+                else same=false;
             }
         }
     }
@@ -186,7 +218,7 @@ const findBestRoute=(paths,routes)=>{
         while((!found)&&(i<routeCount)){
             const route=routes[i],path=route.path;
             let routePaths=route.paths;
-            if(!routePaths) routePaths=route.paths=getHashs(path);
+            if(!routePaths) routePaths=route.paths=getPaths(path);
             const routePathCount=routePaths.length;
             if(routePathCount===pathCount){
                 let rejected=false;
@@ -221,8 +253,8 @@ const findBestRoute=(paths,routes)=>{
     }
 }
 
-const getHashs=(path)=>{
-    path=getLocationPath(path);
+const getPaths=(path)=>{
+    path=getLocationPathName(path);
     const paths=path.split("/").filter(Boolean);
     if((paths.length>1)&&(!paths[0])){
         paths.shift();
@@ -230,9 +262,14 @@ const getHashs=(path)=>{
     return paths;
 }
 
-const getLocationPath=(path=location.hash)=>{
+const getLocationPathName=(path=location.hash)=>{
     if(path.startsWith("#")) path=path.substring(1);
-    const index=path.indexOf("?");
-    if(index>=0) return path.substring(0,index);
+    let markIndex=path.indexOf("?");
+    if(markIndex<0) markIndex=path.length;
+    let dashIndex=path.indexOf("#");
+    if(dashIndex<0) dashIndex=path.length;
+    const index=Math.min(markIndex,dashIndex);
+    if(index===path.length) return path;
+    else if(index>=0) return path.substring(0,index);
     else return path;
 }

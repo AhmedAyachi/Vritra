@@ -10,10 +10,25 @@
 }
 .action{
     position:relative;
+    display:flex;
+    justify-content:flex-start;
+    align-items:center;
+    column-gap:1em;
+    background-color:transparent;
 }
 .action>img{
     min-width:6.4em;
     width:6.4em;
     height:6.4em;
     object-fit:cover;
+}
+.action>label{
+    font-size:4.25em;
+}
+
+
+@media(hover:hover){
+    .action>label{
+        cursor:inherit;
+    }
 }

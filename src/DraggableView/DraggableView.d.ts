@@ -26,7 +26,8 @@ type DraggableView<Tag>=View<Tag>&{
         listener:(coords:DraggableViewCoords,element:DraggableView<Tag>)=>void,
     ):void,
     /**
-     * @param asratio if true returns values as fractions relative to width and height of parent/viewport
+     * @param asratio if true returns values as fractions relative 
+     * to width and height of parent/viewport
      * @default false
      */
     getPosition(asratio:boolean):DraggableViewPosition,
