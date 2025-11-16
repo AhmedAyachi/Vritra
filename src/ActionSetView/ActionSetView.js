@@ -72,8 +72,8 @@ export default function ActionSetView(props){
 }
 
 const getActions=(actions,definitions)=>Array.isArray(definitions)?actions?.map(action=>{
-    const isref=typeof(action)==="string";
-    const actionId=(isref?action:(action.ref||action.id));
+    const isRef=typeof(action)==="string";
+    const actionId=(isRef?action:(action.ref||action.id));
     const definition=definitions.find(({id})=>actionId===id);
-    return {...definition,...(!isref)&&action};
+    return {...definition,...(!isRef)&&action};
 }):actions;

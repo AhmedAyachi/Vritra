@@ -107,11 +107,11 @@ interface HashRouteComponentProps {
     params?:[string:string],
     location:{
         /**
-         * An URL pathname, beginning with a "/".
+         * An URL pathname, beginning with "/".
          */
         pathname:string,
         /**
-         * The current url path, beginning with a "/".
+         * The current url path, beginning with "/".
          */
         path:string,
         /**
@@ -119,11 +119,11 @@ interface HashRouteComponentProps {
          */
         url:string,
         /**
-         * An URL fragment identifier, beginning with a "#".
+         * An URL fragment identifier, beginning with "#".
          */
         hash:string,
         /**
-         * A nURL search string, beginning with a "?"".
+         * An URL search string, beginning with "?".
          */
         search:string,
     },
