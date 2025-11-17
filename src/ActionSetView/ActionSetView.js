@@ -51,9 +51,9 @@ export default function ActionSetView(props){
                 const {style}=action;
                 actionEl=actionsetview[actionId];
                 if(style) Object.assign(actionEl.style,style);
-                actionEl.onclick=(event)=>{
+                actionEl.onClick=(event)=>{
                     event.stopPropagation();
-                    action.onTrigger?.(action);
+                    action.onTrigger?.(action,event);
                 }
                 const img=actionEl.querySelector(":scope>img");
                 if(img) actionEl.setIcon=(icon=action.icon,save)=>{

@@ -279,12 +279,14 @@ export const fadeIn=(element,...params)=>{
         style.display=display||getComputedStyle(element).display||null;
         style.animation=`${css.fadeIn} ${duration}ms 1 linear forwards`;
         element.fadeTimeout=setTimeout(()=>{
+            style.opacity=1;
             style.animation=null;
             delete element.fadeTimeout;
             callback&&callback();
         },duration);
+        return element;
     }
-    return element;
+    else throw new Error("fadeIn: element is not an HTMLElement");
 }
 
 export const fadeOut=(element,duration=200,callback)=>{
@@ -297,13 +299,15 @@ export const fadeOut=(element,duration=200,callback)=>{
         const {style}=element;
         style.animation=`${css.fadeOut} ${duration}ms 1 linear forwards`;
         element.fadeTimeout=setTimeout(()=>{
+            style.opacity=0;
             style.display="none";
             style.animation=null;
             delete element.fadeTimeout;
             callback&&callback();
         },duration);
+        return element;
     }
-    return element;
+    else throw new Error("fadeOut: element is not an HTMLElement");
 }
 
 export function randomColor(colors){

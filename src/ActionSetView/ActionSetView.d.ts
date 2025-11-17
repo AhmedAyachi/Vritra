@@ -96,10 +96,11 @@ interface ActionSetDefinition {
      * Called when the action HTMLElement clicked
      * Not triggered when action created with component prop
      * @param action the action object
+     * @param event the pointer event object
      */
     onTrigger?(action:ActionSetDefinition&{
         element:ActionSetDefinitionElement,
-    }):void,
+    },event:PointerEvent):void,
 }
 
 interface ActionSetDefinitionElement extends HTMLDivElement {
