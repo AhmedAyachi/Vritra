@@ -56,9 +56,8 @@ export default function ActionSetView(props){
                     action.onTrigger?.(action,event);
                 }
                 const img=actionEl.querySelector(":scope>img");
-                if(img) actionEl.setIcon=(icon=action.icon,save)=>{
-                    if(save) action.icon=icon;
-                    img.src=typeof(icon)==="function"?icon(tintColor):icon;
+                if(img) actionEl.setIcon=(icon=action.icon)=>{
+                    img.src=typeof(icon)==="function"?icon(action.color):icon;
                 }
             } catch {
                 throw new Error(actionId?`invalid action with id: "${actionId}"`:"action with no id");
