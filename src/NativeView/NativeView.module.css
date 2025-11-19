@@ -42,11 +42,14 @@
     }
 }
 
-@media(any-hover){
+@media(hover:hover){
     .nativeview *:is(button,[class~=button],[class~=clickable],img[role=button]):hover{
         opacity:0.85;
         cursor:pointer;
         filter:brightness(0.65);
+        &>*{
+            cursor:inherit;
+        }
     }
 }
 

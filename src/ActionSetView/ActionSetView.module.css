@@ -25,10 +25,3 @@
 .action>label{
     font-size:4.25em;
 }
-
-
-@media(hover:hover){
-    .action>label{
-        cursor:inherit;
-    }
-}
