@@ -15,7 +15,7 @@ export {default as Palette} from "./Palette/Palette";
 export {default as FlatList} from "./FlatList/FlatList";
 export {default as DraggableView} from "./DraggableView/DraggableView";
 export {default as FooMap} from "./FooMap/FooMap";
-export {HashRouter} from "./HashRouter/HashRouter";
+export {default as HashRouter} from "./HashRouter/HashRouter";
 export {useZoomGesture,usePinchGesture,useSwipeGesture,usePressGesture} from "./Gestures";
 export {default as withSequence} from "./withSequence/withSequence";
 export {default as sendRequest} from "./sendRequest/sendRequest";
@@ -310,7 +310,7 @@ export const fadeOut=(element,duration=200,callback)=>{
     else throw new Error("fadeOut: element is not an HTMLElement");
 }
 
-export function randomColor(colors){
+export function randomColor(colors,){
     const fromColors=Array.isArray(colors)&&colors.length&&(Math.random()>0.5);
     if(fromColors){
         const color=randomItem(colors);

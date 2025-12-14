@@ -5,7 +5,7 @@ import SmoothPagingContainer from "./SmoothPagingContainer/SmoothPagingContainer
 
 
 export default function FlatList(props){
-    const {parent,horizontal,backwards,smoothPaging,pagingEnabled,scrollEnabled=true,threshold=0.5,transition="ease 300ms",pagingTransition=transition,renderItem,onReachEnd,onRemoveItem,onAddItems,onSwipe}=props;
+    const {parent,horizontal,backwards,smoothPaging,pagingEnabled,scrollEnabled=true,threshold=0.5,transition="ease 300ms",pagingTransition=transition,renderItem,onReachEnd,onRemoveItem,onAddItems}=props;
     const flatlist=NativeView({
         parent,at:props.at,
         props:props.id,
@@ -13,7 +13,7 @@ export default function FlatList(props){
         className:[css.flatlist,props.className],
     }),state={
         data:(it=>Array.isArray(it)?[...it]:[])(props.data),
-        index:-1,//last created element index
+        index:-1,//observed element index
         observedEl:null,//observed element
         infocusIndex:null,//for paging, the index of the element in focus
         itemsmap:new FooMap(),// [item,element] map
@@ -101,35 +101,38 @@ export default function FlatList(props){
     (!data.length)&&showEmptinessElement();
     const observer=new IntersectionObserver(([entry])=>{
         const {isIntersecting}=entry;
+        let entryTargetIndex=state.index;
         if(isIntersecting){
-            if(state.index<(data.length-1)){
-                const max=Math.min(step,data.length-state.index-1);
+            const lastItemIndex=data.length-1;
+            if(state.index<lastItemIndex){
+                const max=Math.min(step,lastItemIndex-state.index);
                 for(let i=1;i<=max;i++){
                     createNextElement(i===1);
                 }
             }
             else if(!state.endReached){
                 state.endReached=true;
+                state.observedEl=null;
+                observer.disconnect();
                 onReachEnd&&onReachEnd({container,data:props.data});
             }
         }
         if(props.onFilled&&(!state.filled)){
             let fillerIndex;
             if(isIntersecting){
-                const {index}=state;
-                if((entry.intersectionRatio<1)||(index>=(data.length-1))){
-                    fillerIndex=index;
+                if((entry.intersectionRatio<1)||(entryTargetIndex>=(data.length-1))){
+                    fillerIndex=entryTargetIndex;
                 }
-            }
-            else{
+            } else {
                 fillerIndex=entry.intersectionRatio>0?state.index:state.index-1;
             }
             if(fillerIndex!==undefined){
                 state.filled=true;
+                const element=state.itemsmap.at(fillerIndex,true);
                 props.onFilled({
                     index:fillerIndex,
-                    item:data[fillerIndex],
-                    element:state.itemsmap.at(fillerIndex,true),
+                    item:data[fillerIndex],element,
+                    visibilityRatio:entry.intersectionRatio||1,
                 });
             }
         }
@@ -140,7 +143,7 @@ export default function FlatList(props){
     if(flatlist.isConnected) setTimeout(()=>{
         const {observedEl}=state;
         if(observedEl instanceof Element){
-            observer.unobserve(observedEl);
+            observer.disconnect();
             observer.observe(observedEl);
         }
     },15);
@@ -155,14 +158,13 @@ export default function FlatList(props){
     }
 
     if(pagingEnabled){
-        //container.style.overflow="visible";
         flatlist.style.overflow="hidden";
-        (scrollEnabled&&!smoothPaging)&&useSwipeGesture({
+        if(scrollEnabled&&!smoothPaging) useSwipeGesture({
             element:flatlist,
-            onSwipe:(event)=>{if((horizontal&&(event.axis==="horizontal"))||((!horizontal)&&(event.axis==="vertical"))){
-                const {infocusIndex}=state;
-                const {direction}=event;
+            onSwipe:(event)=>{if(horizontal?event.axis==="horizontal":event.axis==="vertical"){
                 let index;
+                const {direction}=event;
+                const {infocusIndex}=state;
                 const forward=(direction==="left")||(direction==="top");
                 const backward=(direction==="right")||(direction==="bottom");
                 if(backwards?backward:forward){
@@ -175,7 +177,6 @@ export default function FlatList(props){
                 }
                 flatlist.scrollToIndex(index,true);
                 Object.assign(event,{index,container});
-                onSwipe&&onSwipe(event);
             }},
         });
     }
@@ -198,12 +199,12 @@ export default function FlatList(props){
                 state.endReached=false;
                 createNextElement();
                 if(data.length===length){
+                    //if the flatlist data was initially empty
                     setTimeout(()=>{
-                        state.firstOffset=state.observedEl[offsetSide];
+                        state.firstOffset=state.itemsmap.at(0,true)[offsetSide];
                     },0);
                 }
-            }
-            else{
+            } else {
                 onReachEnd&&onReachEnd({container,data:props.data});
             }
         }
@@ -236,11 +237,12 @@ export default function FlatList(props){
     flatlist.clear=()=>{if(data.length){
         const {observedEl,itemsmap}=state;
         state.index=-1;
+        state.filled=false;
         state.endReached=true;
         state.infocusIndex=null;
         if(observedEl instanceof Element){
             state.observedEl=null;
-            observer.unobserve(observedEl);
+            observer.disconnect();
         }
         data.forEach(item=>{
             const element=itemsmap.get(item);
@@ -251,6 +253,7 @@ export default function FlatList(props){
         });
         itemsmap.clear();
         data.splice(0,data.length);
+        flatlist.scrollToOffset(0,false);
         showEmptinessElement();
     }}
 
@@ -277,7 +280,7 @@ export default function FlatList(props){
         return state.popuplist;
     }
 
-    flatlist.scrollToOffset=(offset,smooth=true)=>{
+    flatlist.scrollToOffset=(offset,smoothly=true)=>{
         state.triggerOnScrollEnd=false;
         if(offset<=0) offset=0;
         else if(data.length>0){
@@ -299,7 +302,7 @@ export default function FlatList(props){
                     state.infocusIndex=item.index;
                 }
             }
-            if(!smooth){
+            if(!smoothly){
                 container.style.transition="none";
                 setTimeout(()=>{container.style.transition=pagingTransition},40);
             }
@@ -312,8 +315,8 @@ export default function FlatList(props){
                 container.setPosition({
                     x:(horizontal?offset:0)*coef,
                     y:(horizontal?0:offset)*coef,
-                    easing:smooth?.easing||"ease-in-out",
-                    duration:smooth?.duration||(smooth?300:0),
+                    easing:smoothly?.easing||"ease-in-out",
+                    duration:smoothly?.duration||(smoothly?300:0),
                 });
             }
             else{
@@ -323,55 +326,62 @@ export default function FlatList(props){
         else{
             container.scrollTo({
                 [horizontal?"left":"top"]:offset,
-                behavior:smooth?"smooth":"auto",
+                behavior:smoothly?"smooth":"auto",
             });
         }
     }
     
-    flatlist.scrollToIndex=(i,smooth=true)=>{
-        const {onInFocusItemChange}=props;
-        const lastIndex=data.length-1;
-        if(i>lastIndex){i=lastIndex} else if(i<0){i=0};
+    flatlist.scrollToIndex=(i,smoothly=true)=>{
         let element;
-        const {index}=state;
-        if(i>index){
-            observer.unobserve(state.observedEl);
-            for(let j=index+1;j<=i;j++){
-                createNextElement(i===j);
+        if(data.length){
+            const lastIndex=data.length-1;
+            if(i>lastIndex) i=lastIndex; else if(i<0) i=0;
+            const {index}=state;
+            if(i>index){
+                const {observedEl}=state;
+                observer.unobserve(observedEl);
+                for(let j=index+1;j<=i;j++){
+                    createNextElement(i===j);
+                }
+                element=state.observedEl;
             }
-            element=state.observedEl;
-        }
-        else{
-            element=state.itemsmap.at(i,true);
+            else element=state.itemsmap.at(i,true);
         }
         if(element){
             const offset=element[offsetSide]-state.firstOffset;
             const infocusChanged=i!==state.infocusIndex;
-            flatlist.scrollToOffset(offset,smooth);
+            flatlist.scrollToOffset(offset,smoothly);
             if(infocusChanged){
+                const {onInFocusItemChange}=props;
                 state.infocusIndex=i;
                 onInFocusItemChange&&onInFocusItemChange({index:i,element,item:data[i]});
             }
         }
-        else{
-            flatlist.scrollToOffset(0,smooth);
-        }
+        else flatlist.scrollToOffset(0,smoothly);
     };
+
+    flatlist.scrollToItem=(item,smoothly=true)=>{
+        const index=data.indexOf(item);
+        if(index>=0) flatlist.scrollToIndex(index,smoothly);
+    }
 
     function createNextElement(observe=true){
         state.index++;
         const {index}=state,item=data[index];
         const element=renderItem({
             parent:container,item,
-            data:props.data,index,
+            data:props.data||[],index,
         });
         state.itemsmap.set(item,element);
         if(observe){
             const {observedEl}=state;
-            observedEl&&observer.unobserve(observedEl);
+            if(observedEl){
+                observer.unobserve(observedEl);
+            }
             observer.observe(element);
             state.observedEl=element;
         }
+        return element;
     }
     function showEmptinessElement(){
         const {EmptyComponent="no data"}=props;

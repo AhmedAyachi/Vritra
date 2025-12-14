@@ -1,6 +1,6 @@
 
 
-export function HashRouter(options){
+export default function HashRouter(options){
     const {target,routes,fallbackRoute}=options;
     const {history,location}=window;
     const state={
@@ -18,7 +18,10 @@ export function HashRouter(options){
         }},
         append:(path,data)=>{if(typeof(path)==="string"){
             state.data=data;
-            location.hash+=getDecentPath(path);
+            let currentPath=location.hash;
+            if(currentPath.startsWith("#")) currentPath=currentPath.substring(1);
+            const url=new URL(`${location.origin}${getDecentPath(currentPath)}`);
+            location.hash=`${url.pathname}${getDecentPath(path)}`;
         }},
         replace:(path,data)=>{if(typeof(path)==="string"){
             const oldhash=location.hash;
@@ -32,9 +35,7 @@ export function HashRouter(options){
                 const {memorize}=route;
                 route.memorize=false;
                 renderRoute(route,target).then(()=>{
-                    if(memorize){
-                        route.memorize=true;
-                    };
+                    if(memorize) route.memorize=true;
                 });
             }
         },
@@ -43,6 +44,7 @@ export function HashRouter(options){
             history.back();
         },
         reset:()=>{
+            state.store={};
             routes.forEach(route=>{
                 delete route.data;
                 delete route.params;
@@ -94,9 +96,7 @@ export function HashRouter(options){
                 state.data=null;
             });
         }
-        else{
-            target.innerHTML="";
-        }
+        else target.innerHTML="";
     }
     
 
@@ -125,13 +125,14 @@ const renderRoute=async (route,target)=>{
     window.scrollTo(0,0);
 }
 
-const getDecentPath=(path)=>path.startsWith("/")?path:("/"+path);
+const getDecentPath=(path)=>(path.startsWith("/")?"":"/")+path.replace(/\/+/g,"/");
 
 const getContext=({params,data})=>{
     let path=location.hash;
     const startsWithHash=path.startsWith("#");
     if(startsWithHash) path=path.substring(1);
-    const url=new URL(`${location.origin}/${path}`);
+    path=getDecentPath(path);
+    const url=new URL(`${location.origin}${path}`);
     const context={
         location:{
             path,

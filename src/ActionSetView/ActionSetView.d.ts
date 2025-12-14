@@ -35,9 +35,9 @@ type ActionSetView=View<"div">&{
 
 interface ActionSetAction extends ActionSetDefinition {
     /**
-     * an id of a defined action
+     * Should match an id of a defined action.
      */
-    ref:string,
+    ref?:string,
 }
 
 interface ActionSetDefinition {

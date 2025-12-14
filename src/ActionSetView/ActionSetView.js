@@ -18,15 +18,18 @@ export default function ActionSetView(props){
             return `
                 <button 
                     ref="${id}" class="${css.action}" 
-                    style="font-size:${Number(size/6.4)}em"
+                    style="
+                        font-size:${Number(size/6.4)}em;
+                        ${label?`
+                            color:${color};
+                        `:""}
+                    "
                 >
                     ${icon?`<img 
                         alt="${iconAlt||id||""}"
                         src="${typeof(icon)==="function"?action.icon(color,2):(icon||"")}"
                     />`:""}
-                    ${label?`
-                        <text as="label" style="color:${color}">${label}</text>
-                    `:""}
+                    ${label?`<text as="label">${label}</text>`:""}
                 </button>
             `
         })}

@@ -3,7 +3,7 @@
 export default function usePressGesture(options:{
     element:HTMLElement,
     /**
-     * For how long in milliseconds the element should kept pressed to trigger the gesture
+     * For how long in milliseconds the element should be pressed to trigger the gesture
      * @default 0
      */
     threshold?:number,

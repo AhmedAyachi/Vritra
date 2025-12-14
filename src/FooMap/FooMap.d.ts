@@ -9,15 +9,20 @@ export default class FooMap<Key,Value> extends Map {
      * 
      * @param index used to target pair at index
      * @param isValue used to specify if the returned value is a Key or Value type
-     * @returns if value is true returns value at index otherwise returns the key
+     * @returns if isValue is true, it returns value at index otherwise returns the key
      */
     at<isValue extends boolean=false>(
         index:number,
         isValue?:isValue,
     ):isValue extends true?Value:Key;
-    indexOf<isValue extends boolean=false>(
-        item:isValue extends true?Value:Key,
-        isValue?:isValue,
+    /**
+     * 
+     * @param item
+     * @param inValues if true, it looks for the item among values otherwise among keys.
+     */
+    indexOf<inValues extends boolean=false>(
+        item:inValues extends true?Value:Key,
+        inValues?:inValues,
     ):number;
     /**
      * Returns a frozen array of keys

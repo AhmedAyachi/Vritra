@@ -7,6 +7,8 @@
 }
 .header{
     max-width:100%;
+    column-gap:var(--spacing);
+    --spacing:4em;
 }
 .defaultheader{
     height:16em;
@@ -19,36 +21,33 @@
     overflow:hidden;
 }
 .title{
-    flex:1;
     font-family:var(--mainFont);
     font-weight:700;
     font-size:4.8em;
     white-space:nowrap;
     text-transform:capitalize;
-   overflow:auto hidden;
+    overflow:auto hidden;
 }
 .title::-webkit-scrollbar{
     display:none;
 }
-.actions{
-    width:fit-content;max-width:46%;
+.tail{
+    flex:1;
+    min-width:30%;
     display:flex;
     flex-direction:row-reverse;
-    justify-content:flex-end;
+    justify-content:flex-start;
     align-items:center;
-    margin-left:var(--actionspacing);
+    column-gap:var(--spacing);
     overflow:hidden;
-    --actionspacing:5em;
 }
 .indicator{
     width:6.4em;
-    margin-left:var(--actionspacing);
     transition:200ms;
 }
 .actionset{
     flex:1;
-    overflow:auto hidden;
-    --spacing:var(--actionspacing) !important;
+    column-gap:var(--spacing) !important;
 }
 
 @media(any-hover){

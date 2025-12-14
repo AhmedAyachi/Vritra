@@ -3,10 +3,10 @@ import VritraElement from "./VritraElement";
 
 export default new (function(){
 	const tagBlackList=new Set(["script","SCRIPT","STYLE","OBJECT"]);
-	const attributeBlackList=new Set(["as"]);
+	const excludedTexts=new Set(["false","undefined","null","0","NaN"]);
+	const attributeBlackList=new Set([...excludedTexts,"as"]);
 	const schemaWhiteList=["http:","https:","data:","m-files:","file:","ftp:","mailto:","tel:","pw:"];
 	const uriAttributes=new Set(["href","action"]);
-	const excludedTextContents=new Set(["false","undefined","null","0","NaN"]);
 	const svgSpecificAttributeMap={
 		"viewbox":"viewBox",
 		"preserveaspectratio":"preserveAspectRatio",
@@ -31,7 +31,7 @@ export default new (function(){
 				let {textContent}=node;
 				if(textContent.includes("\n")){
 					textContent=textContent.trim();
-					if(!excludedTextContents.has(textContent)){
+					if(!excludedTexts.has(textContent)){
 						newNode=node.cloneNode(false);
 					}
 				}
@@ -69,7 +69,7 @@ export default new (function(){
 						}
 						if(newNode){
 							if(ref&&vritraEl){
-								const node=vritraEl[ref]=VritraElement(newNode,ref);
+								const node=vritraEl[ref]=VritraElement(newNode);
 								const remove=node.remove.bind(node);
 								node.remove=()=>{
 									delete vritraEl[ref];

@@ -8,7 +8,7 @@
  * If more than one route matches the hash, the first one is picked
  * @param options HashRouter options
  */
-export function HashRouter(options:{
+export default function HashRouter(options:{
     /**
      * Element to insert the route component element in
      */

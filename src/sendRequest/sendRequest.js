@@ -3,7 +3,7 @@
 export default (url,options)=>new Promise((resolve,reject)=>{
     const {method,headers,body,searchParams,timeout=3000,signal}=options||{};
     const request=new XMLHttpRequest();
-    request.withCredentials=Boolean(options.withCredentials);
+    request.withCredentials=Boolean(options?.withCredentials);
     const requestUrl=new URL(url);
     if(searchParams) for(const key in searchParams){
         requestUrl.searchParams.set(key,searchParams[key]);

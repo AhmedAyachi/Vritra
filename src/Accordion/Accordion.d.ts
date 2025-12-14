@@ -2,23 +2,24 @@ import {View,ExtendableViewProps} from "../View/View";
 import {ActionSetAction,VritraIcon} from "../ActionSetView/ActionSetView";
 
 
-type RendererType=(props:{parent:HTMLElement})=>HTMLElement;
-type ReturnTypeOf<T>=T extends (props:{parent:HTMLElement})=>infer R?R:null;
-
+type RendererType<R=HTMLElement>=(props:{parent:HTMLElement})=>R;
 /**
  * 
  * @param props Accordion props
- * @notice Accordion css variables : paddingHorizontal borderRadius
+ * @notice CSS Variables: paddingHorizontal borderRadius
  */
 export default function Accordion<
     HeaderRenderer extends RendererType,
     ContentRenderer extends RendererType,
 >(props:AccordionProps<HeaderRenderer,ContentRenderer>):Accordion<
-    ReturnTypeOf<HeaderRenderer>,
-    ReturnTypeOf<ContentRenderer>
+    ReturnType<HeaderRenderer>,
+    ReturnType<ContentRenderer>
 >;
 
-type AccordionProps<HeaderRenderer,ContentRenderer>=ExtendableViewProps<"section">&{
+type AccordionProps<
+    HeaderRenderer extends RendererType,
+    ContentRenderer extends RendererType,
+>=ExtendableViewProps<"section">&{
     /**
      * Default header title.
      */
@@ -85,7 +86,7 @@ type AccordionProps<HeaderRenderer,ContentRenderer>=ExtendableViewProps<"section
 
 //type ContentType=ReturnType<AccordionProps["renderContent"]>;
 
-type Accordion<HeaderRenderer,ContentType>=View<"section">&{
+type Accordion<HeaderType,ContentType>=View<"section">&{
     /**
      * Locks and unlocks the accordion.
      * @param locked default to false
@@ -109,7 +110,7 @@ type Accordion<HeaderRenderer,ContentType>=View<"section">&{
     /**
      * Gets the element returned by renderHeader
      */
-    readonly header:HeaderRenderer|null,
+    readonly header:HeaderType,
     /**
      * Gets the element returned by renderContent
      */

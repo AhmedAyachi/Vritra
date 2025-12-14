@@ -2,7 +2,7 @@
     width:fit-content;
     height:fit-content;
     display:flex;
-    justify-content:space-between;
+    justify-content:flex-start;
     align-items:center;
     flex-wrap:nowrap;
     column-gap:5em;
@@ -24,4 +24,5 @@
 }
 .action>label{
     font-size:4.25em;
+    color:inherit;
 }

@@ -30,9 +30,9 @@ export default function Accordion(props){
         >
             ${renderHeader?"":`
                 <h3 class="${css.title}" style="color:${tintColor};">${props.title||""}</h3>
-                <div class="${css.actions}">
+                <div ref="tailEl" class="${css.tail}">
                     <img 
-                        class="${css.indicator}" role="button" alt=""
+                        class="${css.indicator}" role="button" alt="toggle accordion"
                         src="${typeof(indicator)==="function"?indicator(tintColor,2):indicator}"   
                     />
                 </div>
@@ -42,9 +42,9 @@ export default function Accordion(props){
     const {headerEl}=accordion;
     if(renderHeader) state.headerEl=renderHeader({parent:headerEl});
     else if(actions){
-        const actionsEl=accordion.querySelector(`.${css.actions}`);
         const actionsetview=ActionSetView({
-            parent:actionsEl,
+            parent:accordion.tailEl,
+            style:{justifyContent:"flex-end"},
             className:css.actionset,
             actions,color:tintColor,
         });
@@ -126,5 +126,3 @@ export default function Accordion(props){
     if(props.open) setTimeout(()=>{accordion.toggle(true)},0);
     return accordion;
 }
-
-export const AccordionView=Accordion;

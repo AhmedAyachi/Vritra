@@ -28,9 +28,8 @@ interface FlatListProps<Type> extends ExtendableViewProps<"div"> {
     /**
      * The visiblity fraction of an element in order to render the next one.
      * A number in range 0..1
-     * @example 
-     * 0.5 => When half of the element is visible, the next one is rendered.
-     * @default 0.5
+     * @default 
+     * 0.5 //When half of the element is visible, the next one is rendered.
      */
     threshold?:number,
     /**
@@ -53,13 +52,9 @@ interface FlatListProps<Type> extends ExtendableViewProps<"div"> {
     /**
      * specifies the required visibility threshold in pixels for scrolling to an item
      * @notice used when smoothPaging is enabled
-     * @default the third of the flatlist width/height 
+     * @default // 1/3 of the flatlist width/height 
      */
     snapOffsetThreshold?:number,
-    /**
-     * @deprecated use snapOffsetThreshold instead
-     */
-    offsetThreshold?:number,
     /**
      * When false, the flatlist cannot be scrolled via touch interaction
      * @default true
@@ -71,10 +66,6 @@ interface FlatListProps<Type> extends ExtendableViewProps<"div"> {
      * @default "ease 300ms"
      */
     pagingTransition?:string;
-    /**
-     * @deprecated use pagingTransition instead
-     */
-    transition?:string,
     /**
      * When true, causes the flatlist to scroll to the nearest item element.
      * @default false 
@@ -99,13 +90,6 @@ interface FlatListProps<Type> extends ExtendableViewProps<"div"> {
         data:Type[],
     }):HTMLElement,
     /**
-     * Used with pagingEnabled true.
-     * @param params 
-     * @notice only called when an actual swipe gesture is detected
-     * @deprecated use onInFocusItemChange instead
-     */
-    onSwipe(event:FlatListSwipeEvent):void,
-    /**
      * Triggered on each addItems method call;
      * @param items added items array
      */
@@ -119,11 +103,17 @@ interface FlatListProps<Type> extends ExtendableViewProps<"div"> {
      * Called once the list element is filled
      * @param data about the item that filled the list
      */
-    onFilled(data:ItemData<Type>&{index:number}):void,
+    onFilled(fillerData:ItemData<Type>&{
+        /**
+         * How much of the element is currently visible within the root's intersection ratio, 
+         * as a value between 0.0 and 1.0
+         */
+        visibilityRatio:number,
+    }):void,
     /**
      * called when the item in focus has changed
      */
-    onInFocusItemChange(data:ItemData<Type>&{index:number}):void,
+    onInFocusItemChange(data:ItemData<Type>):void,
     /**
      * Triggered when the last data item is reached
      * @param context 
@@ -138,21 +128,27 @@ type PopupProps<Type>=Omit<FlatListProps<Type>,"at"|"containerClassName"|"popupC
 
 type FlatList<Type>=View<"div">&{
     /**
-     * Scrolls to a specific content pixel offset in the list
-     * @param offset 
-     * @param smooth default: true
-     */
-    scrollToOffset(offset:number,smooth?:boolean):void,
-    /**
-     * Returns the flatlist items container element 
+     * Returns the flatlist items container element.
      */
     readonly container:HTMLDivElement,
     /**
-     * Scrolls to item at index
-     * @param index 
-     * @param smooth default: true
+     * Scrolls to item.
+     * @param item item to scroll to
+     * @param smoothly default: true
      */
-    scrollToIndex(index:number,smooth?:boolean):void,
+    scrollToItem(item:Type,smoothly?:boolean):void,
+    /**
+     * Scrolls to item at index.
+     * @param index 
+     * @param smoothly default: true
+     */
+    scrollToIndex(index:number,smoothly?:boolean):void,
+    /**
+     * Scrolls to a specific content pixel offset in the list
+     * @param offset 
+     * @param smoothly default: true
+     */
+    scrollToOffset(offset:number,smoothly?:boolean):void,
     /**
      * Appends more data items to the data array
      * @param items 
@@ -204,6 +200,7 @@ type ItemData<Type>={
      * Data item 
      */
     item:Type,
+    index?:number,
     /**
      * HTML Element associated with the item.
      * null if Element has not been created yet.
