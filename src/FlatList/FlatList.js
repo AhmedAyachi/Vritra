@@ -25,6 +25,7 @@ export default function FlatList(props){
         emptinessEl:null,
         step:Math.max(1,props.step)||1,
         scrollLength:0,
+        cachingEnabled:false,//used by the showItems method
         triggerOnScrollEnd:true,
         snapOffsetThreshold:props.snapOffsetThreshold||props.offsetThreshold||(flatlist["client"+(horizontal?"Width":"Height")]/3),
     },{data,offsetSide,step,snapOffsetThreshold}=state;
@@ -269,6 +270,7 @@ export default function FlatList(props){
         const items=isSubData?data.filter((item,i)=>predicate(item,i)):predicate;
         if(Array.isArray(items)){
             observer.disconnect();
+            state.cachingEnabled=(isSubData&&!(popupProps&&("renderItem" in popupProps)));
             state.popuplist=FlatList({
                 ...props,
                 onReachEnd:null,
@@ -277,16 +279,19 @@ export default function FlatList(props){
                 parent:flatlist,
                 className:[css.popuplist,props.popupClassName,popupProps?.className],
                 data:items,
-                itemsMap:(isSubData&&!(popupProps&&("renderItem" in popupProps)))?state.itemsMap:null,
+                itemsMap:state.cachingEnabled?state.itemsMap:null,
             });
             //flatlist.style.overflow="hidden";
         } else {
             state.popuplist=null;
-            const {itemsMap,observedEl}=state;
-            container.append(...new Array(state.index+1).fill().map((_,i)=>{
-                return itemsMap.get(data[i]);
-            }));
-            if(observedEl) observer.observe(observedEl);
+            if(state.cachingEnabled){
+                state.cachingEnabled=false;
+                const {itemsMap,observedEl}=state;
+                container.append(...new Array(state.index+1).fill().map((_,i)=>{
+                    return itemsMap.get(data[i]);
+                }));
+                if(observedEl) observer.observe(observedEl);
+            }
         }
         return state.popuplist;
     }
