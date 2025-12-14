@@ -5,7 +5,7 @@ import icon0 from "./Icon_0";
 
 
 export default function DrawerNavigator(props){
-    const {parent,routes,initialId,renderHeader}=props;
+    const {parent,routes,initialId,tintColor="#1e90ff",renderHeader}=props;
     const drawernavigator=NativeView({
         parent,id:props.id,
         style:props.style,
@@ -21,21 +21,22 @@ export default function DrawerNavigator(props){
             <header 
                 ref="header"
                 class="${css.header} ${props.headerClassName||""}" 
-                style="padding:4em"
             >
-                <img class="${css.showbtn}" src="${icon0()}"/>
+                <img class="${css.showbtn}"/>
                 <h3 class="${css.title}"></h3>
             </header>
         `}
         <div ref="container" class="${css.container} ${props.containerClassName||""}"></div>
     `;
     routes?.forEach(route=>{
-        if(!route.title){route.title=route.id};
+        if(!route.title) route.title=route.id;
     });
     
     let {header}=drawernavigator;
     if(header){
+        header.style.backgroundColor=tintColor;
         const showbtn=drawernavigator.querySelector(`.${css.showbtn}`);
+        showbtn.src=icon0(getComputedStyle(header).color);
         showbtn.onclick=()=>{drawernavigator.showDrawer()};
     }
 
@@ -43,9 +44,8 @@ export default function DrawerNavigator(props){
     drawernavigator.showDrawer=()=>{
         if(!state.overlayview) state.overlayview=OverlayView({
             parent:drawernavigator,
-            routes:routes,
+            routes:routes,tintColor,
             drawerClassName:props.drawerClassName,
-            tintColor:props.tintColor||"#1e90ff",
             renderHeader:props.renderDrawerHeader,
             renderFooter:props.renderDrawerFooter,
             onChange:(route)=>{drawernavigator.navigate(route.id)},

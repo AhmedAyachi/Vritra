@@ -44,7 +44,7 @@ export default function Accordion(props){
     else if(actions){
         const actionsetview=ActionSetView({
             parent:accordion.tailEl,
-            style:{justifyContent:"flex-end"},
+            style:{flexDirection:"row-reverse"},
             className:css.actionset,
             actions,color:tintColor,
         });

@@ -6,7 +6,7 @@ export default function SmoothPagingContainer(props){
     const {parent,horizontal,backwards,data}=props,state={
         dragTime:null,
         easing:"ease-out",
-    },{easing}=state,{itemsmap}=data;
+    },{easing}=state,{itemsMap}=data;
     const smoothpagingcontainer=DraggableView({
         parent,style:props.style,
         className:props.className,
@@ -35,7 +35,7 @@ export default function SmoothPagingContainer(props){
                     }
                     else{
                         const clientLength="client"+(horizontal?"Width":"Height");
-                        const item=findItem(itemsmap.values(),(element)=>{
+                        const item=findItem(itemsMap.values(),(element)=>{
                             const offset=element[data.offsetSide];
                             return forward?(scrollLength>(offset-parent[clientLength])):
                             (offset+element[clientLength]>=(scrollLength));

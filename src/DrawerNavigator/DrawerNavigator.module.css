@@ -13,6 +13,8 @@
     display:flex;
     justify-content:flex-start;
     align-items:center;
+    padding:4em;
+    column-gap:4em;
 }
 .container{
     max-width:100%;
@@ -21,7 +23,6 @@
 }
 .showbtn{
     width:6em;
-    margin-right:8em;
     transition:200ms;
 }
 .title{
