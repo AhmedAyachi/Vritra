@@ -16,7 +16,7 @@ export default function FlatList(props){
         index:-1,//observed element index
         observedEl:null,//observed element
         infocusIndex:null,//for paging, the index of the element in focus
-        itemsMap:new FooMap(),// [item,element] map
+        itemsMap:(it=>it instanceof FooMap?it:new FooMap())(props.itemsMap),// [item,element] map
         endReached:!props.data?.length,
         firstOffset:null,//for paging lists: firstEl offset
         popuplist:null,
@@ -261,21 +261,32 @@ export default function FlatList(props){
         const {popuplist}=state;
         if(popuplist) popuplist.remove();
         flatlist.style.overflow=null;
-        const items=(typeof(predicate)==="function")?data.filter((item,i)=>predicate(item,i)):predicate;
+        /**
+         * To make sure that the itemsMap keeps no reference 
+         * of items that are not in the data array
+         */
+        const isSubData=typeof(predicate)==="function";
+        const items=isSubData?data.filter((item,i)=>predicate(item,i)):predicate;
         if(Array.isArray(items)){
+            observer.disconnect();
             state.popuplist=FlatList({
                 ...props,
                 onReachEnd:null,
                 onRemoveItem:null,
                 ...popupProps,
                 parent:flatlist,
-                className:`${css.popuplist} ${props.popupClassName||""} ${popupProps?.className||""}`,
+                className:[css.popuplist,props.popupClassName,popupProps?.className],
                 data:items,
+                itemsMap:(isSubData&&!(popupProps&&("renderItem" in popupProps)))?state.itemsMap:null,
             });
             //flatlist.style.overflow="hidden";
         } else {
             state.popuplist=null;
-            
+            const {itemsMap,observedEl}=state;
+            container.append(...new Array(state.index+1).fill().map((_,i)=>{
+                return itemsMap.get(data[i]);
+            }));
+            if(observedEl) observer.observe(observedEl);
         }
         return state.popuplist;
     }
@@ -365,14 +376,27 @@ export default function FlatList(props){
         if(index>=0) flatlist.scrollToIndex(index,smoothly);
     }
 
+    flatlist.remove=(()=>{
+        const remove=flatlist.remove.bind(flatlist);
+        return ()=>{
+            observer.disconnect();
+            remove();
+        };
+    })();
+
     function createNextElement(observe=true){
         state.index++;
-        const {index}=state,item=data[index];
-        const element=renderItem({
-            parent:container,item,
-            data:props.data||[],index,
-        });
-        state.itemsMap.set(item,element);
+        const {index,itemsMap}=state,item=data[index];
+        let element=itemsMap.get(item);
+        if(element){
+            container.appendChild(element);
+        } else {
+            element=renderItem({
+                parent:container,item,
+                data:props.data||[],index,
+            });
+            itemsMap.set(item,element);
+        }
         if(observe){
             const {observedEl}=state;
             if(observedEl){
