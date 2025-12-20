@@ -7,6 +7,7 @@
     flex-wrap:nowrap;
     column-gap:5em;
     overflow:auto hidden;
+    --iconBaseSize:6.4em;
 }
 .action{
     position:relative;
@@ -17,9 +18,9 @@
     background-color:transparent;
 }
 .action>img{
-    min-width:6.4em;
-    width:6.4em;
-    height:6.4em;
+    min-width:var(--iconBaseSize);
+    width:var(--iconBaseSize);
+    height:var(--iconBaseSize);
     object-fit:cover;
 }
 .action>label{

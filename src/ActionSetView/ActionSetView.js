@@ -38,8 +38,11 @@ export default function ActionSetView(props){
         const {component,onReady}=action;
         let actionEl;
         if(component){
-            actionEl=component({...action,parent:actionsetview});
-            actionEl?.classList.add(css.action);
+            actionEl=component({
+                color:tintColor,
+                ...action,
+                parent:actionsetview,
+            });
             actionEl?.addEventListener("click",(event)=>{event.stopPropagation()});
             if(!i){
                 actionsetview.insertAdjacentElement("afterbegin",actionEl);

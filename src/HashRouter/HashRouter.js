@@ -2,12 +2,17 @@
 
 export default function HashRouter(options){
     const {target,routes,fallbackRoute}=options;
+
+    const invalidRouteIndex=routes.findIndex(it=>!(it&&(Object.getPrototypeOf(it)===Object.prototype)));
+    if(invalidRouteIndex>=0){
+        throw HashRouterError("invalid route object at index: "+invalidRouteIndex);
+    }
+
     const {history,location}=window;
     const state={
         data:null,
-        route:null,//{...,params,data,element} to store last data and params values
+        route:null,//{...,params,data,element} to store the last values of data and params.
     };
- 
     setRoute();
     window.addEventListener("hashchange",setRoute);
 
@@ -273,4 +278,11 @@ const getLocationPathName=(path=location.hash)=>{
     if(index===path.length) return path;
     else if(index>=0) return path.substring(0,index);
     else return path;
+}
+
+const HashRouterError=(message)=>{
+    const error=new Error(message),{stack}=error;
+    error.name="HashRouterError";
+    if(stack) error.stack=stack.substring(stack.indexOf("at",stack.indexOf(error.name)));
+    return error;
 }

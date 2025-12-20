@@ -4,7 +4,10 @@ export default function VritraElement(node){
     let onClickHandler;
 	Object.defineProperties(node,{
 		onClick:{set:(handler)=>{
-			node.removeEventListener&&node.removeEventListener("click",onClickHandler);
+			if(onClickHandler&&node.removeEventListener){
+				clearTimeout(node.clickTimeout);
+				node.removeEventListener("click",onClickHandler);
+			}
 			if((typeof(handler)==="function")&&node.addEventListener){
 				!function addHandler(){
 					onClickHandler=(event)=>{

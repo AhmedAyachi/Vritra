@@ -119,9 +119,9 @@ export default function FlatList(props){
             }
         }
         if(props.onFilled&&(!state.filled)){
-            let fillerIndex;
+            let fillerIndex;  
             if(isIntersecting){
-                if((entry.intersectionRatio<1)||(entryTargetIndex>=(data.length-1))){
+                if((entry.intersectionRatio<=0.99)||(entryTargetIndex>=(data.length-1))){
                     fillerIndex=entryTargetIndex;
                 }
             } else {
