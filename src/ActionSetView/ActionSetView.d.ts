@@ -111,6 +111,7 @@ interface ActionSetDefinitionElement extends HTMLDivElement {
      * will make sure that your code keeps behaving the same way independently of package versions.
      */
     setIcon(icon?:VritraIcon):void,
+    setLabel(label?:string):void,
 }
 
 type VritraIcon=string|((

@@ -72,16 +72,14 @@ export default function TabNavigator(props){
             });
             const {container}=tabnavigator,{contentEl}=tab;
             container.innerHTML=""; 
-            if(contentEl){container.appendChild(contentEl)}
+            if(contentEl) container.appendChild(contentEl);
             else{
                 const {context}=state,{renderContent}=tab;
                 const contentEl=renderContent&&renderContent({parent:container,context});
                 if(tab.memorize&&(contentEl instanceof HTMLElement)){
                     tab.contentEl=contentEl;
                 }
-                else{
-                    state.context.contentEl=contentEl;
-                }
+                else state.context.contentEl=contentEl;
             }
             setContext(state.context,tab);
             tabview.setColor(tab.tintColor||tintColor);

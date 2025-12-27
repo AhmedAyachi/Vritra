@@ -65,6 +65,10 @@ export default function ActionSetView(props){
                 if(img) actionEl.setIcon=(icon=action.icon)=>{
                     img.src=typeof(icon)==="function"?icon(action.color):icon;
                 }
+                const labelEl=actionEl.querySelector(":scope>label");
+                if(labelEl) actionEl.setLabel=(label=action.label)=>{
+                    labelEl.innerText=label;
+                }
             } catch {
                 throw new Error(actionId?`invalid action with id: "${actionId}"`:"action with no id");
             }

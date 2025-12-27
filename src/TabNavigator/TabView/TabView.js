@@ -12,7 +12,7 @@ export default function TabView(props){
 
     tabview.innateHTML=`
         ${icon?`<img ref="iconEl"/>`:""}
-        ${label?`<text as="label">${label}</text>`:""}
+        ${label?`<text as="label" ref="labelEl"></text>`:""}
     `;
     
     tabview.onclick=()=>{
@@ -27,7 +27,15 @@ export default function TabView(props){
         }
         tabview.style.color=color;
     }
+    tabview.setLabel=(text)=>{
+        const {labelEl}=tabview;
+        if(labelEl){
+            if(typeof(text)!=="string") text=typeof(label)==="function"?label():label;
+            labelEl.innerText=text;
+        }
+    }
 
     tabview.setColor();
+    tabview.setLabel();
     return tabview;
 }

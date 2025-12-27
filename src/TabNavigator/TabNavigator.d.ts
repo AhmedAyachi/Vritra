@@ -12,7 +12,7 @@ export default function TabNavigator(props:ViewProps<"div">&{
      * @default true
      */
     memorize?:boolean,
-    activeTabId:string,
+    activeTabId?:string,
     /**
      * @default "#1e90ff"
      */
@@ -36,13 +36,15 @@ type TabNavigator=View<"div">&{
 type TabNavigatorContext={
     id:string,
     label:string,
-    readonly tabEl:HTMLButtonElement,
+    readonly tabEl:HTMLButtonElement&{
+        setLabel(label:string):void;
+    },
     readonly contentEl:HTMLElement,
 }
 
 type TabNavigatorTab={
     id:string,
-    label?:string,
+    label?:string|(()=>string),
     icon?:VritraIcon,
     tintColor?:string,
     /**
