@@ -27,6 +27,13 @@ export default function TabView(props){
         }
         tabview.style.color=color;
     }
+    tabview.setIcon=(icon)=>{
+        const {iconEl}=tabview;
+        if(iconEl){
+            if(!icon) icon=tab.icon;
+            iconEl.src=typeof(icon)==="function"?icon(color):icon;
+        }
+    }
     tabview.setLabel=(text)=>{
         const {labelEl}=tabview;
         if(labelEl){

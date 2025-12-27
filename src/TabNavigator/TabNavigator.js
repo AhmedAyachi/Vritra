@@ -25,9 +25,7 @@ export default function TabNavigator(props){
         style:{backgroundColor:tintColor},
     });
     tabs.forEach(tab=>{
-        if(tab.memorize===undefined){
-            tab.memorize=memorize;
-        };
+        if(tab.memorize===undefined) tab.memorize=memorize;
         TabView({
             parent:headerEl,tab,
             textColor:tabTextColor,
@@ -45,12 +43,7 @@ export default function TabNavigator(props){
                 const activeEl=activeTab.element;
                 indicator.style.width=`${activeEl.offsetWidth}px`;
                 indicator.style.transform=`translateX(${activeEl.offsetLeft}px)`;
-                const iconEl=activeEl.querySelector(":scope>img");
-                if(iconEl){
-                    const {icon}=activeTab;
-                    iconEl.src=typeof(icon)==="function"?icon(tabTextColor,2):icon;
-                };
-                activeEl.style.color=tabTextColor;
+                activeEl.setColor(tabTextColor);
             }
             //set new active tab
             state.activeTab=tab;

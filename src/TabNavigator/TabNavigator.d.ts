@@ -30,14 +30,15 @@ type TabNavigator=View<"div">&{
      * @param tabId
      * @param triggerOnNavigate default: true
      */
-    navigate(tabId:string,triggerOnNavigate:boolean):void;
+    navigate(tabId:string,triggerOnNavigate?:boolean):void;
 }
 
 type TabNavigatorContext={
     id:string,
     label:string,
     readonly tabEl:HTMLButtonElement&{
-        setLabel(label:string):void;
+        setIcon(icon?:VritraIcon):void;
+        setLabel(label?:string):void;
     },
     readonly contentEl:HTMLElement,
 }
