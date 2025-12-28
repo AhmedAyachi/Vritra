@@ -65,22 +65,22 @@ export default function TabNavigator(props){
             });
             const {container}=tabnavigator,{contentEl}=tab;
             container.innerHTML=""; 
+            setContext(state.context,tab);
             if(contentEl) container.appendChild(contentEl);
             else{
                 const {context}=state,{renderContent}=tab;
                 const contentEl=renderContent&&renderContent({parent:container,context});
+                context.contentEl=contentEl;
                 if(tab.memorize&&(contentEl instanceof HTMLElement)){
                     tab.contentEl=contentEl;
-                }
-                else state.context.contentEl=contentEl;
+                } 
             }
-            setContext(state.context,tab);
             tabview.setColor(tab.tintColor||tintColor);
             (headerEl.scrollWidth>headerEl.clientWidth)&&headerEl.scrollTo({
                 behavior:"smooth",
                 left:tabview.offsetLeft+tabview.clientWidth/2-headerEl.clientWidth/2,
             });
-            triggerOnNavigate&&onNavigate&&onNavigate(state.context);
+            if(triggerOnNavigate) onNavigate&&onNavigate(state.context);
         }
     }};
    
@@ -90,9 +90,7 @@ export default function TabNavigator(props){
 
 const setContext=(context,tab)=>{
     const {contentEl}=tab;
-    if(contentEl instanceof HTMLElement){
-        context.contentEl=contentEl;
-    }
+    context.contentEl=contentEl instanceof HTMLElement?contentEl:null;
     context.id=tab.id;
     context.label=tab.label;
     context.tabEl=tab.element;
