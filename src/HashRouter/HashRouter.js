@@ -2,6 +2,10 @@
 
 export default function HashRouter(options){
     const {target,routes,fallbackRoute}=options;
+    if(fallbackRoute){
+        delete fallbackRoute.guard;
+        delete fallbackRoute.restrictor;
+    }
 
     const invalidRouteIndex=routes.findIndex(it=>!(it&&(Object.getPrototypeOf(it)===Object.prototype)));
     if(invalidRouteIndex>=0){
@@ -74,34 +78,47 @@ export default function HashRouter(options){
                 onHide&&onHide();
             }
         }
-        route=getRoute(routes,fallbackRoute);
-        if(route){
-            new Promise(resolve=>{
-                const {restrictor}=route;
-                if(typeof(restrictor)==="function"){
-                    restrictor({
-                        target,
-                        data:state.data,
-                        params:route.params,
-                        unlock:()=>{resolve(true)},
-                        redirect:(path,data)=>{
-                            resolve({path:String(path||""),data});
-                        },
+        route=getRoute(routes);
+        if(route) new Promise((resolve,reject)=>{
+            const {guard,restrictor}=route;
+            if(typeof(guard)==="function"){
+                const result=guard({
+                    target,
+                    data:state.data,
+                    params:route.params,
+                    allow:()=>{resolve(true)},
+                    redirect:(path,data)=>{
+                        resolve({path:String(path||""),data});
+                    },
+                });
+                if(result instanceof Promise){
+                    result.catch(error=>{
+                        const message=`"${error.message}" at guard for route ${route.path}.`;
+                        return Promise.reject(HashRouterError(message));
+                    }).then(()=>{
+                        reject(RouteGuardError(route));
                     });
                 }
-                else resolve(true);
-            }).then(result=>{
-                if(result===true){
-                    state.route=route;
-                    route.data=state.data;
-                    return renderRoute(route,target);
-                }
-                else hashrouter.replace(result.path,result.data);
-            }).finally(()=>{
-                state.data=null;
-            });
-        }
-        else target.innerHTML="";
+                else reject(RouteGuardError(route));
+            }
+            else if(typeof(restrictor)==="function"){
+                console.warn(HashRouterError("restrictor is deprecated. Use guard instead"));
+                restrictor(unlocked=>{resolve(Boolean(unlocked))},target);
+            }
+            else resolve(true);
+        }).then(result=>{
+            if(result===true){
+                state.route=route;
+                route.data=state.data;
+                return renderRoute(route,target);
+            }
+            else if(result===false) hashrouter.back();
+            else hashrouter.replace(result.path,result.data);
+        }).finally(()=>{
+            state.data=null;
+        });
+        else if(fallbackRoute) renderRoute(fallbackRoute,target);
+        else throw HashRouterError(`No route matched "${getLocationPathName()}" and no fallback route is defined`);
     }
     
 
@@ -152,7 +169,7 @@ const getContext=({params,data})=>{
     return context;
 }
 
-const getRoute=(routes,fallbackRoute)=>{
+const getRoute=(routes)=>{
     const paths=getPaths(location.hash);
     let route=findBestRoute(paths,routes);
     if(route){
@@ -170,7 +187,6 @@ const getRoute=(routes,fallbackRoute)=>{
             delete route.element;
         }
     }
-    else route=fallbackRoute;
     if(route&&!route.scroll){
         route.scroll={top:0,left:0};
     }
@@ -286,3 +302,5 @@ const HashRouterError=(message)=>{
     if(stack) error.stack=stack.substring(stack.indexOf("at",stack.indexOf(error.name)));
     return error;
 }
+
+const RouteGuardError=(route)=>HashRouterError(`Guard for route "${route.path}" exited without calling allow() or redirect().`);

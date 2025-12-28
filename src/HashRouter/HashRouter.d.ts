@@ -28,35 +28,36 @@ export default function HashRouter(options:{
          */
         path:string,
         /**
-         * @deprecated use path instead with "/" as a separator
-         */
-        hash:string,
-        /**
          * Will rerender anyway if any of the params value changes.
          * @default false
          */
         memorize?:boolean,
+        component(props:HashRouteComponentProps):HashRouteElement|Promise<HashRouteElement>,
         /**
-         * If defined, either unlock or redirect must be called.
-         * @param context 
-         * @returns 
+         * If defined, either allow or redirect must be called.
          */
-        restrictor?:(context:{
+        guard?:(context:{
             data?:object,
             params?:[string:string],
             target:HTMLElement,
             /**
-             * Unlocks the route.
+             * allows navigation to the route.
              */
-            unlock():void,
+            allow():void,
             /**
              * 
              * @param to default to ""
              * @param data default to undefined
              */
             redirect(to?:string,data?:any):void;
-        })=>void,
-        component(props:HashRouteComponentProps):HashRouteElement|Promise<HashRouteElement>,
+        })=>void|Promise<void>,
+        /**
+         * @deprecated use guard instead
+         */
+        restrictor:(
+            unlock:(unlocked:boolean)=>any,
+            target:HTMLElement,
+        )=>void,  
     }[],
     fallbackRoute?:{
         memorize?:boolean,
