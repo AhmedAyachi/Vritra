@@ -213,26 +213,22 @@ export default function FlatList(props){
     }}
 
     flatlist.removeItem=(predicate,withElement=true)=>{
-        const item=removeItem(data,predicate);
-        if(item){
+        const index=data.findIndex(predicate);
+        if(index>=0){
+            const item=data[index];
+            data.splice(index,1);
+            state.index--;
             const {itemsMap}=state;
             const element=itemsMap.get(item);
             if(element){
-                const removed={item,element};
-                if(withElement){
-                    const {element}=removed;
-                    if(element instanceof Element) element.remove();
-                }
+                if(withElement&&element instanceof Element) element.remove();
                 itemsMap.delete(item);
-                state.index--;
-                if((!data.length)&&(!container.childNodes.length)){
-                    showEmptinessElement();
-                }
-                onRemoveItem&&onRemoveItem(removed);
             }
-            else return null;
+            if((!data.length)&&(!container.childNodes.length)){
+                showEmptinessElement();
+            }
+            onRemoveItem&&onRemoveItem({item,element,index});
         }
-        else return null;
     }
 
     flatlist.clear=()=>{if(data.length){
@@ -245,16 +241,19 @@ export default function FlatList(props){
             state.observedEl=null;
             observer.disconnect();
         }
-        data.forEach(item=>{
+        data.forEach((item,i)=>{
             const element=itemsMap.get(item);
             itemsMap.delete(itemsMap);
             removeItem(item,data);
-            element?.remove();
-            onRemoveItem&&onRemoveItem({item,element});
+            if(element) element.remove();
+            onRemoveItem&&onRemoveItem({
+                item,element,
+                index:i,
+            });
         });
         itemsMap.clear();
         data.splice(0,data.length);
-        flatlist.scrollToOffset(0,false);
+        container.innerHTML="";
         showEmptinessElement();
     }}
 

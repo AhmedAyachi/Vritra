@@ -3,7 +3,7 @@ import css from "./ContentView.module.css";
 
 
 export default function ContentView(props){
-    const {parent,onShow}=props;
+    const {parent,animated,onShow,onHide}=props;
     const contentview=View({parent,className:[css.contentview,props.className]}),state={
         nextElStyle:null,
         nextEl:getNextElement(parent),
@@ -11,22 +11,22 @@ export default function ContentView(props){
 
     contentview.innateHTML=`
     `;
-
-    clearTimeout(parent.showTimeout);
-    parent.showTimeout=nextEl&&setTimeout(()=>{
-        state.nextElStyle={};
-        const {style}=nextEl;
-        ["marginTop","transition"].forEach(key=>{
-            state.nextElStyle[key]=style[key];
-        });
-        Object.assign(style,{
-            marginTop:getSpacing(),
-            transition:`${statics.transition}ms`,
-        });
-        delete parent.showTimeout;
-    },0);
     
-    fadeIn(contentview,statics.transition,()=>{
+    new Promise(resolve=>{
+        clearTimeout(parent.showTimeout);
+        if(nextEl){
+            state.nextElStyle=getElementStyle(nextEl);
+            if(animated) parent.showTimeout=setTimeout(()=>{
+                Object.assign(nextEl.style,{
+                    marginTop:getSpacing(),
+                    transition:`${statics.transition}ms`,
+                });
+                delete parent.showTimeout;
+            },0);
+        }
+        if(animated) fadeIn(contentview,statics.transition,resolve);
+        else resolve();
+    }).then(()=>{
         Object.assign(contentview.style,{
             position:"relative",
             transform:"none",
@@ -43,11 +43,13 @@ export default function ContentView(props){
         onShow&&onShow();
     });
 
-    contentview.unmount=(callback)=>{
+    contentview.unmount=()=>{
         Object.assign(contentview.style,{position:null,transform:null});
+        const nextEl=state.nextEl=getNextElement(parent);
         if(nextEl){
             clearTimeout(parent.showTimeout);
             clearTimeout(parent.hideTimeout);
+            state.nextElStyle=getElementStyle(nextEl);
             const {style}=nextEl;
             style.transition="none";
             style.marginTop=getSpacing();
@@ -64,7 +66,7 @@ export default function ContentView(props){
         }
         fadeOut(contentview,statics.transition,()=>{
             contentview.remove();
-            callback&&callback();
+            onHide&&onHide();
         });
     }
 
@@ -72,7 +74,7 @@ export default function ContentView(props){
         return `calc(
             ${(100*contentview.clientHeight/window.innerWidth)}vw +
             ${getComputedStyle(parent).getPropertyValue("margin-bottom")||"0px"} +
-            ${getComputedStyle(nextEl).getPropertyValue("margin-top")||"0px"}
+            ${getComputedStyle(state.nextEl).getPropertyValue("margin-top")||"0px"}
         )`;
     }
 
@@ -82,6 +84,16 @@ export default function ContentView(props){
 const statics={
     transition:250,
 };
+
+const getElementStyle=(element)=>{
+    if(element){
+        const {style}=element;
+        return {
+            marginTop:style.marginTop,
+            transition:style.transition,
+        };
+    } else return null;
+}
 
 const getNextElement=(parent)=>{
     let element=parent;

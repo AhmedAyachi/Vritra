@@ -128,22 +128,22 @@ export default function HashRouter(options){
 const renderRoute=async (route,target)=>{
     target.innerHTML="";
     const {memorize}=route;
-    let {element}=route;
+    let {element}=route,context;
     if(memorize&&element instanceof HTMLElement){
         const {scroll}=route;
         target.appendChild(element);
         if(scroll) element.scrollTo(scroll);
     }
     else if(typeof(route.component)==="function"){
-        const context=getContext(route);
+        context=getContext(route);
         route.name=route.component.name;
         element=route.component({...context,parent:target});
-        if(element instanceof Promise){
-            element=await element;
-        }
+        if(element instanceof Promise) element=await element;
         route.element=element;
     }
-    element&&element.onShow?.();
+    if(element&&element.onShow){
+        element.onShow(context||getContext(route));
+    }
     window.scrollTo(0,0);
 }
 

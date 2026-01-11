@@ -32,15 +32,12 @@ export default function PopupView(props){
         const position=getPosition(popupview,target,parent,props.offset);
         Object.assign(popupview.style,position);
     }
-    popupview.cleanupEventListeners=()=>{
-        avoidable&&statics.avoidEvents.forEach(type=>{
-            window.removeEventListener(type,onTouchScreen);
-        });
-    }
     popupview.remove=(()=>{
         const remove=popupview.remove.bind(popupview);
         return ()=>{
-            popupview.cleanupEventListeners();
+            avoidable&&statics.avoidEvents.forEach(type=>{
+                window.removeEventListener(type,onTouchScreen);
+            });
             if(isStaticParent) parent.style.position=null;
             remove();
             onRemove&&onRemove();

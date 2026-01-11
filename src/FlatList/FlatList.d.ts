@@ -161,14 +161,14 @@ type FlatList<Type>=View<"div">&{
      * @param withElement if true removes the html element associated with the item. Default: true.
      * @returns the removed data {item,element} if exists else null
      */
-    removeItem(predicate:(item:Type,index?:number,data?:Type[])=>boolean,withElement?:boolean):ItemData<Type>,
+    removeItem(predicate:(item:Type,index?:number,data?:Type[])=>boolean,withElement?:boolean):void,
     /**
      * Removes item if found
      * @param item item to remove
      * @param withElement if true removes the html element associated with the item. Default: true
      * @returns the removed data {item,element} if exists else null
      */
-    removeItem(item:any,withElement?:boolean):ItemData<Type>|null,
+    removeItem(item:any,withElement?:boolean):void,
     /**
      * Clears all the flatlist items
      */
@@ -196,16 +196,9 @@ type FlatList<Type>=View<"div">&{
 }
 
 type ItemData<Type>={
-    /**
-     * Data item 
-     */
     item:Type,
-    index?:number,
-    /**
-     * HTML Element associated with the item.
-     * null if Element has not been created yet.
-     */
-    element:HTMLElement|null,
+    index:number,
+    element?:HTMLElement|null,
 }
 
 type FlatListSwipeEvent=SwipeEvent&{

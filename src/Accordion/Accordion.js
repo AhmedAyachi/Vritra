@@ -55,11 +55,26 @@ export default function Accordion(props){
         if(!state.locked) accordion.toggle();
     }
 
+    accordion.toggle=(open=!state.open)=>{ toggleAccordion(open,true) };
     accordion.setLocked=(value)=>{
         if(value&&state.open) accordion.toggle(false);
         accordion.isLocked=value;
     }
-    accordion.toggle=(open=!state.open)=>{
+    
+    Object.defineProperties(accordion,{
+        header:{get:()=>state.headerEl},
+        content:{get:()=>state.contentEl},
+        isOpen:{get:()=>state.open},
+        isLocked:{
+            get:()=>state.locked,
+            set:(value)=>{
+                state.locked=Boolean(value);
+                headerEl.style.opacity=state.locked?0.5:null;
+            },
+        },
+    });
+
+    function toggleAccordion(open,smooth=true){
         open=Boolean(open);
         if(state.interactive&&(open!==state.open)){
             state.interactive=false;
@@ -75,54 +90,37 @@ export default function Accordion(props){
             }
             const indicator=accordion.querySelector(`.${css.indicator}`);
             if(indicator){
+                indicator.style.transition=smooth?null:"0ms";
                 indicator.style.transform=`rotateZ(${open?-180:0}deg)`;
             }
             if(open){
                 const contentview=state.contentview=ContentView({
                     parent:accordion,
                     className:props.containerClassName,
-                    onShow:()=>{
-                        state.interactive=true;
-                    },
+                    animated:smooth,
+                    onShow:()=>{ state.interactive=true },
+                    onHide:()=>{ state.interactive=true },
                 });
                 const {contentEl}=state;
                 if(memorize&&contentEl){
                     if(contentEl instanceof VritraFragment){
                         contentEl.appendTo(contentview);
-                    }
-                    else{
-                        contentview.appendChild(contentEl);
-                    }
-                }
-                else{
+                    } else contentview.appendChild(contentEl);
+                } else {
                     state.contentEl=renderContent&&renderContent({parent:contentview});
                 }
-                onOpen&&onOpen(contentview);
-            }
-            else{
+                if(onOpen) setTimeout(()=>onOpen(contentview),0);
+            } else {
                 const {contentview}=state;
-                contentview&&contentview.unmount(()=>{
-                    state.interactive=true;
-                });
-                state.contentview=null;
-                onClose&&onClose(contentview);
+                if(contentview){
+                    state.contentview=null;
+                    contentview.unmount();
+                    onClose&&onClose(contentview);
+                }
             }
         }
-    };
-    
-    Object.defineProperties(accordion,{
-        header:{get:()=>state.headerEl},
-        content:{get:()=>state.contentEl},
-        isOpen:{get:()=>state.open},
-        isLocked:{
-            get:()=>state.locked,
-            set:(value)=>{
-                state.locked=Boolean(value);
-                headerEl.style.opacity=state.locked?0.5:null;
-            },
-        },
-    });
+    }
 
-    if(props.open) setTimeout(()=>{accordion.toggle(true)},0);
+    if(props.open) toggleAccordion(true,false);
     return accordion;
 }

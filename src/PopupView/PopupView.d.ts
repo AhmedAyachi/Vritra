@@ -34,13 +34,7 @@ type PopupView<Tag>=View<Tag>&{
      */
     position():void;
     /**
-     * Cleans up the event listeners and removes the PopupView 
-     * from DOM with a fade-out animation.
+     * removes the PopupView from the DOM with a fade-out animation.
      */
     unmount():void,
-    /**
-     * Cleans up the added event listeners.
-     * @deprecated will be gone in future versions.
-     */
-    cleanupEventListeners():void,
 }

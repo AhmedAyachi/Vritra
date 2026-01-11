@@ -37,7 +37,7 @@ export default function HashRouter(options:{
          * If defined, either allow or redirect must be called.
          */
         guard?:(context:{
-            data?:object,
+            data?:any,
             params?:[string:string],
             target:HTMLElement,
             /**
@@ -71,18 +71,18 @@ interface HashRouter {
      * @param path 
      * @param data Data object to pass to the new route component
      */
-    push(path:string,data?:object):void,
+    push(path:string,data?:any):void,
     /**
      * Appends the path to the end of the current path
      * @param path Hash to append
      * @param data Data object to pass to the new route component
      */
-    append(path:string,data?:object):void,
+    append(path:string,data?:any):void,
     /**
      * Replaces the current history entry
      * @param data Data object to pass to the new route component
      */
-    replace(path:string,data?:object):void,
+    replace(path:string,data?:any):void,
     /**
      * Rerenders the current route even if memorize true is specified
      */
@@ -90,7 +90,7 @@ interface HashRouter {
     /**
      * Causes the browser to move back one page in the session history.
      */
-    back(data?:object):void,
+    back(data?:any):void,
     /**
      * Resets all routes.
      */
@@ -98,13 +98,16 @@ interface HashRouter {
 }
 
 interface HashRouteElement extends HTMLElement {
-    onShow():void,
+    onShow(context:HashRouterContext):void,
     onHide():void,
 }
 
-interface HashRouteComponentProps {
+interface HashRouteComponentProps extends HashRouterContext {
     parent:HTMLElement,
-    data?:object,
+}
+
+interface HashRouterContext {
+    data?:any,
     params?:[string:string],
     location:{
         /**

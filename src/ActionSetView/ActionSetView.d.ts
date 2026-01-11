@@ -61,11 +61,6 @@ interface ActionSetDefinition {
      */
     label?:string,
     /**
-     * Action image element alt attribute value
-     * @deprecated use iconAlt instead
-     */
-    alt?:string,
-    /**
      * Action img element alt attribute value
      * @default action id
      */
@@ -103,7 +98,7 @@ interface ActionSetDefinition {
     },event:PointerEvent):void,
 }
 
-interface ActionSetDefinitionElement extends HTMLDivElement {
+interface ActionSetDefinitionElement extends HTMLButtonElement {
     /**
      * Not available for custom actions
      * @param icon default to action.icon
