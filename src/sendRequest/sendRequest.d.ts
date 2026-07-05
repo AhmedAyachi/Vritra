@@ -7,11 +7,11 @@ export default function sendRequest(
          * @default "GET"
          */
         method?:string,
-        headers?:[string:any],
         /**
          * for non-string values, the body is stringified.
          */
-        body?:[string:any],
+        body?:any,
+        headers?:[string:any],
         /**
          * Url search params
          */
@@ -23,7 +23,7 @@ export default function sendRequest(
          */
         timeout?:number,
         /**
-         * An AbortSignal to set request's signal.
+         * An AbortSignal.
          */
         signal?:AbortSignal,
         /**

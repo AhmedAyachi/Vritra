@@ -225,6 +225,7 @@ export const map=(array=[],treatment)=>{
     }
     return str;
 }
+
 export const useId=(prefix="",separator="_")=>`${prefix}${prefix?separator:""}${Math.random().toString(36).slice(2)}${Math.random().toString(36).slice(2)}`;
 
 //export const specialchars="+=}°)]@ç^_\\`-|(['{\"#~&²£$¤*µ%ù§!/:.;?,<>";

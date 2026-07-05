@@ -24,3 +24,25 @@ export default function VritraElement(node){
 }
 
 export {default as HtmlSanitizer} from "./HtmlSanitizer";
+
+export const setElementClassName=(element,className)=>{if(className){
+    if(Array.isArray(className)){
+        element.className=className.flat(Infinity).filter(Boolean).join(" ");
+    } else {
+        element.className=className;
+    }
+}};
+
+export const setElementStyle=(element,style)=>{if(style){
+    const applyStyle=(element,style)=>{
+        if(typeof(style)==="string") element.style.cssText+=style; 
+        else Object.assign(element.style,style);
+    }
+    if(Array.isArray(style)){
+        const styles=style.flat(Infinity);
+        for(const styleItem of styles){
+            if(styleItem) applyStyle(element,styleItem);
+        }
+    }
+    else applyStyle(element,style);
+}};

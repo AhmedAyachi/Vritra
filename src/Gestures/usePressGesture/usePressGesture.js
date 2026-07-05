@@ -5,12 +5,11 @@ import {isTouchDevice} from "../../index";
 export default function usePressGesture(options){
     const {element,threshold=0,timestamp=0,onStart,onPressing,onEnd}=options;
     if(element instanceof HTMLElement){
-        const touchable=isTouchDevice();
-        const startEvent=touchable?"touchstart":"mousedown";
-        const moveEvent=touchable?"touchmove":"mousemove";
-        const endEvent=touchable?"touchend":"mouseup";
+        const touchDevice=isTouchDevice();
+        const startEvent=touchDevice?"touchstart":"mousedown";
+        const moveEvent=touchDevice?"touchmove":"mousemove";
+        const endEvent=touchDevice?"touchend":"mouseup";
         const onTriggerGesture=(event)=>{
-            event.stopPropagation();
             let pressing=true,triggered=false;
             let start,elapsed,stamptracker=0;
             const toPressEvent=(event)=>{
@@ -31,7 +30,7 @@ export default function usePressGesture(options){
                 return event;
             }
             requestAnimationFrame(function onPressGesture(time){
-                if(start===undefined){start=time};
+                if(start===undefined) start=time;
                 elapsed=time-start;
                 if(triggered){
                     element.removeEventListener(moveEvent,cancelGesture);
@@ -48,6 +47,7 @@ export default function usePressGesture(options){
                     }
                 }
                 else if(elapsed>=threshold){
+                    event.stopPropagation();
                     toPressEvent(event);
                     event.duration=0;
                     onStart&&onStart(event);

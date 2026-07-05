@@ -76,14 +76,14 @@ interface FlatListProps<Type> extends ExtendableViewProps<"div"> {
      * @notice displays a simple message if a string is passed
      * @default "no data"
      */
-    EmptyComponent?:string|(({parent:HTMLElement})=>HTMLElement),
+    EmptyComponent?:string|((props:{parent:HTMLElement})=>HTMLElement),
      /**
       * Function to execute on each data item
       * 
       * Must return an HTMLElement
       * @param props component props
       */
-    renderItem(props:{
+    renderItem?(props:{
         parent:HTMLDivElement,
         item:Type,
         index:number,
@@ -93,17 +93,17 @@ interface FlatListProps<Type> extends ExtendableViewProps<"div"> {
      * Triggered on each addItems method call;
      * @param items added items array
      */
-    onAddItems(items:Type[]):void,
+    onAddItems?(items:Type[]):void,
      /**
       * Triggered on each removeItem method call;
       * @param data
       */
-    onRemoveItem(data:ItemData<Type>):void,
+    onRemoveItem?(data:ItemData<Type>):void,
     /**
      * Called once the list element is filled
      * @param data about the item that filled the list
      */
-    onFilled(fillerData:ItemData<Type>&{
+    onFilled?(fillerData:ItemData<Type>&{
         /**
          * How much of the element is currently visible within the root's intersection ratio, 
          * as a value between 0.0 and 1.0
@@ -113,12 +113,12 @@ interface FlatListProps<Type> extends ExtendableViewProps<"div"> {
     /**
      * called when the item in focus has changed
      */
-    onInFocusItemChange(data:ItemData<Type>):void,
+    onInFocusItemChange?(data:ItemData<Type>):void,
     /**
      * Triggered when the last data item is reached
      * @param context 
      */
-    onReachEnd(context:{
+    onReachEnd?(context:{
         data:Type[],
         container:HTMLElement,
     }):void,

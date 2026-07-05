@@ -213,7 +213,7 @@ export default function FlatList(props){
     }}
 
     flatlist.removeItem=(predicate,withElement=true)=>{
-        const index=data.findIndex(predicate);
+        const index=typeof(predicate)==="function"?data.findIndex(predicate):data.indexOf(predicate);
         if(index>=0){
             const item=data[index];
             data.splice(index,1);
@@ -403,9 +403,7 @@ export default function FlatList(props){
         }
         if(observe){
             const {observedEl}=state;
-            if(observedEl){
-                observer.unobserve(observedEl);
-            }
+            if(observedEl) observer.unobserve(observedEl);
             observer.observe(element);
             state.observedEl=element;
         }

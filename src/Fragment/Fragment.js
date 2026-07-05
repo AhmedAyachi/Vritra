@@ -1,5 +1,5 @@
 import {findItem} from "../index";
-import {HtmlSanitizer} from "../VritraElement/VritraElement";
+import {setElementStyle,setElementClassName,HtmlSanitizer,vr} from "../VritraElement/VritraElement";
 
 
 export class VritraFragment extends DocumentFragment {
@@ -12,6 +12,11 @@ export class VritraFragment extends DocumentFragment {
         super(props);
         const at=this.#at=props.at;
         const parent=this.#parent=props.parent||null;
+        const toStyleParent=parent instanceof VritraFragment?parent.parentElement:parent;
+        if(toStyleParent instanceof HTMLElement){
+            setElementStyle(toStyleParent,props.style);
+            setElementClassName(toStyleParent,props.className);
+        }
         if((this.#at==="start")||(this.#at<=0)){
             this.#nextParentNode=parent?parent.firstChild:null;
         }
@@ -285,7 +290,7 @@ export class VritraFragment extends DocumentFragment {
         else{
             const nextParentNode=this.#nextParentNode;
             if(nextParentNode) return nextParentNode.previousSibling;
-            else return this.#parent.lastChild?.previousSibling||null;
+            else return this.#parent?.lastChild?.previousSibling||null;
         }
     }
 
@@ -295,7 +300,7 @@ export class VritraFragment extends DocumentFragment {
         else{
             const nextParentNode=this.#nextParentNode;
             if(nextParentNode) return nextParentNode.previousElementSibling;
-            else return this.#parent.lastChild?.previousElementSibling||null;
+            else return this.#parent?.lastChild?.previousElementSibling||null;
         }
     }
 
@@ -306,8 +311,8 @@ export class VritraFragment extends DocumentFragment {
             const {lastChild}=this;
             if(lastChild) return lastChild.nextSibling;
             else{
-                if(this.#at==="start") return this.#parent.firstChild;
-                else return this.#parent.lastChild?.nextSibling;
+                if(this.#at==="start") return this.#parent?.firstChild;
+                else return this.#parent?.lastChild?.nextSibling;
             }
         }
     }
@@ -322,8 +327,8 @@ export class VritraFragment extends DocumentFragment {
             const lastChild=this.lastChild;
             if(lastChild) return lastChild.nextElementSibling;
             else{
-                if(this.#at==="start") return this.#parent.firstElementChild;
-                else return this.#parent.lastElementChild?.nextElementSibling;
+                if(this.#at==="start") return this.#parent?.firstElementChild;
+                else return this.#parent?.lastElementChild?.nextElementSibling;
             }
         }
     }

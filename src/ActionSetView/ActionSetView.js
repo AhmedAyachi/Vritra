@@ -15,21 +15,22 @@ export default function ActionSetView(props){
         ${map(actions.filter(action=>action.icon||action.label),(action)=>{
             if(!action.color) action.color=tintColor;
             const {id,icon,label,size=6.4,color,iconAlt=action.alt}=action;
+            const withLabel=Boolean(label||typeof(label)==="string");
             return `
                 <button 
-                    ref="${id}" class="${css.action}" 
+                    id="${id}" class="${css.action}" 
                     style="
                         font-size:${Number(size/6.4)}em;
-                        ${label?`
-                            color:${color};
-                        `:""}
+                        ${withLabel?`color:${color};`:""}
                     "
                 >
                     ${icon?`<img 
-                        alt="${iconAlt||id||""}"
+                        alt="${iconAlt||id||""}" 
                         src="${typeof(icon)==="function"?action.icon(color,2):(icon||"")}"
                     />`:""}
-                    ${label?`<text as="label">${label}</text>`:""}
+                    ${withLabel?`
+                        <text as="label">${typeof(label)==="function"?label():label}</text>
+                    `:""}
                 </button>
             `
         })}
@@ -46,18 +47,17 @@ export default function ActionSetView(props){
             actionEl?.addEventListener("click",(event)=>{event.stopPropagation()});
             if(!i){
                 actionsetview.insertAdjacentElement("afterbegin",actionEl);
-            }
-            else{
-                const pvaction=actions[i-1];
-                pvaction?.element?.insertAdjacentElement("afterend",actionEl);
+            } else {
+                const previousAction=actions[i-1];
+                previousAction?.element?.insertAdjacentElement("afterend",actionEl);
             }
         } else {
             const actionId=action.id||action.ref;
             try {
                 const {style}=action;
-                actionEl=actionsetview[actionId];
+                actionEl=actionsetview.querySelector(`#${action.id}.${css.action}`);
                 if(style) Object.assign(actionEl.style,style);
-                actionEl.onClick=(event)=>{
+                actionEl.onclick=(event)=>{
                     event.stopPropagation();
                     action.onTrigger?.(action,event);
                 }
@@ -67,7 +67,7 @@ export default function ActionSetView(props){
                 }
                 const labelEl=actionEl.querySelector(":scope>label");
                 if(labelEl) actionEl.setLabel=(label=action.label)=>{
-                    labelEl.innerText=label;
+                    labelEl.innerText=typeof(label)==="function"?label():label;
                 }
             } catch {
                 throw new Error(actionId?`invalid action with id: "${actionId}"`:"action with no id");

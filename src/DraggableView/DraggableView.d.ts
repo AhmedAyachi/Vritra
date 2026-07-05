@@ -30,7 +30,7 @@ type DraggableView<Tag>=View<Tag>&{
      * to width and height of parent/viewport
      * @default false
      */
-    getPosition(asratio:boolean):DraggableViewPosition,
+    getPosition(asratio?:boolean):DraggableViewPosition,
     /**
      * 
      * @param position 

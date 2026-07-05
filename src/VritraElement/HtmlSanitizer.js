@@ -57,10 +57,16 @@ export default new (function(){
 								if(name==="ref"){if(value){ref=value}}
 								else{
 									if(name==="style"){
-										if(hasJavascriptScheme(value)){newNode=null;continue};
+										if(hasJavascriptScheme(value)){ 
+											newNode=null;
+											continue; 
+										};
 									}
 									else if(uriAttributes.has(name)){
-										if(value.includes(":")&&(!startsWithAny(value,schemaWhiteList))){newNode=null;continue};
+										if(value.includes(":")&&(!startsWithAny(value,schemaWhiteList))){
+											newNode=null;
+											continue;
+										};
 									}
 									newNode.setAttribute((isSvg&&svgSpecificAttributeMap[name])||name,value);
 								}

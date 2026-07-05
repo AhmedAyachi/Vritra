@@ -36,7 +36,7 @@ export default function DrawerNavigator(props){
     if(header){
         header.style.backgroundColor=tintColor;
         const showbtn=drawernavigator.querySelector(`.${css.showbtn}`);
-        showbtn.src=icon0(getComputedStyle(header).color);
+        showbtn.src=icon0(rgbStringToHex(getComputedStyle(header).color));
         showbtn.onclick=()=>{drawernavigator.showDrawer()};
     }
 
@@ -103,3 +103,5 @@ const instantiateRoute=(route,parent)=>{
         return instance;
     }
 }
+
+const rgbStringToHex=(rgb)=>"#"+rgb.match(/\d+/g).map(it=>Number(it).toString(16).padStart(2,"0")).join("");

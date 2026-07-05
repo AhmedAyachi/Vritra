@@ -46,10 +46,12 @@ export default function HashRouter(options:{
             allow():void,
             /**
              * 
-             * @param to default to ""
+             * @param to
+             * use null to redirect to previous route
+             * @default null
              * @param data default to undefined
              */
-            redirect(to?:string,data?:any):void;
+            redirect(to?:string|null,data?:any):void;
         })=>void|Promise<void>,
         /**
          * @deprecated use guard instead
@@ -66,6 +68,10 @@ export default function HashRouter(options:{
 }):HashRouter;
  
 interface HashRouter {
+    
+    readonly location:HashRouterLocation,
+
+    getUrlParams():{[key:string]:string},
     /**
      * Adds an entry to the browser's session history stack 
      * @param path 
@@ -109,26 +115,29 @@ interface HashRouteComponentProps extends HashRouterContext {
 interface HashRouterContext {
     data?:any,
     params?:[string:string],
-    location:{
-        /**
-         * An URL pathname, beginning with "/".
-         */
-        pathname:string,
-        /**
-         * The current url path, beginning with "/".
-         */
-        path:string,
-        /**
-         * The full url.
-         */
-        url:string,
-        /**
-         * An URL fragment identifier, beginning with "#".
-         */
-        hash:string,
-        /**
-         * An URL search string, beginning with "?".
-         */
-        search:string,
-    },
+    location:HashRouterLocation,
+}
+
+type HashRouterLocation={
+    /**
+     * An URL pathname, beginning with "/".
+     */
+    readonly pathname:string,
+    /**
+     * The current url path, beginning with "/".
+     */
+    readonly path:string,
+    /**
+     * The full url.
+     */
+    readonly url:string,
+    /**
+     * An URL fragment identifier, beginning with "#".
+     */
+    readonly hash:string,
+    /**
+     * An URL search string, beginning with "?".
+     */
+    readonly search:string,
+    readonly searchParams:{[key:string]:string},
 }

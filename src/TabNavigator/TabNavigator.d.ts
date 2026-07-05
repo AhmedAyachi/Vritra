@@ -31,6 +31,8 @@ type TabNavigator=View<"div">&{
      * @param triggerOnNavigate default: true
      */
     navigate(tabId:string,triggerOnNavigate?:boolean):void;
+    
+    readonly currentTabId:string;
 }
 
 type TabNavigatorContext={

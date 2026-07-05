@@ -20,12 +20,12 @@ export default function useSwipeGesture(options:{
     /**
      * Called When the exact number of pointers is detected and the listeners are ready 
      */
-    onReady(event:TouchEvent):void,
+    onReady?(event:TouchEvent):void,
     /**
      * Called when a swipe gesture is captured
      * @param event 
      */
-    onSwipe(event:SwipeEvent):void,
+    onSwipe?(event:SwipeEvent):void,
 }):void;
 
 interface SwipeEvent extends TouchEvent {

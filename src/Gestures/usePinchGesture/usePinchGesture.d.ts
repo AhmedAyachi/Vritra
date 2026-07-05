@@ -19,9 +19,9 @@ export default function usePinchGesture(options:{
      * @default Infinity
      */
     maxPointerCount?:Number,
-    onStart(event:PinchEvent):void,
-    onMove(event:PinchEvent):void,
-    onEnd(event:PinchEvent&{
+    onStart?(event:PinchEvent):void,
+    onMove?(event:PinchEvent):void,
+    onEnd?(event:PinchEvent&{
         /**
          * Removes the gesture listeners
          */

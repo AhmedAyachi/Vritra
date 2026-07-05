@@ -9,10 +9,18 @@ export interface VritraProps {
      * @example 
      * "end" //at the end of the parent
      * "start" //at the beginning of the parent
-     * number //to specifiy the index 
+     * number //to specify the index 
      * @notice For between-elements insertion, use adjacentTo method
      */
     at?:"start"|"end"|number;
+    /**
+     * @notice for fragments, the style is applied to the parent element.
+     */
+    style?:VritraStyle,
+    /**
+     * @notice for fragments, the className is applied to the parent element.
+     */
+    className?:VritraClassName,
 }
 
 export interface VritraElement { 
@@ -60,4 +68,8 @@ export type RefElement=(
     Pick<VritraElement,"onClick">&{
     /** Overrides the remove method and deletes the reference to the element */
     remove():void;
-})
+});
+
+type Falsy=false|null|undefined|0|"";
+type VritraClassName=string|Falsy|VritraClassName[];
+type VritraStyle=string|CSSStyleDeclaration|Falsy|VritraStyle[];

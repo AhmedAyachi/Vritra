@@ -1,28 +1,13 @@
-import VritraElement,{HtmlSanitizer} from "../VritraElement/VritraElement";
+import VritraElement,{setElementStyle,setElementClassName,HtmlSanitizer} from "../VritraElement/VritraElement";
 import {VritraFragment} from "../Fragment/Fragment";
 
 
 export default function View(props){
     const {parent,id,tag,className,at,style}=props;
     const view=document.createElement(tag||"div");
-    if(id){view.id=id};
-    if(className){
-        if(Array.isArray(className)){
-            view.className=className.flat(Infinity).filter(Boolean).join(" ");
-        }
-        else{
-            view.className=className;
-        }
-    };
-    if(style){
-        if(Array.isArray(style)){
-            const styles=style.flat(Infinity);
-            for(const styleItem of styles){
-                if(styleItem) setViewStyle(view,styleItem);
-            }
-        }
-        else setViewStyle(view,style);
-    }
+    if(id) view.id=id;
+    setElementStyle(view,style);
+    setElementClassName(view,className);
     if(parent){
         const atStart=(at==="start")||(at<=0);
         if(parent instanceof VritraFragment){
@@ -72,13 +57,4 @@ export default function View(props){
     });
     
     return VritraElement(view);
-}
-
-const setViewStyle=(view,style)=>{
-    if(typeof(style)==="string"){
-        view.style.cssText+=style;
-    }
-    else{
-        Object.assign(view.style,style);
-    }
 }

@@ -83,8 +83,11 @@ export default function TabNavigator(props){
             if(triggerOnNavigate) onNavigate&&onNavigate(state.context);
         }
     }};
+    Object.defineProperty(tabnavigator,"currentTabId",{
+        get:()=>state.activeTab?.id,
+    });
    
-    tabnavigator.navigate(tabs.find(tab=>tab.id===activeTabId)?.id||tabs[0].id);
+    tabnavigator.navigate(tabs.find(tab=>tab.id===activeTabId)?.id||tabs[0].id,false);
     return tabnavigator;
 }
 

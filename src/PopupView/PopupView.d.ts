@@ -21,6 +21,11 @@ export default function PopupView<Tag extends "div"|"menu"|"dialog"|undefined=un
      */
     avoidable?:boolean,
     /**
+     * In milliseconds.
+     * @default 200
+     */
+    fadeDuration?:number,
+    /**
      * popup offset.
      */
     offset?:{x?:number,y?:number},

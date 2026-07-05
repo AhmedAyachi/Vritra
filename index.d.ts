@@ -140,12 +140,7 @@ export function getDays(first?:"monday"|"tuesday"|"wednesday"|"thursday"|"friday
  * @param length random part length
  * @default prefix "" length 15
  */
-export function randomId(prefix="",length=15):string;
-/**
- * 
- * @deprecated renamed to randomId and will be removed in future version
- */
-export function useId(prefix="",separator="_"):string;
+export function randomId(prefix?="",length?=15):string;
 
 export function groupBy<Type>(array:Type[],filter:(item:Type,index:number,array:Type[])=>any):{predicate:any,items:Type[]}[];
 

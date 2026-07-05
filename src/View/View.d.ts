@@ -9,8 +9,6 @@ type ViewProps<Tag>=VritraProps&{
      * @default "div"
      */
     tag?:Tag,
-    style?:ViewStyle,
-    className?:ViewClassName,
 };
 type View<Tag>=(
     (Tag extends keyof HTMLElementTagNameMap?HTMLElementTagNameMap[Tag]:HTMLDivElement)&
@@ -29,9 +27,5 @@ interface IView {
      */
     adjacentTo(element:Element,before?:boolean):this;
 }
-
-type Falsy=false|null|undefined|0|"";
-type ViewClassName=string|Falsy|ViewClassName[];
-type ViewStyle=string|CSSStyleDeclaration|Falsy|ViewStyle[];
 
 export type ExtendableViewProps<Tag>=Omit<ViewProps<Tag>,"tag">;

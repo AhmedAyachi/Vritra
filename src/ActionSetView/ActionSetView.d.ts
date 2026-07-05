@@ -58,8 +58,9 @@ interface ActionSetDefinition {
     icon?:VritraIcon,
     /**
      * Action label
+     * @type string or a function for dynamic labels
      */
-    label?:string,
+    label?:string|(()=>string),
     /**
      * Action img element alt attribute value
      * @default action id
@@ -79,7 +80,7 @@ interface ActionSetDefinition {
     /**
      * for custom styling.
      */
-    style?:CSSStyleDeclaration,
+    style?:Partial<CSSStyleDeclaration>,
     /**
      * Called when the action HTMLElement is ready to click on
      * @param action the action object
@@ -88,10 +89,11 @@ interface ActionSetDefinition {
         element:ActionSetDefinitionElement,
     }):void,
     /**
-     * Called when the action HTMLElement clicked
-     * Not triggered when action created with component prop
-     * @param action the action object
-     * @param event the pointer event object
+     * Called when the action HTMLElement is clicked.
+     * 
+     * @notice Not triggered when the action is created with a custom component.
+     * @param action the action object.
+     * @param event the pointer event object.
      */
     onTrigger?(action:ActionSetDefinition&{
         element:ActionSetDefinitionElement,

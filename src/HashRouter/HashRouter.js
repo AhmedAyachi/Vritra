@@ -1,3 +1,4 @@
+import {randomId} from "../index";
 
 
 export default function HashRouter(options){
@@ -11,16 +12,26 @@ export default function HashRouter(options){
     if(invalidRouteIndex>=0){
         throw HashRouterError("invalid route object at index: "+invalidRouteIndex);
     }
+    routes.forEach(route=>{
+        const routeId=route.id;
+        if(!(routeId&&(typeof(routeId)==="string"))) route.id=randomId();
+        route.paths=getPaths(route.path);
+    });
 
     const {history,location}=window;
     const state={
         data:null,
-        route:null,//{...,params,data,element} to store the last values of data and params.
+        route:null,//current route {...,params,data,element}
     };
     setRoute();
     window.addEventListener("hashchange",setRoute);
 
     const hashrouter={
+        get location(){ return getLocation(state.route) },
+        getUrlParams:()=>{
+            const {route}=state;
+            return route?getRouteUrlParams(route):{};
+        },
         push:(path,data)=>{if(typeof(path)==="string"){
             state.data=data;
             location.hash=getDecentPath(path);
@@ -70,6 +81,7 @@ export default function HashRouter(options){
             if(element instanceof HTMLElement){
                 const {onHide}=element;
                 if(route.memorize){
+                    if(!route.scroll) route.scroll={};
                     const {scroll}=route;
                     scroll.top=element.scrollTop;
                     scroll.left=element.scrollLeft;
@@ -86,9 +98,12 @@ export default function HashRouter(options){
                     target,
                     data:state.data,
                     params:route.params,
-                    allow:()=>{resolve(true)},
+                    allow:()=>{ resolve(true) },
                     redirect:(path,data)=>{
-                        resolve({path:String(path||""),data});
+                        resolve({
+                            data,
+                            path:typeof(path)==="string"?path:null,
+                        });
                     },
                 });
                 if(result instanceof Promise){
@@ -98,8 +113,14 @@ export default function HashRouter(options){
                     }).then(()=>{
                         reject(RouteGuardError(route));
                     });
-                }
-                else reject(RouteGuardError(route));
+                } else {
+                    /**
+                     * If guard is not an async function, the resolve function
+                     * would have been called by calling allow/redirect 
+                     * and thus the reject call won't have any effect.
+                     */
+                    reject(RouteGuardError(route));
+                } 
             }
             else if(typeof(restrictor)==="function"){
                 console.warn(HashRouterError("restrictor is deprecated. Use guard instead"));
@@ -111,13 +132,19 @@ export default function HashRouter(options){
                 state.route=route;
                 route.data=state.data;
                 return renderRoute(route,target);
+            } else {
+                const {path,data}=result;
+                if(path===null) hashrouter.back(data);
+                else if(typeof(path)==="string") hashrouter.replace(result.path,result.data);
             }
-            else if(result===false) hashrouter.back();
-            else hashrouter.replace(result.path,result.data);
         }).finally(()=>{
             state.data=null;
         });
-        else if(fallbackRoute) renderRoute(fallbackRoute,target);
+        else if(fallbackRoute){
+            state.route=fallbackRoute;
+            fallbackRoute.data=state.data;
+            renderRoute(fallbackRoute,target);
+        }
         else throw HashRouterError(`No route matched "${getLocationPathName()}" and no fallback route is defined`);
     }
     
@@ -141,7 +168,7 @@ const renderRoute=async (route,target)=>{
         if(element instanceof Promise) element=await element;
         route.element=element;
     }
-    if(element&&element.onShow){
+    if(element&&(typeof(element.onShow)==="function")){
         element.onShow(context||getContext(route));
     }
     window.scrollTo(0,0);
@@ -150,19 +177,8 @@ const renderRoute=async (route,target)=>{
 const getDecentPath=(path)=>(path.startsWith("/")?"":"/")+path.replace(/\/+/g,"/");
 
 const getContext=({params,data})=>{
-    let path=location.hash;
-    const startsWithHash=path.startsWith("#");
-    if(startsWithHash) path=path.substring(1);
-    path=getDecentPath(path);
-    const url=new URL(`${location.origin}${path}`);
     const context={
-        location:{
-            path,
-            pathname:url.pathname,
-            url:`${location.origin}/#${path}`,
-            hash:url.hash,
-            search:url.search,
-        },
+        location:getLocation(),
     };
     if(data) context.data=data;
     if(params) context.params=params;
@@ -170,28 +186,33 @@ const getContext=({params,data})=>{
 }
 
 const getRoute=(routes)=>{
-    const paths=getPaths(location.hash);
-    let route=findBestRoute(paths,routes);
+    let route=findBestRoute(routes);
     if(route){
         const oldParams=route.params;
-        let params=getSearchParams();
-        route.paths?.forEach((path,i)=>{
-            if(path.startsWith(":")){
-                if(!params) params={};
-                const varname=path.substring(1);
-                params[varname]=paths[i];
-            }
-        });
+        const params=Object.assign(getRouteUrlParams(route),getSearchParams());
         route.params=params;
         if(route.memorize&&(!areSameParams(params,oldParams))){
             delete route.element;
         }
     }
-    if(route&&!route.scroll){
-        route.scroll={top:0,left:0};
-    }
+    if(route&&!route.scroll) route.scroll={top:0,left:0};
     return route;
 }
+
+const getRouteUrlParams=(route)=>{
+    const params={},routePaths=route.paths;
+    if(Array.isArray(routePaths)&&routePaths.length){
+        const locationPaths=getPaths(location.hash);
+        routePaths.forEach((path,i)=>{
+            if(path.startsWith(":")){
+                const varname=path.substring(1);
+                params[varname]=locationPaths[i];
+            }
+        });
+    }
+    return params;
+}
+
 const getSearchParams=()=>{
     let path=location.hash;
     if(path.startsWith("#")) path=path.substring(1);
@@ -230,17 +251,17 @@ const areSameParams=(params0,params1)=>{
     return same;
 }
 
-const findBestRoute=(paths,routes)=>{
+const findBestRoute=(routes)=>{
+    const paths=getPaths(location.hash);
     const pathCount=paths.length;
-    if(pathCount<1) return routes.find(it=>!it.path);
+    if(pathCount<1) return routes.find(it=>!it.paths.length);
     else{
         let bestRoute,i=0,found;
         let bestRouteScore={exact:0,param:0};
         const routeCount=routes.length;
         while((!found)&&(i<routeCount)){
             const route=routes[i],path=route.path;
-            let routePaths=route.paths;
-            if(!routePaths) routePaths=route.paths=getPaths(path);
+            const routePaths=route.paths;
             const routePathCount=routePaths.length;
             if(routePathCount===pathCount){
                 let rejected=false;
@@ -277,11 +298,32 @@ const findBestRoute=(paths,routes)=>{
 
 const getPaths=(path)=>{
     path=getLocationPathName(path);
-    const paths=path.split("/").filter(Boolean);
+    const paths=path.split("/").map(it=>it.trim()).filter(Boolean);
     if((paths.length>1)&&(!paths[0])){
         paths.shift();
     }
     return paths;
+}
+
+const getLocation=(route)=>{
+    let path=location.hash;
+    const startsWithHash=path.startsWith("#");
+    if(startsWithHash) path=path.substring(1);
+    path=getDecentPath(path);
+    const url=new URL(`${location.origin}${path}`);
+    const routerLocation={
+        path,
+        pathname:url.pathname,
+        url:`${location.origin}/#${path}`,
+        hash:url.hash,
+        search:url.search,
+    }
+    Object.defineProperties(routerLocation,{
+        searchParams:{
+            get:()=>getSearchParams()||{},
+        },
+    });
+    return Object.freeze(routerLocation);
 }
 
 const getLocationPathName=(path=location.hash)=>{
