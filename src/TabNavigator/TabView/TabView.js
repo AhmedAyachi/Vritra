@@ -44,5 +44,6 @@ export default function TabView(props){
 
     tabview.setColor();
     tabview.setLabel();
+    tabview.type="button";
     return tabview;
 }

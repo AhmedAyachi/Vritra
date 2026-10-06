@@ -2,22 +2,8 @@ import {randomId} from "../index";
 
 
 export default function HashRouter(options){
+    checkOptions(options);
     const {target,routes,fallbackRoute}=options;
-    if(fallbackRoute){
-        delete fallbackRoute.guard;
-        delete fallbackRoute.restrictor;
-    }
-
-    const invalidRouteIndex=routes.findIndex(it=>!(it&&(Object.getPrototypeOf(it)===Object.prototype)));
-    if(invalidRouteIndex>=0){
-        throw HashRouterError("invalid route object at index: "+invalidRouteIndex);
-    }
-    routes.forEach(route=>{
-        const routeId=route.id;
-        if(!(routeId&&(typeof(routeId)==="string"))) route.id=randomId();
-        route.paths=getPaths(route.path);
-    });
-
     const {history,location}=window;
     const state={
         data:null,
@@ -54,7 +40,7 @@ export default function HashRouter(options){
             if(route){
                 const {memorize}=route;
                 route.memorize=false;
-                renderRoute(route,target).then(()=>{
+                reloadRoute(route).then(()=>{
                     if(memorize) route.memorize=true;
                 });
             }
@@ -91,65 +77,94 @@ export default function HashRouter(options){
             }
         }
         route=getRoute(routes);
-        if(route) new Promise((resolve,reject)=>{
-            const {guard,restrictor}=route;
-            if(typeof(guard)==="function"){
-                const result=guard({
-                    target,
-                    data:state.data,
-                    params:route.params,
-                    allow:()=>{ resolve(true) },
-                    redirect:(path,data)=>{
-                        resolve({
-                            data,
-                            path:typeof(path)==="string"?path:null,
-                        });
-                    },
-                });
-                if(result instanceof Promise){
-                    result.catch(error=>{
-                        const message=`"${error.message}" at guard for route ${route.path}.`;
-                        return Promise.reject(HashRouterError(message));
-                    }).then(()=>{
-                        reject(RouteGuardError(route));
-                    });
-                } else {
-                    /**
-                     * If guard is not an async function, the resolve function
-                     * would have been called by calling allow/redirect 
-                     * and thus the reject call won't have any effect.
-                     */
-                    reject(RouteGuardError(route));
-                } 
-            }
-            else if(typeof(restrictor)==="function"){
-                console.warn(HashRouterError("restrictor is deprecated. Use guard instead"));
-                restrictor(unlocked=>{resolve(Boolean(unlocked))},target);
-            }
-            else resolve(true);
-        }).then(result=>{
-            if(result===true){
-                state.route=route;
-                route.data=state.data;
-                return renderRoute(route,target);
-            } else {
-                const {path,data}=result;
-                if(path===null) hashrouter.back(data);
-                else if(typeof(path)==="string") hashrouter.replace(result.path,result.data);
-            }
-        }).finally(()=>{
-            state.data=null;
-        });
+        if(route) reloadRoute(route);
         else if(fallbackRoute){
             state.route=fallbackRoute;
             fallbackRoute.data=state.data;
             renderRoute(fallbackRoute,target);
+            state.data=null;
         }
         else throw HashRouterError(`No route matched "${getLocationPathName()}" and no fallback route is defined`);
     }
+
+    function reloadRoute(route){ return new Promise((resolve,reject)=>{
+        const {guard,restrictor}=route;
+        if(typeof(guard)==="function"){
+            const result=guard({
+                target,
+                data:state.data,
+                params:route.params,
+                allow:()=>{ resolve(true) },
+                redirect:(path,data)=>{
+                    resolve({
+                        data,
+                        path:typeof(path)==="string"?path:null,
+                    });
+                },
+            });
+            if(result instanceof Promise){
+                result.catch(error=>{
+                    const message=`"${error.message}" at guard for route ${route.path}.`;
+                    return Promise.reject(HashRouterError(message));
+                }).then(()=>{
+                    reject(RouteGuardError(route));
+                });
+            } else {
+                /**
+                 * If guard is not an async function, the resolve function
+                 * would have been called by calling allow/redirect 
+                 * and thus the reject call won't have any effect.
+                 */
+                reject(RouteGuardError(route));
+            } 
+        }
+        else if(typeof(restrictor)==="function"){
+            console.warn(HashRouterError("restrictor is deprecated. Use guard instead"));
+            restrictor(unlocked=>{resolve(Boolean(unlocked))},target);
+        }
+        else resolve(true);
+    }).then(result=>{
+        if(result===true){
+            state.route=route;
+            route.data=state.data;
+            return renderRoute(route,target);
+        } else {
+            const {path,data}=result;
+            if(path===null) hashrouter.back(data);
+            else if(typeof(path)==="string") hashrouter.replace(result.path,result.data);
+        }
+    }).finally(()=>{
+        state.data=null;
+    })};
     
 
     return hashrouter;
+}
+
+const checkOptions=(options)=>{
+    const {routes,fallbackRoute}=options;
+    if(fallbackRoute){
+        delete fallbackRoute.guard;
+        delete fallbackRoute.restrictor;
+    }
+    const routeCount=routes.length;
+    for(let i=0;i<routeCount;i++){
+        const route=routes[i];
+        if(!(route&&(Object.getPrototypeOf(route)===Object.prototype))){
+            throw HashRouterError("a non-object was passed as route at index: "+i);
+        }
+        if(typeof(route.path)!=="string"){
+            throw HashRouterError("route's path should be a string at index: "+i);
+        }
+        if(typeof(route.component)!=="function"){
+            throw HashRouterError(`route ${route.path} should have a function as component`);
+        }
+    }
+    routes.forEach(route=>{
+        const routeId=route.id;
+        if(!(routeId&&(typeof(routeId)==="string"))) route.id=randomId();
+        route.paths=getPaths(route.path);
+    });
 }
 
 const renderRoute=async (route,target)=>{
@@ -162,21 +177,21 @@ const renderRoute=async (route,target)=>{
         if(scroll) element.scrollTo(scroll);
     }
     else if(typeof(route.component)==="function"){
-        context=getContext(route);
+        context=getRouteContext(route);
         route.name=route.component.name;
         element=route.component({...context,parent:target});
         if(element instanceof Promise) element=await element;
         route.element=element;
     }
     if(element&&(typeof(element.onShow)==="function")){
-        element.onShow(context||getContext(route));
+        element.onShow(context||getRouteContext(route));
     }
     window.scrollTo(0,0);
 }
 
 const getDecentPath=(path)=>(path.startsWith("/")?"":"/")+path.replace(/\/+/g,"/");
 
-const getContext=({params,data})=>{
+const getRouteContext=({params,data})=>{
     const context={
         location:getLocation(),
     };

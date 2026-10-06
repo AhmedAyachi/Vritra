@@ -1,7 +1,8 @@
 # CONTRIBUTING
 
-When contributing to this repository, please discuss the changes you wish to make first via [issues](https://github.com/AhmedAyachi/Vritra/issues).
-Please stay active when working on a certain issue.
+When contributing to this repository, please :
+ - discuss the changes you wish to make first via [issues](https://github.com/AhmedAyachi/Vritra/issues).
+- stay active when working on a certain issue.
 
 ## Conventions To Follow
 
@@ -46,7 +47,7 @@ To start contributing to the project, follow these steps:
 ## Branching Philosophy
 ```mermaid
 graph RL
-	C((contribute))-->B((beta))
+	C((contrib))-->B((beta))
 	P(PRs)-->C
 	D((dev))-->B
 	C-->D
@@ -54,13 +55,13 @@ graph RL
 	B-->C
 ```
 - master : a release branch.
-- beta : a pre-release branch that makes sure that the code merged from ***dev*** and ***contribute*** is coherent and stable enough.
+- beta : a pre-release branch that makes sure that the code merged from ***dev*** and ***contrib*** is coherent and stable enough.
 - dev : development branch.
-- contribute : PRs branch that makes sure that all PRs are coherent with each other and with the latest code.
+- contrib : PRs branch that makes sure that all PRs are coherent with each other and with the latest code.
 
 ## Notes
 - PRs without an issue or with no issue reference in the title will be rejected.
-- PRs targeting any branch other than the ***contribute*** branch will be rejected.
+- PRs targeting any branch other than the ***contrib*** branch will be rejected.
 - PRs with code that require dependencies will be rejected (for the moment).
 - Make sure to pull the latest version of the upstearm/master branch before you submit a PR.
     ```
@@ -71,7 +72,7 @@ graph RL
 	git checkout master
 	git pull upstream master
 	```
-- Make sure you code works as expected before before submitting a PR.
+- Make sure you code works as expected before submitting a PR.
 
 >A lot of things to consider and it's easy to miss some steps so if it was your first time and your PR was rejected because there was no issue associated with it, simply create the issue and submit a new PR. 
 

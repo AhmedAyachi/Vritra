@@ -1,4 +1,4 @@
-import VritraElement,{setElementStyle,setElementClassName,HtmlSanitizer} from "../VritraElement/VritraElement";
+import VritraElement,{setElementStyle,addElementClassName,HtmlSanitizer} from "../VritraElement/VritraElement";
 import {VritraFragment} from "../Fragment/Fragment";
 
 
@@ -7,7 +7,7 @@ export default function View(props){
     const view=document.createElement(tag||"div");
     if(id) view.id=id;
     setElementStyle(view,style);
-    setElementClassName(view,className);
+    addElementClassName(view,className);
     if(parent){
         const atStart=(at==="start")||(at<=0);
         if(parent instanceof VritraFragment){

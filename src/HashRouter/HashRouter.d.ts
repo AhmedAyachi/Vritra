@@ -53,13 +53,6 @@ export default function HashRouter(options:{
              */
             redirect(to?:string|null,data?:any):void;
         })=>void|Promise<void>,
-        /**
-         * @deprecated use guard instead
-         */
-        restrictor:(
-            unlock:(unlocked:boolean)=>any,
-            target:HTMLElement,
-        )=>void,  
     }[],
     fallbackRoute?:{
         memorize?:boolean,

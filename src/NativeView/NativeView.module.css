@@ -18,7 +18,15 @@
 }
 .nativeview img{
     user-drag:none;
+    -ms-user-drag:none;
+    -moz-user-drag:none;
+    -khtml-user-drag:none;
     -webkit-user-drag:none;
+    user-select:none;
+    -ms-user-select:none;
+    -moz-user-select:none;
+    -khtml-user-select:none;
+    -webkit-user-select:none;
     -webkit-touch-callout:none;
 }
 .nativeview button{
@@ -53,10 +61,10 @@
     }
 }
 
-@supports(-webkit-touch-callout:none){
+@supports(hanging-punctuation:first) and (-webkit-appearance:none){
     /* CSS specific to iOS devices */
 }
   
-@supports not(-webkit-touch-callout:none){
+@supports not((hanging-punctuation:first) and (-webkit-appearance:none)){
     /* CSS for other than iOS devices */
 }

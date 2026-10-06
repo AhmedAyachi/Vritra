@@ -25,11 +25,11 @@ export default function VritraElement(node){
 
 export {default as HtmlSanitizer} from "./HtmlSanitizer";
 
-export const setElementClassName=(element,className)=>{if(className){
-    if(Array.isArray(className)){
-        element.className=className.flat(Infinity).filter(Boolean).join(" ");
+export const addElementClassName=(element,className)=>{if(className){
+    if(Array.isArray(className)&&className.length){
+        element.className+=(element.className?" ":"")+className.flat(Infinity).filter(Boolean).join(" ");
     } else {
-        element.className=className;
+        element.className+=(element.className?" ":"")+className;
     }
 }};
 

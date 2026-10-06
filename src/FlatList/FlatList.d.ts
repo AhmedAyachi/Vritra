@@ -168,7 +168,7 @@ type FlatList<Type>=View<"div">&{
      * @param withElement if true removes the html element associated with the item. Default: true
      * @returns the removed data {item,element} if exists else null
      */
-    removeItem(item:any,withElement?:boolean):void,
+    removeItem(item:Type,withElement?:boolean):void,
     /**
      * Clears all the flatlist items
      */
@@ -192,7 +192,7 @@ type FlatList<Type>=View<"div">&{
      * onReachEnd and onRemoveItem props are not passed to the popup faltlist.
      * If items is not an array, The method removes the popup flatlist.
      */
-    showItems<Type>(predicate:(item:Type,index:number)=>Boolean,props?:PopupProps<Type>):FlatList<Type>|null,
+    showItems(predicate:(item:Type,index:number)=>Boolean,props?:PopupProps<Type>):FlatList<Type>|null,
 }
 
 type ItemData<Type>={

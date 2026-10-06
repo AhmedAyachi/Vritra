@@ -1,5 +1,5 @@
 import {findItem} from "../index";
-import {setElementStyle,setElementClassName,HtmlSanitizer,vr} from "../VritraElement/VritraElement";
+import {setElementStyle,addElementClassName,HtmlSanitizer,vr} from "../VritraElement/VritraElement";
 
 
 export class VritraFragment extends DocumentFragment {
@@ -15,7 +15,7 @@ export class VritraFragment extends DocumentFragment {
         const toStyleParent=parent instanceof VritraFragment?parent.parentElement:parent;
         if(toStyleParent instanceof HTMLElement){
             setElementStyle(toStyleParent,props.style);
-            setElementClassName(toStyleParent,props.className);
+            addElementClassName(toStyleParent,props.className);
         }
         if((this.#at==="start")||(this.#at<=0)){
             this.#nextParentNode=parent?parent.firstChild:null;
@@ -109,7 +109,7 @@ export class VritraFragment extends DocumentFragment {
 
     querySelector(...params){
         const nodes=this.#getNodes();
-        let element=nodes.find(node=>node.matches(...params));
+        let element=nodes.find(node=>(node instanceof Element)&&node.matches(...params));
         if(!element){
             let i=0;
             const {length}=nodes;
@@ -123,21 +123,23 @@ export class VritraFragment extends DocumentFragment {
 
     querySelectorAll(...params){
         const nodes=this.#getNodes();
-        const list=nodes.filter(node=>node.matches(...params));
+        const elements=nodes.filter(node=>(node instanceof Element)&&node.matches(...params));
         nodes.forEach(node=>{
-            list.push(...node.querySelectorAll(...params));
+            if(node instanceof Element){
+                elements.push(...node.querySelectorAll(...params));
+            }
         });
-        return list;
+        return elements;
     }
 
     queryAllSelectors(...selectors){
         const nodes=this.#getNodes();
-        const targets=[];
+        const elements=[];
         for(const selector of selectors){
-            const target=nodes.find(node=>node.matches(selector));
-            targets.push(target);
+            const element=nodes.find(node=>(node instanceof Element)&&node.matches(selector));
+            elements.push(element);
         }
-        return targets;
+        return elements;
     }
 
     prepend(...newNodes){

@@ -97,10 +97,10 @@ const getElementStyle=(element)=>{
 
 const getNextElement=(parent)=>{
     let element=parent;
-    while((element!==document.body)&&(!(element.nextSibling instanceof HTMLElement)||areHorizontallyAligned(element,element.nextSibling))){
+    while(element&&(element!==document.body)&&(!(element.nextSibling instanceof HTMLElement)||areHorizontallyAligned(element,element.nextSibling))){
         element=element.parentNode;
     }
-    return element.nextSibling;
+    return element?.nextSibling;
 }
 
 const areHorizontallyAligned=(elem1,elem2)=>{

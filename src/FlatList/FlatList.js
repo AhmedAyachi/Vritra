@@ -108,7 +108,7 @@ export default function FlatList(props){
             if(state.index<lastItemIndex){
                 const max=Math.min(step,lastItemIndex-state.index);
                 for(let i=1;i<=max;i++){
-                    createNextElement(i===1);
+                    createNextElement(i===max);
                 }
             }
             else if(!state.endReached){
@@ -247,8 +247,8 @@ export default function FlatList(props){
             removeItem(item,data);
             if(element) element.remove();
             onRemoveItem&&onRemoveItem({
-                item,element,
                 index:i,
+                item,element,
             });
         });
         itemsMap.clear();
@@ -428,8 +428,9 @@ export default function FlatList(props){
 }
 
 const styles={
+    //TODO: investigate horizontal?"-webkit-fill-available":
     container:({pagingTransition,horizontal,pagingEnabled,smoothPaging})=>`
-        height:${horizontal?"-webkit-fill-available":"auto"};
+        height:${/* horizontal?"-webkit-fill-available": */"auto"};
         white-space:${horizontal?"nowrap":"normal"};
         overscroll-behavior-${horizontal?"y":"x"}:none;
         ${pagingEnabled?`
