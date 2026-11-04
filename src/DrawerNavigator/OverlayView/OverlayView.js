@@ -1,6 +1,6 @@
-import {View,fadeIn,fadeOut} from "../../index";
+import {View,fadeIn,fadeOut} from "../../index.js";
 import css from "./OverlayView.module.css";
-import DrawerView from "./DrawerView/DrawerView";
+import DrawerView from "./DrawerView/DrawerView.js";
 
 
 export default function OverlayView(props){

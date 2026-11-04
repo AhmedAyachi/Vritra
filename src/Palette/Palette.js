@@ -1,7 +1,7 @@
-import {useId,NativeView} from "../index";
+import {useId,NativeView} from "../index.js";
 import css from "./Palette.module.css";
-import BubblesView from "./BubblesView/BubblesView";
-import icon0 from "./Icon_0";
+import BubblesView from "./BubblesView/BubblesView.js";
+import icon0 from "./Icon_0.js";
 
 
 export default function Palette(props){

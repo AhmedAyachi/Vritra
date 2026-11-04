@@ -1,7 +1,7 @@
-import {NativeView} from "../index";
+import {NativeView} from "../index.js";
 import css from "./DrawerNavigator.module.css";
-import OverlayView from "./OverlayView/OverlayView";
-import icon0 from "./Icon_0";
+import OverlayView from "./OverlayView/OverlayView.js";
+import icon0 from "./Icon_0.js";
 
 
 export default function DrawerNavigator(props){

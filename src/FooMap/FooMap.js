@@ -1,4 +1,4 @@
-import {removeItem} from "../index";
+import {removeItem} from "../index.js";
 
 
 export default class FooMap extends Map {

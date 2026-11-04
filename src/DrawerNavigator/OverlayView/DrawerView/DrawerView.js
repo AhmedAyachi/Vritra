@@ -1,4 +1,4 @@
-import {View,map,hexColorToRGBA} from "../../../index";
+import {View,map,hexColorToRGBA} from "../../../index.js";
 import css from "./DrawerView.module.css";
 
 

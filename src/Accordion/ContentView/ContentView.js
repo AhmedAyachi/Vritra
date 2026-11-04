@@ -1,4 +1,4 @@
-import {View,fadeIn,fadeOut} from "../../index";
+import {View,fadeIn,fadeOut} from "../../index.js";
 import css from "./ContentView.module.css";
 
 
@@ -71,10 +71,11 @@ export default function ContentView(props){
     }
 
     function getSpacing(){
+        const withFlexParent=getComputedStyle(parent.parentNode).display==="flex";
         return `calc(
             ${(100*contentview.clientHeight/window.innerWidth)}vw +
-            ${getComputedStyle(parent).getPropertyValue("margin-bottom")||"0px"} +
-            ${getComputedStyle(state.nextEl).getPropertyValue("margin-top")||"0px"}
+            ${(!withFlexParent&&getComputedStyle(parent).marginBottom)||"0px"} +
+            ${getComputedStyle(state.nextEl).marginTop||"0px"}
         )`;
     }
 
@@ -106,9 +107,8 @@ const getNextElement=(parent)=>{
 const areHorizontallyAligned=(elem1,elem2)=>{
     const elem1Rect=elem1.getBoundingClientRect();
     const elem2Rect=elem2.getBoundingClientRect();
-    return !(
-        elem2Rect.bottom>=elem1Rect.bottom &&
-        elem2Rect.left>=elem1Rect.left &&
-        elem2Rect.right<=elem1Rect.right
-    )
+    return (
+        elem2Rect.left>=(elem1Rect.left+elem1Rect.width)||
+        elem1Rect.left>=(elem2Rect.left+elem2Rect.width)
+    );
 }

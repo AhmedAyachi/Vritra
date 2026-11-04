@@ -23,7 +23,7 @@ export default function VritraElement(node){
 	return node;
 }
 
-export {default as HtmlSanitizer} from "./HtmlSanitizer";
+export {default as HtmlSanitizer} from "./HtmlSanitizer.js";
 
 export const addElementClassName=(element,className)=>{if(className){
     if(Array.isArray(className)&&className.length){

@@ -1,6 +1,6 @@
-import {View,FlatList} from "../../../index";
+import {View,FlatList} from "../../../index.js";
 import css from "./EntryExplorer.module.css";
-import EntryView from "./EntryView/EntryView";
+import EntryView from "./EntryView/EntryView.js";
 
 
 export default function EntryExplorer(props){

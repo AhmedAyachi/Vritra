@@ -1,6 +1,6 @@
-import {withSequence,NativeView,View} from "../index";
+import {withSequence,NativeView,View} from "../index.js";
 import css from "./TabNavigator.module.css";
-import TabView from "./TabView/TabView";
+import TabView from "./TabView/TabView.js";
 
 
 export default function TabNavigator(props){

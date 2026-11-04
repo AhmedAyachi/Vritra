@@ -4,7 +4,7 @@ import {ViewProps,View} from "../View/View";
  * A self-position-adjustment view.
  * @param props 
  */
-export default function PopupView<Tag extends "div"|"menu"|"dialog"|undefined=undefined>(props:ViewProps<Tag>&{
+export default function PopupView<Tag extends "div"|"menu"|"dialog"="div">(props:ViewProps<Tag>&{
     /**
      * The element near which the PopupView is shown.
      */

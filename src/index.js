@@ -1,24 +1,24 @@
 import css from "./index.module.css";
 
 
-export {default as View} from "./View/View";
-export {default as Fragment} from "./Fragment/Fragment";
-export {default as NativeView} from "./NativeView/NativeView";
-export {default as SideBarNavigator} from "./SideBarNavigator/SideBarNavigator";
-export {default as DrawerNavigator} from "./DrawerNavigator/DrawerNavigator";
-export {default as TabNavigator} from "./TabNavigator/TabNavigator";
-export {default as Switch} from "./Switch/Switch";
-export {default as PopupView} from "./PopupView/PopupView";
-export {default as ActionSetView} from "./ActionSetView/ActionSetView";
-export {default as Accordion} from "./Accordion/Accordion";
-export {default as Palette} from "./Palette/Palette";
-export {default as FlatList} from "./FlatList/FlatList";
-export {default as DraggableView} from "./DraggableView/DraggableView";
-export {default as FooMap} from "./FooMap/FooMap";
-export {default as HashRouter} from "./HashRouter/HashRouter";
-export {useZoomGesture,usePinchGesture,useSwipeGesture,usePressGesture} from "./Gestures";
-export {default as withSequence} from "./withSequence/withSequence";
-export {default as sendRequest} from "./sendRequest/sendRequest";
+export * from "./Gestures/Gestures.js";
+export {default as View} from "./View/View.js";
+export {default as Fragment} from "./Fragment/Fragment.js";
+export {default as NativeView} from "./NativeView/NativeView.js";
+export {default as SideBarNavigator} from "./SideBarNavigator/SideBarNavigator.js";
+export {default as DrawerNavigator} from "./DrawerNavigator/DrawerNavigator.js";
+export {default as TabNavigator} from "./TabNavigator/TabNavigator.js";
+export {default as Switch} from "./Switch/Switch.js";
+export {default as PopupView} from "./PopupView/PopupView.js";
+export {default as ActionSetView} from "./ActionSetView/ActionSetView.js";
+export {default as Accordion} from "./Accordion/Accordion.js";
+export {default as Palette} from "./Palette/Palette.js";
+export {default as FlatList} from "./FlatList/FlatList.js";
+export {default as DraggableView} from "./DraggableView/DraggableView.js";
+export {default as FooMap} from "./FooMap/FooMap.js";
+export {default as HashRouter} from "./HashRouter/HashRouter.js";
+export {default as withSequence} from "./withSequence/withSequence.js";
+export {default as sendRequest} from "./sendRequest/sendRequest.js";
 
 export const hexColorToRGBA=(hexcolor="",asarray)=>{
     if(hexcolor.startsWith("#")){

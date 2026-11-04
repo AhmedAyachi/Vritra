@@ -1,7 +1,7 @@
-import {View} from "../../../../index";
+import {View} from "../../../../index.js";
 import css from "./EntryView.module.css";
-import EntryExplorer from "../EntryExplorer";
-import icon0 from "./Icon_0";
+import EntryExplorer from "../EntryExplorer.js";
+import icon0 from "./Icon_0.js";
 
 
 export default function EntryView(props){

@@ -1,4 +1,4 @@
-import {Fragment} from "../../index";
+import {Fragment} from "../../index.js";
 import css from "./EmptyIndicator.module.css";
 
 

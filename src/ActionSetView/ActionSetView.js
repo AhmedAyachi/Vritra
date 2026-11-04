@@ -1,4 +1,4 @@
-import {map,NativeView} from "../index";
+import {map,NativeView} from "../index.js";
 import css from "./ActionSetView.module.css";
 
 

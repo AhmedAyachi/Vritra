@@ -1,4 +1,4 @@
-import {findItem} from "../index";
+import {findItem} from "../index.js";
 
 
 export default function withSequence(element,animations,callback){

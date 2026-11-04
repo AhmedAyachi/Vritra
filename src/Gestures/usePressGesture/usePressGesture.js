@@ -1,4 +1,4 @@
-import {isTouchDevice} from "../../index";
+import {isTouchDevice} from "../../index.js";
 
 
 

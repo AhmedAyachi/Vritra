@@ -1,17 +1,19 @@
 import {RefElement,VritraProps,VritraElement} from "../VritraElement/VritraElement";
 
 
-export default function View<Tag extends keyof HTMLElementTagNameMap|undefined=undefined>(props:ViewProps<Tag>):Tag extends undefined?View<"div">:View<Tag>;
+export default function View<Tag extends keyof ViewTagPropsMap="div">(
+    props:ViewProps<Tag>,
+):Tag extends undefined?View<"div">:View<Tag>;
 
-type ViewProps<Tag>=VritraProps&{
+type ViewProps<Tag extends keyof ViewTagPropsMap>=VritraProps&{
     id?:string,
     /**
      * @default "div"
      */
     tag?:Tag,
-};
+}&ViewTagPropsMap[Tag];
 type View<Tag>=(
-    (Tag extends keyof HTMLElementTagNameMap?HTMLElementTagNameMap[Tag]:HTMLDivElement)&
+    (Tag extends keyof ViewTagPropsMap?HTMLElementTagNameMap[Tag]:HTMLDivElement)&
     VritraElement&IView&{
         [ref:string]:RefElement,
     }
@@ -28,4 +30,11 @@ interface IView {
     adjacentTo(element:Element,before?:boolean):this;
 }
 
-export type ExtendableViewProps<Tag>=Omit<ViewProps<Tag>,"tag">;
+export type ExtendableViewProps<Tag extends keyof ViewTagPropsMap>=Omit<ViewProps<Tag>,"tag">;
+
+export type ViewTagPropsMap={ [Key in keyof HTMLElementTagNameMap]:{} }&{
+    "button":{
+        /** @default "button" */
+        type?:"button"|"submit"|"reset",
+    },
+}

@@ -1,8 +1,8 @@
-import {NativeView,ActionSetView} from "../index";
+import {NativeView,ActionSetView} from "../index.js";
 import css from "./Accordion.module.css";
-import ContentView from "./ContentView/ContentView";
-import {VritraFragment} from "../Fragment/Fragment";
-import icon from "./IndicatorIcon";
+import ContentView from "./ContentView/ContentView.js";
+import {VritraFragment} from "../Fragment/Fragment.js";
+import icon from "./IndicatorIcon.js";
 
 
 export default function Accordion(props){

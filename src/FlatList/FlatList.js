@@ -1,7 +1,7 @@
-import {NativeView,removeItem,FooMap,useSwipeGesture,findItem} from "../index";
+import {NativeView,removeItem,FooMap,useSwipeGesture,findItem} from "../index.js";
 import css from "./FlatList.module.css";
-import EmptyIndicator from "./EmptyIndicator/EmptyIndicator";
-import SmoothPagingContainer from "./SmoothPagingContainer/SmoothPagingContainer";
+import EmptyIndicator from "./EmptyIndicator/EmptyIndicator.js";
+import SmoothPagingContainer from "./SmoothPagingContainer/SmoothPagingContainer.js";
 
 
 export default function FlatList(props){

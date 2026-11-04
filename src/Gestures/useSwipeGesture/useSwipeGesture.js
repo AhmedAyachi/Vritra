@@ -1,4 +1,4 @@
-import {getBaryCenter} from "../index";
+import {getBaryCenter} from "../Gestures.js";
 
 
 export default function useSwipeGesture(options){

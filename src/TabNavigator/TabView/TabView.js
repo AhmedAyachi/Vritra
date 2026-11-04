@@ -1,4 +1,4 @@
-import {View} from "../../index";
+import {View} from "../../index.js";
 import css from "./TabView.module.css";
 
 
@@ -44,6 +44,5 @@ export default function TabView(props){
 
     tabview.setColor();
     tabview.setLabel();
-    tabview.type="button";
     return tabview;
 }

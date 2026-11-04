@@ -1,9 +1,11 @@
 
 
-export default class FooMap<Key,Value> extends Map {
-
+export default class FooMap<Key,Value> implements Omit<
+    Map<Key,Value>,
+    "set"|"keys"|"values"|"entries"|"forEach"
+    > {
     constructor(entries?:Array<[Key,Value]>,options?:{
-        onChange?:function(this:FooMap<Key,Value>):void;
+        onChange?:(this:FooMap<Key,Value>)=>void;
     });
     /**
      * 
@@ -56,7 +58,24 @@ export default class FooMap<Key,Value> extends Map {
      * Returns an iterable of key, value pairs for every entry in the map
      */
     entryIterableIterator():IterableIterator<[Key,Value]>;
+    /* Map fields */
+    /**
+     * Adds a new element with a specified key and value to the Map. If an element with the same key already exists, the element will be updated.
+     */
+    set(key:Key,value:Value):this;
+    get(key:Key):Value|undefined;
+    has(key:Key):boolean;
+    clear():void;
+    delete(key:Key):boolean;
+    /**
+     * Executes a provided function once per each key/value pair in the Map, in insertion order.
+     */
+    forEach(callbackfn:(value:Value,key:Key,map:this)=>void,thisArg?:any):void;
+    readonly size:number;
+    readonly [Symbol.toStringTag]:string;
+    [Symbol.iterator]():IterableIterator<[Key,Value]>;
 }
+
 
 interface FooIterator<Type> {
     next():{

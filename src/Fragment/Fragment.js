@@ -1,5 +1,5 @@
-import {findItem} from "../index";
-import {setElementStyle,addElementClassName,HtmlSanitizer,vr} from "../VritraElement/VritraElement";
+import {findItem} from "../index.js";
+import {setElementStyle,addElementClassName,HtmlSanitizer,vr} from "../VritraElement/VritraElement.js";
 
 
 export class VritraFragment extends DocumentFragment {

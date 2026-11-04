@@ -72,4 +72,4 @@ export type RefElement=(
 
 type Falsy=false|null|undefined|0|"";
 type VritraClassName=string|Falsy|VritraClassName[];
-type VritraStyle=string|CSSStyleDeclaration|Falsy|VritraStyle[];
+type VritraStyle=string|Partial<CSSStyleDeclaration>|Falsy|VritraStyle[];

@@ -1,4 +1,4 @@
-import {View} from "../index";
+import {View} from "../index.js";
 import css from "./NativeView.module.css";
 
 
@@ -8,7 +8,7 @@ export default function NativeView(props){
     if(!Object.hasOwn(window,"rem")){
         const {innerWidth}=window;
         Object.defineProperty(window,"rem",{
-            value:(innerWidth>=567?1:3)*innerWidth/100,
+            value:innerWidth/(innerWidth<=567?100:300),
         });
     }
     return nativeview;

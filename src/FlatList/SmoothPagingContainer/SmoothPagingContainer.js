@@ -1,4 +1,4 @@
-import {DraggableView,findItem} from "../../index";
+import {DraggableView,findItem} from "../../index.js";
 //import css from "./SmoothPagingContainer.module.css";
 
 

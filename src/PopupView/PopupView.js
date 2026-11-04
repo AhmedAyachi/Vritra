@@ -1,4 +1,4 @@
-import {isTouchDevice,NativeView,fadeIn,fadeOut,randomId} from "../index";
+import {isTouchDevice,NativeView,fadeIn,fadeOut,randomId} from "../index.js";
 import css from "./PopupView.module.css";
 
 

@@ -1,4 +1,4 @@
-import {NativeView,sanitize} from "../index";
+import {NativeView,sanitize} from "../index.js";
 import css from "./Switch.module.css";
 
 

@@ -1,4 +1,4 @@
-import {useId,View,map,fadeOut} from "../../index";
+import {useId,View,map,fadeOut} from "../../index.js";
 import css from "./BubblesView.module.css";
 
 

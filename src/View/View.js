@@ -1,5 +1,5 @@
-import VritraElement,{setElementStyle,addElementClassName,HtmlSanitizer} from "../VritraElement/VritraElement";
-import {VritraFragment} from "../Fragment/Fragment";
+import VritraElement,{setElementStyle,addElementClassName,HtmlSanitizer} from "../VritraElement/VritraElement.js";
+import {VritraFragment} from "../Fragment/Fragment.js";
 
 
 export default function View(props){
@@ -8,6 +8,9 @@ export default function View(props){
     if(id) view.id=id;
     setElementStyle(view,style);
     addElementClassName(view,className);
+    if(isButton(view)){
+        view.type=props.type||"button";
+    }
     if(parent){
         const atStart=(at==="start")||(at<=0);
         if(parent instanceof VritraFragment){
@@ -58,3 +61,5 @@ export default function View(props){
     
     return VritraElement(view);
 }
+
+const isButton=(view)=>view.tagName.toLowerCase()==="button";

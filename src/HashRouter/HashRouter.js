@@ -1,4 +1,4 @@
-import {randomId} from "../index";
+import {randomId} from "../index.js";
 
 
 export default function HashRouter(options){

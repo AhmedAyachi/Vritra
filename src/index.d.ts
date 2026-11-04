@@ -1,23 +1,23 @@
 
 
-export {default as View,ViewProps,View as ViewInterface} from "./src/View/View";
-export {default as Fragment} from "./src/Fragment/Fragment";
-export {default as NativeView} from "./src/NativeView/NativeView";
-export {default as SideBarNavigator,SideBarNavigatorProps} from "./src/SideBarNavigator/SideBarNavigator";
-export {default as DrawerNavigator} from "./src/DrawerNavigator/DrawerNavigator";
-export {default as TabNavigator} from "./src/TabNavigator/TabNavigator";
-export {default as Switch} from "./src/Switch/Switch";
-export {default as PopupView} from "./src/PopupView/PopupView";
-export {default as ActionSetView} from "./src/ActionSetView/ActionSetView";
-export {default as Accordion} from "./src/Accordion/Accordion";
-export {default as Palette} from "./src/Palette/Palette";
-export {default as FlatList} from "./src/FlatList/FlatList";
-export {default as DraggableView} from "./src/DraggableView/DraggableView";
-export {default as FooMap} from "./src/FooMap/FooMap";
-export {default as HashRouter} from "./src/HashRouter/HashRouter";
-export {useZoomGesture,usePinchGesture,useSwipeGesture,usePressGesture} from "./src/Gestures";
-export {default as withSequence} from "./src/withSequence/withSequence";
-export {default as sendRequest} from "./src/sendRequest/sendRequest";
+export * from "./Gestures/Gestures";
+export {default as View,ViewProps,View as ViewInterface} from "./View/View";
+export {default as Fragment} from "./Fragment/Fragment";
+export {default as NativeView} from "./NativeView/NativeView";
+export {default as SideBarNavigator,SideBarNavigatorProps} from "./SideBarNavigator/SideBarNavigator";
+export {default as DrawerNavigator} from "./DrawerNavigator/DrawerNavigator";
+export {default as TabNavigator} from "./TabNavigator/TabNavigator";
+export {default as Switch} from "./Switch/Switch";
+export {default as PopupView} from "./PopupView/PopupView";
+export {default as ActionSetView} from "./ActionSetView/ActionSetView";
+export {default as Accordion} from "./Accordion/Accordion";
+export {default as Palette} from "./Palette/Palette";
+export {default as FlatList} from "./FlatList/FlatList";
+export {default as DraggableView} from "./DraggableView/DraggableView";
+export {default as FooMap} from "./FooMap/FooMap";
+export {default as HashRouter} from "./HashRouter/HashRouter";
+export {default as withSequence} from "./withSequence/withSequence";
+export {default as sendRequest} from "./sendRequest/sendRequest";
 
 
 
@@ -72,8 +72,8 @@ export function interpolate(
  * @default 1
  * @returns a date with the chosen format
  */
-export function getAdjacentDate(date:string,format:"dmy"|"mdy"|"ymd",offset=1):string;
-export function getAdjacentDate(date:string,offset=1):string;
+export function getAdjacentDate(date:string,format:"dmy"|"mdy"|"ymd",offset?:number):string;
+export function getAdjacentDate(date:string,offset?:number):string;
 
 /**
  * Returns true if device supports touch gestures
@@ -116,7 +116,7 @@ export function getTimeDuration(start:string,end:string):number;
  * @default false
  * @property name 
  */
-export function getMonths(isLeapYear=false):{
+export function getMonths(isLeapYear?:boolean):{
     name:string,
     ordinal:number,
     daycount:number,
@@ -140,7 +140,7 @@ export function getDays(first?:"monday"|"tuesday"|"wednesday"|"thursday"|"friday
  * @param length random part length
  * @default prefix "" length 15
  */
-export function randomId(prefix?="",length?=15):string;
+export function randomId(prefix?:string,length?:number):string;
 
 export function groupBy<Type>(array:Type[],filter:(item:Type,index:number,array:Type[])=>any):{predicate:any,items:Type[]}[];
 
@@ -205,7 +205,7 @@ export function replaceAt(index:number,replaceValue:string,targetstring:string):
  * 2 => first two words
  * @default 0 => all
  */
-export function capitalize(str:string,count=0):string;
+export function capitalize(str:string,count?:number):string;
 
 export function isEmail(str:string):boolean;
 

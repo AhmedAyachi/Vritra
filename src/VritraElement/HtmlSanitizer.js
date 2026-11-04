@@ -1,4 +1,4 @@
-import VritraElement from "./VritraElement";
+import VritraElement from "./VritraElement.js";
 
 
 export default new (function(){

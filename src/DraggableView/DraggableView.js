@@ -1,4 +1,4 @@
-import {NativeView,capitalize,isTouchDevice,touchable} from "../index";
+import {NativeView,capitalize,isTouchDevice} from "../index.js";
 import css from "./DraggableView.module.css";
 
 

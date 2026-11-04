@@ -1,6 +1,6 @@
 .contentview{
     position:absolute;
-    width:100%;
+    width:stretch;
     height:fit-content;
     left:0;
     bottom:0;
@@ -9,4 +9,10 @@
     transform:translateY(100%);
     transition:250ms;
     z-index:2;
+}
+
+@supports(width:-webkit-fill-available){
+    .contentview{
+        width:-webkit-fill-available;
+    }
 }

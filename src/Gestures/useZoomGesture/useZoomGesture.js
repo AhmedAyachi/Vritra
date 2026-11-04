@@ -1,4 +1,4 @@
-import usePinchGesture from "../usePinchGesture/usePinchGesture";
+import usePinchGesture from "../usePinchGesture/usePinchGesture.js";
 
 
 export default function useZoomGesture(options){

@@ -1,6 +1,6 @@
-import {randomId,NativeView} from "../index";
+import {randomId,NativeView} from "../index.js";
 import css from "./SideBarNavigator.module.css";
-import SideBar from "./SideBar/SideBar";
+import SideBar from "./SideBar/SideBar.js";
 
 
 export default function SideBarNavigator(props){

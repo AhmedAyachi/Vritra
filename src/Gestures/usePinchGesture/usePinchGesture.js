@@ -1,5 +1,5 @@
-import {isTouchDevice} from "../../index";
-import {getBaryCenter} from "../index";
+import {isTouchDevice} from "../../index.js";
+import {getBaryCenter} from "../Gestures.js";
 
 
 export default function usePinchGesture(options){
