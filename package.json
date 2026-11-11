@@ -1,7 +1,7 @@
 {
   "name": "vritra",
   "type": "module",
-  "version": "1.8.1",
+  "version": "1.8.2",
   "description": "a zero-dependency UI library",
   "main": "src/index.js",
   "types": "src/index.d.ts",
